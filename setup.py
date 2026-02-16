@@ -20,6 +20,7 @@ PLAT_TO_CMAKE = {
 
 def myversion_func(version: ScmVersion) -> str:
     from setuptools_scm.version import only_version
+
     if version.distance > 0:
         return version.format_next_version(only_version, fmt="{tag}.dev{distance}")
     else:
@@ -85,8 +86,7 @@ class CMakeBuild(build_ext):
         cmake_args += [f"-DCMAKE_BUILD_TYPE={build_type}"]
         enable_ftracing = os.environ.get("DFTRACER_ENABLE_FTRACING", "OFF")
         cmake_args += [f"-DDFTRACER_ENABLE_FTRACING={enable_ftracing}"]
-        enable_hip_tracing = os.environ.get(
-            "DFTRACER_ENABLE_HIP_TRACING", "OFF")
+        enable_hip_tracing = os.environ.get("DFTRACER_ENABLE_HIP_TRACING", "OFF")
         cmake_args += [f"-DDFTRACER_ENABLE_HIP_TRACING={enable_hip_tracing}"]
         enable_mpi = os.environ.get("DFTRACER_ENABLE_MPI", "OFF")
         cmake_args += [f"-DDFTRACER_ENABLE_MPI={enable_mpi}"]
@@ -95,8 +95,19 @@ class CMakeBuild(build_ext):
         cmake_args += [f"-DDFTRACER_PYTHON_EXE={sys.executable}"]
         cmake_args += [f"-DDFTRACER_PYTHON_SITE={python_site}"]
         cmake_args += [f"-DCMAKE_INSTALL_PREFIX={install_prefix}"]
+        # Preserve environment-provided prefix paths (e.g. Spack view paths)
+        # while still preferring the local install prefix.
+        env_prefix_path = os.environ.get("CMAKE_PREFIX_PATH", "")
+        prefix_entries = [install_prefix]
+        if env_prefix_path:
+            normalized_env_prefix_path = env_prefix_path.replace(";", os.pathsep)
+            prefix_entries.extend(
+                [p for p in normalized_env_prefix_path.split(os.pathsep) if p]
+            )
+        cmake_prefix_path = ";".join(dict.fromkeys(prefix_entries))
+
         cmake_args += [
-            f"-DCMAKE_PREFIX_PATH={install_prefix}",
+            f"-DCMAKE_PREFIX_PATH={cmake_prefix_path}",
             f"-Dpybind11_DIR={py_cmake_dir}",
         ]
         cmake_args += ["-DPYBIND11_FINDPYTHON=ON"]
@@ -108,16 +119,12 @@ class CMakeBuild(build_ext):
         enable_dlio_tests = os.environ.get(
             "DFTRACER_ENABLE_DLIO_BENCHMARK_TESTS", "OFF"
         )
-        cmake_args += [
-            f"-DDFTRACER_ENABLE_DLIO_BENCHMARK_TESTS={enable_dlio_tests}"]
-        enable_dlio_tests = os.environ.get(
-            "DFTRACER_ENABLE_PAPER_TESTS", "OFF")
+        cmake_args += [f"-DDFTRACER_ENABLE_DLIO_BENCHMARK_TESTS={enable_dlio_tests}"]
+        enable_dlio_tests = os.environ.get("DFTRACER_ENABLE_PAPER_TESTS", "OFF")
         cmake_args += [f"-DDFTRACER_ENABLE_PAPER_TESTS={enable_dlio_tests}"]
 
-        test_ld_library_path = os.environ.get(
-            "DFTRACER_TEST_LD_LIBRARY_PATH", "")
-        cmake_args += [
-            f"-DDFTRACER_TEST_LD_LIBRARY_PATH={test_ld_library_path}"]
+        test_ld_library_path = os.environ.get("DFTRACER_TEST_LD_LIBRARY_PATH", "")
+        cmake_args += [f"-DDFTRACER_TEST_LD_LIBRARY_PATH={test_ld_library_path}"]
 
         writer_type = os.environ.get("DFTRACER_WRITER_TYPE", "STDIO")
         cmake_args += [f"-DDFTRACER_WRITER_TYPE={writer_type}"]
@@ -139,8 +146,7 @@ class CMakeBuild(build_ext):
         # (needed e.g. to build for ARM OSx on conda-forge)
 
         # In this example, we pass in the version to C++. You might not need to.
-        cmake_args += [
-            f"-DEXAMPLE_VERSION_INFO={self.distribution.get_version()}"]
+        cmake_args += [f"-DEXAMPLE_VERSION_INFO={self.distribution.get_version()}"]
 
         # Set CMAKE_BUILD_PARALLEL_LEVEL to control the parallel build level
         # across all generators.
@@ -150,6 +156,24 @@ class CMakeBuild(build_ext):
         if not build_temp.exists():
             build_temp.mkdir(parents=True)
         print("cmake", ext.sourcedir, cmake_args)
+
+        cmake_env = os.environ.copy()
+        ldflags = [item for item in cmake_env.get("LDFLAGS", "").split() if item]
+        extra_ldflags = []
+        for prefix in [
+            item
+            for item in cmake_prefix_path.replace(";", os.pathsep).split(os.pathsep)
+            if item
+        ]:
+            libdir = Path(prefix) / "lib"
+            libflag = f"-L{libdir}"
+            if (
+                libdir.is_dir()
+                and libflag not in ldflags
+                and libflag not in extra_ldflags
+            ):
+                extra_ldflags.append(libflag)
+        cmake_env["LDFLAGS"] = " ".join(ldflags + extra_ldflags)
 
         if (
             "DFTRACER_BUILD_DEPENDENCIES" not in os.environ
@@ -163,9 +187,13 @@ class CMakeBuild(build_ext):
                 ["cmake", ext.sourcedir, *install_cmake_args],
                 cwd=build_temp,
                 check=True,
+                env=cmake_env,
             )
             subprocess.run(
-                ["cmake", "--build", ".", *build_args], cwd=build_temp, check=True
+                ["cmake", "--build", ".", *build_args],
+                cwd=build_temp,
+                check=True,
+                env=cmake_env,
             )
         cmake_args += ["-DDFTRACER_INSTALL_DEPENDENCIES=OFF"]
         # link correct depedencies
@@ -176,15 +204,24 @@ class CMakeBuild(build_ext):
 
         if "DFTRACER_CMAKE_ARGS" in os.environ:
             cmake_args += [
-                item for item in os.environ["DFTRACER_CMAKE_ARGS"].split(";") if item]
+                item for item in os.environ["DFTRACER_CMAKE_ARGS"].split(";") if item
+            ]
 
         subprocess.run(
-            ["cmake", ext.sourcedir, *cmake_args], cwd=build_temp, check=True
+            ["cmake", ext.sourcedir, *cmake_args],
+            cwd=build_temp,
+            check=True,
+            env=cmake_env,
         )
         subprocess.run(
-            ["cmake", "--build", ".", *build_args], cwd=build_temp, check=True
+            ["cmake", "--build", ".", *build_args],
+            cwd=build_temp,
+            check=True,
+            env=cmake_env,
         )
-        subprocess.run(["cmake", "--install", "."], cwd=build_temp, check=True)
+        subprocess.run(
+            ["cmake", "--install", "."], cwd=build_temp, check=True, env=cmake_env
+        )
 
 
 # The information here can also be placed in setup.cfg - better separation of
@@ -192,9 +229,8 @@ class CMakeBuild(build_ext):
 setup(
     name="dftracer",
     use_scm_version={"version_scheme": myversion_func},
-    packages=find_packages(where='python') +
-    find_packages(where='dfanalyzer_old'),
-    package_dir={'': 'python', 'dfanalyzer_old': 'dfanalyzer_old'},
+    packages=find_packages(where="python") + find_packages(where="dfanalyzer_old"),
+    package_dir={"": "python", "dfanalyzer_old": "dfanalyzer_old"},
     ext_modules=[
         CMakeExtension("dftracer.dftracer"),
         CMakeExtension("dftracer.dftracer_dbg"),
