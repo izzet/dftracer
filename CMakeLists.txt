@@ -223,6 +223,12 @@ else()
 set(DEPENDENCY_LIB ${CMAKE_EXE_LINKER_FLAGS} $ENV{LDFLAGS}  -lpthread)
 set(DEPENDENCY_LIBRARY_DIRS "")
 
+# On some GNU toolchains, std::filesystem symbols require explicit
+# linking with libstdc++fs.
+if (CMAKE_CXX_COMPILER_ID STREQUAL "GNU" AND DFTRACER_HAS_STD_FILESYSTEM)
+    set(DEPENDENCY_LIB ${DEPENDENCY_LIB} stdc++fs)
+endif ()
+
 find_package(cpp-logger 1.0.0 REQUIRED)
 if (${cpp-logger_FOUND})
     include_directories(${CPP_LOGGER_INCLUDE_DIRS})
