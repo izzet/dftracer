@@ -5,7 +5,9 @@
 
 #if DFTRACER_WRITER_TYPE_MOFKA
 #include <dftracer/core/writer/mofka_writer.h>
-#elif DFTRACER_WRITER_TYPE_STDIO
+#elif DFTRACER_WRITER_TYPE_ZMQ
+#include <dftracer/core/writer/zmq_writer.h>
+#else
 #include <dftracer/core/writer/stdio_writer.h>
 #endif
 
@@ -50,6 +52,9 @@ int BufferManager::initialize(const char* filename, HashType hostname_hash) {
 #if DFTRACER_WRITER_TYPE_MOFKA
   this->writer = std::static_pointer_cast<dftracer::WriterInterface>(
       dftracer::Singleton<dftracer::MofkaWriter>::get_instance());
+#elif DFTRACER_WRITER_TYPE_ZMQ
+  this->writer = std::static_pointer_cast<dftracer::WriterInterface>(
+      dftracer::Singleton<dftracer::ZMQWriter>::get_instance());
 #else
   this->writer = std::static_pointer_cast<dftracer::WriterInterface>(
       dftracer::Singleton<dftracer::STDIOWriter>::get_instance());

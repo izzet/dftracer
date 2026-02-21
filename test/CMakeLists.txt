@@ -4,6 +4,10 @@ include_directories(${DFTRACER_PROJECT_DIR}/include)
 set(MOFKA_GROUP_FILE "${CMAKE_CURRENT_BINARY_DIR}/mofka.group.json")
 set(MOFKA_SERVER_FIXTURE "MOFKA_SERVER")
 
+set(ZMQ_EVENT_PORT 5555)
+set(ZMQ_CONTROL_PORT 5556)
+set(ZMQ_SINK_FIXTURE "ZMQ_SINK")
+
 find_program(BASH_EXE bash)
 
 if(DFTRACER_WRITER_TYPE_MOFKA)
@@ -12,6 +16,13 @@ if(DFTRACER_WRITER_TYPE_MOFKA)
     add_test(mofka_server_stop ${CMAKE_CURRENT_SOURCE_DIR}/mofka_server_stop.sh)
     set_tests_properties(mofka_server_start PROPERTIES FIXTURES_SETUP ${MOFKA_SERVER_FIXTURE})
     set_tests_properties(mofka_server_stop PROPERTIES FIXTURES_CLEANUP ${MOFKA_SERVER_FIXTURE})
+endif()
+
+if(DFTRACER_WRITER_TYPE_ZMQ)
+    add_test(zmq_sink_start ${CMAKE_CURRENT_SOURCE_DIR}/zmq_sink_start.sh ${DFTRACER_PYTHON_EXE} ${CMAKE_CURRENT_BINARY_DIR}/zmq_sink.log ${ZMQ_EVENT_PORT} ${ZMQ_CONTROL_PORT})
+    add_test(zmq_sink_stop ${CMAKE_CURRENT_SOURCE_DIR}/zmq_sink_stop.sh ${ZMQ_CONTROL_PORT})
+    set_tests_properties(zmq_sink_start PROPERTIES FIXTURES_SETUP ${ZMQ_SINK_FIXTURE})
+    set_tests_properties(zmq_sink_stop PROPERTIES FIXTURES_CLEANUP ${ZMQ_SINK_FIXTURE})
 endif()
 
 function(df_add_test)
@@ -32,6 +43,10 @@ function(df_check_test test_name expected_count)
         set_tests_properties(check_${test_name} PROPERTIES FIXTURES_REQUIRED ${MOFKA_SERVER_FIXTURE})
         set_property(TEST check_${test_name} APPEND PROPERTY ENVIRONMENT DFTRACER_MOFKA_GROUP_FILE=${MOFKA_GROUP_FILE})
         set_property(TEST check_${test_name} APPEND PROPERTY ENVIRONMENT DFTRACER_MOFKA_TOPIC_NAME=${test_name})
+    elseif(DFTRACER_WRITER_TYPE_ZMQ)
+        df_add_test(check_${test_name}
+            ${DFTRACER_PYTHON_EXE} ${CMAKE_CURRENT_SOURCE_DIR}/check_zmq_sink.py ${test_name} ${expected_count} --control-port ${ZMQ_CONTROL_PORT})
+        set_tests_properties(check_${test_name} PROPERTIES FIXTURES_REQUIRED ${ZMQ_SINK_FIXTURE})
     else()
         if(${expected_count} EQUAL 0)
             df_add_test(check_${test_name}
@@ -82,6 +97,11 @@ function(set_common_properties test_name)
         set_property(TEST ${test_name} APPEND PROPERTY ENVIRONMENT DFTRACER_MOFKA_GROUP_FILE=${MOFKA_GROUP_FILE})
         set_property(TEST ${test_name} APPEND PROPERTY ENVIRONMENT DFTRACER_MOFKA_TOPIC_NAME=${test_name})
         set_tests_properties(${test_name} PROPERTIES FIXTURES_REQUIRED ${MOFKA_SERVER_FIXTURE})
+    endif()
+
+    if(DFTRACER_WRITER_TYPE_ZMQ)
+        set_property(TEST ${test_name} APPEND PROPERTY ENVIRONMENT DFTRACER_ZMQ_ENDPOINT=tcp://localhost:${ZMQ_EVENT_PORT})
+        set_tests_properties(${test_name} PROPERTIES FIXTURES_REQUIRED ${ZMQ_SINK_FIXTURE})
     endif()
 endfunction()
 

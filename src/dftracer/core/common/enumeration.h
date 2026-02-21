@@ -12,6 +12,7 @@
 enum WriterType : uint8_t {
   WRITER_TYPE_STDIO = 0,
   WRITER_TYPE_MOFKA = 1,
+  WRITER_TYPE_ZMQ = 2,
 };
 enum ProfilerStage : uint8_t {
   PROFILER_INIT = 0,
@@ -105,6 +106,8 @@ inline std::string to_string(const AggregationType& type) {
 inline void convert(const std::string& s, WriterType& type) {
   if (s == "MOFKA") {
     type = WriterType::WRITER_TYPE_MOFKA;
+  } else if (s == "ZMQ") {
+    type = WriterType::WRITER_TYPE_ZMQ;
   } else {
     type = WriterType::WRITER_TYPE_STDIO;
   }

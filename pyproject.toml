@@ -1,11 +1,11 @@
 [build-system]
 requires = [
-    "setuptools>=64", 
-    "setuptools-scm>=8",
-    "wheel",
-    "ninja",
-    "cmake>=3.12",
-    "pybind11"
+  "setuptools>=64",
+  "setuptools-scm>=8",
+  "wheel",
+  "ninja",
+  "cmake>=3.12",
+  "pybind11",
 ]
 build-backend = "setuptools.build_meta"
 
@@ -16,15 +16,15 @@ readme = "README.md"
 requires-python = '>=3.7'
 
 authors = [
-  { name = "Hariharan Devarajan (Hari)", email = "hariharandev1@llnl.gov" }
+  { name = "Hariharan Devarajan (Hari)", email = "hariharandev1@llnl.gov" },
 ]
 keywords = [
-  "profiler", 
-  "deep learning", 
-  "I/O", 
-  "benchmark", 
-  "NPZ", 
-  "pytorch benchmark", 
+  "profiler",
+  "deep learning",
+  "I/O",
+  "benchmark",
+  "NPZ",
+  "pytorch benchmark",
   "tensorflow benchmark",
 ]
 classifiers = [
@@ -49,11 +49,11 @@ classifiers = [
 ]
 dynamic = ["version"]
 dependencies = [
-  "pybind11", 
-  "setuptools>=64", 
+  "pybind11",
+  "setuptools>=64",
   "setuptools-scm>=8",
   "dftracer-utils>=0.0.5",
-  "pydftracer>=2.0.2"
+  "pydftracer>=2.0.2",
 ]
 
 [project.urls]
@@ -64,25 +64,23 @@ Documentation = "https://dftracer.readthedocs.io/en/latest/"
 
 [project.optional-dependencies]
 test = ['pytest>=6.0']
-dfanalyzer = [
-    'dftracer-analyzer>=0.0.5'
-]
+dfanalyzer = ['dftracer-analyzer>=0.0.5']
 dfanalyzer_old = [
-    'seaborn>=0.13.2', 
-    'bokeh>=2.4.2', 
-    'pybind11', 
-    'pandas>=2.0.3', 
-    'dask>=2023.5.0', 
-    'distributed', 
-    'numpy>=1.24.3', 
-    'pyarrow>=12.0.1', 
-    'rich>=13.6.0', 
-    'python-intervals>=1.10.0.post1', 
-    'matplotlib>=3.7.3'
+  'seaborn>=0.13.2',
+  'bokeh>=2.4.2',
+  'pybind11',
+  'pandas>=2.0.3',
+  'dask>=2023.5.0',
+  'distributed',
+  'numpy>=1.24.3',
+  'pyarrow>=12.0.1',
+  'rich>=13.6.0',
+  'python-intervals>=1.10.0.post1',
+  'matplotlib>=3.7.3',
 ]
-dynamo = [
-    'torch>=2.5.1'
-]
+dynamo = ['torch>=2.5.1']
+streaming-mofka = []
+streaming-zmq = ['pyzmq>=27.0.0']
 
 [tool]
 files = "setup.py"
@@ -121,7 +119,7 @@ extend-select = [
   "UP",   # pyupgrade
 ]
 extend-ignore = [
-  "E501",   # Line too long
+  "E501", # Line too long
 ]
 target-version = "py38"
 
@@ -134,4 +132,3 @@ script-files = [
 [tool.setuptools_scm]
 local_scheme = "no-local-version"
 write_to = "python/dftracer/_version.py"
-

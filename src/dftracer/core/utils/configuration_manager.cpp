@@ -70,6 +70,8 @@ dftracer::ConfigurationManager::ConfigurationManager()
       write_buffer_size(16 * 1024 * 1024),
 #if DFTRACER_WRITER_TYPE_MOFKA
       writer_type(WriterType::WRITER_TYPE_MOFKA),
+#elif DFTRACER_WRITER_TYPE_ZMQ
+      writer_type(WriterType::WRITER_TYPE_ZMQ),
 #else
       writer_type(WriterType::WRITER_TYPE_STDIO),
 #endif
@@ -393,6 +395,12 @@ dftracer::ConfigurationManager::ConfigurationManager()
   if (this->writer_type == WriterType::WRITER_TYPE_MOFKA) {
     if (this->compression) {
       DFTRACER_LOG_WARN("Compression is not supported for Mofka writer", "");
+      this->compression = false;
+    }
+  }
+  if (this->writer_type == WriterType::WRITER_TYPE_ZMQ) {
+    if (this->compression) {
+      DFTRACER_LOG_WARN("Compression is not supported for ZMQ writer", "");
       this->compression = false;
     }
   }
