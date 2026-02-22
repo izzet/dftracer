@@ -1,6 +1,7 @@
 set_property(GLOBAL PROPERTY COVERAGE_FILES "")
 include_directories(${DFTRACER_PROJECT_DIR}/include)
 
+set(DFTRACER_TEST_DIR ${CMAKE_CURRENT_SOURCE_DIR})
 set(MOFKA_GROUP_FILE "${CMAKE_CURRENT_BINARY_DIR}/mofka.group.json")
 set(MOFKA_SERVER_FIXTURE "MOFKA_SERVER")
 
@@ -39,23 +40,23 @@ endfunction()
 function(df_check_test test_name expected_count)
     if(DFTRACER_WRITER_TYPE_MOFKA)
         df_add_test(check_${test_name}
-            ${DFTRACER_PYTHON_EXE} ${CMAKE_CURRENT_SOURCE_DIR}/check_mofka_topic.py ${test_name} ${expected_count})
+            ${DFTRACER_PYTHON_EXE} ${DFTRACER_TEST_DIR}/check_mofka_topic.py ${test_name} ${expected_count})
         set_tests_properties(check_${test_name} PROPERTIES FIXTURES_REQUIRED ${MOFKA_SERVER_FIXTURE})
         set_property(TEST check_${test_name} APPEND PROPERTY ENVIRONMENT DFTRACER_MOFKA_GROUP_FILE=${MOFKA_GROUP_FILE})
         set_property(TEST check_${test_name} APPEND PROPERTY ENVIRONMENT DFTRACER_MOFKA_TOPIC_NAME=${test_name})
     elseif(DFTRACER_WRITER_TYPE_ZMQ)
         df_add_test(check_${test_name}
-            ${DFTRACER_PYTHON_EXE} ${CMAKE_CURRENT_SOURCE_DIR}/check_zmq_sink.py ${test_name} ${expected_count} --control-port ${ZMQ_CONTROL_PORT})
+            ${DFTRACER_PYTHON_EXE} ${DFTRACER_TEST_DIR}/check_zmq_sink.py ${test_name} ${expected_count} --control-port ${ZMQ_CONTROL_PORT})
         set_tests_properties(check_${test_name} PROPERTIES FIXTURES_REQUIRED ${ZMQ_SINK_FIXTURE})
     else()
         if(${expected_count} EQUAL 0)
             df_add_test(check_${test_name}
-                ${BASH_EXE} ${CMAKE_CURRENT_SOURCE_DIR}/check_file_not.sh
+                ${BASH_EXE} ${DFTRACER_TEST_DIR}/check_file_not.sh
                 ${CMAKE_CURRENT_BINARY_DIR}/${test_name}*
             )
         else()
             df_add_test(check_${test_name}
-                ${BASH_EXE} ${CMAKE_CURRENT_SOURCE_DIR}/check_file_at_least.sh
+                ${BASH_EXE} ${DFTRACER_TEST_DIR}/check_file_at_least.sh
                 ${CMAKE_CURRENT_BINARY_DIR}/${test_name}* ${expected_count}
             )
         endif()
@@ -328,7 +329,7 @@ df_check_test(${test_name} 71)
 # ########################################################################
 set(TEST_SRC ${CMAKE_CURRENT_SOURCE_DIR}/util.h)
 
-if(ENABLE_DLIO_BENCHMARK_TESTS)
+if(DFTRACER_ENABLE_DLIO_BENCHMARK_TESTS)
     set(test_name python_test_py_disable_only)
     df_add_test(${test_name} ${DFTRACER_PYTHON_EXE} ${CMAKE_CURRENT_SOURCE_DIR}/py/python_test.py --format=npz)
     set_common_properties(${test_name})
@@ -368,7 +369,7 @@ if(ENABLE_DLIO_BENCHMARK_TESTS)
     add_subdirectory(dlio_benchmark)
 endif()
 
-if(ENABLE_PAPER_TESTS)
+if(DFTRACER_ENABLE_PAPER_TESTS)
     add_subdirectory(paper)
 endif()
 
