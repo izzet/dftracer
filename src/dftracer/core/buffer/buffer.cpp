@@ -60,6 +60,7 @@ int BufferManager::initialize(const char* filename, HashType hostname_hash) {
       dftracer::Singleton<dftracer::STDIOWriter>::get_instance());
 #endif
   this->writer->initialize(filename);
+  this->control_hooks_enabled = this->writer->control_hooks_enabled();
   this->serializer = dftracer::Singleton<dftracer::JsonLines>::get_instance();
   this->aggregator = dftracer::Singleton<dftracer::Aggregator>::get_instance();
   if (this->config->compression) {
@@ -106,6 +107,10 @@ void BufferManager::log_data_event(int index, ConstEventNameType event_name,
                                    ProcessID process_id, ThreadID tid) {
   std::unique_lock<std::shared_mutex> lock(mtx);
   DFTRACER_LOG_DEBUG("BufferManager.log_data_event %d", index);
+  if (this->control_hooks_enabled) {
+    this->writer->before_write(
+        dftracer::EventContext{event_name, category, "X", process_id, tid});
+  }
   size_t size = 0;
   bool enable_tracing = true;
   if (this->config->aggregation_enable && strcmp(category, "dftracer") != 0) {
@@ -142,6 +147,10 @@ void BufferManager::log_counter_event(int index, ConstEventNameType name,
                                       dftracer::Metadata* metadata) {
   std::unique_lock<std::shared_mutex> lock(mtx);
   DFTRACER_LOG_DEBUG("BufferManager.log_counter_event %d", index);
+  if (this->control_hooks_enabled) {
+    this->writer->before_write(
+        dftracer::EventContext{name, category, "C", process_id, thread_id});
+  }
   size_t size =
       this->serializer->counter(buffer + buffer_pos, index, name, category,
                                 start_time, process_id, thread_id, metadata);
@@ -155,6 +164,10 @@ void BufferManager::log_metadata_event(ConstEventNameType name,
                                        bool is_string) {
   std::unique_lock<std::shared_mutex> lock(mtx);
   DFTRACER_LOG_DEBUG("BufferManager.log_metadata_event %s", value);
+  if (this->control_hooks_enabled) {
+    this->writer->before_write(
+        dftracer::EventContext{ph, "dftracer", "M", process_id, tid});
+  }
   size_t size = this->serializer->metadata(buffer + buffer_pos, name, value, ph,
                                            process_id, tid, is_string);
   compress_and_write_if_needed(size);

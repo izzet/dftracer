@@ -20,7 +20,12 @@ namespace dftracer {
 class BufferManager {
  public:
   BufferManager()
-      : buffer(nullptr), buffer_pos(0), mtx(), app_name(), rank(-1) {}
+      : buffer(nullptr),
+        buffer_pos(0),
+        mtx(),
+        app_name(),
+        rank(-1),
+        control_hooks_enabled(false) {}
   ~BufferManager() {}
 
   void inline set_app_name(const char* name) { app_name = name; }
@@ -56,6 +61,7 @@ class BufferManager {
   std::shared_mutex mtx;
   std::string app_name;
   int rank;
+  bool control_hooks_enabled;
 
   std::shared_ptr<dftracer::ConfigurationManager> config;
   std::shared_ptr<dftracer::JsonLines> serializer;
