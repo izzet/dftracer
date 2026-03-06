@@ -14,6 +14,7 @@
 #include <mofka/MofkaDriver.hpp>
 #include <sstream>
 #include <string>
+#include <unistd.h>
 #include <vector>
 
 namespace dftracer {
@@ -87,206 +88,220 @@ void MofkaWriter::initialize(const char* filename) {
   group_file_ = group_file_env;
   const char* topic_name_env = std::getenv("DFTRACER_MOFKA_TOPIC_NAME");
   topic_name_ = topic_name_env ? topic_name_env : "dftracer_events";
-  trace_events_written_ = 0;
-  control_hooks_enabled_ = false;
-  control_trigger_event_names_.clear();
-  control_topic_name_.clear();
+  auto current_pid = getpid();
 
   // Allow Mofka/Mercury to access this process's memory for shared memory
   // transport
   // prctl(PR_SET_PTRACER, PR_SET_PTRACER_ANY, 0, 0, 0);
 
   if (driver_) {
-    DFTRACER_LOG_INFO("MofkaWriter already initialized", "");
-  } else {
-    try {
-      diaspora::Metadata options;
-      options.json()["group_file"] = group_file_;
-      options.json()["margo"] = nlohmann::json::object();
-      options.json()["margo"]["use_progress_thread"] = true;
-
-      driver_ = std::make_unique<diaspora::Driver>(
-          diaspora::Driver::New("mofka", options));
-      DFTRACER_LOG_INFO("Mofka driver initialized", "");
-
-      if (driver_->topicExists(topic_name_)) {
-        DFTRACER_LOG_INFO("Mofka trace topic exists", "");
-      } else {
-        ensure_topic_exists(driver_.get(), topic_name_);
-        DFTRACER_LOG_INFO("Mofka trace topic created", "");
-      }
-
-      topic_ = std::make_unique<diaspora::TopicHandle>(
-          driver_->openTopic(topic_name_));
-      DFTRACER_LOG_INFO("Mofka topic opened", "");
-
-      diaspora::BatchSize batchSize = diaspora::BatchSize::Adaptive();
-      const char* batch_size_env_name = "DFTRACER_MOFKA_PRODUCER_BATCH_SIZE";
-      const char* batch_size_env = std::getenv(batch_size_env_name);
-      size_t parsed_batch_size = 0;
-      if (batch_size_env) {
-        if (parse_positive_size_t(batch_size_env, &parsed_batch_size)) {
-          batchSize = diaspora::BatchSize{parsed_batch_size};
-          DFTRACER_LOG_INFO("Mofka producer batch size set from %s=%zu",
-                            batch_size_env_name, parsed_batch_size);
-        } else {
-          DFTRACER_LOG_WARN("Invalid %s value '%s'; using Adaptive batch size",
-                            batch_size_env_name, batch_size_env);
-        }
-      }
-
-      diaspora::MaxNumBatches max_num_batches = diaspora::MaxNumBatches{2};
-      const char* max_num_batches_env_name =
-          "DFTRACER_MOFKA_PRODUCER_MAX_NUM_BATCHES";
-      const char* max_num_batches_env = std::getenv(max_num_batches_env_name);
-      size_t parsed_max_num_batches = 0;
-      if (max_num_batches_env) {
-        if (parse_positive_size_t(max_num_batches_env,
-                                  &parsed_max_num_batches)) {
-          max_num_batches = diaspora::MaxNumBatches{
-              static_cast<size_t>(parsed_max_num_batches)};
-          DFTRACER_LOG_INFO("Mofka producer max num batches set from %s=%zu",
-                            max_num_batches_env_name, parsed_max_num_batches);
-        } else {
-          DFTRACER_LOG_WARN("Invalid %s value '%s'; using default of 2",
-                            max_num_batches_env_name, max_num_batches_env);
-        }
-      }
-
-      diaspora::Ordering ordering = diaspora::Ordering::Strict;
-      const char* ordering_env_name = "DFTRACER_MOFKA_PRODUCER_ORDERING";
-      const char* ordering_env = std::getenv(ordering_env_name);
-      if (ordering_env) {
-        if (parse_ordering(ordering_env, &ordering)) {
-          DFTRACER_LOG_INFO("Mofka producer ordering set from %s=%s",
-                            ordering_env_name, ordering_env);
-        } else {
-          DFTRACER_LOG_WARN("Invalid %s value '%s'; using strict ordering",
-                            ordering_env_name, ordering_env);
-        }
-      }
-
-      const char* producer_thread_count_env_name =
-          "DFTRACER_MOFKA_PRODUCER_THREAD_COUNT";
-      const char* producer_thread_count_env =
-          std::getenv(producer_thread_count_env_name);
-      size_t producer_thread_count = 0;
-      diaspora::ThreadPool producer_thread_pool{};
-      if (producer_thread_count_env) {
-        if (parse_positive_size_t(producer_thread_count_env,
-                                  &producer_thread_count)) {
-          producer_thread_pool = driver_->makeThreadPool(
-              diaspora::ThreadCount{producer_thread_count});
-          DFTRACER_LOG_INFO("Mofka producer thread count set from %s=%zu",
-                            producer_thread_count_env_name,
-                            producer_thread_count);
-        } else {
-          DFTRACER_LOG_WARN("Invalid %s value '%s'; using default thread pool",
-                            producer_thread_count_env_name,
-                            producer_thread_count_env);
-        }
-      }
-
-      const char* flush_every_n_writes_env_name =
-          "DFTRACER_MOFKA_PRODUCER_FLUSH_EVERY_N_WRITES";
-      const char* flush_every_n_writes_env =
-          std::getenv(flush_every_n_writes_env_name);
-      size_t parsed_flush_every_n_writes = 0;
-      flush_every_n_writes_ = 0;
-      writes_since_flush_ = 0;
-      if (flush_every_n_writes_env) {
-        if (parse_positive_size_t(flush_every_n_writes_env,
-                                  &parsed_flush_every_n_writes)) {
-          flush_every_n_writes_ = parsed_flush_every_n_writes;
-          DFTRACER_LOG_INFO("Mofka periodic flush set from %s=%zu",
-                            flush_every_n_writes_env_name,
-                            parsed_flush_every_n_writes);
-        } else {
-          DFTRACER_LOG_WARN("Invalid %s value '%s'; disabling periodic flush",
-                            flush_every_n_writes_env_name,
-                            flush_every_n_writes_env);
-        }
-      }
-
-      const char* control_topic_env_name = "DFTRACER_MOFKA_CONTROL_TOPIC_NAME";
-      const char* control_topic_env = std::getenv(control_topic_env_name);
-      if (control_topic_env && control_topic_env[0] != '\0') {
-        control_topic_name_ = control_topic_env;
-      } else {
-        control_topic_name_ = "control_events";
-        DFTRACER_LOG_INFO("%s unset; defaulting to %s", control_topic_env_name,
-                          control_topic_name_.c_str());
-      }
-
-      const char* control_event_names_env_name =
-          "DFTRACER_MOFKA_CONTROL_EVENT_NAMES";
-      const char* control_event_names_env =
-          std::getenv(control_event_names_env_name);
-      if (control_event_names_env) {
-        parse_control_event_names(control_event_names_env,
-                                  &control_trigger_event_names_);
-        if (control_trigger_event_names_.empty()) {
-          DFTRACER_LOG_WARN(
-              "%s is set but empty; control-event producer disabled",
-              control_event_names_env_name);
-        } else {
-          DFTRACER_LOG_INFO("Mofka control trigger names loaded from %s",
-                            control_event_names_env_name);
-        }
-      } else {
-        // Default trigger names to avoid requiring extra env setup.
-        control_trigger_event_names_.push_back("epoch.start");
-        control_trigger_event_names_.push_back("epoch.block");
-        DFTRACER_LOG_INFO(
-            "%s unset; defaulting control-event triggers to "
-            "epoch.start,epoch.block",
-            control_event_names_env_name);
-      }
-
-      if (producer_thread_pool) {
-        producer_ = std::make_unique<diaspora::Producer>(
-            topic_->producer("dftracer", batchSize, max_num_batches, ordering,
-                             producer_thread_pool));
-      } else {
-        producer_ = std::make_unique<diaspora::Producer>(
-            topic_->producer("dftracer", batchSize, max_num_batches, ordering));
-      }
-      DFTRACER_LOG_INFO("Mofka producer created", "");
-
-      if (!control_trigger_event_names_.empty()) {
-        if (driver_->topicExists(control_topic_name_)) {
-          DFTRACER_LOG_INFO("Mofka control topic exists", "");
-        } else {
-          ensure_topic_exists(driver_.get(), control_topic_name_);
-          DFTRACER_LOG_INFO("Mofka control topic created", "");
-        }
-        control_topic_ = std::make_unique<diaspora::TopicHandle>(
-            driver_->openTopic(control_topic_name_));
-
-        const diaspora::BatchSize control_batch_size{1};
-        const diaspora::Ordering control_ordering = diaspora::Ordering::Strict;
-        if (producer_thread_pool) {
-          control_producer_ =
-              std::make_unique<diaspora::Producer>(control_topic_->producer(
-                  "dftracer_control", control_batch_size, max_num_batches,
-                  control_ordering, producer_thread_pool));
-        } else {
-          control_producer_ = std::make_unique<diaspora::Producer>(
-              control_topic_->producer("dftracer_control", control_batch_size,
-                                       max_num_batches, control_ordering));
-        }
-        DFTRACER_LOG_INFO(
-            "Mofka control producer enabled: topic=%s trigger_count=%zu",
-            control_topic_name_.c_str(), control_trigger_event_names_.size());
-        control_hooks_enabled_ = true;
-      }
-
-      init_pid_ = getpid();
-      DFTRACER_LOG_INFO("MofkaWriter initialized with PID %d", init_pid_);
-    } catch (const std::exception& e) {
-      DFTRACER_LOG_ERROR("Failed to initialize MofkaWriter", e.what());
-      throw;
+    if (init_pid_ == current_pid) {
+      DFTRACER_LOG_INFO("MofkaWriter already initialized", "");
+      return;
     }
+    DFTRACER_LOG_INFO(
+        "Detected forked child; rebuilding MofkaWriter state (parent pid=%d, "
+        "child pid=%d)",
+        init_pid_, current_pid);
+    (void)control_producer_.release();
+    (void)producer_.release();
+    (void)control_topic_.release();
+    (void)topic_.release();
+    (void)driver_.release();
+  }
+
+  trace_events_written_ = 0;
+  control_hooks_enabled_ = false;
+  control_trigger_event_names_.clear();
+  control_topic_name_.clear();
+
+  try {
+    diaspora::Metadata options;
+    options.json()["group_file"] = group_file_;
+    options.json()["margo"] = nlohmann::json::object();
+    options.json()["margo"]["use_progress_thread"] = true;
+
+    driver_ = std::make_unique<diaspora::Driver>(
+        diaspora::Driver::New("mofka", options));
+    DFTRACER_LOG_INFO("Mofka driver initialized", "");
+
+    if (driver_->topicExists(topic_name_)) {
+      DFTRACER_LOG_INFO("Mofka trace topic exists", "");
+    } else {
+      ensure_topic_exists(driver_.get(), topic_name_);
+      DFTRACER_LOG_INFO("Mofka trace topic created", "");
+    }
+
+    topic_ = std::make_unique<diaspora::TopicHandle>(
+        driver_->openTopic(topic_name_));
+    DFTRACER_LOG_INFO("Mofka topic opened", "");
+
+    diaspora::BatchSize batchSize = diaspora::BatchSize::Adaptive();
+    const char* batch_size_env_name = "DFTRACER_MOFKA_PRODUCER_BATCH_SIZE";
+    const char* batch_size_env = std::getenv(batch_size_env_name);
+    size_t parsed_batch_size = 0;
+    if (batch_size_env) {
+      if (parse_positive_size_t(batch_size_env, &parsed_batch_size)) {
+        batchSize = diaspora::BatchSize{parsed_batch_size};
+        DFTRACER_LOG_INFO("Mofka producer batch size set from %s=%zu",
+                          batch_size_env_name, parsed_batch_size);
+      } else {
+        DFTRACER_LOG_WARN("Invalid %s value '%s'; using Adaptive batch size",
+                          batch_size_env_name, batch_size_env);
+      }
+    }
+
+    diaspora::MaxNumBatches max_num_batches = diaspora::MaxNumBatches{2};
+    const char* max_num_batches_env_name =
+        "DFTRACER_MOFKA_PRODUCER_MAX_NUM_BATCHES";
+    const char* max_num_batches_env = std::getenv(max_num_batches_env_name);
+    size_t parsed_max_num_batches = 0;
+    if (max_num_batches_env) {
+      if (parse_positive_size_t(max_num_batches_env,
+                                &parsed_max_num_batches)) {
+        max_num_batches = diaspora::MaxNumBatches{
+            static_cast<size_t>(parsed_max_num_batches)};
+        DFTRACER_LOG_INFO("Mofka producer max num batches set from %s=%zu",
+                          max_num_batches_env_name, parsed_max_num_batches);
+      } else {
+        DFTRACER_LOG_WARN("Invalid %s value '%s'; using default of 2",
+                          max_num_batches_env_name, max_num_batches_env);
+      }
+    }
+
+    diaspora::Ordering ordering = diaspora::Ordering::Strict;
+    const char* ordering_env_name = "DFTRACER_MOFKA_PRODUCER_ORDERING";
+    const char* ordering_env = std::getenv(ordering_env_name);
+    if (ordering_env) {
+      if (parse_ordering(ordering_env, &ordering)) {
+        DFTRACER_LOG_INFO("Mofka producer ordering set from %s=%s",
+                          ordering_env_name, ordering_env);
+      } else {
+        DFTRACER_LOG_WARN("Invalid %s value '%s'; using strict ordering",
+                          ordering_env_name, ordering_env);
+      }
+    }
+
+    const char* producer_thread_count_env_name =
+        "DFTRACER_MOFKA_PRODUCER_THREAD_COUNT";
+    const char* producer_thread_count_env =
+        std::getenv(producer_thread_count_env_name);
+    size_t producer_thread_count = 0;
+    diaspora::ThreadPool producer_thread_pool{};
+    if (producer_thread_count_env) {
+      if (parse_positive_size_t(producer_thread_count_env,
+                                &producer_thread_count)) {
+        producer_thread_pool = driver_->makeThreadPool(
+            diaspora::ThreadCount{producer_thread_count});
+        DFTRACER_LOG_INFO("Mofka producer thread count set from %s=%zu",
+                          producer_thread_count_env_name,
+                          producer_thread_count);
+      } else {
+        DFTRACER_LOG_WARN("Invalid %s value '%s'; using default thread pool",
+                          producer_thread_count_env_name,
+                          producer_thread_count_env);
+      }
+    }
+
+    const char* flush_every_n_writes_env_name =
+        "DFTRACER_MOFKA_PRODUCER_FLUSH_EVERY_N_WRITES";
+    const char* flush_every_n_writes_env =
+        std::getenv(flush_every_n_writes_env_name);
+    size_t parsed_flush_every_n_writes = 0;
+    flush_every_n_writes_ = 0;
+    writes_since_flush_ = 0;
+    if (flush_every_n_writes_env) {
+      if (parse_positive_size_t(flush_every_n_writes_env,
+                                &parsed_flush_every_n_writes)) {
+        flush_every_n_writes_ = parsed_flush_every_n_writes;
+        DFTRACER_LOG_INFO("Mofka periodic flush set from %s=%zu",
+                          flush_every_n_writes_env_name,
+                          parsed_flush_every_n_writes);
+      } else {
+        DFTRACER_LOG_WARN("Invalid %s value '%s'; disabling periodic flush",
+                          flush_every_n_writes_env_name,
+                          flush_every_n_writes_env);
+      }
+    }
+
+    const char* control_topic_env_name = "DFTRACER_MOFKA_CONTROL_TOPIC_NAME";
+    const char* control_topic_env = std::getenv(control_topic_env_name);
+    if (control_topic_env && control_topic_env[0] != '\0') {
+      control_topic_name_ = control_topic_env;
+    } else {
+      control_topic_name_ = "control_events";
+      DFTRACER_LOG_INFO("%s unset; defaulting to %s", control_topic_env_name,
+                        control_topic_name_.c_str());
+    }
+
+    const char* control_event_names_env_name =
+        "DFTRACER_MOFKA_CONTROL_EVENT_NAMES";
+    const char* control_event_names_env =
+        std::getenv(control_event_names_env_name);
+    if (control_event_names_env) {
+      parse_control_event_names(control_event_names_env,
+                                &control_trigger_event_names_);
+      if (control_trigger_event_names_.empty()) {
+        DFTRACER_LOG_WARN(
+            "%s is set but empty; control-event producer disabled",
+            control_event_names_env_name);
+      } else {
+        DFTRACER_LOG_INFO("Mofka control trigger names loaded from %s",
+                          control_event_names_env_name);
+      }
+    } else {
+      // Default trigger names to avoid requiring extra env setup.
+      control_trigger_event_names_.push_back("epoch.start");
+      control_trigger_event_names_.push_back("epoch.block");
+      DFTRACER_LOG_INFO(
+          "%s unset; defaulting control-event triggers to "
+          "epoch.start,epoch.block",
+          control_event_names_env_name);
+    }
+
+    if (producer_thread_pool) {
+      producer_ = std::make_unique<diaspora::Producer>(
+          topic_->producer("dftracer", batchSize, max_num_batches, ordering,
+                           producer_thread_pool));
+    } else {
+      producer_ = std::make_unique<diaspora::Producer>(
+          topic_->producer("dftracer", batchSize, max_num_batches, ordering));
+    }
+    DFTRACER_LOG_INFO("Mofka producer created", "");
+
+    if (!control_trigger_event_names_.empty()) {
+      if (driver_->topicExists(control_topic_name_)) {
+        DFTRACER_LOG_INFO("Mofka control topic exists", "");
+      } else {
+        ensure_topic_exists(driver_.get(), control_topic_name_);
+        DFTRACER_LOG_INFO("Mofka control topic created", "");
+      }
+      control_topic_ = std::make_unique<diaspora::TopicHandle>(
+          driver_->openTopic(control_topic_name_));
+
+      const diaspora::BatchSize control_batch_size{1};
+      const diaspora::Ordering control_ordering = diaspora::Ordering::Strict;
+      if (producer_thread_pool) {
+        control_producer_ =
+            std::make_unique<diaspora::Producer>(control_topic_->producer(
+                "dftracer_control", control_batch_size, max_num_batches,
+                control_ordering, producer_thread_pool));
+      } else {
+        control_producer_ = std::make_unique<diaspora::Producer>(
+            control_topic_->producer("dftracer_control", control_batch_size,
+                                     max_num_batches, control_ordering));
+      }
+      DFTRACER_LOG_INFO(
+          "Mofka control producer enabled: topic=%s trigger_count=%zu",
+          control_topic_name_.c_str(), control_trigger_event_names_.size());
+      control_hooks_enabled_ = true;
+    }
+
+    init_pid_ = current_pid;
+    DFTRACER_LOG_INFO("MofkaWriter initialized with PID %d", init_pid_);
+  } catch (const std::exception& e) {
+    DFTRACER_LOG_ERROR("Failed to initialize MofkaWriter", e.what());
+    throw;
   }
 }
 
@@ -323,10 +338,8 @@ size_t MofkaWriter::write(const char* data, size_t len, bool force) {
     return 0;
   }
   try {
-    // Use string_view with explicit length and parse=false to store raw data
-    // without JSON parsing (which would fail on binary data with null bytes)
     std::string_view data_view(data, len);
-    producer_->push(diaspora::Metadata{data_view, false}, diaspora::DataView{});
+    producer_->push(diaspora::Metadata{data_view}, diaspora::DataView{});
     ++trace_events_written_;
 
     if (flush_every_n_writes_ > 0) {
