@@ -26,6 +26,8 @@ class MofkaWriter : public WriterInterface {
   size_t writes_since_flush_ = 0;
   size_t trace_events_written_ = 0;
   bool control_hooks_enabled_ = false;
+  bool forked_child_ = false;
+  bool finalized_ = false;
   std::vector<std::string> control_trigger_event_names_;
 
  public:
@@ -34,7 +36,7 @@ class MofkaWriter : public WriterInterface {
 
   void initialize(const char* filename) override;
   bool control_hooks_enabled() const override { return control_hooks_enabled_; }
-  void before_write(const EventContext& event) override;
+  void after_write(const EventContext& event) override;
   size_t write(const char* data, size_t len, bool force = false) override;
   void finalize(int index) override;
 };

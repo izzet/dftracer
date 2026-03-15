@@ -30,6 +30,11 @@ void dftracer_init(void) {
 }
 
 void dftracer_fini(void) {
+  dftracer::emit_fork_breadcrumb("dftracer_fini.enter");
+  if (dftracer::g_forked_child_process) {
+    dftracer::emit_fork_breadcrumb("dftracer_fini.skip_forked_child");
+    return;
+  }
   auto conf =
       dftracer::Singleton<dftracer::ConfigurationManager>::get_instance();
   DFTRACER_LOG_DEBUG("dftracer_fini", "");
@@ -37,6 +42,7 @@ void dftracer_fini(void) {
       dftracer::Singleton<dftracer::DFTracerCore>::get_instance(
           ProfilerStage::PROFILER_FINI, ProfileType::PROFILER_PRELOAD);
   if (dftracer_inst != nullptr) {
+    dftracer::emit_fork_breadcrumb("dftracer_fini.finalize_core");
     dftracer_inst->finalize();
   }
 }

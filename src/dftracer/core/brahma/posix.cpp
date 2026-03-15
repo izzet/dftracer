@@ -694,9 +694,12 @@ int brahma::POSIXDFTracer::fork() {
   int ret = __real_fork();
   if (ret == 0) {
     // zero comes for forked childs
+    dftracer::g_forked_child_process = true;
+    dftracer::emit_fork_breadcrumb("posix_fork.child_before_reinit");
     auto main = dftracer::Singleton<dftracer::DFTracerCore>::get_instance(
         ProfilerStage::PROFILER_INIT, ProfileType::PROFILER_PRELOAD);
     main->reinitialize();
+    dftracer::emit_fork_breadcrumb("posix_fork.child_after_reinit");
   } else {
     DFT_LOGGER_START_ALWAYS();
     DFT_LOGGER_UPDATE(ret);
@@ -707,14 +710,25 @@ int brahma::POSIXDFTracer::fork() {
 
 void brahma::POSIXDFTracer::exit(int status) {
   BRAHMA_MAP_OR_FAIL(exit);
+  dftracer::emit_fork_breadcrumb("posix_exit.enter");
   DFTRACER_LOG_INFO("Calling finalize from exit", "");
   dft_finalize(true);
+  dftracer::emit_fork_breadcrumb("posix_exit.after_finalize");
+  const char* fast_exit = std::getenv("DFTRACER_USE__EXIT_AFTER_FINALIZE");
+  if (fast_exit && fast_exit[0] != '\0' && fast_exit[0] != '0') {
+    BRAHMA_MAP_OR_FAIL(_exit);
+    dftracer::emit_fork_breadcrumb("posix_exit.use__exit_after_finalize");
+    fflush(nullptr);
+    __real__exit(status);
+  }
   __real_exit(status);
 }
 
 void brahma::POSIXDFTracer::_exit(int status) {
   BRAHMA_MAP_OR_FAIL(_exit);
+  dftracer::emit_fork_breadcrumb("posix__exit.enter");
   DFTRACER_LOG_INFO("Calling finalize from _exit", "");
   dft_finalize(true);
+  dftracer::emit_fork_breadcrumb("posix__exit.after_finalize");
   __real__exit(status);
 }

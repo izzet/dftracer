@@ -2,6 +2,7 @@
 
 #include <cstddef>
 #include <dftracer/core/dftracer_config.hpp>
+#include <string>
 
 #if DFTRACER_WRITER_TYPE_MOFKA
 #include <dftracer/core/writer/mofka_writer.h>
@@ -18,6 +19,51 @@ template <>
 bool dftracer::Singleton<dftracer::BufferManager>::stop_creating_instances =
     false;
 namespace dftracer {
+
+namespace {
+
+bool extract_metadata_integer(const dftracer::Metadata* metadata,
+                              const char* key, long long* value) {
+  if (!metadata || !key || !value) return false;
+  auto it = metadata->find(key);
+  if (it == metadata->end()) return false;
+  const std::any& raw_value = it->second.second;
+  if (raw_value.type() == typeid(int)) {
+    *value = std::any_cast<int>(raw_value);
+    return true;
+  }
+  if (raw_value.type() == typeid(long)) {
+    *value = std::any_cast<long>(raw_value);
+    return true;
+  }
+  if (raw_value.type() == typeid(long long)) {
+    *value = std::any_cast<long long>(raw_value);
+    return true;
+  }
+  if (raw_value.type() == typeid(unsigned int)) {
+    *value = std::any_cast<unsigned int>(raw_value);
+    return true;
+  }
+  if (raw_value.type() == typeid(unsigned long)) {
+    *value = std::any_cast<unsigned long>(raw_value);
+    return true;
+  }
+  if (raw_value.type() == typeid(unsigned long long)) {
+    *value = std::any_cast<unsigned long long>(raw_value);
+    return true;
+  }
+  if (raw_value.type() == typeid(std::string)) {
+    try {
+      *value = std::stoll(std::any_cast<std::string>(raw_value));
+      return true;
+    } catch (...) {
+      return false;
+    }
+  }
+  return false;
+}
+
+}  // namespace
 
 void BufferManager::compress_and_write_if_needed(size_t size, bool force) {
 #if DFTRACER_WRITER_TYPE_MOFKA
@@ -107,11 +153,11 @@ void BufferManager::log_data_event(int index, ConstEventNameType event_name,
                                    ProcessID process_id, ThreadID tid) {
   std::unique_lock<std::shared_mutex> lock(mtx);
   DFTRACER_LOG_DEBUG("BufferManager.log_data_event %d", index);
-  if (this->control_hooks_enabled) {
-    this->writer->before_write(
-        dftracer::EventContext{event_name, category, "X", process_id, tid});
-  }
   size_t size = 0;
+  long long step = 0;
+  long long epoch = 0;
+  const bool has_step = extract_metadata_integer(metadata, "step", &step);
+  const bool has_epoch = extract_metadata_integer(metadata, "epoch", &epoch);
   bool enable_tracing = true;
   if (this->config->aggregation_enable && strcmp(category, "dftracer") != 0) {
     enable_tracing = false;
@@ -138,6 +184,11 @@ void BufferManager::log_data_event(int index, ConstEventNameType event_name,
                                start_time, duration, metadata, process_id, tid);
   }
   compress_and_write_if_needed(size);
+  if (this->control_hooks_enabled) {
+    this->writer->after_write(dftracer::EventContext{
+        event_name, category, "X", process_id, tid, start_time, metadata,
+        has_step, step, has_epoch, epoch});
+  }
 }
 
 void BufferManager::log_counter_event(int index, ConstEventNameType name,
@@ -147,14 +198,19 @@ void BufferManager::log_counter_event(int index, ConstEventNameType name,
                                       dftracer::Metadata* metadata) {
   std::unique_lock<std::shared_mutex> lock(mtx);
   DFTRACER_LOG_DEBUG("BufferManager.log_counter_event %d", index);
-  if (this->control_hooks_enabled) {
-    this->writer->before_write(
-        dftracer::EventContext{name, category, "C", process_id, thread_id});
-  }
+  long long step = 0;
+  long long epoch = 0;
+  const bool has_step = extract_metadata_integer(metadata, "step", &step);
+  const bool has_epoch = extract_metadata_integer(metadata, "epoch", &epoch);
   size_t size =
       this->serializer->counter(buffer + buffer_pos, index, name, category,
                                 start_time, process_id, thread_id, metadata);
   compress_and_write_if_needed(size);
+  if (this->control_hooks_enabled) {
+    this->writer->after_write(dftracer::EventContext{
+        name, category, "C", process_id, thread_id, start_time, metadata,
+        has_step, step, has_epoch, epoch});
+  }
 }
 
 void BufferManager::log_metadata_event(ConstEventNameType name,
@@ -164,12 +220,22 @@ void BufferManager::log_metadata_event(ConstEventNameType name,
                                        bool is_string) {
   std::unique_lock<std::shared_mutex> lock(mtx);
   DFTRACER_LOG_DEBUG("BufferManager.log_metadata_event %s", value);
-  if (this->control_hooks_enabled) {
-    this->writer->before_write(
-        dftracer::EventContext{ph, "dftracer", "M", process_id, tid});
-  }
   size_t size = this->serializer->metadata(buffer + buffer_pos, name, value, ph,
                                            process_id, tid, is_string);
   compress_and_write_if_needed(size);
+  if (this->control_hooks_enabled) {
+    this->writer->after_write(dftracer::EventContext{
+        name ? name : ph,
+        "dftracer",
+        "M",
+        process_id,
+        tid,
+        0,
+        nullptr,
+        false,
+        0,
+        false,
+        0});
+  }
 }
 }  // namespace dftracer

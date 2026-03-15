@@ -10,6 +10,7 @@
 #include <dftracer/core/common/cpp_typedefs.h>
 #include <dftracer/core/common/datastructure.h>
 #include <dftracer/core/common/enumeration.h>
+#include <dftracer/core/common/fork_state.h>
 #include <dftracer/core/common/logging.h>
 #include <dftracer/core/common/singleton.h>
 #include <dftracer/core/common/typedef.h>
@@ -405,6 +406,7 @@ class DFTLogger {
 
   inline void finalize() {
     DFTRACER_LOG_DEBUG("DFTLogger.finalize", "");
+    dftracer::emit_fork_breadcrumb("dft_logger.finalize.enter");
     if (this->buffer_manager != nullptr) {
       auto meta = new dftracer::Metadata();
       meta->insert_or_assign("num_events", index.load());
@@ -415,6 +417,7 @@ class DFTLogger {
                                            this->process_id, tid);
       this->exit_event();
       this->buffer_manager->finalize(index.load(), this->process_id, true);
+      dftracer::emit_fork_breadcrumb("dft_logger.finalize.after_buffer");
       DFTRACER_LOG_INFO("Released Logger", "");
       this->buffer_manager.reset();
       clean_stack();
@@ -422,6 +425,7 @@ class DFTLogger {
       DFTRACER_LOG_WARN("DFTLogger.finalize buffer manager not initialized",
                         "");
     }
+    dftracer::emit_fork_breadcrumb("dft_logger.finalize.exit");
   }
 };
 

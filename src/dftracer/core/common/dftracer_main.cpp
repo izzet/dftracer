@@ -11,14 +11,31 @@ std::shared_ptr<dftracer::DFTracerCore>
 template <>
 bool dftracer::Singleton<dftracer::DFTracerCore>::stop_creating_instances =
     false;
+bool dftracer::g_forked_child_process = false;
+
+namespace {
+bool should_skip_io_unbind_on_finalize() {
+  const char* fast_exit = std::getenv("DFTRACER_USE__EXIT_AFTER_FINALIZE");
+  return fast_exit && fast_exit[0] != '\0' && fast_exit[0] != '0';
+}
+}  // namespace
+
 void dft_finalize(bool force) {
   DFTRACER_LOG_DEBUG("DFTracerCore.dft_finalize", "");
+  dftracer::emit_fork_breadcrumb("dft_finalize.enter");
+  if (dftracer::g_forked_child_process) {
+    dftracer::emit_fork_breadcrumb("dft_finalize.skip_forked_child");
+    DFTRACER_LOG_INFO("Skipping DFTracer finalize in forked child pid %d",
+                      df_getpid());
+    return;
+  }
   auto conf =
       dftracer::Singleton<dftracer::ConfigurationManager>::get_instance();
   if (force || conf->init_type == ProfileInitType::PROFILER_INIT_FUNCTION) {
     auto dftracer = DFTRACER_MAIN_SINGLETON(ProfilerStage::PROFILER_FINI,
                                             ProfileType::PROFILER_ANY);
     if (dftracer != nullptr) {
+      dftracer::emit_fork_breadcrumb("dft_finalize.finalize_core");
       dftracer->finalize();
       dftracer::Singleton<dftracer::DFTracerCore>::finalize();
     }
@@ -106,13 +123,16 @@ void dftracer::DFTracerCore::log_metadata(ConstEventNameType key,
 bool dftracer::DFTracerCore::finalize() {
   DFTRACER_LOG_DEBUG("DFTracerCore::finalize", "");
   if (this->is_initialized && conf->enable) {
+    dftracer::emit_fork_breadcrumb("dftracer_core.finalize.enter");
     DFTRACER_LOG_INFO("Calling finalize on pid %d", this->process_id);
+    const bool skip_io_unbind = should_skip_io_unbind_on_finalize();
     auto trie = dftracer::Singleton<Trie>::get_instance();
     if (trie != nullptr) {
       DFTRACER_LOG_INFO("Release Prefix Tree", "");
       trie->finalize();
       dftracer::Singleton<Trie>::finalize();
     }
+    dftracer::emit_fork_breadcrumb("dftracer_core.finalize.after_trie");
     if (bind) {
 #ifdef DFTRACER_FTRACING_ENABLE
       auto function_instance = dftracer::Function::get_instance();
@@ -131,21 +151,48 @@ bool dftracer::DFTracerCore::finalize() {
         DFTRACER_LOG_INFO("Release I/O bindings", "");
         auto posix_instance = brahma::POSIXDFTracer::get_instance();
         if (posix_instance != nullptr) {
-          posix_instance->unbind();
+          if (skip_io_unbind) {
+            dftracer::emit_fork_breadcrumb(
+                "dftracer_core.finalize.skip_posix_unbind");
+          } else {
+            dftracer::emit_fork_breadcrumb(
+                "dftracer_core.finalize.before_posix_unbind");
+            posix_instance->unbind();
+            dftracer::emit_fork_breadcrumb(
+                "dftracer_core.finalize.after_posix_unbind");
+          }
           posix_instance->finalize();
+          dftracer::emit_fork_breadcrumb(
+              "dftracer_core.finalize.after_posix_finalize");
         }
         auto stdio_instance = brahma::STDIODFTracer::get_instance();
         if (stdio_instance != nullptr) {
-          stdio_instance->unbind();
+          if (skip_io_unbind) {
+            dftracer::emit_fork_breadcrumb(
+                "dftracer_core.finalize.skip_stdio_unbind");
+          } else {
+            dftracer::emit_fork_breadcrumb(
+                "dftracer_core.finalize.before_stdio_unbind");
+            stdio_instance->unbind();
+            dftracer::emit_fork_breadcrumb(
+                "dftracer_core.finalize.after_stdio_unbind");
+          }
           stdio_instance->finalize();
+          dftracer::emit_fork_breadcrumb(
+              "dftracer_core.finalize.after_stdio_finalize");
         }
       }
     }
     if (logger != nullptr) {
+      dftracer::emit_fork_breadcrumb(
+          "dftracer_core.finalize.before_logger_finalize");
       logger->finalize();
       dftracer::Singleton<DFTLogger>::finalize();
+      dftracer::emit_fork_breadcrumb(
+          "dftracer_core.finalize.after_logger_finalize");
     }
     this->is_initialized = false;
+    dftracer::emit_fork_breadcrumb("dftracer_core.finalize.exit");
     return true;
   } else {
     DFTRACER_LOG_INFO("Already finalized on pid %d", this->process_id);

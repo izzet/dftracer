@@ -1,4 +1,5 @@
 #include <dftracer/core/common/logging.h>
+#include <dftracer/core/common/fork_state.h>
 #include <dftracer/core/common/singleton.h>
 #include <dftracer/core/common/utils.h>
 #include <dftracer/core/writer/mofka_writer.h>
@@ -77,7 +78,20 @@ bool Singleton<MofkaWriter>::stop_creating_instances = false;
 
 MofkaWriter::MofkaWriter() {}
 
-MofkaWriter::~MofkaWriter() { finalize(0); }
+MofkaWriter::~MofkaWriter() {
+  dftracer::emit_fork_breadcrumb("mofka_writer.destructor.enter");
+  if (forked_child_ || dftracer::g_forked_child_process) {
+    (void)control_producer_.release();
+    (void)producer_.release();
+    (void)control_topic_.release();
+    (void)topic_.release();
+    (void)driver_.release();
+    dftracer::emit_fork_breadcrumb("mofka_writer.destructor.release_forked_child");
+    return;
+  }
+  finalize(0);
+  dftracer::emit_fork_breadcrumb("mofka_writer.destructor.exit");
+}
 
 void MofkaWriter::initialize(const char* filename) {
   const char* group_file_env = std::getenv("DFTRACER_MOFKA_GROUP_FILE");
@@ -99,6 +113,7 @@ void MofkaWriter::initialize(const char* filename) {
       DFTRACER_LOG_INFO("MofkaWriter already initialized", "");
       return;
     }
+    forked_child_ = true;
     DFTRACER_LOG_INFO(
         "Detected forked child; rebuilding MofkaWriter state (parent pid=%d, "
         "child pid=%d)",
@@ -114,6 +129,7 @@ void MofkaWriter::initialize(const char* filename) {
   control_hooks_enabled_ = false;
   control_trigger_event_names_.clear();
   control_topic_name_.clear();
+  finalized_ = false;
 
   try {
     diaspora::Metadata options;
@@ -305,19 +321,23 @@ void MofkaWriter::initialize(const char* filename) {
   }
 }
 
-void MofkaWriter::before_write(const EventContext& event) {
+void MofkaWriter::after_write(const EventContext& event) {
   if (!control_producer_) return;
   if (!is_control_trigger_event(event.event_name, control_trigger_event_names_))
     return;
   try {
-    const auto now_ns = std::chrono::duration_cast<std::chrono::nanoseconds>(
-                            std::chrono::system_clock::now().time_since_epoch())
-                            .count();
+    if (producer_) {
+      producer_->flush().wait(-1);
+      writes_since_flush_ = 0;
+    }
+
+    const auto trace_ts_us =
+        static_cast<unsigned long long>(event.start_time);
     diaspora::Metadata control_metadata;
     control_metadata.json()["type"] = "boundary_event";
     control_metadata.json()["trace_topic"] = topic_name_;
     control_metadata.json()["control_topic"] = control_topic_name_;
-    control_metadata.json()["events_written"] = trace_events_written_ + 1;
+    control_metadata.json()["events_written"] = trace_events_written_;
     control_metadata.json()["trigger_event_name"] = event.event_name;
     control_metadata.json()["trigger_category"] =
         event.category ? event.category : "";
@@ -325,8 +345,12 @@ void MofkaWriter::before_write(const EventContext& event) {
     control_metadata.json()["pid"] = event.process_id;
     control_metadata.json()["tid"] =
         static_cast<unsigned long long>(event.thread_id);
-    control_metadata.json()["ts_unix_ns"] = now_ns;
+    control_metadata.json()["trace_ts_us"] = trace_ts_us;
+    control_metadata.json()["ts_unix_ns"] = trace_ts_us * 1000ULL;
+    if (event.has_step) control_metadata.json()["step"] = event.step;
+    if (event.has_epoch) control_metadata.json()["epoch"] = event.epoch;
     control_producer_->push(std::move(control_metadata), diaspora::DataView{});
+    control_producer_->flush().wait(-1);
   } catch (const std::exception& e) {
     DFTRACER_LOG_WARN("Mofka control event push failed: %s", e.what());
   }
@@ -360,6 +384,13 @@ size_t MofkaWriter::write(const char* data, size_t len, bool force) {
 }
 
 void MofkaWriter::finalize(int index) {
+  dftracer::emit_fork_breadcrumb("mofka_writer.finalize.enter");
+  if (finalized_) {
+    DFTRACER_LOG_INFO("MofkaWriter already finalized", "");
+    dftracer::emit_fork_breadcrumb("mofka_writer.finalize.already_finalized");
+    return;
+  }
+  finalized_ = true;
   DFTRACER_LOG_INFO("Mofka finalizing", "");
   if (getpid() != init_pid_) {
     DFTRACER_LOG_INFO(
@@ -384,6 +415,30 @@ void MofkaWriter::finalize(int index) {
     if (driver_) {
       driver_.release();
     }
+    dftracer::emit_fork_breadcrumb("mofka_writer.finalize.skip_wrong_pid");
+    return;
+  }
+  if (forked_child_) {
+    DFTRACER_LOG_INFO(
+        "MofkaWriter::finalize in forked child pid=%d: releasing handles "
+        "without flushing or destruction",
+        getpid());
+    if (control_producer_) {
+      (void)control_producer_.release();
+    }
+    if (producer_) {
+      (void)producer_.release();
+    }
+    if (control_topic_) {
+      (void)control_topic_.release();
+    }
+    if (topic_) {
+      (void)topic_.release();
+    }
+    if (driver_) {
+      (void)driver_.release();
+    }
+    dftracer::emit_fork_breadcrumb("mofka_writer.finalize.release_forked_child");
     return;
   }
   if (control_producer_) {
@@ -410,6 +465,7 @@ void MofkaWriter::finalize(int index) {
     driver_.reset();
     DFTRACER_LOG_INFO("Mofka driver reset", "");
   }
+  dftracer::emit_fork_breadcrumb("mofka_writer.finalize.exit");
 }
 
 }  // namespace dftracer
