@@ -22,8 +22,6 @@ class MofkaWriter : public WriterInterface {
   std::unique_ptr<diaspora::TopicHandle> topic_;
   std::unique_ptr<diaspora::TopicHandle> control_topic_;
   pid_t init_pid_ = 0;
-  size_t flush_every_n_writes_ = 0;
-  size_t writes_since_flush_ = 0;
   size_t trace_events_written_ = 0;
   bool control_hooks_enabled_ = false;
   bool forked_child_ = false;
@@ -36,6 +34,7 @@ class MofkaWriter : public WriterInterface {
 
   void initialize(const char* filename) override;
   bool control_hooks_enabled() const override { return control_hooks_enabled_; }
+  bool is_control_trigger(ConstEventNameType event_name) const override;
   void after_write(const EventContext& event) override;
   size_t write(const char* data, size_t len, bool force = false) override;
   void finalize(int index) override;

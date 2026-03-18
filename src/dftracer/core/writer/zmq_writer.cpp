@@ -1,12 +1,31 @@
+#include <dftracer/core/common/utils.h>
 #include <dftracer/core/writer/zmq_writer.h>
 #include <pthread.h>
 #include <unistd.h>
 
 #include <cstdlib>
 #include <cstring>
+#include <sstream>
 #include <stdexcept>
 
 namespace dftracer {
+
+namespace {
+
+void parse_control_event_names(const char* value,
+                               std::vector<std::string>* names) {
+  if (!names) return;
+  names->clear();
+  if (!value) return;
+  std::stringstream ss(value);
+  std::string token;
+  while (std::getline(ss, token, ',')) {
+    auto trimmed = trim_copy(token);
+    if (!trimmed.empty()) names->push_back(std::move(trimmed));
+  }
+}
+
+}  // namespace
 
 template <>
 std::shared_ptr<ZMQWriter> Singleton<ZMQWriter>::instance = nullptr;
@@ -66,11 +85,34 @@ void ZMQWriter::initialize(const char* filename) {
 
     DFTRACER_LOG_INFO("ZMQWriter connected to %s with fork handling (PID %d)",
                       endpoint_.c_str(), init_pid_);
+
+    // Parse control trigger event names (shared with Mofka config).
+    const char* control_event_names_env =
+        std::getenv("DFTRACER_MOFKA_CONTROL_EVENT_NAMES");
+    if (control_event_names_env) {
+      parse_control_event_names(control_event_names_env,
+                                &control_trigger_event_names_);
+    }
+    if (control_trigger_event_names_.empty()) {
+      control_trigger_event_names_.push_back("epoch.start");
+      control_trigger_event_names_.push_back("epoch.block");
+    }
+    control_hooks_enabled_ = !control_trigger_event_names_.empty();
+    DFTRACER_LOG_INFO("ZMQWriter control triggers: %zu event names",
+                      control_trigger_event_names_.size());
   } catch (const zmq::error_t& e) {
     DFTRACER_LOG_ERROR("ZeroMQ error during initialization: %s", e.what());
     throw std::runtime_error(std::string("ZeroMQ initialization failed: ") +
                              e.what());
   }
+}
+
+bool ZMQWriter::is_control_trigger(ConstEventNameType event_name) const {
+  if (!event_name || event_name[0] == '\0') return false;
+  for (const auto& trigger_name : control_trigger_event_names_) {
+    if (std::strcmp(event_name, trigger_name.c_str()) == 0) return true;
+  }
+  return false;
 }
 
 size_t ZMQWriter::write(const char* data, size_t len, bool force) {

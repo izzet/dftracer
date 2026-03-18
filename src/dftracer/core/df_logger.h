@@ -132,9 +132,26 @@ class DFTLogger {
     return hash_str;
   }
 
+  /**
+   * Reset event-nesting state after fork.  Called from update_log_file() so
+   * that the child process starts with a clean event stack regardless of
+   * whether the DFTLogger singleton was replaced (get_new_instance) or
+   * reused in-place (get_instance).  Extracted as a standalone method so
+   * callers that need get_instance() semantics (e.g. Mofka streaming, where
+   * POSIX/STDIO interceptors cache a shared_ptr to the singleton) can call
+   * reset_state() explicitly without creating a new object.
+   */
+  inline void reset_state() {
+    std::unique_lock<std::shared_mutex> lock(level_mtx);
+    index.store(0);
+    level = 0;
+    index_stack.clear();
+  }
+
   inline void update_log_file(std::string log_file, std::string exec_name,
                               std::string cmd, ProcessID process_id = -1) {
     DFTRACER_LOG_DEBUG("DFTLogger.update_log_file %s", log_file.c_str());
+    reset_state();
     this->process_id = df_getpid();
     ThreadID tid = 0;
     if (dftracer_tid) {

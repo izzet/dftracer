@@ -152,7 +152,10 @@ void MofkaWriter::initialize(const char* filename) {
         driver_->openTopic(topic_name_));
     DFTRACER_LOG_INFO("Mofka topic opened", "");
 
-    diaspora::BatchSize batchSize = diaspora::BatchSize::Adaptive();
+    // Buffer manager handles batching — each write() call from the buffer
+    // manager contains a batch of newline-delimited JSON events. Use
+    // batch_size=1 so each push is sent immediately (no Mofka-level batching).
+    diaspora::BatchSize batchSize{1};
     const char* batch_size_env_name = "DFTRACER_MOFKA_PRODUCER_BATCH_SIZE";
     const char* batch_size_env = std::getenv(batch_size_env_name);
     size_t parsed_batch_size = 0;
@@ -162,12 +165,12 @@ void MofkaWriter::initialize(const char* filename) {
         DFTRACER_LOG_INFO("Mofka producer batch size set from %s=%zu",
                           batch_size_env_name, parsed_batch_size);
       } else {
-        DFTRACER_LOG_WARN("Invalid %s value '%s'; using Adaptive batch size",
+        DFTRACER_LOG_WARN("Invalid %s value '%s'; using batch_size=1",
                           batch_size_env_name, batch_size_env);
       }
     }
 
-    diaspora::MaxNumBatches max_num_batches = diaspora::MaxNumBatches{2};
+    diaspora::MaxNumBatches max_num_batches = diaspora::MaxNumBatches{16};
     const char* max_num_batches_env_name =
         "DFTRACER_MOFKA_PRODUCER_MAX_NUM_BATCHES";
     const char* max_num_batches_env = std::getenv(max_num_batches_env_name);
@@ -180,7 +183,7 @@ void MofkaWriter::initialize(const char* filename) {
         DFTRACER_LOG_INFO("Mofka producer max num batches set from %s=%zu",
                           max_num_batches_env_name, parsed_max_num_batches);
       } else {
-        DFTRACER_LOG_WARN("Invalid %s value '%s'; using default of 2",
+        DFTRACER_LOG_WARN("Invalid %s value '%s'; using default of 16",
                           max_num_batches_env_name, max_num_batches_env);
       }
     }
@@ -216,27 +219,6 @@ void MofkaWriter::initialize(const char* filename) {
         DFTRACER_LOG_WARN("Invalid %s value '%s'; using default thread pool",
                           producer_thread_count_env_name,
                           producer_thread_count_env);
-      }
-    }
-
-    const char* flush_every_n_writes_env_name =
-        "DFTRACER_MOFKA_PRODUCER_FLUSH_EVERY_N_WRITES";
-    const char* flush_every_n_writes_env =
-        std::getenv(flush_every_n_writes_env_name);
-    size_t parsed_flush_every_n_writes = 0;
-    flush_every_n_writes_ = 0;
-    writes_since_flush_ = 0;
-    if (flush_every_n_writes_env) {
-      if (parse_positive_size_t(flush_every_n_writes_env,
-                                &parsed_flush_every_n_writes)) {
-        flush_every_n_writes_ = parsed_flush_every_n_writes;
-        DFTRACER_LOG_INFO("Mofka periodic flush set from %s=%zu",
-                          flush_every_n_writes_env_name,
-                          parsed_flush_every_n_writes);
-      } else {
-        DFTRACER_LOG_WARN("Invalid %s value '%s'; disabling periodic flush",
-                          flush_every_n_writes_env_name,
-                          flush_every_n_writes_env);
       }
     }
 
@@ -321,15 +303,22 @@ void MofkaWriter::initialize(const char* filename) {
   }
 }
 
+bool MofkaWriter::is_control_trigger(ConstEventNameType event_name) const {
+  return is_control_trigger_event(event_name, control_trigger_event_names_);
+}
+
 void MofkaWriter::after_write(const EventContext& event) {
   if (!control_producer_) return;
-  if (!is_control_trigger_event(event.event_name, control_trigger_event_names_))
-    return;
   try {
+    // Buffer manager already force-flushed via write() before calling us.
+    // Flush the Mofka producer to ensure all trace data is delivered before
+    // the control boundary event.
+    static constexpr int FLUSH_TIMEOUT_MS = 100;
+    auto t0 = std::chrono::steady_clock::now();
     if (producer_) {
-      producer_->flush().wait(-1);
-      writes_since_flush_ = 0;
+      producer_->flush().wait(FLUSH_TIMEOUT_MS);
     }
+    auto t1 = std::chrono::steady_clock::now();
 
     const auto trace_ts_us =
         static_cast<unsigned long long>(event.start_time);
@@ -349,8 +338,22 @@ void MofkaWriter::after_write(const EventContext& event) {
     control_metadata.json()["ts_unix_ns"] = trace_ts_us * 1000ULL;
     if (event.has_step) control_metadata.json()["step"] = event.step;
     if (event.has_epoch) control_metadata.json()["epoch"] = event.epoch;
+    auto t2 = std::chrono::steady_clock::now();
     control_producer_->push(std::move(control_metadata), diaspora::DataView{});
-    control_producer_->flush().wait(-1);
+    auto t3 = std::chrono::steady_clock::now();
+    control_producer_->flush().wait(FLUSH_TIMEOUT_MS);
+    auto t4 = std::chrono::steady_clock::now();
+
+    fprintf(stderr,
+        "[DFTRACER_PERF_AFTER_WRITE] pid=%d event=%s "
+        "data_flush_ms=%.1f ctrl_build_ms=%.1f ctrl_push_ms=%.1f ctrl_flush_ms=%.1f total_ms=%.1f\n",
+        (int)event.process_id,
+        event.event_name ? event.event_name : "?",
+        std::chrono::duration<double, std::milli>(t1 - t0).count(),
+        std::chrono::duration<double, std::milli>(t2 - t1).count(),
+        std::chrono::duration<double, std::milli>(t3 - t2).count(),
+        std::chrono::duration<double, std::milli>(t4 - t3).count(),
+        std::chrono::duration<double, std::milli>(t4 - t0).count());
   } catch (const std::exception& e) {
     DFTRACER_LOG_WARN("Mofka control event push failed: %s", e.what());
   }
@@ -362,19 +365,18 @@ size_t MofkaWriter::write(const char* data, size_t len, bool force) {
     return 0;
   }
   try {
-    std::string_view data_view(data, len);
-    producer_->push(diaspora::Metadata{data_view}, diaspora::DataView{});
-    ++trace_events_written_;
-
-    if (flush_every_n_writes_ > 0) {
-      ++writes_since_flush_;
-      if (writes_since_flush_ >= flush_every_n_writes_) {
-        producer_->flush().wait(-1);
-        if (control_producer_) {
-          control_producer_->flush().wait(-1);
-        }
-        writes_since_flush_ = 0;
-      }
+    // Push batched newline-delimited JSON via DataView. Each write() call from
+    // buffer_manager contains a batch of events accumulated up to
+    // write_buffer_size. Metadata is minimal — the actual event data is in the
+    // DataView payload.
+    diaspora::Metadata batch_metadata;
+    batch_metadata.json()["type"] = "batch";
+    batch_metadata.json()["size"] = len;
+    diaspora::DataView data_view(const_cast<char*>(data), len);
+    producer_->push(std::move(batch_metadata), data_view);
+    // Count individual events in the batch (each ends with '\n').
+    for (size_t i = 0; i < len; ++i) {
+      if (data[i] == '\n') ++trace_events_written_;
     }
     return len;
   } catch (const std::exception& e) {

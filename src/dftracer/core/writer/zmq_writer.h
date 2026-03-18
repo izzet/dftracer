@@ -8,6 +8,7 @@
 
 #include <memory>
 #include <string>
+#include <vector>
 #include <zmq.hpp>
 
 namespace dftracer {
@@ -19,12 +20,16 @@ class ZMQWriter : public WriterInterface {
   std::string endpoint_;
   bool initialized_;
   pid_t init_pid_;
+  bool control_hooks_enabled_ = false;
+  std::vector<std::string> control_trigger_event_names_;
 
  public:
   ZMQWriter();
   ~ZMQWriter() override;
 
   void initialize(const char* filename) override;
+  bool control_hooks_enabled() const override { return control_hooks_enabled_; }
+  bool is_control_trigger(ConstEventNameType event_name) const override;
   size_t write(const char* data, size_t len, bool force = false) override;
   void finalize(int index) override;
 

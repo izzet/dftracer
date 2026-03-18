@@ -227,7 +227,7 @@ void dftracer::DFTracerCore::reinitialize() {
   DFTRACER_LOG_INFO(
       "Reinitializing DFTracer with log_file %s data_dirs %s and process %d",
       new_log_file.c_str(), this->data_dirs.c_str(), this->process_id);
-  logger = dftracer::Singleton<DFTLogger>::get_new_instance();
+  logger = dftracer::Singleton<DFTLogger>::get_instance();
   initialize(false, nullptr, this->data_dirs.c_str(), nullptr);
 }
 

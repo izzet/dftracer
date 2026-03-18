@@ -25,6 +25,9 @@ class WriterInterface {
  public:
   virtual void initialize(const char* filename) = 0;
   virtual bool control_hooks_enabled() const { return false; }
+  virtual bool is_control_trigger(ConstEventNameType event_name) const {
+    return false;
+  }
   virtual void after_write(const EventContext& event) {}
   virtual size_t write(const char* data, size_t len, bool force = false) = 0;
   virtual void finalize(int index) = 0;

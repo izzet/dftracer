@@ -88,12 +88,10 @@ size_t JsonLines::data(char* buffer, int index, ConstEventNameType event_name,
         index, event_name, category, process_id, thread_id, start_time,
         duration);
   }
-#if !DFTRACER_WRITER_TYPE_MOFKA
   if (written_size > 0) {
     buffer[written_size++] = '\n';
     buffer[written_size] = '\0';
   }
-#endif
   DFTRACER_LOG_DEBUG("JsonLines.serialize %s", buffer);
   return written_size;
 }
@@ -122,12 +120,10 @@ size_t JsonLines::counter(char* buffer, int index,
         R"({"name":"%s","cat":"%s","ts":%llu,"ph":"C","pid":%d,"tid":%lu})",
         event_name, category, start_time, process_id, thread_id);
   }
-#if !DFTRACER_WRITER_TYPE_MOFKA
   if (written_size > 0) {
     buffer[written_size++] = '\n';
     buffer[written_size] = '\0';
   }
-#endif
   DFTRACER_LOG_DEBUG("JsonLines.serialize %s", buffer);
   return written_size;
 }
@@ -148,10 +144,8 @@ size_t JsonLines::metadata(char* buffer, ConstEventNameType name,
         R"({"name":"%s","cat":"dftracer","pid":%d,"tid":%lu,"ph":"M","args":{"hhash":"%s","name":"%s","value":%s}})",
         ph, process_id, thread_id, this->hostname_hash, name, value);
   }
-#if !DFTRACER_WRITER_TYPE_MOFKA
   buffer[written_size++] = '\n';
   buffer[written_size] = '\0';
-#endif
   DFTRACER_LOG_DEBUG("ChromeWriter.convert_json_metadata %s", buffer);
   return written_size;
 }
