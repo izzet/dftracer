@@ -77,6 +77,33 @@ class POSIXDFTracer : public POSIX {
     for (int i = 0; i < MAX_FD; ++i) tracked_fd[i] = NO_HASH_DEFAULT;
     logger = DFT_LOGGER_INIT();
   }
+  /**
+   * Resolve file descriptors inherited from a parent process (e.g. via
+   * shell stdout redirection before execve).  At LD_PRELOAD init time,
+   * fds 0-2 and any others opened by the parent shell are already open
+   * but have no entry in tracked_fd[] because DFTracer never saw the
+   * open() call.  This method reads /proc/self/fd to fill those gaps.
+   *
+   * Must be called after the Trie include/exclude sets are populated
+   * and after the logger singleton is available.
+   */
+  void resolve_inherited_fds() {
+    char link_path[64];
+    char resolved[PATH_MAX];
+    for (int fd = 0; fd < MAX_FD; ++fd) {
+      if (tracked_fd[fd] != NO_HASH_DEFAULT) continue;
+      snprintf(link_path, sizeof(link_path), "/proc/self/fd/%d", fd);
+      ssize_t len = df_readlink(link_path, resolved, PATH_MAX - 1);
+      if (len <= 0) continue;  // fd not open or error
+      resolved[len] = '\0';
+      HashType hash = is_traced(resolved, "inherited_fd");
+      if (hash != NO_HASH_DEFAULT) {
+        tracked_fd[fd] = hash;
+        DFTRACER_LOG_INFO(
+            "Resolved inherited fd %d -> %s", fd, resolved);
+      }
+    }
+  }
   void finalize() {
     DFTRACER_LOG_DEBUG("Finalizing POSIXDFTracer", "");
     stop_trace = true;

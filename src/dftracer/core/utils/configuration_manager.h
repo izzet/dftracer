@@ -30,6 +30,7 @@ class ConfigurationManager {
   bool trace_all_files;
   bool tids;
   bool bind_signals;
+  bool resolve_inherited_fds;
   bool throw_error;
   size_t write_buffer_size;
   size_t trace_interval_ms;

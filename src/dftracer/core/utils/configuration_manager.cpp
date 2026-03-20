@@ -66,6 +66,7 @@ dftracer::ConfigurationManager::ConfigurationManager()
       trace_all_files(false),
       tids(true),
       bind_signals(false),
+      resolve_inherited_fds(false),
       throw_error(false),
       write_buffer_size(16 * 1024 * 1024),
       trace_interval_ms(1000),
@@ -273,6 +274,12 @@ dftracer::ConfigurationManager::ConfigurationManager()
     }
     DFTRACER_LOG_DEBUG("ENV ConfigurationManager.bind_signals %d",
                        this->bind_signals);
+    const char *env_resolve_fds = getenv(DFTRACER_RESOLVE_INHERITED_FDS);
+    if (env_resolve_fds != nullptr && strcmp(env_resolve_fds, "1") == 0) {
+      resolve_inherited_fds = true;
+    }
+    DFTRACER_LOG_DEBUG("ENV ConfigurationManager.resolve_inherited_fds %d",
+                       this->resolve_inherited_fds);
     const char *env_meta = getenv(DFTRACER_INC_METADATA);
     if (env_meta != nullptr && strcmp(env_meta, "1") == 0) {
       metadata = true;
