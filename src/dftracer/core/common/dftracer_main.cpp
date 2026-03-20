@@ -321,6 +321,9 @@ void dftracer::DFTracerCore::initialize(bool _bind, const char *_log_file,
           if (conf->posix) {
             auto posix =
                 brahma::POSIXDFTracer::get_instance(conf->trace_all_files);
+            if (conf->resolve_inherited_fds) {
+              posix->resolve_inherited_fds();
+            }
             posix->bind<brahma::POSIXDFTracer>("dftracer",
                                                conf->gotcha_priority);
           }
