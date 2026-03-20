@@ -478,6 +478,7 @@ int brahma::POSIXDFTracer::dup(int oldfd) {
   DFT_LOGGER_START(oldfd);
   int ret = __real_dup(oldfd);
   DFT_LOGGER_END();
+  if (trace && ret != -1) this->trace(ret, fhash);
   return ret;
 }
 
@@ -486,6 +487,7 @@ int brahma::POSIXDFTracer::dup2(int oldfd, int newfd) {
   DFT_LOGGER_START(oldfd);
   int ret = __real_dup2(oldfd, newfd);
   DFT_LOGGER_END();
+  if (trace && ret != -1) this->trace(ret, fhash);
   return ret;
 }
 
