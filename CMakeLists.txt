@@ -199,6 +199,10 @@ if(DFTRACER_ENABLE_MPI)
         set(DFTRACER_MPI_ENABLE 1)
 endif()
 
+set(DFTRACER_MPI_IMPL "" CACHE STRING
+    "Override detected MPI implementation (OPENMPI, MPICH, CRAYMPICH, MVAPICH, INTELMPI). Empty = auto-detect via C probe.")
+set_property(CACHE DFTRACER_MPI_IMPL PROPERTY STRINGS "" OPENMPI MPICH CRAYMPICH MVAPICH INTELMPI UNKNOWN)
+
 option(DFTRACER_ENABLE_HDF5 "Enable HDF5" OFF)
 
 if(DFTRACER_ENABLE_HDF5)
@@ -358,6 +362,41 @@ else()
                 message(FATAL_ERROR "[${PROJECT_NAME}] DFTRACER_ENABLE_MPI=ON but MPI was not found")
         endif()
 
+        # MPI implementation detection via compiled C probe
+        set(DFTRACER_MPI_IMPL_NAME "UNKNOWN")
+        if(MPI_FOUND OR TARGET MPI::MPI_C)
+                if(DFTRACER_MPI_IMPL)
+                        # User override via -DDFTRACER_MPI_IMPL=<impl>
+                        set(DFTRACER_MPI_IMPL_NAME "${DFTRACER_MPI_IMPL}")
+                        message(STATUS "[${PROJECT_NAME}] MPI implementation overridden: ${DFTRACER_MPI_IMPL_NAME}")
+                else()
+                        # Auto-detect by compiling and running a small C probe
+                        try_run(
+                                _dftracer_mpi_run_result
+                                _dftracer_mpi_compile_result
+                                "${CMAKE_BINARY_DIR}/dftracer_mpi_detect"
+                                "${CMAKE_CURRENT_SOURCE_DIR}/cmake/tests/mpi_detect.c"
+                                CMAKE_FLAGS "-DINCLUDE_DIRECTORIES=${MPI_C_INCLUDE_DIRS}"
+                                LINK_LIBRARIES ${MPI_C_LIBRARIES}
+                                COMPILE_OUTPUT_VARIABLE _dftracer_mpi_compile_out
+                                RUN_OUTPUT_VARIABLE _dftracer_mpi_detect_out
+                        )
+                        set(DFTRACER_MPI_PACKAGE_VERSION "")
+                        if(_dftracer_mpi_compile_result AND
+                           NOT "${_dftracer_mpi_run_result}" STREQUAL "FAILED_TO_RUN")
+                                if(_dftracer_mpi_detect_out MATCHES "IMPL=([A-Z]+)")
+                                        set(DFTRACER_MPI_IMPL_NAME "${CMAKE_MATCH_1}")
+                                endif()
+                                if(_dftracer_mpi_detect_out MATCHES "VERSION=([0-9]+\\.[0-9]+\\.[0-9]+)")
+                                        set(DFTRACER_MPI_PACKAGE_VERSION "${CMAKE_MATCH_1}")
+                                endif()
+                                message(STATUS "[${PROJECT_NAME}] MPI C probe: impl=${DFTRACER_MPI_IMPL_NAME} version=${DFTRACER_MPI_PACKAGE_VERSION}")
+                        else()
+                                message(WARNING "[${PROJECT_NAME}] MPI C probe did not run (compile=${_dftracer_mpi_compile_result} run=${_dftracer_mpi_run_result}); impl detection skipped")
+                        endif()
+                endif()
+        endif()
+
         find_package(brahma 4.0.1 REQUIRED)
 
         if(${brahma_FOUND})
@@ -478,9 +517,16 @@ else()
 
         if(MPI_CXX_FOUND AND(DFTRACER_ENABLE_MPI OR DFTRACER_ENABLE_DYNAMIC_DETECTION))
                 message(STATUS "[${PROJECT_NAME}] MPI found at ${MPI_CXX_INCLUDE_DIRS}.")
+                message(STATUS "[${PROJECT_NAME}] MPI implementation: ${DFTRACER_MPI_IMPL_NAME}")
                 set(DFTRACER_MPI_ENABLE 1)
                 include_directories(${MPI_CXX_INCLUDE_DIRS})
                 set(DEPENDENCY_LIB ${DEPENDENCY_LIB} ${MPI_CXX_LIBRARIES})
+
+                # Set implementation-specific compile definition
+                if(NOT DFTRACER_MPI_IMPL_NAME STREQUAL "UNKNOWN")
+                        target_compile_definitions(${PROJECT_NAME}_core PUBLIC
+                                DFTRACER_MPI_IMPL_${DFTRACER_MPI_IMPL_NAME})
+                endif()
 
                 # Get the directory of each MPI_CXX_LIBRARY and append to MPI_CXX_LIBRARY_DIRS
                 set(MPI_CXX_LIBRARY_DIRS "")

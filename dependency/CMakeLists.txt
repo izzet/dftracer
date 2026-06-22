@@ -5,12 +5,40 @@ dftracer_install_external_project(cpp-logger 2.0.0 "CPP_LOGGER" https://github.c
 # Keep BRAHMA's core targets/install rules enabled in the currently pinned branch.
 set(BRAHMA_CONFIGURE_ARGS "-DBRAHMA_BUILD_DEPENDENCIES=ON")
 
-# Determine effective brahma MPI toggle from availability.
+# Determine effective brahma MPI toggle from availability and detect implementation.
 set(_dftracer_enable_brahma_mpi OFF)
+set(_dftracer_dep_mpi_impl "")
 if(DFTRACER_ENABLE_MPI)
   find_package(MPI QUIET COMPONENTS C)
   if(MPI_FOUND OR TARGET MPI::MPI_C)
     set(_dftracer_enable_brahma_mpi ON)
+
+    # Resolve MPI implementation: honour user override, then run C probe.
+    if(DFTRACER_MPI_IMPL)
+      set(_dftracer_dep_mpi_impl "${DFTRACER_MPI_IMPL}")
+      message(STATUS "[${PROJECT_NAME}] dependency: MPI implementation overridden: ${_dftracer_dep_mpi_impl}")
+    else()
+      # Auto-detect via compiled C probe (reads preprocessor macros from mpi.h)
+      try_run(
+        _dep_mpi_run_result
+        _dep_mpi_compile_result
+        "${CMAKE_BINARY_DIR}/dftracer_dep_mpi_detect"
+        "${CMAKE_CURRENT_SOURCE_DIR}/../cmake/tests/mpi_detect.c"
+        CMAKE_FLAGS "-DINCLUDE_DIRECTORIES=${MPI_C_INCLUDE_DIRS}"
+        LINK_LIBRARIES ${MPI_C_LIBRARIES}
+        COMPILE_OUTPUT_VARIABLE _dep_mpi_compile_out
+        RUN_OUTPUT_VARIABLE _dep_mpi_detect_out
+      )
+      if(_dep_mpi_compile_result AND
+         NOT "${_dep_mpi_run_result}" STREQUAL "FAILED_TO_RUN")
+        if(_dep_mpi_detect_out MATCHES "IMPL=([A-Z]+)")
+          set(_dftracer_dep_mpi_impl "${CMAKE_MATCH_1}")
+        endif()
+        message(STATUS "[${PROJECT_NAME}] dependency: MPI C probe: impl=${_dftracer_dep_mpi_impl}")
+      else()
+        message(WARNING "[${PROJECT_NAME}] dependency: MPI C probe did not run; brahma will auto-detect impl independently")
+      endif()
+    endif()
   else()
     message(WARNING "[${PROJECT_NAME}] DFTRACER_ENABLE_MPI=ON but MPI was not found. Forcing BRAHMA_BUILD_WITH_MPI=OFF")
   endif()
@@ -20,13 +48,18 @@ if(_dftracer_enable_brahma_mpi)
   if(NOT "${BRAHMA_CONFIGURE_ARGS}" STREQUAL "")
     string(APPEND BRAHMA_CONFIGURE_ARGS ";")
   endif()
-
   string(APPEND BRAHMA_CONFIGURE_ARGS "-DBRAHMA_BUILD_WITH_MPI=ON")
+
+  # Forward detected/overridden MPI implementation to brahma so it uses
+  # the same impl without re-running its own detection independently.
+  if(_dftracer_dep_mpi_impl AND NOT "${_dftracer_dep_mpi_impl}" STREQUAL "UNKNOWN")
+    string(APPEND BRAHMA_CONFIGURE_ARGS ";-DBRAHMA_MPI_IMPL=${_dftracer_dep_mpi_impl}")
+    message(STATUS "[${PROJECT_NAME}] Forwarding BRAHMA_MPI_IMPL=${_dftracer_dep_mpi_impl} to brahma")
+  endif()
 else()
   if(NOT "${BRAHMA_CONFIGURE_ARGS}" STREQUAL "")
     string(APPEND BRAHMA_CONFIGURE_ARGS ";")
   endif()
-
   string(APPEND BRAHMA_CONFIGURE_ARGS "-DBRAHMA_BUILD_WITH_MPI=OFF")
 endif()
 
@@ -58,7 +91,7 @@ if(DFTRACER_GENERATE_INTERFACES)
 endif()
 
 # TODO: pin to a tagged release once the next brahma release is published.
-dftracer_install_external_project(brahma 4.0.4 "BRAHMA" https://github.com/hariharan-devarajan/brahma.git v1.0.6 ${CMAKE_INSTALL_PREFIX} "${BRAHMA_CONFIGURE_ARGS}")
+dftracer_install_external_project(brahma 4.1.0 "BRAHMA" https://github.com/hariharan-devarajan/brahma.git v1.0.7 ${CMAKE_INSTALL_PREFIX} "${BRAHMA_CONFIGURE_ARGS}")
 if(TARGET brahma AND TARGET cpp-logger)
   add_dependencies(brahma cpp-logger)
 endif()
