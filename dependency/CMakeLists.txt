@@ -91,7 +91,7 @@ if(DFTRACER_GENERATE_INTERFACES)
 endif()
 
 # TODO: pin to a tagged release once the next brahma release is published.
-dftracer_install_external_project(brahma 4.1.0 "BRAHMA" https://github.com/hariharan-devarajan/brahma.git v1.0.7 ${CMAKE_INSTALL_PREFIX} "${BRAHMA_CONFIGURE_ARGS}")
+dftracer_install_external_project(brahma 4.1.0 "BRAHMA" https://github.com/hariharan-devarajan/brahma.git v1.0.8 ${CMAKE_INSTALL_PREFIX} "${BRAHMA_CONFIGURE_ARGS}")
 if(TARGET brahma AND TARGET cpp-logger)
   add_dependencies(brahma cpp-logger)
 endif()
