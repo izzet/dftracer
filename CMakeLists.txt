@@ -522,10 +522,9 @@ else()
                 include_directories(${MPI_CXX_INCLUDE_DIRS})
                 set(DEPENDENCY_LIB ${DEPENDENCY_LIB} ${MPI_CXX_LIBRARIES})
 
-                # Set implementation-specific compile definition
+                # Store impl compile definition; applied after targets are created below
                 if(NOT DFTRACER_MPI_IMPL_NAME STREQUAL "UNKNOWN")
-                        target_compile_definitions(${PROJECT_NAME}_core PUBLIC
-                                DFTRACER_MPI_IMPL_${DFTRACER_MPI_IMPL_NAME})
+                        set(DFTRACER_MPI_IMPL_COMPILE_DEF "DFTRACER_MPI_IMPL_${DFTRACER_MPI_IMPL_NAME}")
                 endif()
 
                 # Get the directory of each MPI_CXX_LIBRARY and append to MPI_CXX_LIBRARY_DIRS
@@ -723,10 +722,16 @@ else()
         add_library(dftracer::dftracer_core ALIAS ${PROJECT_NAME}_core)
         set_target_properties(${PROJECT_NAME}_core PROPERTIES LINKER_LANGUAGE CXX)
         target_compile_definitions(${PROJECT_NAME}_core PUBLIC DFTRACER_LOGGER_LEVEL_ERROR)
+        if(DEFINED DFTRACER_MPI_IMPL_COMPILE_DEF)
+                target_compile_definitions(${PROJECT_NAME}_core PUBLIC ${DFTRACER_MPI_IMPL_COMPILE_DEF})
+        endif()
         target_link_libraries(${PROJECT_NAME}_core ${DEPENDENCY_LIB})
         add_library(${PROJECT_NAME}_core_dbg SHARED)
         add_library(dftracer::dftracer_core_dbg ALIAS ${PROJECT_NAME}_core_dbg)
         set_target_properties(${PROJECT_NAME}_core_dbg PROPERTIES LINKER_LANGUAGE CXX)
+        if(DEFINED DFTRACER_MPI_IMPL_COMPILE_DEF)
+                target_compile_definitions(${PROJECT_NAME}_core_dbg PUBLIC ${DFTRACER_MPI_IMPL_COMPILE_DEF})
+        endif()
         target_link_libraries(${PROJECT_NAME}_core_dbg ${DEPENDENCY_LIB})
         add_library(${PROJECT_NAME}_preload SHARED)
         add_library(dftracer::dftracer_preload ALIAS ${PROJECT_NAME}_preload)
