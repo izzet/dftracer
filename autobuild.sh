@@ -16,6 +16,7 @@ INSTALL_PREFIX="${INSTALL_PREFIX:-${SCRIPT_DIR}/install}"
 BUILD_TYPE="${DFTRACER_BUILD_TYPE:-Release}"
 PYTHON_EXE="${PYTHON_EXE:-}"
 USE_PYTHON="${USE_PYTHON:-auto}"
+PYTHON_EXPLICITLY_SET="0"
 BUILD_DEPENDENCIES="${DFTRACER_BUILD_DEPENDENCIES:-1}"
 ENABLE_TESTS="${DFTRACER_ENABLE_TESTS:-OFF}"
 ENABLE_FTRACING="${DFTRACER_ENABLE_FTRACING:-OFF}"
@@ -28,6 +29,10 @@ DISABLE_HWLOC="${DFTRACER_DISABLE_HWLOC:-ON}"
 ENABLE_DLIO_TESTS="${DFTRACER_ENABLE_DLIO_BENCHMARK_TESTS:-OFF}"
 ENABLE_PAPER_TESTS="${DFTRACER_ENABLE_PAPER_TESTS:-OFF}"
 CMAKE_ARGS="${DFTRACER_CMAKE_ARGS:-}"
+HDF5_ROOT_DIR="${DFTRACER_HDF5_ROOT:-}"
+MPI_ROOT_DIR="${DFTRACER_MPI_ROOT:-}"
+C_COMPILER="${DFTRACER_C_COMPILER:-}"
+CXX_COMPILER="${DFTRACER_CXX_COMPILER:-}"
 JOBS="${JOBS:-$(nproc 2>/dev/null || sysctl -n hw.ncpu 2>/dev/null || echo 4)}"
 CLEAN_BUILD="${CLEAN_BUILD:-0}"
 CLEAN_INSTALL="${CLEAN_INSTALL:-0}"
@@ -46,6 +51,9 @@ RUN_VALGRIND_DLIO="${RUN_VALGRIND_DLIO:-auto}"
 RUN_PR_CI_LOCAL="${RUN_PR_CI_LOCAL:-0}"
 PR_CI_VENV_DIR="${PR_CI_VENV_DIR:-${SCRIPT_DIR}/.pr-ci-venv}"
 PR_CI_MASTER_LOG="${PR_CI_MASTER_LOG:-${BUILD_DIR}/ci-local.log}"
+SKIP_HDF5_TRACE_CI="${SKIP_HDF5_TRACE_CI:-0}"
+HDF5_CI_CACHE_DIR="${HDF5_CI_CACHE_DIR:-${SCRIPT_DIR}/.hdf5-ci-cache}"
+START_FROM_STEP="${START_FROM_STEP:-1}"
 
 # Print usage
 usage() {
@@ -67,6 +75,10 @@ OPTIONS:
     --enable-hip            Enable HIP tracing
     --enable-mpi            Enable MPI support
     --enable-hdf5           Enable HDF5 support
+    --with-hdf5 DIR         Path to custom HDF5 installation (sets HDF5_ROOT for CMake)
+    --with-mpi DIR          Path to custom MPI installation (sets MPI_HOME for CMake)
+    --with-c-compiler PATH  C compiler to use (sets CMAKE_C_COMPILER)
+    --with-cxx-compiler PATH C++ compiler to use (sets CMAKE_CXX_COMPILER)
     --enable-dynamic-detection Enable dynamic detection of MPI, HWLOC, and HIP at runtime
     --generate-interfaces   Generate Brahma/DFTracer interfaces from discovered MPI/HDF5 headers
     --enable-hwloc          Enable HWLOC (default: disabled)
@@ -87,7 +99,10 @@ OPTIONS:
     --run-valgrind-dlio     Run DLIO benchmark workloads under valgrind if dlio_benchmark is installed
     --skip-valgrind-dlio    Skip the optional DLIO benchmark valgrind gate
     --skip-build-run-tests  Skip build/install and run tests from an existing build tree
-    --run-pr-ci-local       Run local pre-push CI suite: clean build + format check + CTest + valgrind gates + install dlio_benchmark + benchmark
+    --run-pr-ci-local       Run local pre-push CI suite: clean build + format check + CTest + valgrind gates + install dlio_benchmark + benchmark + HDF5 trace CI
+    --skip-hdf5-trace-ci    Skip the HDF5+MPI multi-version trace verification stage in --run-pr-ci-local
+    --list-steps            List all --run-pr-ci-local steps with their numbers and exit
+    --skip-to-step N        Start --run-pr-ci-local from step N (skips earlier steps)
 
 ENVIRONMENT VARIABLES (same as setup.py):
     DFTRACER_BUILD_TYPE                     Build type (Release/Debug)
@@ -103,6 +118,10 @@ ENVIRONMENT VARIABLES (same as setup.py):
     DFTRACER_ENABLE_DLIO_BENCHMARK_TESTS    Enable DLIO tests (ON/OFF)
     DFTRACER_ENABLE_PAPER_TESTS             Enable paper tests (ON/OFF)
     DFTRACER_CMAKE_ARGS                     Additional CMake arguments (semicolon-separated)
+    DFTRACER_HDF5_ROOT                      Custom HDF5 installation prefix (sets HDF5_ROOT)
+    DFTRACER_MPI_ROOT                       Custom MPI installation prefix (sets MPI_HOME)
+    DFTRACER_C_COMPILER                     C compiler path (sets CMAKE_C_COMPILER)
+    DFTRACER_CXX_COMPILER                   C++ compiler path (sets CMAKE_CXX_COMPILER)
     DFTRACER_INSTALL_DIR                    Installation directory
     DFTRACER_PYTHON_SITE                    Python site-packages directory
     QUIET                                   Noninteractive mode (1/0)
@@ -110,6 +129,8 @@ ENVIRONMENT VARIABLES (same as setup.py):
     VALGRIND_CTEST_TIMEOUT                  Timeout per Valgrind CTest case in seconds
     VALGRIND_DLIO_TIMEOUT                   Timeout per DLIO Valgrind workload in seconds
     SKIP_BUILD_RUN_TESTS                    Skip build/install and run existing tests (1/0)
+    SKIP_HDF5_TRACE_CI                      Skip HDF5+MPI trace verification stage (1/0)
+    HDF5_CI_CACHE_DIR                       Directory for cached HDF5 source builds (default: .hdf5-ci-cache)
     RUN_VALGRIND_DLIO                       Run DLIO valgrind gate (auto/1/0)
     RUN_PR_CI_LOCAL                         Run full local PR-CI-equivalent checks (1/0, quiet stage progress and failure-only logs)
     PR_CI_VENV_DIR                          Project-local dedicated virtualenv for --run-pr-ci-local
@@ -136,6 +157,14 @@ EXAMPLES:
 
     # Build with MPI + HDF5 and generated interfaces
     $0 --enable-mpi --enable-hdf5 --generate-interfaces
+
+    # Build against a custom HDF5 install (also enables HDF5 automatically)
+    $0 --with-hdf5 /path/to/hdf5-install --enable-mpi --enable-tests
+
+    # Build with a custom MPI and HDF5 using MPI wrapper compilers
+    $0 --with-mpi /path/to/mpi --with-hdf5 /path/to/hdf5 \
+       --with-c-compiler mpicc --with-cxx-compiler mpicxx \
+       --enable-tests --install-mode cmake
 
     # Build with dfanalyzer for analysis tools
     $0 --with-dfanalyzer
@@ -210,6 +239,7 @@ while [[ $# -gt 0 ]]; do
         --python)
             PYTHON_EXE="$2"
             USE_PYTHON="yes"
+            PYTHON_EXPLICITLY_SET="1"
             shift 2
             ;;
         --skip-deps)
@@ -349,6 +379,44 @@ while [[ $# -gt 0 ]]; do
             export DFTRACER_ENABLE_MPI="ON"
             export DFTRACER_ENABLE_HDF5="ON"
             shift
+            ;;
+        --skip-hdf5-trace-ci)
+            SKIP_HDF5_TRACE_CI="1"
+            shift
+            ;;
+        --list-steps)
+            # Handled after functions are defined; set a flag and continue parsing.
+            LIST_STEPS="1"
+            shift
+            ;;
+        --skip-to-step)
+            START_FROM_STEP="$2"
+            RUN_PR_CI_LOCAL="1"
+            shift 2
+            ;;
+        --with-hdf5)
+            HDF5_ROOT_DIR="$2"
+            export DFTRACER_HDF5_ROOT="$2"
+            ENABLE_HDF5="ON"
+            export DFTRACER_ENABLE_HDF5="ON"
+            shift 2
+            ;;
+        --with-mpi)
+            MPI_ROOT_DIR="$2"
+            export DFTRACER_MPI_ROOT="$2"
+            ENABLE_MPI="ON"
+            export DFTRACER_ENABLE_MPI="ON"
+            shift 2
+            ;;
+        --with-c-compiler)
+            C_COMPILER="$2"
+            export DFTRACER_C_COMPILER="$2"
+            shift 2
+            ;;
+        --with-cxx-compiler)
+            CXX_COMPILER="$2"
+            export DFTRACER_CXX_COMPILER="$2"
+            shift 2
             ;;
         *)
             echo -e "${RED}Unknown option: $1${NC}"
@@ -1359,39 +1427,385 @@ print(f"Installed dlio_benchmark from: {package_dir}")
 PY
 }
 
+# Build (or reuse cached) parallel HDF5 from source.
+# Sets HDF5_ROOT_DIR to the install prefix if successful.
+# Uses the same cache dir as run_hdf5_mpi_trace_ci so builds are shared.
+build_default_parallel_hdf5() {
+    local version="1.14.6"
+    local tag="hdf5_1.14.6"
+    local hdf5_install="${HDF5_CI_CACHE_DIR}/hdf5-${version}/install"
+    local hdf5_src="${HDF5_CI_CACHE_DIR}/hdf5-${version}/src"
+    local hdf5_build="${HDF5_CI_CACHE_DIR}/hdf5-${version}/build"
+
+    local mpi_cc mpi_cxx
+    mpi_cc="$(command -v mpicc 2>/dev/null || echo "${CC:-gcc}")"
+    mpi_cxx="$(command -v mpicxx 2>/dev/null || echo "${CXX:-g++}")"
+
+    if [ -f "${hdf5_install}/include/H5public.h" ]; then
+        echo -e "${GREEN}Using cached parallel HDF5 ${version} at ${hdf5_install}${NC}"
+        HDF5_ROOT_DIR="${hdf5_install}"
+        return 0
+    fi
+
+    echo -e "${BLUE}Building parallel HDF5 ${version} from source (CC=${mpi_cc})...${NC}"
+    mkdir -p "${hdf5_src}" "${hdf5_build}" "${hdf5_install}"
+
+    if ! curl -fsSL \
+        "https://github.com/HDFGroup/hdf5/archive/refs/tags/${tag}.tar.gz" \
+        | tar xz -C "${hdf5_src}" --strip-components=1 2>/dev/null; then
+        echo -e "${RED}ERROR: failed to download HDF5 ${version}${NC}"
+        return 1
+    fi
+
+    if ! cmake -S "${hdf5_src}" -B "${hdf5_build}" \
+        -DCMAKE_C_COMPILER="${mpi_cc}" \
+        -DCMAKE_CXX_COMPILER="${mpi_cxx}" \
+        -DCMAKE_INSTALL_PREFIX="${hdf5_install}" \
+        -DHDF5_ENABLE_PARALLEL=ON \
+        -DHDF5_BUILD_TOOLS=OFF \
+        -DHDF5_BUILD_EXAMPLES=OFF \
+        -DBUILD_TESTING=OFF \
+        -DHDF5_BUILD_HL_LIB=ON \
+        -DCMAKE_BUILD_TYPE=Release \
+        -DHDF5_ENABLE_Z_LIB_SUPPORT=OFF \
+        -DHDF5_ENABLE_SZIP_SUPPORT=OFF \
+        >/dev/null 2>&1; then
+        echo -e "${RED}ERROR: failed to configure HDF5 ${version}${NC}"
+        return 1
+    fi
+
+    if ! cmake --build "${hdf5_build}" --parallel "${JOBS}" >/dev/null 2>&1; then
+        echo -e "${RED}ERROR: failed to build HDF5 ${version}${NC}"
+        return 1
+    fi
+
+    cmake --install "${hdf5_build}" >/dev/null 2>&1
+    echo -e "${GREEN}Parallel HDF5 ${version} installed at ${hdf5_install}${NC}"
+    HDF5_ROOT_DIR="${hdf5_install}"
+}
+
+run_hdf5_mpi_trace_ci() {
+    echo -e "${GREEN}=== HDF5+MPI Multi-Version Trace CI ===${NC}"
+
+    if [ "${ENABLE_HDF5}" != "ON" ] || [ "${ENABLE_MPI}" != "ON" ]; then
+        echo -e "${YELLOW}Skipping: requires --enable-hdf5 and --enable-mpi${NC}"
+        return 0
+    fi
+
+    if [ "${SKIP_HDF5_TRACE_CI}" = "1" ]; then
+        echo -e "${YELLOW}Skipping: SKIP_HDF5_TRACE_CI=1${NC}"
+        return 0
+    fi
+
+    # HDF5 installs are cached outside BUILD_DIR so --clean doesn't force re-download
+    local hdf5_cache="${HDF5_CI_CACHE_DIR}"
+    # per-version dftracer builds live inside BUILD_DIR (wiped by --clean)
+    local hdf5_work_dir="${BUILD_DIR}/hdf5-ci"
+
+    if [ "${DRY_RUN}" != "1" ]; then
+        mkdir -p "${hdf5_cache}" "${hdf5_work_dir}"
+    fi
+
+    # Detect MPI wrapper compilers
+    local mpi_cc mpi_cxx
+    if command -v mpicc >/dev/null 2>&1; then
+        mpi_cc="mpicc"
+    else
+        mpi_cc="${CC:-gcc}"
+    fi
+    if command -v mpicxx >/dev/null 2>&1; then
+        mpi_cxx="mpicxx"
+    else
+        mpi_cxx="${CXX:-g++}"
+    fi
+    echo -e "${BLUE}MPI compilers: CC=${mpi_cc}  CXX=${mpi_cxx}${NC}"
+
+    # brahma v1.0.8 HDF5 supported ranges (major*100000+minor*100+patch):
+    #   1.10.x [101005,101100): 1.10.11=101011 ✓
+    #   1.12.x [101203,101300): 1.12.3=101203 ✓  (1.12.2=101202 is below threshold)
+    #   1.14.x [101405,101500): 1.14.6=101406 ✓
+    declare -a hdf5_versions=("1.10.11" "1.12.3" "1.14.6")
+    declare -A hdf5_tags=(
+        ["1.10.11"]="hdf5-1_10_11"
+        ["1.12.3"]="hdf5-1_12_3"
+        ["1.14.6"]="hdf5_1.14.6"
+    )
+
+    local overall_rc=0
+
+    for version in "${hdf5_versions[@]}"; do
+        local tag="${hdf5_tags[$version]}"
+        local hdf5_install="${hdf5_cache}/hdf5-${version}/install"
+        local hdf5_src="${hdf5_cache}/hdf5-${version}/src"
+        local hdf5_build="${hdf5_cache}/hdf5-${version}/build"
+        local dftracer_build="${hdf5_work_dir}/hdf5-${version}/dftracer-build"
+        local dftracer_install="${hdf5_work_dir}/hdf5-${version}/dftracer-install"
+
+        echo ""
+        echo -e "${BLUE}--- HDF5 ${version} ---${NC}"
+
+        # ---- 1. Build HDF5 from source (cached) ----
+        if [ ! -f "${hdf5_install}/include/H5public.h" ]; then
+            echo -e "${BLUE}  Building HDF5 ${version} from source (tag: ${tag})...${NC}"
+
+            if [ "${DRY_RUN}" = "1" ]; then
+                echo -e "${YELLOW}  [DRY-RUN] Would download and build HDF5 ${version}${NC}"
+            else
+                mkdir -p "${hdf5_src}" "${hdf5_build}" "${hdf5_install}"
+
+                if ! curl -fsSL \
+                    "https://github.com/HDFGroup/hdf5/archive/refs/tags/${tag}.tar.gz" \
+                    | tar xz -C "${hdf5_src}" --strip-components=1 2>/dev/null; then
+                    echo -e "${RED}  ERROR: failed to download HDF5 ${version}${NC}"
+                    overall_rc=1
+                    continue
+                fi
+
+                if ! cmake -S "${hdf5_src}" -B "${hdf5_build}" \
+                    -DCMAKE_C_COMPILER="${mpi_cc}" \
+                    -DCMAKE_CXX_COMPILER="${mpi_cxx}" \
+                    -DCMAKE_INSTALL_PREFIX="${hdf5_install}" \
+                    -DHDF5_ENABLE_PARALLEL=ON \
+                    -DHDF5_BUILD_TOOLS=OFF \
+                    -DHDF5_BUILD_EXAMPLES=OFF \
+                    -DBUILD_TESTING=OFF \
+                    -DHDF5_BUILD_HL_LIB=ON \
+                    -DCMAKE_BUILD_TYPE=Release \
+                    -DHDF5_ENABLE_Z_LIB_SUPPORT=OFF \
+                    -DHDF5_ENABLE_SZIP_SUPPORT=OFF \
+                    >/dev/null 2>&1; then
+                    echo -e "${RED}  ERROR: failed to configure HDF5 ${version}${NC}"
+                    overall_rc=1
+                    continue
+                fi
+
+                if ! cmake --build "${hdf5_build}" --parallel "${JOBS}" >/dev/null 2>&1; then
+                    echo -e "${RED}  ERROR: failed to build HDF5 ${version}${NC}"
+                    overall_rc=1
+                    continue
+                fi
+
+                cmake --install "${hdf5_build}" >/dev/null 2>&1
+                echo -e "${GREEN}  HDF5 ${version} installed at ${hdf5_install}${NC}"
+            fi
+        else
+            echo -e "${GREEN}  Using cached HDF5 ${version} at ${hdf5_install}${NC}"
+        fi
+
+        # ---- 2. Build dftracer against this HDF5 ----
+        if [ "${DRY_RUN}" = "1" ]; then
+            echo -e "${YELLOW}  [DRY-RUN] Would build dftracer against HDF5 ${version}${NC}"
+        else
+            echo -e "${BLUE}  Building dftracer against HDF5 ${version}...${NC}"
+            mkdir -p "${dftracer_build}" "${dftracer_install}"
+
+            # Build LD_LIBRARY_PATH hint for CTest (belt-and-suspenders beside RPATH)
+            local _hdf5_ld_hint=""
+            for _d in "${hdf5_install}/lib" "${hdf5_install}/lib64"; do
+                [ -d "${_d}" ] && _hdf5_ld_hint="${_hdf5_ld_hint:+${_hdf5_ld_hint}:}${_d}"
+            done
+
+            local cmake_full_args=(
+                "-DCMAKE_BUILD_TYPE=Release"
+                "-DCMAKE_INSTALL_PREFIX=${dftracer_install}"
+                "-DCMAKE_C_COMPILER=${mpi_cc}"
+                "-DCMAKE_CXX_COMPILER=${mpi_cxx}"
+                "-DCMAKE_PREFIX_PATH=${INSTALL_PREFIX}"
+                "-DDFTRACER_ENABLE_MPI=ON"
+                "-DDFTRACER_ENABLE_HDF5=ON"
+                "-DHDF5_ROOT=${hdf5_install}"
+                "-DDFTRACER_ENABLE_TESTS=ON"
+                "-DDFTRACER_BUILD_PYTHON_BINDINGS=OFF"
+                "-DDFTRACER_INSTALL_DEPENDENCIES=OFF"
+                "-Dyaml-cpp_DIR=${INSTALL_PREFIX}"
+            )
+            if [ -n "${_hdf5_ld_hint}" ]; then
+                cmake_full_args+=("-DDFTRACER_TEST_LD_LIBRARY_PATH=${_hdf5_ld_hint}")
+            fi
+
+            if ! (cd "${dftracer_build}" && cmake "${SCRIPT_DIR}" "${cmake_full_args[@]}" >/dev/null 2>&1); then
+                echo -e "${RED}  ERROR: cmake configure failed for HDF5 ${version}${NC}"
+                overall_rc=1
+                continue
+            fi
+
+            if ! cmake --build "${dftracer_build}" --parallel "${JOBS}" >/dev/null 2>&1; then
+                echo -e "${RED}  ERROR: cmake build failed for HDF5 ${version}${NC}"
+                overall_rc=1
+                continue
+            fi
+            echo -e "${GREEN}  dftracer built for HDF5 ${version}${NC}"
+        fi
+
+        # ---- 3. Run test binary directly with LD_PRELOAD and verify traces ----
+        if [ "${DRY_RUN}" = "1" ]; then
+            echo -e "${YELLOW}  [DRY-RUN] Would run test_c_hdf5_mpi with LD_PRELOAD for HDF5 ${version}${NC}"
+        else
+            echo -e "${BLUE}  Running verify test for HDF5 ${version}...${NC}"
+
+            local preload_lib
+            preload_lib="$(find "${dftracer_build}" -name "libdftracer_preload_dbg.so" | head -1)"
+            if [ -z "${preload_lib}" ]; then
+                echo -e "${RED}  ERROR: libdftracer_preload_dbg.so not found under ${dftracer_build}${NC}"
+                overall_rc=1
+                continue
+            fi
+
+            local test_bin="${dftracer_build}/bin/test_c_hdf5_mpi"
+            if [ ! -x "${test_bin}" ]; then
+                echo -e "${RED}  ERROR: test binary not found: ${test_bin}${NC}"
+                overall_rc=1
+                continue
+            fi
+
+            local verify_trace_dir="${dftracer_build}/trace-verify"
+            local verify_data_dir="${verify_trace_dir}/data"
+            rm -rf "${verify_trace_dir}"
+            mkdir -p "${verify_data_dir}"
+
+            local hdf5_ld_path=""
+            for _d in "${hdf5_install}/lib" "${hdf5_install}/lib64"; do
+                [ -d "${_d}" ] && hdf5_ld_path="${hdf5_ld_path:+${hdf5_ld_path}:}${_d}"
+            done
+
+            local run_rc=0
+            (
+                export DFTRACER_ENABLE=1
+                export DFTRACER_INC_METADATA=1
+                export DFTRACER_LOG_FILE="${verify_trace_dir}/hdf5_mpi_verify"
+                export DFTRACER_DATA_DIR=/
+                export DFTRACER_INIT=PRELOAD
+                export DFTRACER_TRACE_COMPRESSION=1
+                export DFTRACER_BIND_SIGNALS=0
+                export LD_PRELOAD="${preload_lib}"
+                export LD_LIBRARY_PATH="${hdf5_ld_path}${LD_LIBRARY_PATH:+:${LD_LIBRARY_PATH}}"
+                "${test_bin}" "${verify_data_dir}"
+            ) || run_rc=$?
+            if [ "${run_rc}" -ne 0 ]; then
+                echo -e "${RED}  ERROR: test binary exited with code ${run_rc} for HDF5 ${version}${NC}"
+                overall_rc=1
+                continue
+            fi
+
+            local py_result
+            py_result="$(python3 - "${verify_trace_dir}" 2>&1 << 'PYEOF'
+import sys, gzip, json, glob, os
+
+trace_dir = sys.argv[1]
+files = list(set(
+    glob.glob(os.path.join(trace_dir, "*.pfw.gz")) +
+    glob.glob(os.path.join(trace_dir, "**", "*.pfw.gz"), recursive=True)
+))
+
+if not files:
+    print(f"ERROR: no trace files found in {trace_dir}")
+    sys.exit(1)
+
+print(f"Checking {len(files)} trace file(s)...")
+
+hdf5_funcs, mpi_funcs = set(), set()
+for path in files:
+    with gzip.open(path, "rt") as fh:
+        for line in fh:
+            line = line.strip().rstrip(",")
+            if not line or line in ("[", "]"):
+                continue
+            try:
+                ev = json.loads(line)
+            except json.JSONDecodeError:
+                continue
+            cat  = ev.get("cat", "")
+            name = ev.get("name", "")
+            if cat == "HDF5":
+                hdf5_funcs.add(name)
+            elif cat in ("MPI", "MPIIO"):
+                mpi_funcs.add(name)
+
+print(f"HDF5 functions intercepted: {sorted(hdf5_funcs)}")
+print(f"MPI  functions intercepted: {sorted(mpi_funcs)}")
+
+required_hdf5 = {"H5Fcreate", "H5Dcreate2", "H5Dwrite", "H5Dread", "H5Fclose"}
+required_mpi  = {"MPI_File_open"}
+missing_hdf5  = required_hdf5 - hdf5_funcs
+missing_mpi   = required_mpi  - mpi_funcs
+
+ok = True
+if missing_hdf5:
+    print(f"FAIL: missing HDF5 events: {sorted(missing_hdf5)}")
+    ok = False
+else:
+    print(f"PASS: all required HDF5 events present")
+if missing_mpi:
+    print(f"FAIL: missing MPI file I/O events: {sorted(missing_mpi)}")
+    ok = False
+else:
+    print(f"PASS: MPI_File_open intercepted (MPIO driver active)")
+
+sys.exit(0 if ok else 1)
+PYEOF
+)"
+            local py_rc=$?
+            echo -e "${BLUE}${py_result}${NC}"
+            if [ "${py_rc}" -ne 0 ]; then
+                echo -e "${RED}  ERROR: trace verification failed for HDF5 ${version}${NC}"
+                overall_rc=1
+            else
+                echo -e "${GREEN}  Trace verification passed for HDF5 ${version}${NC}"
+            fi
+        fi
+    done
+
+    if [ "${overall_rc}" -eq 0 ]; then
+        echo -e "${GREEN}All HDF5 versions passed.${NC}"
+    fi
+    return ${overall_rc}
+}
+
+list_pr_ci_steps() {
+    cat << 'EOF'
+Local PR CI steps (use --skip-to-step N to start from step N):
+
+  1  Format Check
+  2  CTest (non-valgrind)
+  3  Valgrind CTests
+  4  Install dlio_benchmark
+  5  DLIO Valgrind Workloads
+  6  IOR Benchmark
+  7  HDF5+MPI Trace CI
+EOF
+}
+
 run_local_pr_ci_suite() {
     echo -e "${GREEN}=== Running Local PR CI Suite ===${NC}"
-    local total=6
+    local total=7
     local suite_start_ts
     suite_start_ts="$(date +%s)"
 
-    if ! run_ci_stage 1 "${total}" "Format Check" run_format_check; then
-        echo -e "${RED}Stopping local CI at first failure (stage 1, total elapsed $(format_ci_duration "$(( $(date +%s) - suite_start_ts ))")).${NC}"
-        return 1
+    if [ "${START_FROM_STEP}" -gt 1 ]; then
+        echo -e "${YELLOW}Skipping steps 1-$((START_FROM_STEP - 1)) (--skip-to-step ${START_FROM_STEP})${NC}"
     fi
-    if ! run_ci_stage 2 "${total}" "CTest (non-valgrind)" run_non_valgrind_ctest_tests; then
-        echo -e "${RED}Stopping local CI at first failure (stage 2, total elapsed $(format_ci_duration "$(( $(date +%s) - suite_start_ts ))")).${NC}"
-        return 1
-    fi
-    if ! run_ci_stage 3 "${total}" "Valgrind CTests" run_valgrind_ctest_tests; then
-        echo -e "${RED}Stopping local CI at first failure (stage 3, total elapsed $(format_ci_duration "$(( $(date +%s) - suite_start_ts ))")).${NC}"
-        return 1
-    fi
-    if ! run_ci_stage 4 "${total}" "Install dlio_benchmark" install_dlio_benchmark_for_ci; then
-        echo -e "${RED}Stopping local CI at first failure (stage 4, total elapsed $(format_ci_duration "$(( $(date +%s) - suite_start_ts ))")).${NC}"
-        return 1
-    fi
-    if ! run_ci_stage 5 "${total}" "DLIO Valgrind Workloads" run_valgrind_dlio_tests; then
-        echo -e "${RED}Stopping local CI at first failure (stage 5, total elapsed $(format_ci_duration "$(( $(date +%s) - suite_start_ts ))")).${NC}"
-        return 1
-    fi
-    if ! run_ci_stage 6 "${total}" "IOR Benchmark" run_ior_benchmark_tests; then
-        echo -e "${RED}Stopping local CI at first failure (stage 6, total elapsed $(format_ci_duration "$(( $(date +%s) - suite_start_ts ))")).${NC}"
-        return 1
-    fi
+
+    _ci_step() {
+        local n="$1"; shift
+        if [ "${n}" -lt "${START_FROM_STEP}" ]; then
+            echo -e "${YELLOW}[CI ${n}/${total}] Skipped (--skip-to-step ${START_FROM_STEP})${NC}"
+            return 0
+        fi
+        if ! run_ci_stage "${n}" "${total}" "$@"; then
+            echo -e "${RED}Stopping local CI at first failure (stage ${n}, total elapsed $(format_ci_duration "$(( $(date +%s) - suite_start_ts ))")).${NC}"
+            return 1
+        fi
+    }
+
+    _ci_step 1 "Format Check"            run_format_check            || return 1
+    _ci_step 2 "CTest (non-valgrind)"    run_non_valgrind_ctest_tests || return 1
+    _ci_step 3 "Valgrind CTests"         run_valgrind_ctest_tests     || return 1
+    _ci_step 4 "Install dlio_benchmark"  install_dlio_benchmark_for_ci || return 1
+    _ci_step 5 "DLIO Valgrind Workloads" run_valgrind_dlio_tests      || return 1
+    _ci_step 6 "IOR Benchmark"           run_ior_benchmark_tests      || return 1
+    _ci_step 7 "HDF5+MPI Trace CI"       run_hdf5_mpi_trace_ci        || return 1
 
     echo -e "${GREEN}Local PR CI total elapsed: $(format_ci_duration "$(( $(date +%s) - suite_start_ts ))")${NC}"
-
     return 0
 }
 
@@ -1464,6 +1878,12 @@ run_service_smoke_test() {
     return $?
 }
 
+# Handle --list-steps early (no build needed)
+if [ "${LIST_STEPS:-0}" = "1" ]; then
+    list_pr_ci_steps
+    exit 0
+fi
+
 # Auto-detect Python if not explicitly disabled
 if [ "$USE_PYTHON" = "auto" ]; then
     # Try to find Python
@@ -1494,6 +1914,10 @@ if [ "$USE_PYTHON" = "yes" ]; then
         echo -e "${GREEN}Using project-local dedicated venv: ${PR_CI_VENV_DIR}${NC}"
     elif [ $IN_VENV -eq 0 ] && [ "$SKIP_BUILD_RUN_TESTS" = "1" ] && [ -n "${PYTHON_EXE}" ]; then
         echo -e "${YELLOW}Warning: no active virtual environment detected; using explicit Python for existing tests: ${PYTHON_EXE}${NC}"
+    elif [ $IN_VENV -eq 0 ] && [ "$INSTALL_MODE" = "cmake" ] && [ "$PYTHON_EXPLICITLY_SET" = "0" ]; then
+        # cmake mode without --python: Python bindings are not built, no venv needed
+        USE_PYTHON="no"
+        echo -e "${YELLOW}cmake mode without --python: Python support disabled (no venv required)${NC}"
     elif [ $IN_VENV -eq 0 ]; then
         echo -e "${RED}Error: Python support requires an active virtual environment${NC}"
         echo "Please activate a virtual environment before running this script:"
@@ -1788,6 +2212,15 @@ elif [ "$DRY_RUN" = "1" ]; then
     echo -e "${YELLOW}[DRY-RUN] Would create directory: ${BUILD_DIR}${NC}"
 else
     mkdir -p "${BUILD_DIR}"
+fi
+
+# When MPI and HDF5 are both enabled but no --with-hdf5 path was given,
+# build parallel HDF5 from source so test_c_hdf5_mpi links correctly.
+if [ "${ENABLE_HDF5}" = "ON" ] && [ "${ENABLE_MPI}" = "ON" ] && [ -z "${HDF5_ROOT_DIR}" ] && [ "${SKIP_BUILD_RUN_TESTS}" != "1" ] && [ "${DRY_RUN}" != "1" ]; then
+    if ! build_default_parallel_hdf5; then
+        echo -e "${RED}ERROR: could not build parallel HDF5 from source. Pass --with-hdf5 to provide one manually.${NC}"
+        exit 1
+    fi
 fi
 
 # Export environment variables
@@ -2125,6 +2558,41 @@ else
         )
     fi
     
+    # Add compiler overrides
+    if [ -n "${C_COMPILER}" ]; then
+        CMAKE_FULL_ARGS+=("-DCMAKE_C_COMPILER=${C_COMPILER}")
+    fi
+    if [ -n "${CXX_COMPILER}" ]; then
+        CMAKE_FULL_ARGS+=("-DCMAKE_CXX_COMPILER=${CXX_COMPILER}")
+    fi
+
+    # Add HDF5 root if specified
+    if [ -n "${HDF5_ROOT_DIR}" ]; then
+        CMAKE_FULL_ARGS+=("-DHDF5_ROOT=${HDF5_ROOT_DIR}")
+        # Spack's HDF5 config can expose a directory-local target named
+        # hdf5-shared.  Prefer FindHDF5's concrete library paths so HDF5 can
+        # also be forwarded safely to Brahma's separate ExternalProject.
+        CMAKE_FULL_ARGS+=("-DHDF5_PREFER_PARALLEL=TRUE")
+        CMAKE_FULL_ARGS+=("-DHDF5_NO_FIND_PACKAGE_CONFIG_FILE=TRUE")
+        # Also tell CTest to include the HDF5 lib dirs in LD_LIBRARY_PATH so
+        # test binaries can find libhdf5 even before RPATH is fully resolved.
+        _hdf5_test_ld=""
+        for _d in "${HDF5_ROOT_DIR}/lib" "${HDF5_ROOT_DIR}/lib64"; do
+            if [ -d "${_d}" ]; then
+                _hdf5_test_ld="${_hdf5_test_ld:+${_hdf5_test_ld}:}${_d}"
+            fi
+        done
+        if [ -n "${_hdf5_test_ld}" ]; then
+            CMAKE_FULL_ARGS+=("-DDFTRACER_TEST_LD_LIBRARY_PATH=${_hdf5_test_ld}")
+        fi
+        unset _hdf5_test_ld _d
+    fi
+
+    # Add MPI home if specified
+    if [ -n "${MPI_ROOT_DIR}" ]; then
+        CMAKE_FULL_ARGS+=("-DMPI_HOME=${MPI_ROOT_DIR}")
+    fi
+
     # Add custom CMake arguments
     if [ -n "${CMAKE_ARGS}" ]; then
         IFS=';' read -ra EXTRA_ARGS <<< "${CMAKE_ARGS}"

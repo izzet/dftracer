@@ -1209,13 +1209,15 @@ int brahma::MPIDFTracer::MPI_Alltoallw_init_c(
   return ret;
 }
 #endif
-#if ((defined(BRAHMA_MPI_IMPL_CRAYMPICH) &&                               \
-      ((BRAHMA_MPI_VERSION >= 800108 && BRAHMA_MPI_VERSION < 800200) ||   \
-       (BRAHMA_MPI_VERSION >= 900001 && BRAHMA_MPI_VERSION < 900100))) || \
-     (defined(BRAHMA_MPI_IMPL_MPICH) &&                                   \
-      (BRAHMA_MPI_VERSION >= 300403 && BRAHMA_MPI_VERSION < 300500)) ||   \
-     (defined(BRAHMA_MPI_IMPL_OPENMPI) &&                                 \
-      (BRAHMA_MPI_VERSION >= 500006 && BRAHMA_MPI_VERSION < 500100)))
+#if (((defined(BRAHMA_MPI_IMPL_CRAYMPICH) &&                               \
+       ((BRAHMA_MPI_VERSION >= 800108 && BRAHMA_MPI_VERSION < 800200) ||   \
+        (BRAHMA_MPI_VERSION >= 900001 && BRAHMA_MPI_VERSION < 900100))) || \
+      (defined(BRAHMA_MPI_IMPL_MPICH) &&                                   \
+       (BRAHMA_MPI_VERSION >= 300403 && BRAHMA_MPI_VERSION < 300500)) ||   \
+      (defined(BRAHMA_MPI_IMPL_OPENMPI) &&                                 \
+       (BRAHMA_MPI_VERSION >= 500006 && BRAHMA_MPI_VERSION < 500100)))) || \
+    (defined(BRAHMA_MPI_IMPL_OPENMPI) &&                                   \
+     (BRAHMA_MPI_VERSION >= 400106 && BRAHMA_MPI_VERSION < 400200))
 int brahma::MPIDFTracer::MPI_Attr_delete(MPI_Comm comm, int keyval) {
   BRAHMA_MAP_OR_FAIL(MPI_Attr_delete);
   DFT_LOGGER_START_ALWAYS();
@@ -1227,12 +1229,14 @@ int brahma::MPIDFTracer::MPI_Attr_delete(MPI_Comm comm, int keyval) {
   return ret;
 }
 #endif
-#if ((defined(BRAHMA_MPI_IMPL_CRAYMPICH) &&                             \
-      (BRAHMA_MPI_VERSION >= 900100 && BRAHMA_MPI_VERSION < 900200)) || \
-     (defined(BRAHMA_MPI_IMPL_MPICH) &&                                 \
-      (BRAHMA_MPI_VERSION >= 400203 && BRAHMA_MPI_VERSION < 400300)) || \
-     (defined(BRAHMA_MPI_IMPL_OPENMPI) &&                               \
-      (BRAHMA_MPI_VERSION >= 400106 && BRAHMA_MPI_VERSION < 400200)))
+#if (((defined(BRAHMA_MPI_IMPL_CRAYMPICH) &&                               \
+       (BRAHMA_MPI_VERSION >= 900100 && BRAHMA_MPI_VERSION < 900200)) ||   \
+      (defined(BRAHMA_MPI_IMPL_MPICH) &&                                   \
+       (BRAHMA_MPI_VERSION >= 400203 && BRAHMA_MPI_VERSION < 400300)) ||   \
+      (defined(BRAHMA_MPI_IMPL_OPENMPI) &&                                 \
+       (BRAHMA_MPI_VERSION >= 400106 && BRAHMA_MPI_VERSION < 400200)))) && \
+    !(defined(BRAHMA_MPI_IMPL_OPENMPI) &&                                  \
+      (BRAHMA_MPI_VERSION >= 400106 && BRAHMA_MPI_VERSION < 400200))
 int brahma::MPIDFTracer::MPI_Attr_delete(int comm, int keyval) {
   BRAHMA_MAP_OR_FAIL(MPI_Attr_delete);
   DFT_LOGGER_START_ALWAYS();
@@ -1244,13 +1248,15 @@ int brahma::MPIDFTracer::MPI_Attr_delete(int comm, int keyval) {
   return ret;
 }
 #endif
-#if ((defined(BRAHMA_MPI_IMPL_CRAYMPICH) &&                               \
-      ((BRAHMA_MPI_VERSION >= 800108 && BRAHMA_MPI_VERSION < 800200) ||   \
-       (BRAHMA_MPI_VERSION >= 900001 && BRAHMA_MPI_VERSION < 900100))) || \
-     (defined(BRAHMA_MPI_IMPL_MPICH) &&                                   \
-      (BRAHMA_MPI_VERSION >= 300403 && BRAHMA_MPI_VERSION < 300500)) ||   \
-     (defined(BRAHMA_MPI_IMPL_OPENMPI) &&                                 \
-      (BRAHMA_MPI_VERSION >= 500006 && BRAHMA_MPI_VERSION < 500100)))
+#if (((defined(BRAHMA_MPI_IMPL_CRAYMPICH) &&                               \
+       ((BRAHMA_MPI_VERSION >= 800108 && BRAHMA_MPI_VERSION < 800200) ||   \
+        (BRAHMA_MPI_VERSION >= 900001 && BRAHMA_MPI_VERSION < 900100))) || \
+      (defined(BRAHMA_MPI_IMPL_MPICH) &&                                   \
+       (BRAHMA_MPI_VERSION >= 300403 && BRAHMA_MPI_VERSION < 300500)) ||   \
+      (defined(BRAHMA_MPI_IMPL_OPENMPI) &&                                 \
+       (BRAHMA_MPI_VERSION >= 500006 && BRAHMA_MPI_VERSION < 500100)))) || \
+    (defined(BRAHMA_MPI_IMPL_OPENMPI) &&                                   \
+     (BRAHMA_MPI_VERSION >= 400106 && BRAHMA_MPI_VERSION < 400200))
 int brahma::MPIDFTracer::MPI_Attr_get(MPI_Comm comm, int keyval,
                                       void* attribute_val, int* flag) {
   BRAHMA_MAP_OR_FAIL(MPI_Attr_get);
@@ -1263,12 +1269,14 @@ int brahma::MPIDFTracer::MPI_Attr_get(MPI_Comm comm, int keyval,
   return ret;
 }
 #endif
-#if ((defined(BRAHMA_MPI_IMPL_CRAYMPICH) &&                             \
-      (BRAHMA_MPI_VERSION >= 900100 && BRAHMA_MPI_VERSION < 900200)) || \
-     (defined(BRAHMA_MPI_IMPL_MPICH) &&                                 \
-      (BRAHMA_MPI_VERSION >= 400203 && BRAHMA_MPI_VERSION < 400300)) || \
-     (defined(BRAHMA_MPI_IMPL_OPENMPI) &&                               \
-      (BRAHMA_MPI_VERSION >= 400106 && BRAHMA_MPI_VERSION < 400200)))
+#if (((defined(BRAHMA_MPI_IMPL_CRAYMPICH) &&                               \
+       (BRAHMA_MPI_VERSION >= 900100 && BRAHMA_MPI_VERSION < 900200)) ||   \
+      (defined(BRAHMA_MPI_IMPL_MPICH) &&                                   \
+       (BRAHMA_MPI_VERSION >= 400203 && BRAHMA_MPI_VERSION < 400300)) ||   \
+      (defined(BRAHMA_MPI_IMPL_OPENMPI) &&                                 \
+       (BRAHMA_MPI_VERSION >= 400106 && BRAHMA_MPI_VERSION < 400200)))) && \
+    !(defined(BRAHMA_MPI_IMPL_OPENMPI) &&                                  \
+      (BRAHMA_MPI_VERSION >= 400106 && BRAHMA_MPI_VERSION < 400200))
 int brahma::MPIDFTracer::MPI_Attr_get(int comm, int keyval, void* attribute_val,
                                       int* flag) {
   BRAHMA_MAP_OR_FAIL(MPI_Attr_get);
@@ -1281,13 +1289,15 @@ int brahma::MPIDFTracer::MPI_Attr_get(int comm, int keyval, void* attribute_val,
   return ret;
 }
 #endif
-#if ((defined(BRAHMA_MPI_IMPL_CRAYMPICH) &&                               \
-      ((BRAHMA_MPI_VERSION >= 800108 && BRAHMA_MPI_VERSION < 800200) ||   \
-       (BRAHMA_MPI_VERSION >= 900001 && BRAHMA_MPI_VERSION < 900100))) || \
-     (defined(BRAHMA_MPI_IMPL_MPICH) &&                                   \
-      (BRAHMA_MPI_VERSION >= 300403 && BRAHMA_MPI_VERSION < 300500)) ||   \
-     (defined(BRAHMA_MPI_IMPL_OPENMPI) &&                                 \
-      (BRAHMA_MPI_VERSION >= 500006 && BRAHMA_MPI_VERSION < 500100)))
+#if (((defined(BRAHMA_MPI_IMPL_CRAYMPICH) &&                               \
+       ((BRAHMA_MPI_VERSION >= 800108 && BRAHMA_MPI_VERSION < 800200) ||   \
+        (BRAHMA_MPI_VERSION >= 900001 && BRAHMA_MPI_VERSION < 900100))) || \
+      (defined(BRAHMA_MPI_IMPL_MPICH) &&                                   \
+       (BRAHMA_MPI_VERSION >= 300403 && BRAHMA_MPI_VERSION < 300500)) ||   \
+      (defined(BRAHMA_MPI_IMPL_OPENMPI) &&                                 \
+       (BRAHMA_MPI_VERSION >= 500006 && BRAHMA_MPI_VERSION < 500100)))) || \
+    (defined(BRAHMA_MPI_IMPL_OPENMPI) &&                                   \
+     (BRAHMA_MPI_VERSION >= 400106 && BRAHMA_MPI_VERSION < 400200))
 int brahma::MPIDFTracer::MPI_Attr_put(MPI_Comm comm, int keyval,
                                       void* attribute_val) {
   BRAHMA_MAP_OR_FAIL(MPI_Attr_put);
@@ -1300,12 +1310,14 @@ int brahma::MPIDFTracer::MPI_Attr_put(MPI_Comm comm, int keyval,
   return ret;
 }
 #endif
-#if ((defined(BRAHMA_MPI_IMPL_CRAYMPICH) &&                             \
-      (BRAHMA_MPI_VERSION >= 900100 && BRAHMA_MPI_VERSION < 900200)) || \
-     (defined(BRAHMA_MPI_IMPL_MPICH) &&                                 \
-      (BRAHMA_MPI_VERSION >= 400203 && BRAHMA_MPI_VERSION < 400300)) || \
-     (defined(BRAHMA_MPI_IMPL_OPENMPI) &&                               \
-      (BRAHMA_MPI_VERSION >= 400106 && BRAHMA_MPI_VERSION < 400200)))
+#if (((defined(BRAHMA_MPI_IMPL_CRAYMPICH) &&                               \
+       (BRAHMA_MPI_VERSION >= 900100 && BRAHMA_MPI_VERSION < 900200)) ||   \
+      (defined(BRAHMA_MPI_IMPL_MPICH) &&                                   \
+       (BRAHMA_MPI_VERSION >= 400203 && BRAHMA_MPI_VERSION < 400300)) ||   \
+      (defined(BRAHMA_MPI_IMPL_OPENMPI) &&                                 \
+       (BRAHMA_MPI_VERSION >= 400106 && BRAHMA_MPI_VERSION < 400200)))) && \
+    !(defined(BRAHMA_MPI_IMPL_OPENMPI) &&                                  \
+      (BRAHMA_MPI_VERSION >= 400106 && BRAHMA_MPI_VERSION < 400200))
 int brahma::MPIDFTracer::MPI_Attr_put(int comm, int keyval,
                                       void* attribute_val) {
   BRAHMA_MAP_OR_FAIL(MPI_Attr_put);
@@ -1940,22 +1952,6 @@ int brahma::MPIDFTracer::MPI_Close_port(const char* port_name) {
   return ret;
 }
 #endif
-#if ((defined(BRAHMA_MPI_IMPL_CRAYMPICH) &&                             \
-      (BRAHMA_MPI_VERSION >= 900100 && BRAHMA_MPI_VERSION < 900200)) || \
-     (defined(BRAHMA_MPI_IMPL_MPICH) &&                                 \
-      (BRAHMA_MPI_VERSION >= 400203 && BRAHMA_MPI_VERSION < 400300)) || \
-     (defined(BRAHMA_MPI_IMPL_OPENMPI) &&                               \
-      (BRAHMA_MPI_VERSION >= 400106 && BRAHMA_MPI_VERSION < 400200)))
-MPI_Comm brahma::MPIDFTracer::MPI_Comm(int comm) {
-  BRAHMA_MAP_OR_FAIL(MPI_Comm);
-  DFT_LOGGER_START_ALWAYS();
-  DFT_LOGGER_UPDATE_TYPE(comm, MetadataType::MT_VALUE);
-  MPI_Comm ret = __real_MPI_Comm(comm);
-  DFT_LOGGER_UPDATE_TYPE(ret, MetadataType::MT_VALUE);
-  DFT_LOGGER_END();
-  return ret;
-}
-#endif
 #if ((defined(BRAHMA_MPI_IMPL_CRAYMPICH) &&                               \
       ((BRAHMA_MPI_VERSION >= 800108 && BRAHMA_MPI_VERSION < 800200) ||   \
        (BRAHMA_MPI_VERSION >= 900001 && BRAHMA_MPI_VERSION < 900200))) || \
@@ -2322,13 +2318,15 @@ int brahma::MPIDFTracer::MPI_Comm_flush_buffer(int comm) {
   return ret;
 }
 #endif
-#if ((defined(BRAHMA_MPI_IMPL_CRAYMPICH) &&                               \
-      ((BRAHMA_MPI_VERSION >= 800108 && BRAHMA_MPI_VERSION < 800200) ||   \
-       (BRAHMA_MPI_VERSION >= 900001 && BRAHMA_MPI_VERSION < 900100))) || \
-     (defined(BRAHMA_MPI_IMPL_MPICH) &&                                   \
-      (BRAHMA_MPI_VERSION >= 300403 && BRAHMA_MPI_VERSION < 300500)) ||   \
-     (defined(BRAHMA_MPI_IMPL_OPENMPI) &&                                 \
-      (BRAHMA_MPI_VERSION >= 500006 && BRAHMA_MPI_VERSION < 500100)))
+#if (((defined(BRAHMA_MPI_IMPL_CRAYMPICH) &&                               \
+       ((BRAHMA_MPI_VERSION >= 800108 && BRAHMA_MPI_VERSION < 800200) ||   \
+        (BRAHMA_MPI_VERSION >= 900001 && BRAHMA_MPI_VERSION < 900100))) || \
+      (defined(BRAHMA_MPI_IMPL_MPICH) &&                                   \
+       (BRAHMA_MPI_VERSION >= 300403 && BRAHMA_MPI_VERSION < 300500)) ||   \
+      (defined(BRAHMA_MPI_IMPL_OPENMPI) &&                                 \
+       (BRAHMA_MPI_VERSION >= 500006 && BRAHMA_MPI_VERSION < 500100)))) || \
+    (defined(BRAHMA_MPI_IMPL_OPENMPI) &&                                   \
+     (BRAHMA_MPI_VERSION >= 400106 && BRAHMA_MPI_VERSION < 400200))
 int brahma::MPIDFTracer::MPI_Comm_free(MPI_Comm* comm) {
   BRAHMA_MAP_OR_FAIL(MPI_Comm_free);
   DFT_LOGGER_START_ALWAYS();
@@ -2338,12 +2336,14 @@ int brahma::MPIDFTracer::MPI_Comm_free(MPI_Comm* comm) {
   return ret;
 }
 #endif
-#if ((defined(BRAHMA_MPI_IMPL_CRAYMPICH) &&                             \
-      (BRAHMA_MPI_VERSION >= 900100 && BRAHMA_MPI_VERSION < 900200)) || \
-     (defined(BRAHMA_MPI_IMPL_MPICH) &&                                 \
-      (BRAHMA_MPI_VERSION >= 400203 && BRAHMA_MPI_VERSION < 400300)) || \
-     (defined(BRAHMA_MPI_IMPL_OPENMPI) &&                               \
-      (BRAHMA_MPI_VERSION >= 400106 && BRAHMA_MPI_VERSION < 400200)))
+#if (((defined(BRAHMA_MPI_IMPL_CRAYMPICH) &&                               \
+       (BRAHMA_MPI_VERSION >= 900100 && BRAHMA_MPI_VERSION < 900200)) ||   \
+      (defined(BRAHMA_MPI_IMPL_MPICH) &&                                   \
+       (BRAHMA_MPI_VERSION >= 400203 && BRAHMA_MPI_VERSION < 400300)) ||   \
+      (defined(BRAHMA_MPI_IMPL_OPENMPI) &&                                 \
+       (BRAHMA_MPI_VERSION >= 400106 && BRAHMA_MPI_VERSION < 400200)))) && \
+    !(defined(BRAHMA_MPI_IMPL_OPENMPI) &&                                  \
+      (BRAHMA_MPI_VERSION >= 400106 && BRAHMA_MPI_VERSION < 400200))
 int brahma::MPIDFTracer::MPI_Comm_free(int* comm) {
   BRAHMA_MAP_OR_FAIL(MPI_Comm_free);
   DFT_LOGGER_START_ALWAYS();
@@ -2371,13 +2371,15 @@ int brahma::MPIDFTracer::MPI_Comm_free_keyval(int* comm_keyval) {
   return ret;
 }
 #endif
-#if ((defined(BRAHMA_MPI_IMPL_CRAYMPICH) &&                               \
-      ((BRAHMA_MPI_VERSION >= 800108 && BRAHMA_MPI_VERSION < 800200) ||   \
-       (BRAHMA_MPI_VERSION >= 900001 && BRAHMA_MPI_VERSION < 900100))) || \
-     (defined(BRAHMA_MPI_IMPL_MPICH) &&                                   \
-      (BRAHMA_MPI_VERSION >= 300403 && BRAHMA_MPI_VERSION < 300500)) ||   \
-     (defined(BRAHMA_MPI_IMPL_OPENMPI) &&                                 \
-      (BRAHMA_MPI_VERSION >= 500006 && BRAHMA_MPI_VERSION < 500100)))
+#if (((defined(BRAHMA_MPI_IMPL_CRAYMPICH) &&                               \
+       ((BRAHMA_MPI_VERSION >= 800108 && BRAHMA_MPI_VERSION < 800200) ||   \
+        (BRAHMA_MPI_VERSION >= 900001 && BRAHMA_MPI_VERSION < 900100))) || \
+      (defined(BRAHMA_MPI_IMPL_MPICH) &&                                   \
+       (BRAHMA_MPI_VERSION >= 300403 && BRAHMA_MPI_VERSION < 300500)) ||   \
+      (defined(BRAHMA_MPI_IMPL_OPENMPI) &&                                 \
+       (BRAHMA_MPI_VERSION >= 500006 && BRAHMA_MPI_VERSION < 500100)))) || \
+    (defined(BRAHMA_MPI_IMPL_OPENMPI) &&                                   \
+     (BRAHMA_MPI_VERSION >= 400106 && BRAHMA_MPI_VERSION < 400200))
 int brahma::MPIDFTracer::MPI_Comm_get_attr(MPI_Comm comm, int comm_keyval,
                                            void* attribute_val, int* flag) {
   BRAHMA_MAP_OR_FAIL(MPI_Comm_get_attr);
@@ -2390,12 +2392,14 @@ int brahma::MPIDFTracer::MPI_Comm_get_attr(MPI_Comm comm, int comm_keyval,
   return ret;
 }
 #endif
-#if ((defined(BRAHMA_MPI_IMPL_CRAYMPICH) &&                             \
-      (BRAHMA_MPI_VERSION >= 900100 && BRAHMA_MPI_VERSION < 900200)) || \
-     (defined(BRAHMA_MPI_IMPL_MPICH) &&                                 \
-      (BRAHMA_MPI_VERSION >= 400203 && BRAHMA_MPI_VERSION < 400300)) || \
-     (defined(BRAHMA_MPI_IMPL_OPENMPI) &&                               \
-      (BRAHMA_MPI_VERSION >= 400106 && BRAHMA_MPI_VERSION < 400200)))
+#if (((defined(BRAHMA_MPI_IMPL_CRAYMPICH) &&                               \
+       (BRAHMA_MPI_VERSION >= 900100 && BRAHMA_MPI_VERSION < 900200)) ||   \
+      (defined(BRAHMA_MPI_IMPL_MPICH) &&                                   \
+       (BRAHMA_MPI_VERSION >= 400203 && BRAHMA_MPI_VERSION < 400300)) ||   \
+      (defined(BRAHMA_MPI_IMPL_OPENMPI) &&                                 \
+       (BRAHMA_MPI_VERSION >= 400106 && BRAHMA_MPI_VERSION < 400200)))) && \
+    !(defined(BRAHMA_MPI_IMPL_OPENMPI) &&                                  \
+      (BRAHMA_MPI_VERSION >= 400106 && BRAHMA_MPI_VERSION < 400200))
 int brahma::MPIDFTracer::MPI_Comm_get_attr(int comm, int comm_keyval,
                                            void* attribute_val, int* flag) {
   BRAHMA_MAP_OR_FAIL(MPI_Comm_get_attr);
@@ -2408,13 +2412,15 @@ int brahma::MPIDFTracer::MPI_Comm_get_attr(int comm, int comm_keyval,
   return ret;
 }
 #endif
-#if ((defined(BRAHMA_MPI_IMPL_CRAYMPICH) &&                               \
-      ((BRAHMA_MPI_VERSION >= 800108 && BRAHMA_MPI_VERSION < 800200) ||   \
-       (BRAHMA_MPI_VERSION >= 900001 && BRAHMA_MPI_VERSION < 900100))) || \
-     (defined(BRAHMA_MPI_IMPL_MPICH) &&                                   \
-      (BRAHMA_MPI_VERSION >= 300403 && BRAHMA_MPI_VERSION < 300500)) ||   \
-     (defined(BRAHMA_MPI_IMPL_OPENMPI) &&                                 \
-      (BRAHMA_MPI_VERSION >= 500006 && BRAHMA_MPI_VERSION < 500100)))
+#if (((defined(BRAHMA_MPI_IMPL_CRAYMPICH) &&                               \
+       ((BRAHMA_MPI_VERSION >= 800108 && BRAHMA_MPI_VERSION < 800200) ||   \
+        (BRAHMA_MPI_VERSION >= 900001 && BRAHMA_MPI_VERSION < 900100))) || \
+      (defined(BRAHMA_MPI_IMPL_MPICH) &&                                   \
+       (BRAHMA_MPI_VERSION >= 300403 && BRAHMA_MPI_VERSION < 300500)) ||   \
+      (defined(BRAHMA_MPI_IMPL_OPENMPI) &&                                 \
+       (BRAHMA_MPI_VERSION >= 500006 && BRAHMA_MPI_VERSION < 500100)))) || \
+    (defined(BRAHMA_MPI_IMPL_OPENMPI) &&                                   \
+     (BRAHMA_MPI_VERSION >= 400106 && BRAHMA_MPI_VERSION < 400200))
 int brahma::MPIDFTracer::MPI_Comm_get_errhandler(MPI_Comm comm,
                                                  MPI_Errhandler* erhandler) {
   BRAHMA_MAP_OR_FAIL(MPI_Comm_get_errhandler);
@@ -2426,12 +2432,14 @@ int brahma::MPIDFTracer::MPI_Comm_get_errhandler(MPI_Comm comm,
   return ret;
 }
 #endif
-#if ((defined(BRAHMA_MPI_IMPL_CRAYMPICH) &&                             \
-      (BRAHMA_MPI_VERSION >= 900100 && BRAHMA_MPI_VERSION < 900200)) || \
-     (defined(BRAHMA_MPI_IMPL_MPICH) &&                                 \
-      (BRAHMA_MPI_VERSION >= 400203 && BRAHMA_MPI_VERSION < 400300)) || \
-     (defined(BRAHMA_MPI_IMPL_OPENMPI) &&                               \
-      (BRAHMA_MPI_VERSION >= 400106 && BRAHMA_MPI_VERSION < 400200)))
+#if (((defined(BRAHMA_MPI_IMPL_CRAYMPICH) &&                               \
+       (BRAHMA_MPI_VERSION >= 900100 && BRAHMA_MPI_VERSION < 900200)) ||   \
+      (defined(BRAHMA_MPI_IMPL_MPICH) &&                                   \
+       (BRAHMA_MPI_VERSION >= 400203 && BRAHMA_MPI_VERSION < 400300)) ||   \
+      (defined(BRAHMA_MPI_IMPL_OPENMPI) &&                                 \
+       (BRAHMA_MPI_VERSION >= 400106 && BRAHMA_MPI_VERSION < 400200)))) && \
+    !(defined(BRAHMA_MPI_IMPL_OPENMPI) &&                                  \
+      (BRAHMA_MPI_VERSION >= 400106 && BRAHMA_MPI_VERSION < 400200))
 int brahma::MPIDFTracer::MPI_Comm_get_errhandler(int comm,
                                                  MPI_Errhandler* erhandler) {
   BRAHMA_MAP_OR_FAIL(MPI_Comm_get_errhandler);
@@ -2443,13 +2451,15 @@ int brahma::MPIDFTracer::MPI_Comm_get_errhandler(int comm,
   return ret;
 }
 #endif
-#if ((defined(BRAHMA_MPI_IMPL_CRAYMPICH) &&                               \
-      ((BRAHMA_MPI_VERSION >= 800108 && BRAHMA_MPI_VERSION < 800200) ||   \
-       (BRAHMA_MPI_VERSION >= 900001 && BRAHMA_MPI_VERSION < 900100))) || \
-     (defined(BRAHMA_MPI_IMPL_MPICH) &&                                   \
-      (BRAHMA_MPI_VERSION >= 300403 && BRAHMA_MPI_VERSION < 300500)) ||   \
-     (defined(BRAHMA_MPI_IMPL_OPENMPI) &&                                 \
-      (BRAHMA_MPI_VERSION >= 500006 && BRAHMA_MPI_VERSION < 500100)))
+#if (((defined(BRAHMA_MPI_IMPL_CRAYMPICH) &&                               \
+       ((BRAHMA_MPI_VERSION >= 800108 && BRAHMA_MPI_VERSION < 800200) ||   \
+        (BRAHMA_MPI_VERSION >= 900001 && BRAHMA_MPI_VERSION < 900100))) || \
+      (defined(BRAHMA_MPI_IMPL_MPICH) &&                                   \
+       (BRAHMA_MPI_VERSION >= 300403 && BRAHMA_MPI_VERSION < 300500)) ||   \
+      (defined(BRAHMA_MPI_IMPL_OPENMPI) &&                                 \
+       (BRAHMA_MPI_VERSION >= 500006 && BRAHMA_MPI_VERSION < 500100)))) || \
+    (defined(BRAHMA_MPI_IMPL_OPENMPI) &&                                   \
+     (BRAHMA_MPI_VERSION >= 400106 && BRAHMA_MPI_VERSION < 400200))
 int brahma::MPIDFTracer::MPI_Comm_get_info(MPI_Comm comm, MPI_Info* info_used) {
   BRAHMA_MAP_OR_FAIL(MPI_Comm_get_info);
   DFT_LOGGER_START_ALWAYS();
@@ -2460,12 +2470,14 @@ int brahma::MPIDFTracer::MPI_Comm_get_info(MPI_Comm comm, MPI_Info* info_used) {
   return ret;
 }
 #endif
-#if ((defined(BRAHMA_MPI_IMPL_CRAYMPICH) &&                             \
-      (BRAHMA_MPI_VERSION >= 900100 && BRAHMA_MPI_VERSION < 900200)) || \
-     (defined(BRAHMA_MPI_IMPL_MPICH) &&                                 \
-      (BRAHMA_MPI_VERSION >= 400203 && BRAHMA_MPI_VERSION < 400300)) || \
-     (defined(BRAHMA_MPI_IMPL_OPENMPI) &&                               \
-      (BRAHMA_MPI_VERSION >= 400106 && BRAHMA_MPI_VERSION < 400200)))
+#if (((defined(BRAHMA_MPI_IMPL_CRAYMPICH) &&                               \
+       (BRAHMA_MPI_VERSION >= 900100 && BRAHMA_MPI_VERSION < 900200)) ||   \
+      (defined(BRAHMA_MPI_IMPL_MPICH) &&                                   \
+       (BRAHMA_MPI_VERSION >= 400203 && BRAHMA_MPI_VERSION < 400300)) ||   \
+      (defined(BRAHMA_MPI_IMPL_OPENMPI) &&                                 \
+       (BRAHMA_MPI_VERSION >= 400106 && BRAHMA_MPI_VERSION < 400200)))) && \
+    !(defined(BRAHMA_MPI_IMPL_OPENMPI) &&                                  \
+      (BRAHMA_MPI_VERSION >= 400106 && BRAHMA_MPI_VERSION < 400200))
 int brahma::MPIDFTracer::MPI_Comm_get_info(int comm, MPI_Info* info_used) {
   BRAHMA_MAP_OR_FAIL(MPI_Comm_get_info);
   DFT_LOGGER_START_ALWAYS();
@@ -2476,13 +2488,15 @@ int brahma::MPIDFTracer::MPI_Comm_get_info(int comm, MPI_Info* info_used) {
   return ret;
 }
 #endif
-#if ((defined(BRAHMA_MPI_IMPL_CRAYMPICH) &&                               \
-      ((BRAHMA_MPI_VERSION >= 800108 && BRAHMA_MPI_VERSION < 800200) ||   \
-       (BRAHMA_MPI_VERSION >= 900001 && BRAHMA_MPI_VERSION < 900100))) || \
-     (defined(BRAHMA_MPI_IMPL_MPICH) &&                                   \
-      (BRAHMA_MPI_VERSION >= 300403 && BRAHMA_MPI_VERSION < 300500)) ||   \
-     (defined(BRAHMA_MPI_IMPL_OPENMPI) &&                                 \
-      (BRAHMA_MPI_VERSION >= 500006 && BRAHMA_MPI_VERSION < 500100)))
+#if (((defined(BRAHMA_MPI_IMPL_CRAYMPICH) &&                               \
+       ((BRAHMA_MPI_VERSION >= 800108 && BRAHMA_MPI_VERSION < 800200) ||   \
+        (BRAHMA_MPI_VERSION >= 900001 && BRAHMA_MPI_VERSION < 900100))) || \
+      (defined(BRAHMA_MPI_IMPL_MPICH) &&                                   \
+       (BRAHMA_MPI_VERSION >= 300403 && BRAHMA_MPI_VERSION < 300500)) ||   \
+      (defined(BRAHMA_MPI_IMPL_OPENMPI) &&                                 \
+       (BRAHMA_MPI_VERSION >= 500006 && BRAHMA_MPI_VERSION < 500100)))) || \
+    (defined(BRAHMA_MPI_IMPL_OPENMPI) &&                                   \
+     (BRAHMA_MPI_VERSION >= 400106 && BRAHMA_MPI_VERSION < 400200))
 int brahma::MPIDFTracer::MPI_Comm_get_name(MPI_Comm comm, char* comm_name,
                                            int* resultlen) {
   BRAHMA_MAP_OR_FAIL(MPI_Comm_get_name);
@@ -2494,12 +2508,14 @@ int brahma::MPIDFTracer::MPI_Comm_get_name(MPI_Comm comm, char* comm_name,
   return ret;
 }
 #endif
-#if ((defined(BRAHMA_MPI_IMPL_CRAYMPICH) &&                             \
-      (BRAHMA_MPI_VERSION >= 900100 && BRAHMA_MPI_VERSION < 900200)) || \
-     (defined(BRAHMA_MPI_IMPL_MPICH) &&                                 \
-      (BRAHMA_MPI_VERSION >= 400203 && BRAHMA_MPI_VERSION < 400300)) || \
-     (defined(BRAHMA_MPI_IMPL_OPENMPI) &&                               \
-      (BRAHMA_MPI_VERSION >= 400106 && BRAHMA_MPI_VERSION < 400200)))
+#if (((defined(BRAHMA_MPI_IMPL_CRAYMPICH) &&                               \
+       (BRAHMA_MPI_VERSION >= 900100 && BRAHMA_MPI_VERSION < 900200)) ||   \
+      (defined(BRAHMA_MPI_IMPL_MPICH) &&                                   \
+       (BRAHMA_MPI_VERSION >= 400203 && BRAHMA_MPI_VERSION < 400300)) ||   \
+      (defined(BRAHMA_MPI_IMPL_OPENMPI) &&                                 \
+       (BRAHMA_MPI_VERSION >= 400106 && BRAHMA_MPI_VERSION < 400200)))) && \
+    !(defined(BRAHMA_MPI_IMPL_OPENMPI) &&                                  \
+      (BRAHMA_MPI_VERSION >= 400106 && BRAHMA_MPI_VERSION < 400200))
 int brahma::MPIDFTracer::MPI_Comm_get_name(int comm, char* comm_name,
                                            int* resultlen) {
   BRAHMA_MAP_OR_FAIL(MPI_Comm_get_name);
@@ -2511,13 +2527,15 @@ int brahma::MPIDFTracer::MPI_Comm_get_name(int comm, char* comm_name,
   return ret;
 }
 #endif
-#if ((defined(BRAHMA_MPI_IMPL_CRAYMPICH) &&                               \
-      ((BRAHMA_MPI_VERSION >= 800108 && BRAHMA_MPI_VERSION < 800200) ||   \
-       (BRAHMA_MPI_VERSION >= 900001 && BRAHMA_MPI_VERSION < 900100))) || \
-     (defined(BRAHMA_MPI_IMPL_MPICH) &&                                   \
-      (BRAHMA_MPI_VERSION >= 300403 && BRAHMA_MPI_VERSION < 300500)) ||   \
-     (defined(BRAHMA_MPI_IMPL_OPENMPI) &&                                 \
-      (BRAHMA_MPI_VERSION >= 500006 && BRAHMA_MPI_VERSION < 500100)))
+#if (((defined(BRAHMA_MPI_IMPL_CRAYMPICH) &&                               \
+       ((BRAHMA_MPI_VERSION >= 800108 && BRAHMA_MPI_VERSION < 800200) ||   \
+        (BRAHMA_MPI_VERSION >= 900001 && BRAHMA_MPI_VERSION < 900100))) || \
+      (defined(BRAHMA_MPI_IMPL_MPICH) &&                                   \
+       (BRAHMA_MPI_VERSION >= 300403 && BRAHMA_MPI_VERSION < 300500)) ||   \
+      (defined(BRAHMA_MPI_IMPL_OPENMPI) &&                                 \
+       (BRAHMA_MPI_VERSION >= 500006 && BRAHMA_MPI_VERSION < 500100)))) || \
+    (defined(BRAHMA_MPI_IMPL_OPENMPI) &&                                   \
+     (BRAHMA_MPI_VERSION >= 400106 && BRAHMA_MPI_VERSION < 400200))
 int brahma::MPIDFTracer::MPI_Comm_get_parent(MPI_Comm* parent) {
   BRAHMA_MAP_OR_FAIL(MPI_Comm_get_parent);
   DFT_LOGGER_START_ALWAYS();
@@ -2527,12 +2545,14 @@ int brahma::MPIDFTracer::MPI_Comm_get_parent(MPI_Comm* parent) {
   return ret;
 }
 #endif
-#if ((defined(BRAHMA_MPI_IMPL_CRAYMPICH) &&                             \
-      (BRAHMA_MPI_VERSION >= 900100 && BRAHMA_MPI_VERSION < 900200)) || \
-     (defined(BRAHMA_MPI_IMPL_MPICH) &&                                 \
-      (BRAHMA_MPI_VERSION >= 400203 && BRAHMA_MPI_VERSION < 400300)) || \
-     (defined(BRAHMA_MPI_IMPL_OPENMPI) &&                               \
-      (BRAHMA_MPI_VERSION >= 400106 && BRAHMA_MPI_VERSION < 400200)))
+#if (((defined(BRAHMA_MPI_IMPL_CRAYMPICH) &&                               \
+       (BRAHMA_MPI_VERSION >= 900100 && BRAHMA_MPI_VERSION < 900200)) ||   \
+      (defined(BRAHMA_MPI_IMPL_MPICH) &&                                   \
+       (BRAHMA_MPI_VERSION >= 400203 && BRAHMA_MPI_VERSION < 400300)) ||   \
+      (defined(BRAHMA_MPI_IMPL_OPENMPI) &&                                 \
+       (BRAHMA_MPI_VERSION >= 400106 && BRAHMA_MPI_VERSION < 400200)))) && \
+    !(defined(BRAHMA_MPI_IMPL_OPENMPI) &&                                  \
+      (BRAHMA_MPI_VERSION >= 400106 && BRAHMA_MPI_VERSION < 400200))
 int brahma::MPIDFTracer::MPI_Comm_get_parent(int* parent) {
   BRAHMA_MAP_OR_FAIL(MPI_Comm_get_parent);
   DFT_LOGGER_START_ALWAYS();
@@ -2542,13 +2562,15 @@ int brahma::MPIDFTracer::MPI_Comm_get_parent(int* parent) {
   return ret;
 }
 #endif
-#if ((defined(BRAHMA_MPI_IMPL_CRAYMPICH) &&                               \
-      ((BRAHMA_MPI_VERSION >= 800108 && BRAHMA_MPI_VERSION < 800200) ||   \
-       (BRAHMA_MPI_VERSION >= 900001 && BRAHMA_MPI_VERSION < 900100))) || \
-     (defined(BRAHMA_MPI_IMPL_MPICH) &&                                   \
-      (BRAHMA_MPI_VERSION >= 300403 && BRAHMA_MPI_VERSION < 300500)) ||   \
-     (defined(BRAHMA_MPI_IMPL_OPENMPI) &&                                 \
-      (BRAHMA_MPI_VERSION >= 500006 && BRAHMA_MPI_VERSION < 500100)))
+#if (((defined(BRAHMA_MPI_IMPL_CRAYMPICH) &&                               \
+       ((BRAHMA_MPI_VERSION >= 800108 && BRAHMA_MPI_VERSION < 800200) ||   \
+        (BRAHMA_MPI_VERSION >= 900001 && BRAHMA_MPI_VERSION < 900100))) || \
+      (defined(BRAHMA_MPI_IMPL_MPICH) &&                                   \
+       (BRAHMA_MPI_VERSION >= 300403 && BRAHMA_MPI_VERSION < 300500)) ||   \
+      (defined(BRAHMA_MPI_IMPL_OPENMPI) &&                                 \
+       (BRAHMA_MPI_VERSION >= 500006 && BRAHMA_MPI_VERSION < 500100)))) || \
+    (defined(BRAHMA_MPI_IMPL_OPENMPI) &&                                   \
+     (BRAHMA_MPI_VERSION >= 400106 && BRAHMA_MPI_VERSION < 400200))
 int brahma::MPIDFTracer::MPI_Comm_group(MPI_Comm comm, MPI_Group* group) {
   BRAHMA_MAP_OR_FAIL(MPI_Comm_group);
   DFT_LOGGER_START_ALWAYS();
@@ -2559,12 +2581,14 @@ int brahma::MPIDFTracer::MPI_Comm_group(MPI_Comm comm, MPI_Group* group) {
   return ret;
 }
 #endif
-#if ((defined(BRAHMA_MPI_IMPL_CRAYMPICH) &&                             \
-      (BRAHMA_MPI_VERSION >= 900100 && BRAHMA_MPI_VERSION < 900200)) || \
-     (defined(BRAHMA_MPI_IMPL_MPICH) &&                                 \
-      (BRAHMA_MPI_VERSION >= 400203 && BRAHMA_MPI_VERSION < 400300)) || \
-     (defined(BRAHMA_MPI_IMPL_OPENMPI) &&                               \
-      (BRAHMA_MPI_VERSION >= 400106 && BRAHMA_MPI_VERSION < 400200)))
+#if (((defined(BRAHMA_MPI_IMPL_CRAYMPICH) &&                               \
+       (BRAHMA_MPI_VERSION >= 900100 && BRAHMA_MPI_VERSION < 900200)) ||   \
+      (defined(BRAHMA_MPI_IMPL_MPICH) &&                                   \
+       (BRAHMA_MPI_VERSION >= 400203 && BRAHMA_MPI_VERSION < 400300)) ||   \
+      (defined(BRAHMA_MPI_IMPL_OPENMPI) &&                                 \
+       (BRAHMA_MPI_VERSION >= 400106 && BRAHMA_MPI_VERSION < 400200)))) && \
+    !(defined(BRAHMA_MPI_IMPL_OPENMPI) &&                                  \
+      (BRAHMA_MPI_VERSION >= 400106 && BRAHMA_MPI_VERSION < 400200))
 int brahma::MPIDFTracer::MPI_Comm_group(int comm, MPI_Group* group) {
   BRAHMA_MAP_OR_FAIL(MPI_Comm_group);
   DFT_LOGGER_START_ALWAYS();
@@ -2642,13 +2666,15 @@ int brahma::MPIDFTracer::MPI_Comm_iflush_buffer(int comm, int* request) {
   return ret;
 }
 #endif
-#if ((defined(BRAHMA_MPI_IMPL_CRAYMPICH) &&                               \
-      ((BRAHMA_MPI_VERSION >= 800108 && BRAHMA_MPI_VERSION < 800200) ||   \
-       (BRAHMA_MPI_VERSION >= 900001 && BRAHMA_MPI_VERSION < 900100))) || \
-     (defined(BRAHMA_MPI_IMPL_MPICH) &&                                   \
-      (BRAHMA_MPI_VERSION >= 300403 && BRAHMA_MPI_VERSION < 300500)) ||   \
-     (defined(BRAHMA_MPI_IMPL_OPENMPI) &&                                 \
-      (BRAHMA_MPI_VERSION >= 500006 && BRAHMA_MPI_VERSION < 500100)))
+#if (((defined(BRAHMA_MPI_IMPL_CRAYMPICH) &&                               \
+       ((BRAHMA_MPI_VERSION >= 800108 && BRAHMA_MPI_VERSION < 800200) ||   \
+        (BRAHMA_MPI_VERSION >= 900001 && BRAHMA_MPI_VERSION < 900100))) || \
+      (defined(BRAHMA_MPI_IMPL_MPICH) &&                                   \
+       (BRAHMA_MPI_VERSION >= 300403 && BRAHMA_MPI_VERSION < 300500)) ||   \
+      (defined(BRAHMA_MPI_IMPL_OPENMPI) &&                                 \
+       (BRAHMA_MPI_VERSION >= 500006 && BRAHMA_MPI_VERSION < 500100)))) || \
+    (defined(BRAHMA_MPI_IMPL_OPENMPI) &&                                   \
+     (BRAHMA_MPI_VERSION >= 400106 && BRAHMA_MPI_VERSION < 400200))
 int brahma::MPIDFTracer::MPI_Comm_join(int fd, MPI_Comm* intercomm) {
   BRAHMA_MAP_OR_FAIL(MPI_Comm_join);
   DFT_LOGGER_START_ALWAYS();
@@ -2659,12 +2685,14 @@ int brahma::MPIDFTracer::MPI_Comm_join(int fd, MPI_Comm* intercomm) {
   return ret;
 }
 #endif
-#if ((defined(BRAHMA_MPI_IMPL_CRAYMPICH) &&                             \
-      (BRAHMA_MPI_VERSION >= 900100 && BRAHMA_MPI_VERSION < 900200)) || \
-     (defined(BRAHMA_MPI_IMPL_MPICH) &&                                 \
-      (BRAHMA_MPI_VERSION >= 400203 && BRAHMA_MPI_VERSION < 400300)) || \
-     (defined(BRAHMA_MPI_IMPL_OPENMPI) &&                               \
-      (BRAHMA_MPI_VERSION >= 400106 && BRAHMA_MPI_VERSION < 400200)))
+#if (((defined(BRAHMA_MPI_IMPL_CRAYMPICH) &&                               \
+       (BRAHMA_MPI_VERSION >= 900100 && BRAHMA_MPI_VERSION < 900200)) ||   \
+      (defined(BRAHMA_MPI_IMPL_MPICH) &&                                   \
+       (BRAHMA_MPI_VERSION >= 400203 && BRAHMA_MPI_VERSION < 400300)) ||   \
+      (defined(BRAHMA_MPI_IMPL_OPENMPI) &&                                 \
+       (BRAHMA_MPI_VERSION >= 400106 && BRAHMA_MPI_VERSION < 400200)))) && \
+    !(defined(BRAHMA_MPI_IMPL_OPENMPI) &&                                  \
+      (BRAHMA_MPI_VERSION >= 400106 && BRAHMA_MPI_VERSION < 400200))
 int brahma::MPIDFTracer::MPI_Comm_join(int fd, int* intercomm) {
   BRAHMA_MAP_OR_FAIL(MPI_Comm_join);
   DFT_LOGGER_START_ALWAYS();
@@ -2675,13 +2703,15 @@ int brahma::MPIDFTracer::MPI_Comm_join(int fd, int* intercomm) {
   return ret;
 }
 #endif
-#if ((defined(BRAHMA_MPI_IMPL_CRAYMPICH) &&                               \
-      ((BRAHMA_MPI_VERSION >= 800108 && BRAHMA_MPI_VERSION < 800200) ||   \
-       (BRAHMA_MPI_VERSION >= 900001 && BRAHMA_MPI_VERSION < 900100))) || \
-     (defined(BRAHMA_MPI_IMPL_MPICH) &&                                   \
-      (BRAHMA_MPI_VERSION >= 300403 && BRAHMA_MPI_VERSION < 300500)) ||   \
-     (defined(BRAHMA_MPI_IMPL_OPENMPI) &&                                 \
-      (BRAHMA_MPI_VERSION >= 500006 && BRAHMA_MPI_VERSION < 500100)))
+#if (((defined(BRAHMA_MPI_IMPL_CRAYMPICH) &&                               \
+       ((BRAHMA_MPI_VERSION >= 800108 && BRAHMA_MPI_VERSION < 800200) ||   \
+        (BRAHMA_MPI_VERSION >= 900001 && BRAHMA_MPI_VERSION < 900100))) || \
+      (defined(BRAHMA_MPI_IMPL_MPICH) &&                                   \
+       (BRAHMA_MPI_VERSION >= 300403 && BRAHMA_MPI_VERSION < 300500)) ||   \
+      (defined(BRAHMA_MPI_IMPL_OPENMPI) &&                                 \
+       (BRAHMA_MPI_VERSION >= 500006 && BRAHMA_MPI_VERSION < 500100)))) || \
+    (defined(BRAHMA_MPI_IMPL_OPENMPI) &&                                   \
+     (BRAHMA_MPI_VERSION >= 400106 && BRAHMA_MPI_VERSION < 400200))
 int brahma::MPIDFTracer::MPI_Comm_rank(MPI_Comm comm, int* rank) {
   BRAHMA_MAP_OR_FAIL(MPI_Comm_rank);
   DFT_LOGGER_START_ALWAYS();
@@ -2692,12 +2722,14 @@ int brahma::MPIDFTracer::MPI_Comm_rank(MPI_Comm comm, int* rank) {
   return ret;
 }
 #endif
-#if ((defined(BRAHMA_MPI_IMPL_CRAYMPICH) &&                             \
-      (BRAHMA_MPI_VERSION >= 900100 && BRAHMA_MPI_VERSION < 900200)) || \
-     (defined(BRAHMA_MPI_IMPL_MPICH) &&                                 \
-      (BRAHMA_MPI_VERSION >= 400203 && BRAHMA_MPI_VERSION < 400300)) || \
-     (defined(BRAHMA_MPI_IMPL_OPENMPI) &&                               \
-      (BRAHMA_MPI_VERSION >= 400106 && BRAHMA_MPI_VERSION < 400200)))
+#if (((defined(BRAHMA_MPI_IMPL_CRAYMPICH) &&                               \
+       (BRAHMA_MPI_VERSION >= 900100 && BRAHMA_MPI_VERSION < 900200)) ||   \
+      (defined(BRAHMA_MPI_IMPL_MPICH) &&                                   \
+       (BRAHMA_MPI_VERSION >= 400203 && BRAHMA_MPI_VERSION < 400300)) ||   \
+      (defined(BRAHMA_MPI_IMPL_OPENMPI) &&                                 \
+       (BRAHMA_MPI_VERSION >= 400106 && BRAHMA_MPI_VERSION < 400200)))) && \
+    !(defined(BRAHMA_MPI_IMPL_OPENMPI) &&                                  \
+      (BRAHMA_MPI_VERSION >= 400106 && BRAHMA_MPI_VERSION < 400200))
 int brahma::MPIDFTracer::MPI_Comm_rank(int comm, int* rank) {
   BRAHMA_MAP_OR_FAIL(MPI_Comm_rank);
   DFT_LOGGER_START_ALWAYS();
@@ -2708,13 +2740,15 @@ int brahma::MPIDFTracer::MPI_Comm_rank(int comm, int* rank) {
   return ret;
 }
 #endif
-#if ((defined(BRAHMA_MPI_IMPL_CRAYMPICH) &&                               \
-      ((BRAHMA_MPI_VERSION >= 800108 && BRAHMA_MPI_VERSION < 800200) ||   \
-       (BRAHMA_MPI_VERSION >= 900001 && BRAHMA_MPI_VERSION < 900100))) || \
-     (defined(BRAHMA_MPI_IMPL_MPICH) &&                                   \
-      (BRAHMA_MPI_VERSION >= 300403 && BRAHMA_MPI_VERSION < 300500)) ||   \
-     (defined(BRAHMA_MPI_IMPL_OPENMPI) &&                                 \
-      (BRAHMA_MPI_VERSION >= 500006 && BRAHMA_MPI_VERSION < 500100)))
+#if (((defined(BRAHMA_MPI_IMPL_CRAYMPICH) &&                               \
+       ((BRAHMA_MPI_VERSION >= 800108 && BRAHMA_MPI_VERSION < 800200) ||   \
+        (BRAHMA_MPI_VERSION >= 900001 && BRAHMA_MPI_VERSION < 900100))) || \
+      (defined(BRAHMA_MPI_IMPL_MPICH) &&                                   \
+       (BRAHMA_MPI_VERSION >= 300403 && BRAHMA_MPI_VERSION < 300500)) ||   \
+      (defined(BRAHMA_MPI_IMPL_OPENMPI) &&                                 \
+       (BRAHMA_MPI_VERSION >= 500006 && BRAHMA_MPI_VERSION < 500100)))) || \
+    (defined(BRAHMA_MPI_IMPL_OPENMPI) &&                                   \
+     (BRAHMA_MPI_VERSION >= 400106 && BRAHMA_MPI_VERSION < 400200))
 int brahma::MPIDFTracer::MPI_Comm_remote_group(MPI_Comm comm,
                                                MPI_Group* group) {
   BRAHMA_MAP_OR_FAIL(MPI_Comm_remote_group);
@@ -2726,12 +2760,14 @@ int brahma::MPIDFTracer::MPI_Comm_remote_group(MPI_Comm comm,
   return ret;
 }
 #endif
-#if ((defined(BRAHMA_MPI_IMPL_CRAYMPICH) &&                             \
-      (BRAHMA_MPI_VERSION >= 900100 && BRAHMA_MPI_VERSION < 900200)) || \
-     (defined(BRAHMA_MPI_IMPL_MPICH) &&                                 \
-      (BRAHMA_MPI_VERSION >= 400203 && BRAHMA_MPI_VERSION < 400300)) || \
-     (defined(BRAHMA_MPI_IMPL_OPENMPI) &&                               \
-      (BRAHMA_MPI_VERSION >= 400106 && BRAHMA_MPI_VERSION < 400200)))
+#if (((defined(BRAHMA_MPI_IMPL_CRAYMPICH) &&                               \
+       (BRAHMA_MPI_VERSION >= 900100 && BRAHMA_MPI_VERSION < 900200)) ||   \
+      (defined(BRAHMA_MPI_IMPL_MPICH) &&                                   \
+       (BRAHMA_MPI_VERSION >= 400203 && BRAHMA_MPI_VERSION < 400300)) ||   \
+      (defined(BRAHMA_MPI_IMPL_OPENMPI) &&                                 \
+       (BRAHMA_MPI_VERSION >= 400106 && BRAHMA_MPI_VERSION < 400200)))) && \
+    !(defined(BRAHMA_MPI_IMPL_OPENMPI) &&                                  \
+      (BRAHMA_MPI_VERSION >= 400106 && BRAHMA_MPI_VERSION < 400200))
 int brahma::MPIDFTracer::MPI_Comm_remote_group(int comm, MPI_Group* group) {
   BRAHMA_MAP_OR_FAIL(MPI_Comm_remote_group);
   DFT_LOGGER_START_ALWAYS();
@@ -2742,13 +2778,15 @@ int brahma::MPIDFTracer::MPI_Comm_remote_group(int comm, MPI_Group* group) {
   return ret;
 }
 #endif
-#if ((defined(BRAHMA_MPI_IMPL_CRAYMPICH) &&                               \
-      ((BRAHMA_MPI_VERSION >= 800108 && BRAHMA_MPI_VERSION < 800200) ||   \
-       (BRAHMA_MPI_VERSION >= 900001 && BRAHMA_MPI_VERSION < 900100))) || \
-     (defined(BRAHMA_MPI_IMPL_MPICH) &&                                   \
-      (BRAHMA_MPI_VERSION >= 300403 && BRAHMA_MPI_VERSION < 300500)) ||   \
-     (defined(BRAHMA_MPI_IMPL_OPENMPI) &&                                 \
-      (BRAHMA_MPI_VERSION >= 500006 && BRAHMA_MPI_VERSION < 500100)))
+#if (((defined(BRAHMA_MPI_IMPL_CRAYMPICH) &&                               \
+       ((BRAHMA_MPI_VERSION >= 800108 && BRAHMA_MPI_VERSION < 800200) ||   \
+        (BRAHMA_MPI_VERSION >= 900001 && BRAHMA_MPI_VERSION < 900100))) || \
+      (defined(BRAHMA_MPI_IMPL_MPICH) &&                                   \
+       (BRAHMA_MPI_VERSION >= 300403 && BRAHMA_MPI_VERSION < 300500)) ||   \
+      (defined(BRAHMA_MPI_IMPL_OPENMPI) &&                                 \
+       (BRAHMA_MPI_VERSION >= 500006 && BRAHMA_MPI_VERSION < 500100)))) || \
+    (defined(BRAHMA_MPI_IMPL_OPENMPI) &&                                   \
+     (BRAHMA_MPI_VERSION >= 400106 && BRAHMA_MPI_VERSION < 400200))
 int brahma::MPIDFTracer::MPI_Comm_remote_size(MPI_Comm comm, int* size) {
   BRAHMA_MAP_OR_FAIL(MPI_Comm_remote_size);
   DFT_LOGGER_START_ALWAYS();
@@ -2759,12 +2797,14 @@ int brahma::MPIDFTracer::MPI_Comm_remote_size(MPI_Comm comm, int* size) {
   return ret;
 }
 #endif
-#if ((defined(BRAHMA_MPI_IMPL_CRAYMPICH) &&                             \
-      (BRAHMA_MPI_VERSION >= 900100 && BRAHMA_MPI_VERSION < 900200)) || \
-     (defined(BRAHMA_MPI_IMPL_MPICH) &&                                 \
-      (BRAHMA_MPI_VERSION >= 400203 && BRAHMA_MPI_VERSION < 400300)) || \
-     (defined(BRAHMA_MPI_IMPL_OPENMPI) &&                               \
-      (BRAHMA_MPI_VERSION >= 400106 && BRAHMA_MPI_VERSION < 400200)))
+#if (((defined(BRAHMA_MPI_IMPL_CRAYMPICH) &&                               \
+       (BRAHMA_MPI_VERSION >= 900100 && BRAHMA_MPI_VERSION < 900200)) ||   \
+      (defined(BRAHMA_MPI_IMPL_MPICH) &&                                   \
+       (BRAHMA_MPI_VERSION >= 400203 && BRAHMA_MPI_VERSION < 400300)) ||   \
+      (defined(BRAHMA_MPI_IMPL_OPENMPI) &&                                 \
+       (BRAHMA_MPI_VERSION >= 400106 && BRAHMA_MPI_VERSION < 400200)))) && \
+    !(defined(BRAHMA_MPI_IMPL_OPENMPI) &&                                  \
+      (BRAHMA_MPI_VERSION >= 400106 && BRAHMA_MPI_VERSION < 400200))
 int brahma::MPIDFTracer::MPI_Comm_remote_size(int comm, int* size) {
   BRAHMA_MAP_OR_FAIL(MPI_Comm_remote_size);
   DFT_LOGGER_START_ALWAYS();
@@ -2775,13 +2815,15 @@ int brahma::MPIDFTracer::MPI_Comm_remote_size(int comm, int* size) {
   return ret;
 }
 #endif
-#if ((defined(BRAHMA_MPI_IMPL_CRAYMPICH) &&                               \
-      ((BRAHMA_MPI_VERSION >= 800108 && BRAHMA_MPI_VERSION < 800200) ||   \
-       (BRAHMA_MPI_VERSION >= 900001 && BRAHMA_MPI_VERSION < 900100))) || \
-     (defined(BRAHMA_MPI_IMPL_MPICH) &&                                   \
-      (BRAHMA_MPI_VERSION >= 300403 && BRAHMA_MPI_VERSION < 300500)) ||   \
-     (defined(BRAHMA_MPI_IMPL_OPENMPI) &&                                 \
-      (BRAHMA_MPI_VERSION >= 500006 && BRAHMA_MPI_VERSION < 500100)))
+#if (((defined(BRAHMA_MPI_IMPL_CRAYMPICH) &&                               \
+       ((BRAHMA_MPI_VERSION >= 800108 && BRAHMA_MPI_VERSION < 800200) ||   \
+        (BRAHMA_MPI_VERSION >= 900001 && BRAHMA_MPI_VERSION < 900100))) || \
+      (defined(BRAHMA_MPI_IMPL_MPICH) &&                                   \
+       (BRAHMA_MPI_VERSION >= 300403 && BRAHMA_MPI_VERSION < 300500)) ||   \
+      (defined(BRAHMA_MPI_IMPL_OPENMPI) &&                                 \
+       (BRAHMA_MPI_VERSION >= 500006 && BRAHMA_MPI_VERSION < 500100)))) || \
+    (defined(BRAHMA_MPI_IMPL_OPENMPI) &&                                   \
+     (BRAHMA_MPI_VERSION >= 400106 && BRAHMA_MPI_VERSION < 400200))
 int brahma::MPIDFTracer::MPI_Comm_set_attr(MPI_Comm comm, int comm_keyval,
                                            void* attribute_val) {
   BRAHMA_MAP_OR_FAIL(MPI_Comm_set_attr);
@@ -2794,12 +2836,14 @@ int brahma::MPIDFTracer::MPI_Comm_set_attr(MPI_Comm comm, int comm_keyval,
   return ret;
 }
 #endif
-#if ((defined(BRAHMA_MPI_IMPL_CRAYMPICH) &&                             \
-      (BRAHMA_MPI_VERSION >= 900100 && BRAHMA_MPI_VERSION < 900200)) || \
-     (defined(BRAHMA_MPI_IMPL_MPICH) &&                                 \
-      (BRAHMA_MPI_VERSION >= 400203 && BRAHMA_MPI_VERSION < 400300)) || \
-     (defined(BRAHMA_MPI_IMPL_OPENMPI) &&                               \
-      (BRAHMA_MPI_VERSION >= 400106 && BRAHMA_MPI_VERSION < 400200)))
+#if (((defined(BRAHMA_MPI_IMPL_CRAYMPICH) &&                               \
+       (BRAHMA_MPI_VERSION >= 900100 && BRAHMA_MPI_VERSION < 900200)) ||   \
+      (defined(BRAHMA_MPI_IMPL_MPICH) &&                                   \
+       (BRAHMA_MPI_VERSION >= 400203 && BRAHMA_MPI_VERSION < 400300)) ||   \
+      (defined(BRAHMA_MPI_IMPL_OPENMPI) &&                                 \
+       (BRAHMA_MPI_VERSION >= 400106 && BRAHMA_MPI_VERSION < 400200)))) && \
+    !(defined(BRAHMA_MPI_IMPL_OPENMPI) &&                                  \
+      (BRAHMA_MPI_VERSION >= 400106 && BRAHMA_MPI_VERSION < 400200))
 int brahma::MPIDFTracer::MPI_Comm_set_attr(int comm, int comm_keyval,
                                            void* attribute_val) {
   BRAHMA_MAP_OR_FAIL(MPI_Comm_set_attr);
@@ -2812,13 +2856,15 @@ int brahma::MPIDFTracer::MPI_Comm_set_attr(int comm, int comm_keyval,
   return ret;
 }
 #endif
-#if ((defined(BRAHMA_MPI_IMPL_CRAYMPICH) &&                               \
-      ((BRAHMA_MPI_VERSION >= 800108 && BRAHMA_MPI_VERSION < 800200) ||   \
-       (BRAHMA_MPI_VERSION >= 900001 && BRAHMA_MPI_VERSION < 900100))) || \
-     (defined(BRAHMA_MPI_IMPL_MPICH) &&                                   \
-      (BRAHMA_MPI_VERSION >= 300403 && BRAHMA_MPI_VERSION < 300500)) ||   \
-     (defined(BRAHMA_MPI_IMPL_OPENMPI) &&                                 \
-      (BRAHMA_MPI_VERSION >= 500006 && BRAHMA_MPI_VERSION < 500100)))
+#if (((defined(BRAHMA_MPI_IMPL_CRAYMPICH) &&                               \
+       ((BRAHMA_MPI_VERSION >= 800108 && BRAHMA_MPI_VERSION < 800200) ||   \
+        (BRAHMA_MPI_VERSION >= 900001 && BRAHMA_MPI_VERSION < 900100))) || \
+      (defined(BRAHMA_MPI_IMPL_MPICH) &&                                   \
+       (BRAHMA_MPI_VERSION >= 300403 && BRAHMA_MPI_VERSION < 300500)) ||   \
+      (defined(BRAHMA_MPI_IMPL_OPENMPI) &&                                 \
+       (BRAHMA_MPI_VERSION >= 500006 && BRAHMA_MPI_VERSION < 500100)))) || \
+    (defined(BRAHMA_MPI_IMPL_OPENMPI) &&                                   \
+     (BRAHMA_MPI_VERSION >= 400106 && BRAHMA_MPI_VERSION < 400200))
 int brahma::MPIDFTracer::MPI_Comm_set_errhandler(MPI_Comm comm,
                                                  MPI_Errhandler errhandler) {
   BRAHMA_MAP_OR_FAIL(MPI_Comm_set_errhandler);
@@ -2831,12 +2877,14 @@ int brahma::MPIDFTracer::MPI_Comm_set_errhandler(MPI_Comm comm,
   return ret;
 }
 #endif
-#if ((defined(BRAHMA_MPI_IMPL_CRAYMPICH) &&                             \
-      (BRAHMA_MPI_VERSION >= 900100 && BRAHMA_MPI_VERSION < 900200)) || \
-     (defined(BRAHMA_MPI_IMPL_MPICH) &&                                 \
-      (BRAHMA_MPI_VERSION >= 400203 && BRAHMA_MPI_VERSION < 400300)) || \
-     (defined(BRAHMA_MPI_IMPL_OPENMPI) &&                               \
-      (BRAHMA_MPI_VERSION >= 400106 && BRAHMA_MPI_VERSION < 400200)))
+#if (((defined(BRAHMA_MPI_IMPL_CRAYMPICH) &&                               \
+       (BRAHMA_MPI_VERSION >= 900100 && BRAHMA_MPI_VERSION < 900200)) ||   \
+      (defined(BRAHMA_MPI_IMPL_MPICH) &&                                   \
+       (BRAHMA_MPI_VERSION >= 400203 && BRAHMA_MPI_VERSION < 400300)) ||   \
+      (defined(BRAHMA_MPI_IMPL_OPENMPI) &&                                 \
+       (BRAHMA_MPI_VERSION >= 400106 && BRAHMA_MPI_VERSION < 400200)))) && \
+    !(defined(BRAHMA_MPI_IMPL_OPENMPI) &&                                  \
+      (BRAHMA_MPI_VERSION >= 400106 && BRAHMA_MPI_VERSION < 400200))
 int brahma::MPIDFTracer::MPI_Comm_set_errhandler(int comm,
                                                  MPI_Errhandler errhandler) {
   BRAHMA_MAP_OR_FAIL(MPI_Comm_set_errhandler);
@@ -2849,13 +2897,15 @@ int brahma::MPIDFTracer::MPI_Comm_set_errhandler(int comm,
   return ret;
 }
 #endif
-#if ((defined(BRAHMA_MPI_IMPL_CRAYMPICH) &&                               \
-      ((BRAHMA_MPI_VERSION >= 800108 && BRAHMA_MPI_VERSION < 800200) ||   \
-       (BRAHMA_MPI_VERSION >= 900001 && BRAHMA_MPI_VERSION < 900100))) || \
-     (defined(BRAHMA_MPI_IMPL_MPICH) &&                                   \
-      (BRAHMA_MPI_VERSION >= 300403 && BRAHMA_MPI_VERSION < 300500)) ||   \
-     (defined(BRAHMA_MPI_IMPL_OPENMPI) &&                                 \
-      (BRAHMA_MPI_VERSION >= 500006 && BRAHMA_MPI_VERSION < 500100)))
+#if (((defined(BRAHMA_MPI_IMPL_CRAYMPICH) &&                               \
+       ((BRAHMA_MPI_VERSION >= 800108 && BRAHMA_MPI_VERSION < 800200) ||   \
+        (BRAHMA_MPI_VERSION >= 900001 && BRAHMA_MPI_VERSION < 900100))) || \
+      (defined(BRAHMA_MPI_IMPL_MPICH) &&                                   \
+       (BRAHMA_MPI_VERSION >= 300403 && BRAHMA_MPI_VERSION < 300500)) ||   \
+      (defined(BRAHMA_MPI_IMPL_OPENMPI) &&                                 \
+       (BRAHMA_MPI_VERSION >= 500006 && BRAHMA_MPI_VERSION < 500100)))) || \
+    (defined(BRAHMA_MPI_IMPL_OPENMPI) &&                                   \
+     (BRAHMA_MPI_VERSION >= 400106 && BRAHMA_MPI_VERSION < 400200))
 int brahma::MPIDFTracer::MPI_Comm_set_info(MPI_Comm comm, MPI_Info info) {
   BRAHMA_MAP_OR_FAIL(MPI_Comm_set_info);
   DFT_LOGGER_START_ALWAYS();
@@ -2867,12 +2917,14 @@ int brahma::MPIDFTracer::MPI_Comm_set_info(MPI_Comm comm, MPI_Info info) {
   return ret;
 }
 #endif
-#if ((defined(BRAHMA_MPI_IMPL_CRAYMPICH) &&                             \
-      (BRAHMA_MPI_VERSION >= 900100 && BRAHMA_MPI_VERSION < 900200)) || \
-     (defined(BRAHMA_MPI_IMPL_MPICH) &&                                 \
-      (BRAHMA_MPI_VERSION >= 400203 && BRAHMA_MPI_VERSION < 400300)) || \
-     (defined(BRAHMA_MPI_IMPL_OPENMPI) &&                               \
-      (BRAHMA_MPI_VERSION >= 400106 && BRAHMA_MPI_VERSION < 400200)))
+#if (((defined(BRAHMA_MPI_IMPL_CRAYMPICH) &&                               \
+       (BRAHMA_MPI_VERSION >= 900100 && BRAHMA_MPI_VERSION < 900200)) ||   \
+      (defined(BRAHMA_MPI_IMPL_MPICH) &&                                   \
+       (BRAHMA_MPI_VERSION >= 400203 && BRAHMA_MPI_VERSION < 400300)) ||   \
+      (defined(BRAHMA_MPI_IMPL_OPENMPI) &&                                 \
+       (BRAHMA_MPI_VERSION >= 400106 && BRAHMA_MPI_VERSION < 400200)))) && \
+    !(defined(BRAHMA_MPI_IMPL_OPENMPI) &&                                  \
+      (BRAHMA_MPI_VERSION >= 400106 && BRAHMA_MPI_VERSION < 400200))
 int brahma::MPIDFTracer::MPI_Comm_set_info(int comm, MPI_Info info) {
   BRAHMA_MAP_OR_FAIL(MPI_Comm_set_info);
   DFT_LOGGER_START_ALWAYS();
@@ -2884,13 +2936,15 @@ int brahma::MPIDFTracer::MPI_Comm_set_info(int comm, MPI_Info info) {
   return ret;
 }
 #endif
-#if ((defined(BRAHMA_MPI_IMPL_CRAYMPICH) &&                               \
-      ((BRAHMA_MPI_VERSION >= 800108 && BRAHMA_MPI_VERSION < 800200) ||   \
-       (BRAHMA_MPI_VERSION >= 900001 && BRAHMA_MPI_VERSION < 900100))) || \
-     (defined(BRAHMA_MPI_IMPL_MPICH) &&                                   \
-      (BRAHMA_MPI_VERSION >= 300403 && BRAHMA_MPI_VERSION < 300500)) ||   \
-     (defined(BRAHMA_MPI_IMPL_OPENMPI) &&                                 \
-      (BRAHMA_MPI_VERSION >= 500006 && BRAHMA_MPI_VERSION < 500100)))
+#if (((defined(BRAHMA_MPI_IMPL_CRAYMPICH) &&                               \
+       ((BRAHMA_MPI_VERSION >= 800108 && BRAHMA_MPI_VERSION < 800200) ||   \
+        (BRAHMA_MPI_VERSION >= 900001 && BRAHMA_MPI_VERSION < 900100))) || \
+      (defined(BRAHMA_MPI_IMPL_MPICH) &&                                   \
+       (BRAHMA_MPI_VERSION >= 300403 && BRAHMA_MPI_VERSION < 300500)) ||   \
+      (defined(BRAHMA_MPI_IMPL_OPENMPI) &&                                 \
+       (BRAHMA_MPI_VERSION >= 500006 && BRAHMA_MPI_VERSION < 500100)))) || \
+    (defined(BRAHMA_MPI_IMPL_OPENMPI) &&                                   \
+     (BRAHMA_MPI_VERSION >= 400106 && BRAHMA_MPI_VERSION < 400200))
 int brahma::MPIDFTracer::MPI_Comm_set_name(MPI_Comm comm,
                                            const char* comm_name) {
   BRAHMA_MAP_OR_FAIL(MPI_Comm_set_name);
@@ -2902,12 +2956,14 @@ int brahma::MPIDFTracer::MPI_Comm_set_name(MPI_Comm comm,
   return ret;
 }
 #endif
-#if ((defined(BRAHMA_MPI_IMPL_CRAYMPICH) &&                             \
-      (BRAHMA_MPI_VERSION >= 900100 && BRAHMA_MPI_VERSION < 900200)) || \
-     (defined(BRAHMA_MPI_IMPL_MPICH) &&                                 \
-      (BRAHMA_MPI_VERSION >= 400203 && BRAHMA_MPI_VERSION < 400300)) || \
-     (defined(BRAHMA_MPI_IMPL_OPENMPI) &&                               \
-      (BRAHMA_MPI_VERSION >= 400106 && BRAHMA_MPI_VERSION < 400200)))
+#if (((defined(BRAHMA_MPI_IMPL_CRAYMPICH) &&                               \
+       (BRAHMA_MPI_VERSION >= 900100 && BRAHMA_MPI_VERSION < 900200)) ||   \
+      (defined(BRAHMA_MPI_IMPL_MPICH) &&                                   \
+       (BRAHMA_MPI_VERSION >= 400203 && BRAHMA_MPI_VERSION < 400300)) ||   \
+      (defined(BRAHMA_MPI_IMPL_OPENMPI) &&                                 \
+       (BRAHMA_MPI_VERSION >= 400106 && BRAHMA_MPI_VERSION < 400200)))) && \
+    !(defined(BRAHMA_MPI_IMPL_OPENMPI) &&                                  \
+      (BRAHMA_MPI_VERSION >= 400106 && BRAHMA_MPI_VERSION < 400200))
 int brahma::MPIDFTracer::MPI_Comm_set_name(int comm, const char* comm_name) {
   BRAHMA_MAP_OR_FAIL(MPI_Comm_set_name);
   DFT_LOGGER_START_ALWAYS();
@@ -2918,13 +2974,15 @@ int brahma::MPIDFTracer::MPI_Comm_set_name(int comm, const char* comm_name) {
   return ret;
 }
 #endif
-#if ((defined(BRAHMA_MPI_IMPL_CRAYMPICH) &&                               \
-      ((BRAHMA_MPI_VERSION >= 800108 && BRAHMA_MPI_VERSION < 800200) ||   \
-       (BRAHMA_MPI_VERSION >= 900001 && BRAHMA_MPI_VERSION < 900100))) || \
-     (defined(BRAHMA_MPI_IMPL_MPICH) &&                                   \
-      (BRAHMA_MPI_VERSION >= 300403 && BRAHMA_MPI_VERSION < 300500)) ||   \
-     (defined(BRAHMA_MPI_IMPL_OPENMPI) &&                                 \
-      (BRAHMA_MPI_VERSION >= 500006 && BRAHMA_MPI_VERSION < 500100)))
+#if (((defined(BRAHMA_MPI_IMPL_CRAYMPICH) &&                               \
+       ((BRAHMA_MPI_VERSION >= 800108 && BRAHMA_MPI_VERSION < 800200) ||   \
+        (BRAHMA_MPI_VERSION >= 900001 && BRAHMA_MPI_VERSION < 900100))) || \
+      (defined(BRAHMA_MPI_IMPL_MPICH) &&                                   \
+       (BRAHMA_MPI_VERSION >= 300403 && BRAHMA_MPI_VERSION < 300500)) ||   \
+      (defined(BRAHMA_MPI_IMPL_OPENMPI) &&                                 \
+       (BRAHMA_MPI_VERSION >= 500006 && BRAHMA_MPI_VERSION < 500100)))) || \
+    (defined(BRAHMA_MPI_IMPL_OPENMPI) &&                                   \
+     (BRAHMA_MPI_VERSION >= 400106 && BRAHMA_MPI_VERSION < 400200))
 int brahma::MPIDFTracer::MPI_Comm_size(MPI_Comm comm, int* size) {
   BRAHMA_MAP_OR_FAIL(MPI_Comm_size);
   DFT_LOGGER_START_ALWAYS();
@@ -2935,12 +2993,14 @@ int brahma::MPIDFTracer::MPI_Comm_size(MPI_Comm comm, int* size) {
   return ret;
 }
 #endif
-#if ((defined(BRAHMA_MPI_IMPL_CRAYMPICH) &&                             \
-      (BRAHMA_MPI_VERSION >= 900100 && BRAHMA_MPI_VERSION < 900200)) || \
-     (defined(BRAHMA_MPI_IMPL_MPICH) &&                                 \
-      (BRAHMA_MPI_VERSION >= 400203 && BRAHMA_MPI_VERSION < 400300)) || \
-     (defined(BRAHMA_MPI_IMPL_OPENMPI) &&                               \
-      (BRAHMA_MPI_VERSION >= 400106 && BRAHMA_MPI_VERSION < 400200)))
+#if (((defined(BRAHMA_MPI_IMPL_CRAYMPICH) &&                               \
+       (BRAHMA_MPI_VERSION >= 900100 && BRAHMA_MPI_VERSION < 900200)) ||   \
+      (defined(BRAHMA_MPI_IMPL_MPICH) &&                                   \
+       (BRAHMA_MPI_VERSION >= 400203 && BRAHMA_MPI_VERSION < 400300)) ||   \
+      (defined(BRAHMA_MPI_IMPL_OPENMPI) &&                                 \
+       (BRAHMA_MPI_VERSION >= 400106 && BRAHMA_MPI_VERSION < 400200)))) && \
+    !(defined(BRAHMA_MPI_IMPL_OPENMPI) &&                                  \
+      (BRAHMA_MPI_VERSION >= 400106 && BRAHMA_MPI_VERSION < 400200))
 int brahma::MPIDFTracer::MPI_Comm_size(int comm, int* size) {
   BRAHMA_MAP_OR_FAIL(MPI_Comm_size);
   DFT_LOGGER_START_ALWAYS();
@@ -2951,13 +3011,15 @@ int brahma::MPIDFTracer::MPI_Comm_size(int comm, int* size) {
   return ret;
 }
 #endif
-#if ((defined(BRAHMA_MPI_IMPL_CRAYMPICH) &&                               \
-      ((BRAHMA_MPI_VERSION >= 800108 && BRAHMA_MPI_VERSION < 800200) ||   \
-       (BRAHMA_MPI_VERSION >= 900001 && BRAHMA_MPI_VERSION < 900100))) || \
-     (defined(BRAHMA_MPI_IMPL_MPICH) &&                                   \
-      (BRAHMA_MPI_VERSION >= 300403 && BRAHMA_MPI_VERSION < 300500)) ||   \
-     (defined(BRAHMA_MPI_IMPL_OPENMPI) &&                                 \
-      (BRAHMA_MPI_VERSION >= 500006 && BRAHMA_MPI_VERSION < 500100)))
+#if (((defined(BRAHMA_MPI_IMPL_CRAYMPICH) &&                               \
+       ((BRAHMA_MPI_VERSION >= 800108 && BRAHMA_MPI_VERSION < 800200) ||   \
+        (BRAHMA_MPI_VERSION >= 900001 && BRAHMA_MPI_VERSION < 900100))) || \
+      (defined(BRAHMA_MPI_IMPL_MPICH) &&                                   \
+       (BRAHMA_MPI_VERSION >= 300403 && BRAHMA_MPI_VERSION < 300500)) ||   \
+      (defined(BRAHMA_MPI_IMPL_OPENMPI) &&                                 \
+       (BRAHMA_MPI_VERSION >= 500006 && BRAHMA_MPI_VERSION < 500100)))) || \
+    (defined(BRAHMA_MPI_IMPL_OPENMPI) &&                                   \
+     (BRAHMA_MPI_VERSION >= 400106 && BRAHMA_MPI_VERSION < 400200))
 int brahma::MPIDFTracer::MPI_Comm_spawn(const char* command, char* argv[],
                                         int maxprocs, MPI_Info info, int root,
                                         MPI_Comm comm, MPI_Comm* intercomm,
@@ -2975,12 +3037,14 @@ int brahma::MPIDFTracer::MPI_Comm_spawn(const char* command, char* argv[],
   return ret;
 }
 #endif
-#if ((defined(BRAHMA_MPI_IMPL_CRAYMPICH) &&                             \
-      (BRAHMA_MPI_VERSION >= 900100 && BRAHMA_MPI_VERSION < 900200)) || \
-     (defined(BRAHMA_MPI_IMPL_MPICH) &&                                 \
-      (BRAHMA_MPI_VERSION >= 400203 && BRAHMA_MPI_VERSION < 400300)) || \
-     (defined(BRAHMA_MPI_IMPL_OPENMPI) &&                               \
-      (BRAHMA_MPI_VERSION >= 400106 && BRAHMA_MPI_VERSION < 400200)))
+#if (((defined(BRAHMA_MPI_IMPL_CRAYMPICH) &&                               \
+       (BRAHMA_MPI_VERSION >= 900100 && BRAHMA_MPI_VERSION < 900200)) ||   \
+      (defined(BRAHMA_MPI_IMPL_MPICH) &&                                   \
+       (BRAHMA_MPI_VERSION >= 400203 && BRAHMA_MPI_VERSION < 400300)) ||   \
+      (defined(BRAHMA_MPI_IMPL_OPENMPI) &&                                 \
+       (BRAHMA_MPI_VERSION >= 400106 && BRAHMA_MPI_VERSION < 400200)))) && \
+    !(defined(BRAHMA_MPI_IMPL_OPENMPI) &&                                  \
+      (BRAHMA_MPI_VERSION >= 400106 && BRAHMA_MPI_VERSION < 400200))
 int brahma::MPIDFTracer::MPI_Comm_spawn(const char* command, char* argv[],
                                         int maxprocs, MPI_Info info, int root,
                                         int comm, int* intercomm,
@@ -2998,13 +3062,15 @@ int brahma::MPIDFTracer::MPI_Comm_spawn(const char* command, char* argv[],
   return ret;
 }
 #endif
-#if ((defined(BRAHMA_MPI_IMPL_CRAYMPICH) &&                               \
-      ((BRAHMA_MPI_VERSION >= 800108 && BRAHMA_MPI_VERSION < 800200) ||   \
-       (BRAHMA_MPI_VERSION >= 900001 && BRAHMA_MPI_VERSION < 900100))) || \
-     (defined(BRAHMA_MPI_IMPL_MPICH) &&                                   \
-      (BRAHMA_MPI_VERSION >= 300403 && BRAHMA_MPI_VERSION < 300500)) ||   \
-     (defined(BRAHMA_MPI_IMPL_OPENMPI) &&                                 \
-      (BRAHMA_MPI_VERSION >= 500006 && BRAHMA_MPI_VERSION < 500100)))
+#if (((defined(BRAHMA_MPI_IMPL_CRAYMPICH) &&                               \
+       ((BRAHMA_MPI_VERSION >= 800108 && BRAHMA_MPI_VERSION < 800200) ||   \
+        (BRAHMA_MPI_VERSION >= 900001 && BRAHMA_MPI_VERSION < 900100))) || \
+      (defined(BRAHMA_MPI_IMPL_MPICH) &&                                   \
+       (BRAHMA_MPI_VERSION >= 300403 && BRAHMA_MPI_VERSION < 300500)) ||   \
+      (defined(BRAHMA_MPI_IMPL_OPENMPI) &&                                 \
+       (BRAHMA_MPI_VERSION >= 500006 && BRAHMA_MPI_VERSION < 500100)))) || \
+    (defined(BRAHMA_MPI_IMPL_OPENMPI) &&                                   \
+     (BRAHMA_MPI_VERSION >= 400106 && BRAHMA_MPI_VERSION < 400200))
 int brahma::MPIDFTracer::MPI_Comm_spawn_multiple(
     int count, char* array_of_commands[], char** array_of_argv[],
     const int array_of_maxprocs[], const MPI_Info array_of_info[], int root,
@@ -3022,12 +3088,14 @@ int brahma::MPIDFTracer::MPI_Comm_spawn_multiple(
   return ret;
 }
 #endif
-#if ((defined(BRAHMA_MPI_IMPL_CRAYMPICH) &&                             \
-      (BRAHMA_MPI_VERSION >= 900100 && BRAHMA_MPI_VERSION < 900200)) || \
-     (defined(BRAHMA_MPI_IMPL_MPICH) &&                                 \
-      (BRAHMA_MPI_VERSION >= 400203 && BRAHMA_MPI_VERSION < 400300)) || \
-     (defined(BRAHMA_MPI_IMPL_OPENMPI) &&                               \
-      (BRAHMA_MPI_VERSION >= 400106 && BRAHMA_MPI_VERSION < 400200)))
+#if (((defined(BRAHMA_MPI_IMPL_CRAYMPICH) &&                               \
+       (BRAHMA_MPI_VERSION >= 900100 && BRAHMA_MPI_VERSION < 900200)) ||   \
+      (defined(BRAHMA_MPI_IMPL_MPICH) &&                                   \
+       (BRAHMA_MPI_VERSION >= 400203 && BRAHMA_MPI_VERSION < 400300)) ||   \
+      (defined(BRAHMA_MPI_IMPL_OPENMPI) &&                                 \
+       (BRAHMA_MPI_VERSION >= 400106 && BRAHMA_MPI_VERSION < 400200)))) && \
+    !(defined(BRAHMA_MPI_IMPL_OPENMPI) &&                                  \
+      (BRAHMA_MPI_VERSION >= 400106 && BRAHMA_MPI_VERSION < 400200))
 int brahma::MPIDFTracer::MPI_Comm_spawn_multiple(
     int count, char* array_of_commands[], char** array_of_argv[],
     const int array_of_maxprocs[], const MPI_Info array_of_info[], int root,
@@ -3045,13 +3113,15 @@ int brahma::MPIDFTracer::MPI_Comm_spawn_multiple(
   return ret;
 }
 #endif
-#if ((defined(BRAHMA_MPI_IMPL_CRAYMPICH) &&                               \
-      ((BRAHMA_MPI_VERSION >= 800108 && BRAHMA_MPI_VERSION < 800200) ||   \
-       (BRAHMA_MPI_VERSION >= 900001 && BRAHMA_MPI_VERSION < 900100))) || \
-     (defined(BRAHMA_MPI_IMPL_MPICH) &&                                   \
-      (BRAHMA_MPI_VERSION >= 300403 && BRAHMA_MPI_VERSION < 300500)) ||   \
-     (defined(BRAHMA_MPI_IMPL_OPENMPI) &&                                 \
-      (BRAHMA_MPI_VERSION >= 500006 && BRAHMA_MPI_VERSION < 500100)))
+#if (((defined(BRAHMA_MPI_IMPL_CRAYMPICH) &&                               \
+       ((BRAHMA_MPI_VERSION >= 800108 && BRAHMA_MPI_VERSION < 800200) ||   \
+        (BRAHMA_MPI_VERSION >= 900001 && BRAHMA_MPI_VERSION < 900100))) || \
+      (defined(BRAHMA_MPI_IMPL_MPICH) &&                                   \
+       (BRAHMA_MPI_VERSION >= 300403 && BRAHMA_MPI_VERSION < 300500)) ||   \
+      (defined(BRAHMA_MPI_IMPL_OPENMPI) &&                                 \
+       (BRAHMA_MPI_VERSION >= 500006 && BRAHMA_MPI_VERSION < 500100)))) || \
+    (defined(BRAHMA_MPI_IMPL_OPENMPI) &&                                   \
+     (BRAHMA_MPI_VERSION >= 400106 && BRAHMA_MPI_VERSION < 400200))
 int brahma::MPIDFTracer::MPI_Comm_split(MPI_Comm comm, int color, int key,
                                         MPI_Comm* newcomm) {
   BRAHMA_MAP_OR_FAIL(MPI_Comm_split);
@@ -3065,12 +3135,14 @@ int brahma::MPIDFTracer::MPI_Comm_split(MPI_Comm comm, int color, int key,
   return ret;
 }
 #endif
-#if ((defined(BRAHMA_MPI_IMPL_CRAYMPICH) &&                             \
-      (BRAHMA_MPI_VERSION >= 900100 && BRAHMA_MPI_VERSION < 900200)) || \
-     (defined(BRAHMA_MPI_IMPL_MPICH) &&                                 \
-      (BRAHMA_MPI_VERSION >= 400203 && BRAHMA_MPI_VERSION < 400300)) || \
-     (defined(BRAHMA_MPI_IMPL_OPENMPI) &&                               \
-      (BRAHMA_MPI_VERSION >= 400106 && BRAHMA_MPI_VERSION < 400200)))
+#if (((defined(BRAHMA_MPI_IMPL_CRAYMPICH) &&                               \
+       (BRAHMA_MPI_VERSION >= 900100 && BRAHMA_MPI_VERSION < 900200)) ||   \
+      (defined(BRAHMA_MPI_IMPL_MPICH) &&                                   \
+       (BRAHMA_MPI_VERSION >= 400203 && BRAHMA_MPI_VERSION < 400300)) ||   \
+      (defined(BRAHMA_MPI_IMPL_OPENMPI) &&                                 \
+       (BRAHMA_MPI_VERSION >= 400106 && BRAHMA_MPI_VERSION < 400200)))) && \
+    !(defined(BRAHMA_MPI_IMPL_OPENMPI) &&                                  \
+      (BRAHMA_MPI_VERSION >= 400106 && BRAHMA_MPI_VERSION < 400200))
 int brahma::MPIDFTracer::MPI_Comm_split(int comm, int color, int key,
                                         int* newcomm) {
   BRAHMA_MAP_OR_FAIL(MPI_Comm_split);
@@ -3084,13 +3156,15 @@ int brahma::MPIDFTracer::MPI_Comm_split(int comm, int color, int key,
   return ret;
 }
 #endif
-#if ((defined(BRAHMA_MPI_IMPL_CRAYMPICH) &&                               \
-      ((BRAHMA_MPI_VERSION >= 800108 && BRAHMA_MPI_VERSION < 800200) ||   \
-       (BRAHMA_MPI_VERSION >= 900001 && BRAHMA_MPI_VERSION < 900100))) || \
-     (defined(BRAHMA_MPI_IMPL_MPICH) &&                                   \
-      (BRAHMA_MPI_VERSION >= 300403 && BRAHMA_MPI_VERSION < 300500)) ||   \
-     (defined(BRAHMA_MPI_IMPL_OPENMPI) &&                                 \
-      (BRAHMA_MPI_VERSION >= 500006 && BRAHMA_MPI_VERSION < 500100)))
+#if (((defined(BRAHMA_MPI_IMPL_CRAYMPICH) &&                               \
+       ((BRAHMA_MPI_VERSION >= 800108 && BRAHMA_MPI_VERSION < 800200) ||   \
+        (BRAHMA_MPI_VERSION >= 900001 && BRAHMA_MPI_VERSION < 900100))) || \
+      (defined(BRAHMA_MPI_IMPL_MPICH) &&                                   \
+       (BRAHMA_MPI_VERSION >= 300403 && BRAHMA_MPI_VERSION < 300500)) ||   \
+      (defined(BRAHMA_MPI_IMPL_OPENMPI) &&                                 \
+       (BRAHMA_MPI_VERSION >= 500006 && BRAHMA_MPI_VERSION < 500100)))) || \
+    (defined(BRAHMA_MPI_IMPL_OPENMPI) &&                                   \
+     (BRAHMA_MPI_VERSION >= 400106 && BRAHMA_MPI_VERSION < 400200))
 int brahma::MPIDFTracer::MPI_Comm_split_type(MPI_Comm comm, int split_type,
                                              int key, MPI_Info info,
                                              MPI_Comm* newcomm) {
@@ -3106,12 +3180,14 @@ int brahma::MPIDFTracer::MPI_Comm_split_type(MPI_Comm comm, int split_type,
   return ret;
 }
 #endif
-#if ((defined(BRAHMA_MPI_IMPL_CRAYMPICH) &&                             \
-      (BRAHMA_MPI_VERSION >= 900100 && BRAHMA_MPI_VERSION < 900200)) || \
-     (defined(BRAHMA_MPI_IMPL_MPICH) &&                                 \
-      (BRAHMA_MPI_VERSION >= 400203 && BRAHMA_MPI_VERSION < 400300)) || \
-     (defined(BRAHMA_MPI_IMPL_OPENMPI) &&                               \
-      (BRAHMA_MPI_VERSION >= 400106 && BRAHMA_MPI_VERSION < 400200)))
+#if (((defined(BRAHMA_MPI_IMPL_CRAYMPICH) &&                               \
+       (BRAHMA_MPI_VERSION >= 900100 && BRAHMA_MPI_VERSION < 900200)) ||   \
+      (defined(BRAHMA_MPI_IMPL_MPICH) &&                                   \
+       (BRAHMA_MPI_VERSION >= 400203 && BRAHMA_MPI_VERSION < 400300)) ||   \
+      (defined(BRAHMA_MPI_IMPL_OPENMPI) &&                                 \
+       (BRAHMA_MPI_VERSION >= 400106 && BRAHMA_MPI_VERSION < 400200)))) && \
+    !(defined(BRAHMA_MPI_IMPL_OPENMPI) &&                                  \
+      (BRAHMA_MPI_VERSION >= 400106 && BRAHMA_MPI_VERSION < 400200))
 int brahma::MPIDFTracer::MPI_Comm_split_type(int comm, int split_type, int key,
                                              MPI_Info info, int* newcomm) {
   BRAHMA_MAP_OR_FAIL(MPI_Comm_split_type);
@@ -3126,13 +3202,15 @@ int brahma::MPIDFTracer::MPI_Comm_split_type(int comm, int split_type, int key,
   return ret;
 }
 #endif
-#if ((defined(BRAHMA_MPI_IMPL_CRAYMPICH) &&                               \
-      ((BRAHMA_MPI_VERSION >= 800108 && BRAHMA_MPI_VERSION < 800200) ||   \
-       (BRAHMA_MPI_VERSION >= 900001 && BRAHMA_MPI_VERSION < 900100))) || \
-     (defined(BRAHMA_MPI_IMPL_MPICH) &&                                   \
-      (BRAHMA_MPI_VERSION >= 300403 && BRAHMA_MPI_VERSION < 300500)) ||   \
-     (defined(BRAHMA_MPI_IMPL_OPENMPI) &&                                 \
-      (BRAHMA_MPI_VERSION >= 500006 && BRAHMA_MPI_VERSION < 500100)))
+#if (((defined(BRAHMA_MPI_IMPL_CRAYMPICH) &&                               \
+       ((BRAHMA_MPI_VERSION >= 800108 && BRAHMA_MPI_VERSION < 800200) ||   \
+        (BRAHMA_MPI_VERSION >= 900001 && BRAHMA_MPI_VERSION < 900100))) || \
+      (defined(BRAHMA_MPI_IMPL_MPICH) &&                                   \
+       (BRAHMA_MPI_VERSION >= 300403 && BRAHMA_MPI_VERSION < 300500)) ||   \
+      (defined(BRAHMA_MPI_IMPL_OPENMPI) &&                                 \
+       (BRAHMA_MPI_VERSION >= 500006 && BRAHMA_MPI_VERSION < 500100)))) || \
+    (defined(BRAHMA_MPI_IMPL_OPENMPI) &&                                   \
+     (BRAHMA_MPI_VERSION >= 400106 && BRAHMA_MPI_VERSION < 400200))
 int brahma::MPIDFTracer::MPI_Comm_test_inter(MPI_Comm comm, int* flag) {
   BRAHMA_MAP_OR_FAIL(MPI_Comm_test_inter);
   DFT_LOGGER_START_ALWAYS();
@@ -3143,12 +3221,14 @@ int brahma::MPIDFTracer::MPI_Comm_test_inter(MPI_Comm comm, int* flag) {
   return ret;
 }
 #endif
-#if ((defined(BRAHMA_MPI_IMPL_CRAYMPICH) &&                             \
-      (BRAHMA_MPI_VERSION >= 900100 && BRAHMA_MPI_VERSION < 900200)) || \
-     (defined(BRAHMA_MPI_IMPL_MPICH) &&                                 \
-      (BRAHMA_MPI_VERSION >= 400203 && BRAHMA_MPI_VERSION < 400300)) || \
-     (defined(BRAHMA_MPI_IMPL_OPENMPI) &&                               \
-      (BRAHMA_MPI_VERSION >= 400106 && BRAHMA_MPI_VERSION < 400200)))
+#if (((defined(BRAHMA_MPI_IMPL_CRAYMPICH) &&                               \
+       (BRAHMA_MPI_VERSION >= 900100 && BRAHMA_MPI_VERSION < 900200)) ||   \
+      (defined(BRAHMA_MPI_IMPL_MPICH) &&                                   \
+       (BRAHMA_MPI_VERSION >= 400203 && BRAHMA_MPI_VERSION < 400300)) ||   \
+      (defined(BRAHMA_MPI_IMPL_OPENMPI) &&                                 \
+       (BRAHMA_MPI_VERSION >= 400106 && BRAHMA_MPI_VERSION < 400200)))) && \
+    !(defined(BRAHMA_MPI_IMPL_OPENMPI) &&                                  \
+      (BRAHMA_MPI_VERSION >= 400106 && BRAHMA_MPI_VERSION < 400200))
 int brahma::MPIDFTracer::MPI_Comm_test_inter(int comm, int* flag) {
   BRAHMA_MAP_OR_FAIL(MPI_Comm_test_inter);
   DFT_LOGGER_START_ALWAYS();
@@ -3185,22 +3265,6 @@ int brahma::MPIDFTracer::MPI_Compare_and_swap(
   return ret;
 }
 #endif
-#if ((defined(BRAHMA_MPI_IMPL_CRAYMPICH) &&                             \
-      (BRAHMA_MPI_VERSION >= 900100 && BRAHMA_MPI_VERSION < 900200)) || \
-     (defined(BRAHMA_MPI_IMPL_MPICH) &&                                 \
-      (BRAHMA_MPI_VERSION >= 400203 && BRAHMA_MPI_VERSION < 400300)) || \
-     (defined(BRAHMA_MPI_IMPL_OPENMPI) &&                               \
-      (BRAHMA_MPI_VERSION >= 400106 && BRAHMA_MPI_VERSION < 400200)))
-MPI_Datatype brahma::MPIDFTracer::MPI_Datatype(int datatype) {
-  BRAHMA_MAP_OR_FAIL(MPI_Datatype);
-  DFT_LOGGER_START_ALWAYS();
-  DFT_LOGGER_UPDATE_TYPE(datatype, MetadataType::MT_VALUE);
-  MPI_Datatype ret = __real_MPI_Datatype(datatype);
-  DFT_LOGGER_UPDATE_TYPE(ret, MetadataType::MT_VALUE);
-  DFT_LOGGER_END();
-  return ret;
-}
-#endif
 #if ((defined(BRAHMA_MPI_IMPL_CRAYMPICH) &&                               \
       ((BRAHMA_MPI_VERSION >= 800108 && BRAHMA_MPI_VERSION < 800200) ||   \
        (BRAHMA_MPI_VERSION >= 900001 && BRAHMA_MPI_VERSION < 900200))) || \
@@ -3221,13 +3285,15 @@ int brahma::MPIDFTracer::MPI_Dims_create(int nnodes, int ndims, int dims[]) {
   return ret;
 }
 #endif
-#if ((defined(BRAHMA_MPI_IMPL_CRAYMPICH) &&                               \
-      ((BRAHMA_MPI_VERSION >= 800108 && BRAHMA_MPI_VERSION < 800200) ||   \
-       (BRAHMA_MPI_VERSION >= 900001 && BRAHMA_MPI_VERSION < 900100))) || \
-     (defined(BRAHMA_MPI_IMPL_MPICH) &&                                   \
-      (BRAHMA_MPI_VERSION >= 300403 && BRAHMA_MPI_VERSION < 300500)) ||   \
-     (defined(BRAHMA_MPI_IMPL_OPENMPI) &&                                 \
-      (BRAHMA_MPI_VERSION >= 500006 && BRAHMA_MPI_VERSION < 500100)))
+#if (((defined(BRAHMA_MPI_IMPL_CRAYMPICH) &&                               \
+       ((BRAHMA_MPI_VERSION >= 800108 && BRAHMA_MPI_VERSION < 800200) ||   \
+        (BRAHMA_MPI_VERSION >= 900001 && BRAHMA_MPI_VERSION < 900100))) || \
+      (defined(BRAHMA_MPI_IMPL_MPICH) &&                                   \
+       (BRAHMA_MPI_VERSION >= 300403 && BRAHMA_MPI_VERSION < 300500)) ||   \
+      (defined(BRAHMA_MPI_IMPL_OPENMPI) &&                                 \
+       (BRAHMA_MPI_VERSION >= 500006 && BRAHMA_MPI_VERSION < 500100)))) || \
+    (defined(BRAHMA_MPI_IMPL_OPENMPI) &&                                   \
+     (BRAHMA_MPI_VERSION >= 400106 && BRAHMA_MPI_VERSION < 400200))
 int brahma::MPIDFTracer::MPI_Dist_graph_create(
     MPI_Comm comm_old, int n, const int nodes[], const int degrees[],
     const int targets[], const int weights[], MPI_Info info, int reorder,
@@ -3245,12 +3311,14 @@ int brahma::MPIDFTracer::MPI_Dist_graph_create(
   return ret;
 }
 #endif
-#if ((defined(BRAHMA_MPI_IMPL_CRAYMPICH) &&                             \
-      (BRAHMA_MPI_VERSION >= 900100 && BRAHMA_MPI_VERSION < 900200)) || \
-     (defined(BRAHMA_MPI_IMPL_MPICH) &&                                 \
-      (BRAHMA_MPI_VERSION >= 400203 && BRAHMA_MPI_VERSION < 400300)) || \
-     (defined(BRAHMA_MPI_IMPL_OPENMPI) &&                               \
-      (BRAHMA_MPI_VERSION >= 400106 && BRAHMA_MPI_VERSION < 400200)))
+#if (((defined(BRAHMA_MPI_IMPL_CRAYMPICH) &&                               \
+       (BRAHMA_MPI_VERSION >= 900100 && BRAHMA_MPI_VERSION < 900200)) ||   \
+      (defined(BRAHMA_MPI_IMPL_MPICH) &&                                   \
+       (BRAHMA_MPI_VERSION >= 400203 && BRAHMA_MPI_VERSION < 400300)) ||   \
+      (defined(BRAHMA_MPI_IMPL_OPENMPI) &&                                 \
+       (BRAHMA_MPI_VERSION >= 400106 && BRAHMA_MPI_VERSION < 400200)))) && \
+    !(defined(BRAHMA_MPI_IMPL_OPENMPI) &&                                  \
+      (BRAHMA_MPI_VERSION >= 400106 && BRAHMA_MPI_VERSION < 400200))
 int brahma::MPIDFTracer::MPI_Dist_graph_create(
     int comm_old, int n, const int nodes[], const int degrees[],
     const int targets[], const int weights[], MPI_Info info, int reorder,
@@ -3268,13 +3336,15 @@ int brahma::MPIDFTracer::MPI_Dist_graph_create(
   return ret;
 }
 #endif
-#if ((defined(BRAHMA_MPI_IMPL_CRAYMPICH) &&                               \
-      ((BRAHMA_MPI_VERSION >= 800108 && BRAHMA_MPI_VERSION < 800200) ||   \
-       (BRAHMA_MPI_VERSION >= 900001 && BRAHMA_MPI_VERSION < 900100))) || \
-     (defined(BRAHMA_MPI_IMPL_MPICH) &&                                   \
-      (BRAHMA_MPI_VERSION >= 300403 && BRAHMA_MPI_VERSION < 300500)) ||   \
-     (defined(BRAHMA_MPI_IMPL_OPENMPI) &&                                 \
-      (BRAHMA_MPI_VERSION >= 500006 && BRAHMA_MPI_VERSION < 500100)))
+#if (((defined(BRAHMA_MPI_IMPL_CRAYMPICH) &&                               \
+       ((BRAHMA_MPI_VERSION >= 800108 && BRAHMA_MPI_VERSION < 800200) ||   \
+        (BRAHMA_MPI_VERSION >= 900001 && BRAHMA_MPI_VERSION < 900100))) || \
+      (defined(BRAHMA_MPI_IMPL_MPICH) &&                                   \
+       (BRAHMA_MPI_VERSION >= 300403 && BRAHMA_MPI_VERSION < 300500)) ||   \
+      (defined(BRAHMA_MPI_IMPL_OPENMPI) &&                                 \
+       (BRAHMA_MPI_VERSION >= 500006 && BRAHMA_MPI_VERSION < 500100)))) || \
+    (defined(BRAHMA_MPI_IMPL_OPENMPI) &&                                   \
+     (BRAHMA_MPI_VERSION >= 400106 && BRAHMA_MPI_VERSION < 400200))
 int brahma::MPIDFTracer::MPI_Dist_graph_create_adjacent(
     MPI_Comm comm_old, int indegree, const int sources[],
     const int sourceweights[], int outdegree, const int destinations[],
@@ -3295,12 +3365,14 @@ int brahma::MPIDFTracer::MPI_Dist_graph_create_adjacent(
   return ret;
 }
 #endif
-#if ((defined(BRAHMA_MPI_IMPL_CRAYMPICH) &&                             \
-      (BRAHMA_MPI_VERSION >= 900100 && BRAHMA_MPI_VERSION < 900200)) || \
-     (defined(BRAHMA_MPI_IMPL_MPICH) &&                                 \
-      (BRAHMA_MPI_VERSION >= 400203 && BRAHMA_MPI_VERSION < 400300)) || \
-     (defined(BRAHMA_MPI_IMPL_OPENMPI) &&                               \
-      (BRAHMA_MPI_VERSION >= 400106 && BRAHMA_MPI_VERSION < 400200)))
+#if (((defined(BRAHMA_MPI_IMPL_CRAYMPICH) &&                               \
+       (BRAHMA_MPI_VERSION >= 900100 && BRAHMA_MPI_VERSION < 900200)) ||   \
+      (defined(BRAHMA_MPI_IMPL_MPICH) &&                                   \
+       (BRAHMA_MPI_VERSION >= 400203 && BRAHMA_MPI_VERSION < 400300)) ||   \
+      (defined(BRAHMA_MPI_IMPL_OPENMPI) &&                                 \
+       (BRAHMA_MPI_VERSION >= 400106 && BRAHMA_MPI_VERSION < 400200)))) && \
+    !(defined(BRAHMA_MPI_IMPL_OPENMPI) &&                                  \
+      (BRAHMA_MPI_VERSION >= 400106 && BRAHMA_MPI_VERSION < 400200))
 int brahma::MPIDFTracer::MPI_Dist_graph_create_adjacent(
     int comm_old, int indegree, const int sources[], const int sourceweights[],
     int outdegree, const int destinations[], const int destweights[],
@@ -3320,13 +3392,15 @@ int brahma::MPIDFTracer::MPI_Dist_graph_create_adjacent(
   return ret;
 }
 #endif
-#if ((defined(BRAHMA_MPI_IMPL_CRAYMPICH) &&                               \
-      ((BRAHMA_MPI_VERSION >= 800108 && BRAHMA_MPI_VERSION < 800200) ||   \
-       (BRAHMA_MPI_VERSION >= 900001 && BRAHMA_MPI_VERSION < 900100))) || \
-     (defined(BRAHMA_MPI_IMPL_MPICH) &&                                   \
-      (BRAHMA_MPI_VERSION >= 300403 && BRAHMA_MPI_VERSION < 300500)) ||   \
-     (defined(BRAHMA_MPI_IMPL_OPENMPI) &&                                 \
-      (BRAHMA_MPI_VERSION >= 500006 && BRAHMA_MPI_VERSION < 500100)))
+#if (((defined(BRAHMA_MPI_IMPL_CRAYMPICH) &&                               \
+       ((BRAHMA_MPI_VERSION >= 800108 && BRAHMA_MPI_VERSION < 800200) ||   \
+        (BRAHMA_MPI_VERSION >= 900001 && BRAHMA_MPI_VERSION < 900100))) || \
+      (defined(BRAHMA_MPI_IMPL_MPICH) &&                                   \
+       (BRAHMA_MPI_VERSION >= 300403 && BRAHMA_MPI_VERSION < 300500)) ||   \
+      (defined(BRAHMA_MPI_IMPL_OPENMPI) &&                                 \
+       (BRAHMA_MPI_VERSION >= 500006 && BRAHMA_MPI_VERSION < 500100)))) || \
+    (defined(BRAHMA_MPI_IMPL_OPENMPI) &&                                   \
+     (BRAHMA_MPI_VERSION >= 400106 && BRAHMA_MPI_VERSION < 400200))
 int brahma::MPIDFTracer::MPI_Dist_graph_neighbors(
     MPI_Comm comm, int maxindegree, int sources[], int sourceweights[],
     int maxoutdegree, int destinations[], int destweights[]) {
@@ -3343,12 +3417,14 @@ int brahma::MPIDFTracer::MPI_Dist_graph_neighbors(
   return ret;
 }
 #endif
-#if ((defined(BRAHMA_MPI_IMPL_CRAYMPICH) &&                             \
-      (BRAHMA_MPI_VERSION >= 900100 && BRAHMA_MPI_VERSION < 900200)) || \
-     (defined(BRAHMA_MPI_IMPL_MPICH) &&                                 \
-      (BRAHMA_MPI_VERSION >= 400203 && BRAHMA_MPI_VERSION < 400300)) || \
-     (defined(BRAHMA_MPI_IMPL_OPENMPI) &&                               \
-      (BRAHMA_MPI_VERSION >= 400106 && BRAHMA_MPI_VERSION < 400200)))
+#if (((defined(BRAHMA_MPI_IMPL_CRAYMPICH) &&                               \
+       (BRAHMA_MPI_VERSION >= 900100 && BRAHMA_MPI_VERSION < 900200)) ||   \
+      (defined(BRAHMA_MPI_IMPL_MPICH) &&                                   \
+       (BRAHMA_MPI_VERSION >= 400203 && BRAHMA_MPI_VERSION < 400300)) ||   \
+      (defined(BRAHMA_MPI_IMPL_OPENMPI) &&                                 \
+       (BRAHMA_MPI_VERSION >= 400106 && BRAHMA_MPI_VERSION < 400200)))) && \
+    !(defined(BRAHMA_MPI_IMPL_OPENMPI) &&                                  \
+      (BRAHMA_MPI_VERSION >= 400106 && BRAHMA_MPI_VERSION < 400200))
 int brahma::MPIDFTracer::MPI_Dist_graph_neighbors(
     int comm, int maxindegree, int sources[], int sourceweights[],
     int maxoutdegree, int destinations[], int destweights[]) {
@@ -3365,13 +3441,15 @@ int brahma::MPIDFTracer::MPI_Dist_graph_neighbors(
   return ret;
 }
 #endif
-#if ((defined(BRAHMA_MPI_IMPL_CRAYMPICH) &&                               \
-      ((BRAHMA_MPI_VERSION >= 800108 && BRAHMA_MPI_VERSION < 800200) ||   \
-       (BRAHMA_MPI_VERSION >= 900001 && BRAHMA_MPI_VERSION < 900100))) || \
-     (defined(BRAHMA_MPI_IMPL_MPICH) &&                                   \
-      (BRAHMA_MPI_VERSION >= 300403 && BRAHMA_MPI_VERSION < 300500)) ||   \
-     (defined(BRAHMA_MPI_IMPL_OPENMPI) &&                                 \
-      (BRAHMA_MPI_VERSION >= 500006 && BRAHMA_MPI_VERSION < 500100)))
+#if (((defined(BRAHMA_MPI_IMPL_CRAYMPICH) &&                               \
+       ((BRAHMA_MPI_VERSION >= 800108 && BRAHMA_MPI_VERSION < 800200) ||   \
+        (BRAHMA_MPI_VERSION >= 900001 && BRAHMA_MPI_VERSION < 900100))) || \
+      (defined(BRAHMA_MPI_IMPL_MPICH) &&                                   \
+       (BRAHMA_MPI_VERSION >= 300403 && BRAHMA_MPI_VERSION < 300500)) ||   \
+      (defined(BRAHMA_MPI_IMPL_OPENMPI) &&                                 \
+       (BRAHMA_MPI_VERSION >= 500006 && BRAHMA_MPI_VERSION < 500100)))) || \
+    (defined(BRAHMA_MPI_IMPL_OPENMPI) &&                                   \
+     (BRAHMA_MPI_VERSION >= 400106 && BRAHMA_MPI_VERSION < 400200))
 int brahma::MPIDFTracer::MPI_Dist_graph_neighbors_count(MPI_Comm comm,
                                                         int* inneighbors,
                                                         int* outneighbors,
@@ -3386,12 +3464,14 @@ int brahma::MPIDFTracer::MPI_Dist_graph_neighbors_count(MPI_Comm comm,
   return ret;
 }
 #endif
-#if ((defined(BRAHMA_MPI_IMPL_CRAYMPICH) &&                             \
-      (BRAHMA_MPI_VERSION >= 900100 && BRAHMA_MPI_VERSION < 900200)) || \
-     (defined(BRAHMA_MPI_IMPL_MPICH) &&                                 \
-      (BRAHMA_MPI_VERSION >= 400203 && BRAHMA_MPI_VERSION < 400300)) || \
-     (defined(BRAHMA_MPI_IMPL_OPENMPI) &&                               \
-      (BRAHMA_MPI_VERSION >= 400106 && BRAHMA_MPI_VERSION < 400200)))
+#if (((defined(BRAHMA_MPI_IMPL_CRAYMPICH) &&                               \
+       (BRAHMA_MPI_VERSION >= 900100 && BRAHMA_MPI_VERSION < 900200)) ||   \
+      (defined(BRAHMA_MPI_IMPL_MPICH) &&                                   \
+       (BRAHMA_MPI_VERSION >= 400203 && BRAHMA_MPI_VERSION < 400300)) ||   \
+      (defined(BRAHMA_MPI_IMPL_OPENMPI) &&                                 \
+       (BRAHMA_MPI_VERSION >= 400106 && BRAHMA_MPI_VERSION < 400200)))) && \
+    !(defined(BRAHMA_MPI_IMPL_OPENMPI) &&                                  \
+      (BRAHMA_MPI_VERSION >= 400106 && BRAHMA_MPI_VERSION < 400200))
 int brahma::MPIDFTracer::MPI_Dist_graph_neighbors_count(int comm,
                                                         int* inneighbors,
                                                         int* outneighbors,
@@ -3401,22 +3481,6 @@ int brahma::MPIDFTracer::MPI_Dist_graph_neighbors_count(int comm,
   DFT_LOGGER_UPDATE_TYPE(comm, MetadataType::MT_VALUE);
   int ret = __real_MPI_Dist_graph_neighbors_count(comm, inneighbors,
                                                   outneighbors, weighted);
-  DFT_LOGGER_UPDATE_TYPE(ret, MetadataType::MT_VALUE);
-  DFT_LOGGER_END();
-  return ret;
-}
-#endif
-#if ((defined(BRAHMA_MPI_IMPL_CRAYMPICH) &&                             \
-      (BRAHMA_MPI_VERSION >= 900100 && BRAHMA_MPI_VERSION < 900200)) || \
-     (defined(BRAHMA_MPI_IMPL_MPICH) &&                                 \
-      (BRAHMA_MPI_VERSION >= 400203 && BRAHMA_MPI_VERSION < 400300)) || \
-     (defined(BRAHMA_MPI_IMPL_OPENMPI) &&                               \
-      (BRAHMA_MPI_VERSION >= 400106 && BRAHMA_MPI_VERSION < 400200)))
-MPI_Errhandler brahma::MPIDFTracer::MPI_Errhandler(int errhandler) {
-  BRAHMA_MAP_OR_FAIL(MPI_Errhandler);
-  DFT_LOGGER_START_ALWAYS();
-  DFT_LOGGER_UPDATE_TYPE(errhandler, MetadataType::MT_VALUE);
-  MPI_Errhandler ret = __real_MPI_Errhandler(errhandler);
   DFT_LOGGER_UPDATE_TYPE(ret, MetadataType::MT_VALUE);
   DFT_LOGGER_END();
   return ret;
@@ -3449,8 +3513,10 @@ int brahma::MPIDFTracer::MPI_Errhandler_create(
   return ret;
 }
 #endif
-#if (defined(BRAHMA_MPI_IMPL_OPENMPI) && \
-     (BRAHMA_MPI_VERSION >= 300403 && BRAHMA_MPI_VERSION < 300500))
+#if ((defined(BRAHMA_MPI_IMPL_OPENMPI) &&                                \
+      (BRAHMA_MPI_VERSION >= 300403 && BRAHMA_MPI_VERSION < 300500))) || \
+    (defined(BRAHMA_MPI_IMPL_OPENMPI) &&                                 \
+     (BRAHMA_MPI_VERSION >= 400106 && BRAHMA_MPI_VERSION < 400200))
 int brahma::MPIDFTracer::MPI_Errhandler_create(MPI_Handler_function* function,
                                                MPI_Errhandler* errhandler) {
   BRAHMA_MAP_OR_FAIL(MPI_Errhandler_create);
@@ -3461,8 +3527,10 @@ int brahma::MPIDFTracer::MPI_Errhandler_create(MPI_Handler_function* function,
   return ret;
 }
 #endif
-#if (defined(BRAHMA_MPI_IMPL_OPENMPI) && \
-     (BRAHMA_MPI_VERSION >= 400106 && BRAHMA_MPI_VERSION < 400200))
+#if ((defined(BRAHMA_MPI_IMPL_OPENMPI) &&                                \
+      (BRAHMA_MPI_VERSION >= 400106 && BRAHMA_MPI_VERSION < 400200))) && \
+    !(defined(BRAHMA_MPI_IMPL_OPENMPI) &&                                \
+      (BRAHMA_MPI_VERSION >= 400106 && BRAHMA_MPI_VERSION < 400200))
 int brahma::MPIDFTracer::MPI_Errhandler_create(MPI_Handler_function* function,
                                                int* errhandler) {
   BRAHMA_MAP_OR_FAIL(MPI_Errhandler_create);
@@ -3473,13 +3541,15 @@ int brahma::MPIDFTracer::MPI_Errhandler_create(MPI_Handler_function* function,
   return ret;
 }
 #endif
-#if ((defined(BRAHMA_MPI_IMPL_CRAYMPICH) &&                               \
-      ((BRAHMA_MPI_VERSION >= 800108 && BRAHMA_MPI_VERSION < 800200) ||   \
-       (BRAHMA_MPI_VERSION >= 900001 && BRAHMA_MPI_VERSION < 900100))) || \
-     (defined(BRAHMA_MPI_IMPL_MPICH) &&                                   \
-      (BRAHMA_MPI_VERSION >= 300403 && BRAHMA_MPI_VERSION < 300500)) ||   \
-     (defined(BRAHMA_MPI_IMPL_OPENMPI) &&                                 \
-      (BRAHMA_MPI_VERSION >= 500006 && BRAHMA_MPI_VERSION < 500100)))
+#if (((defined(BRAHMA_MPI_IMPL_CRAYMPICH) &&                               \
+       ((BRAHMA_MPI_VERSION >= 800108 && BRAHMA_MPI_VERSION < 800200) ||   \
+        (BRAHMA_MPI_VERSION >= 900001 && BRAHMA_MPI_VERSION < 900100))) || \
+      (defined(BRAHMA_MPI_IMPL_MPICH) &&                                   \
+       (BRAHMA_MPI_VERSION >= 300403 && BRAHMA_MPI_VERSION < 300500)) ||   \
+      (defined(BRAHMA_MPI_IMPL_OPENMPI) &&                                 \
+       (BRAHMA_MPI_VERSION >= 500006 && BRAHMA_MPI_VERSION < 500100)))) || \
+    (defined(BRAHMA_MPI_IMPL_OPENMPI) &&                                   \
+     (BRAHMA_MPI_VERSION >= 400106 && BRAHMA_MPI_VERSION < 400200))
 int brahma::MPIDFTracer::MPI_Errhandler_free(MPI_Errhandler* errhandler) {
   BRAHMA_MAP_OR_FAIL(MPI_Errhandler_free);
   DFT_LOGGER_START_ALWAYS();
@@ -3489,12 +3559,14 @@ int brahma::MPIDFTracer::MPI_Errhandler_free(MPI_Errhandler* errhandler) {
   return ret;
 }
 #endif
-#if ((defined(BRAHMA_MPI_IMPL_CRAYMPICH) &&                             \
-      (BRAHMA_MPI_VERSION >= 900100 && BRAHMA_MPI_VERSION < 900200)) || \
-     (defined(BRAHMA_MPI_IMPL_MPICH) &&                                 \
-      (BRAHMA_MPI_VERSION >= 400203 && BRAHMA_MPI_VERSION < 400300)) || \
-     (defined(BRAHMA_MPI_IMPL_OPENMPI) &&                               \
-      (BRAHMA_MPI_VERSION >= 400106 && BRAHMA_MPI_VERSION < 400200)))
+#if (((defined(BRAHMA_MPI_IMPL_CRAYMPICH) &&                               \
+       (BRAHMA_MPI_VERSION >= 900100 && BRAHMA_MPI_VERSION < 900200)) ||   \
+      (defined(BRAHMA_MPI_IMPL_MPICH) &&                                   \
+       (BRAHMA_MPI_VERSION >= 400203 && BRAHMA_MPI_VERSION < 400300)) ||   \
+      (defined(BRAHMA_MPI_IMPL_OPENMPI) &&                                 \
+       (BRAHMA_MPI_VERSION >= 400106 && BRAHMA_MPI_VERSION < 400200)))) && \
+    !(defined(BRAHMA_MPI_IMPL_OPENMPI) &&                                  \
+      (BRAHMA_MPI_VERSION >= 400106 && BRAHMA_MPI_VERSION < 400200))
 int brahma::MPIDFTracer::MPI_Errhandler_free(int* errhandler) {
   BRAHMA_MAP_OR_FAIL(MPI_Errhandler_free);
   DFT_LOGGER_START_ALWAYS();
@@ -3504,13 +3576,15 @@ int brahma::MPIDFTracer::MPI_Errhandler_free(int* errhandler) {
   return ret;
 }
 #endif
-#if ((defined(BRAHMA_MPI_IMPL_CRAYMPICH) &&                               \
-      ((BRAHMA_MPI_VERSION >= 800108 && BRAHMA_MPI_VERSION < 800200) ||   \
-       (BRAHMA_MPI_VERSION >= 900001 && BRAHMA_MPI_VERSION < 900100))) || \
-     (defined(BRAHMA_MPI_IMPL_MPICH) &&                                   \
-      (BRAHMA_MPI_VERSION >= 300403 && BRAHMA_MPI_VERSION < 300500)) ||   \
-     (defined(BRAHMA_MPI_IMPL_OPENMPI) &&                                 \
-      (BRAHMA_MPI_VERSION >= 500006 && BRAHMA_MPI_VERSION < 500100)))
+#if (((defined(BRAHMA_MPI_IMPL_CRAYMPICH) &&                               \
+       ((BRAHMA_MPI_VERSION >= 800108 && BRAHMA_MPI_VERSION < 800200) ||   \
+        (BRAHMA_MPI_VERSION >= 900001 && BRAHMA_MPI_VERSION < 900100))) || \
+      (defined(BRAHMA_MPI_IMPL_MPICH) &&                                   \
+       (BRAHMA_MPI_VERSION >= 300403 && BRAHMA_MPI_VERSION < 300500)) ||   \
+      (defined(BRAHMA_MPI_IMPL_OPENMPI) &&                                 \
+       (BRAHMA_MPI_VERSION >= 500006 && BRAHMA_MPI_VERSION < 500100)))) || \
+    (defined(BRAHMA_MPI_IMPL_OPENMPI) &&                                   \
+     (BRAHMA_MPI_VERSION >= 400106 && BRAHMA_MPI_VERSION < 400200))
 int brahma::MPIDFTracer::MPI_Errhandler_get(MPI_Comm comm,
                                             MPI_Errhandler* errhandler) {
   BRAHMA_MAP_OR_FAIL(MPI_Errhandler_get);
@@ -3522,12 +3596,14 @@ int brahma::MPIDFTracer::MPI_Errhandler_get(MPI_Comm comm,
   return ret;
 }
 #endif
-#if ((defined(BRAHMA_MPI_IMPL_CRAYMPICH) &&                             \
-      (BRAHMA_MPI_VERSION >= 900100 && BRAHMA_MPI_VERSION < 900200)) || \
-     (defined(BRAHMA_MPI_IMPL_MPICH) &&                                 \
-      (BRAHMA_MPI_VERSION >= 400203 && BRAHMA_MPI_VERSION < 400300)) || \
-     (defined(BRAHMA_MPI_IMPL_OPENMPI) &&                               \
-      (BRAHMA_MPI_VERSION >= 400106 && BRAHMA_MPI_VERSION < 400200)))
+#if (((defined(BRAHMA_MPI_IMPL_CRAYMPICH) &&                               \
+       (BRAHMA_MPI_VERSION >= 900100 && BRAHMA_MPI_VERSION < 900200)) ||   \
+      (defined(BRAHMA_MPI_IMPL_MPICH) &&                                   \
+       (BRAHMA_MPI_VERSION >= 400203 && BRAHMA_MPI_VERSION < 400300)) ||   \
+      (defined(BRAHMA_MPI_IMPL_OPENMPI) &&                                 \
+       (BRAHMA_MPI_VERSION >= 400106 && BRAHMA_MPI_VERSION < 400200)))) && \
+    !(defined(BRAHMA_MPI_IMPL_OPENMPI) &&                                  \
+      (BRAHMA_MPI_VERSION >= 400106 && BRAHMA_MPI_VERSION < 400200))
 int brahma::MPIDFTracer::MPI_Errhandler_get(int comm, int* errhandler) {
   BRAHMA_MAP_OR_FAIL(MPI_Errhandler_get);
   DFT_LOGGER_START_ALWAYS();
@@ -3538,13 +3614,15 @@ int brahma::MPIDFTracer::MPI_Errhandler_get(int comm, int* errhandler) {
   return ret;
 }
 #endif
-#if ((defined(BRAHMA_MPI_IMPL_CRAYMPICH) &&                               \
-      ((BRAHMA_MPI_VERSION >= 800108 && BRAHMA_MPI_VERSION < 800200) ||   \
-       (BRAHMA_MPI_VERSION >= 900001 && BRAHMA_MPI_VERSION < 900100))) || \
-     (defined(BRAHMA_MPI_IMPL_MPICH) &&                                   \
-      (BRAHMA_MPI_VERSION >= 300403 && BRAHMA_MPI_VERSION < 300500)) ||   \
-     (defined(BRAHMA_MPI_IMPL_OPENMPI) &&                                 \
-      (BRAHMA_MPI_VERSION >= 500006 && BRAHMA_MPI_VERSION < 500100)))
+#if (((defined(BRAHMA_MPI_IMPL_CRAYMPICH) &&                               \
+       ((BRAHMA_MPI_VERSION >= 800108 && BRAHMA_MPI_VERSION < 800200) ||   \
+        (BRAHMA_MPI_VERSION >= 900001 && BRAHMA_MPI_VERSION < 900100))) || \
+      (defined(BRAHMA_MPI_IMPL_MPICH) &&                                   \
+       (BRAHMA_MPI_VERSION >= 300403 && BRAHMA_MPI_VERSION < 300500)) ||   \
+      (defined(BRAHMA_MPI_IMPL_OPENMPI) &&                                 \
+       (BRAHMA_MPI_VERSION >= 500006 && BRAHMA_MPI_VERSION < 500100)))) || \
+    (defined(BRAHMA_MPI_IMPL_OPENMPI) &&                                   \
+     (BRAHMA_MPI_VERSION >= 400106 && BRAHMA_MPI_VERSION < 400200))
 int brahma::MPIDFTracer::MPI_Errhandler_set(MPI_Comm comm,
                                             MPI_Errhandler errhandler) {
   BRAHMA_MAP_OR_FAIL(MPI_Errhandler_set);
@@ -3557,12 +3635,14 @@ int brahma::MPIDFTracer::MPI_Errhandler_set(MPI_Comm comm,
   return ret;
 }
 #endif
-#if ((defined(BRAHMA_MPI_IMPL_CRAYMPICH) &&                             \
-      (BRAHMA_MPI_VERSION >= 900100 && BRAHMA_MPI_VERSION < 900200)) || \
-     (defined(BRAHMA_MPI_IMPL_MPICH) &&                                 \
-      (BRAHMA_MPI_VERSION >= 400203 && BRAHMA_MPI_VERSION < 400300)) || \
-     (defined(BRAHMA_MPI_IMPL_OPENMPI) &&                               \
-      (BRAHMA_MPI_VERSION >= 400106 && BRAHMA_MPI_VERSION < 400200)))
+#if (((defined(BRAHMA_MPI_IMPL_CRAYMPICH) &&                               \
+       (BRAHMA_MPI_VERSION >= 900100 && BRAHMA_MPI_VERSION < 900200)) ||   \
+      (defined(BRAHMA_MPI_IMPL_MPICH) &&                                   \
+       (BRAHMA_MPI_VERSION >= 400203 && BRAHMA_MPI_VERSION < 400300)) ||   \
+      (defined(BRAHMA_MPI_IMPL_OPENMPI) &&                                 \
+       (BRAHMA_MPI_VERSION >= 400106 && BRAHMA_MPI_VERSION < 400200)))) && \
+    !(defined(BRAHMA_MPI_IMPL_OPENMPI) &&                                  \
+      (BRAHMA_MPI_VERSION >= 400106 && BRAHMA_MPI_VERSION < 400200))
 int brahma::MPIDFTracer::MPI_Errhandler_set(int comm, int errhandler) {
   BRAHMA_MAP_OR_FAIL(MPI_Errhandler_set);
   DFT_LOGGER_START_ALWAYS();
@@ -3613,13 +3693,15 @@ int brahma::MPIDFTracer::MPI_Error_string(int errorcode, char* string,
   return ret;
 }
 #endif
-#if ((defined(BRAHMA_MPI_IMPL_CRAYMPICH) &&                               \
-      ((BRAHMA_MPI_VERSION >= 800108 && BRAHMA_MPI_VERSION < 800200) ||   \
-       (BRAHMA_MPI_VERSION >= 900001 && BRAHMA_MPI_VERSION < 900100))) || \
-     (defined(BRAHMA_MPI_IMPL_MPICH) &&                                   \
-      (BRAHMA_MPI_VERSION >= 300403 && BRAHMA_MPI_VERSION < 300500)) ||   \
-     (defined(BRAHMA_MPI_IMPL_OPENMPI) &&                                 \
-      (BRAHMA_MPI_VERSION >= 500006 && BRAHMA_MPI_VERSION < 500100)))
+#if (((defined(BRAHMA_MPI_IMPL_CRAYMPICH) &&                               \
+       ((BRAHMA_MPI_VERSION >= 800108 && BRAHMA_MPI_VERSION < 800200) ||   \
+        (BRAHMA_MPI_VERSION >= 900001 && BRAHMA_MPI_VERSION < 900100))) || \
+      (defined(BRAHMA_MPI_IMPL_MPICH) &&                                   \
+       (BRAHMA_MPI_VERSION >= 300403 && BRAHMA_MPI_VERSION < 300500)) ||   \
+      (defined(BRAHMA_MPI_IMPL_OPENMPI) &&                                 \
+       (BRAHMA_MPI_VERSION >= 500006 && BRAHMA_MPI_VERSION < 500100)))) || \
+    (defined(BRAHMA_MPI_IMPL_OPENMPI) &&                                   \
+     (BRAHMA_MPI_VERSION >= 400106 && BRAHMA_MPI_VERSION < 400200))
 int brahma::MPIDFTracer::MPI_Exscan(const void* sendbuf, void* recvbuf,
                                     int count, MPI_Datatype datatype, MPI_Op op,
                                     MPI_Comm comm) {
@@ -3635,12 +3717,14 @@ int brahma::MPIDFTracer::MPI_Exscan(const void* sendbuf, void* recvbuf,
   return ret;
 }
 #endif
-#if ((defined(BRAHMA_MPI_IMPL_CRAYMPICH) &&                             \
-      (BRAHMA_MPI_VERSION >= 900100 && BRAHMA_MPI_VERSION < 900200)) || \
-     (defined(BRAHMA_MPI_IMPL_MPICH) &&                                 \
-      (BRAHMA_MPI_VERSION >= 400203 && BRAHMA_MPI_VERSION < 400300)) || \
-     (defined(BRAHMA_MPI_IMPL_OPENMPI) &&                               \
-      (BRAHMA_MPI_VERSION >= 400106 && BRAHMA_MPI_VERSION < 400200)))
+#if (((defined(BRAHMA_MPI_IMPL_CRAYMPICH) &&                               \
+       (BRAHMA_MPI_VERSION >= 900100 && BRAHMA_MPI_VERSION < 900200)) ||   \
+      (defined(BRAHMA_MPI_IMPL_MPICH) &&                                   \
+       (BRAHMA_MPI_VERSION >= 400203 && BRAHMA_MPI_VERSION < 400300)) ||   \
+      (defined(BRAHMA_MPI_IMPL_OPENMPI) &&                                 \
+       (BRAHMA_MPI_VERSION >= 400106 && BRAHMA_MPI_VERSION < 400200)))) && \
+    !(defined(BRAHMA_MPI_IMPL_OPENMPI) &&                                  \
+      (BRAHMA_MPI_VERSION >= 400106 && BRAHMA_MPI_VERSION < 400200))
 int brahma::MPIDFTracer::MPI_Exscan(const void* sendbuf, void* recvbuf,
                                     int count, MPI_Datatype datatype, MPI_Op op,
                                     int comm) {
@@ -3838,128 +3922,6 @@ int brahma::MPIDFTracer::MPI_Finalized(int* flag) {
   return __real_MPI_Finalized(flag);
 }
 #endif
-#if ((defined(BRAHMA_MPI_IMPL_CRAYMPICH) &&                             \
-      (BRAHMA_MPI_VERSION >= 900100 && BRAHMA_MPI_VERSION < 900200)) || \
-     (defined(BRAHMA_MPI_IMPL_MPICH) &&                                 \
-      (BRAHMA_MPI_VERSION >= 400203 && BRAHMA_MPI_VERSION < 400300)))
-MPI_Fint brahma::MPIDFTracer::MPI_Fint(MPI_Comm comm) {
-  BRAHMA_MAP_OR_FAIL(MPI_Fint);
-  DFT_LOGGER_START_ALWAYS();
-  DFT_LOGGER_UPDATE_TYPE(comm, MetadataType::MT_VALUE);
-  MPI_Fint ret = __real_MPI_Fint(comm);
-  DFT_LOGGER_UPDATE_TYPE(ret, MetadataType::MT_VALUE);
-  DFT_LOGGER_END();
-  return ret;
-}
-#endif
-#if (defined(BRAHMA_MPI_IMPL_OPENMPI) && \
-     (BRAHMA_MPI_VERSION >= 400106 && BRAHMA_MPI_VERSION < 400200))
-int brahma::MPIDFTracer::MPI_Fint(MPI_Comm comm) {
-  BRAHMA_MAP_OR_FAIL(MPI_Fint);
-  DFT_LOGGER_START_ALWAYS();
-  DFT_LOGGER_UPDATE_TYPE(comm, MetadataType::MT_VALUE);
-  int ret = __real_MPI_Fint(comm);
-  DFT_LOGGER_UPDATE_TYPE(ret, MetadataType::MT_VALUE);
-  DFT_LOGGER_END();
-  return ret;
-}
-#endif
-#if (defined(BRAHMA_MPI_IMPL_OPENMPI) && \
-     (BRAHMA_MPI_VERSION >= 400106 && BRAHMA_MPI_VERSION < 400200))
-int brahma::MPIDFTracer::MPI_Fint(MPI_Datatype datatype) {
-  BRAHMA_MAP_OR_FAIL(MPI_Fint);
-  DFT_LOGGER_START_ALWAYS();
-  DFT_LOGGER_UPDATE_TYPE(datatype, MetadataType::MT_VALUE);
-  int ret = __real_MPI_Fint(datatype);
-  DFT_LOGGER_UPDATE_TYPE(ret, MetadataType::MT_VALUE);
-  DFT_LOGGER_END();
-  return ret;
-}
-#endif
-#if (defined(BRAHMA_MPI_IMPL_OPENMPI) && \
-     (BRAHMA_MPI_VERSION >= 400106 && BRAHMA_MPI_VERSION < 400200))
-int brahma::MPIDFTracer::MPI_Fint(MPI_Errhandler errhandler) {
-  BRAHMA_MAP_OR_FAIL(MPI_Fint);
-  DFT_LOGGER_START_ALWAYS();
-  DFT_LOGGER_UPDATE_TYPE(errhandler, MetadataType::MT_VALUE);
-  int ret = __real_MPI_Fint(errhandler);
-  DFT_LOGGER_UPDATE_TYPE(ret, MetadataType::MT_VALUE);
-  DFT_LOGGER_END();
-  return ret;
-}
-#endif
-#if (defined(BRAHMA_MPI_IMPL_OPENMPI) && \
-     (BRAHMA_MPI_VERSION >= 400106 && BRAHMA_MPI_VERSION < 400200))
-int brahma::MPIDFTracer::MPI_Fint(MPI_Group group) {
-  BRAHMA_MAP_OR_FAIL(MPI_Fint);
-  DFT_LOGGER_START_ALWAYS();
-  DFT_LOGGER_UPDATE_TYPE(group, MetadataType::MT_VALUE);
-  int ret = __real_MPI_Fint(group);
-  DFT_LOGGER_UPDATE_TYPE(ret, MetadataType::MT_VALUE);
-  DFT_LOGGER_END();
-  return ret;
-}
-#endif
-#if (defined(BRAHMA_MPI_IMPL_OPENMPI) && \
-     (BRAHMA_MPI_VERSION >= 400106 && BRAHMA_MPI_VERSION < 400200))
-int brahma::MPIDFTracer::MPI_Fint(MPI_Info info) {
-  BRAHMA_MAP_OR_FAIL(MPI_Fint);
-  DFT_LOGGER_START_ALWAYS();
-  DFT_LOGGER_UPDATE_TYPE(info, MetadataType::MT_VALUE);
-  int ret = __real_MPI_Fint(info);
-  DFT_LOGGER_UPDATE_TYPE(ret, MetadataType::MT_VALUE);
-  DFT_LOGGER_END();
-  return ret;
-}
-#endif
-#if (defined(BRAHMA_MPI_IMPL_OPENMPI) && \
-     (BRAHMA_MPI_VERSION >= 400106 && BRAHMA_MPI_VERSION < 400200))
-int brahma::MPIDFTracer::MPI_Fint(MPI_Message message) {
-  BRAHMA_MAP_OR_FAIL(MPI_Fint);
-  DFT_LOGGER_START_ALWAYS();
-  DFT_LOGGER_UPDATE_TYPE(message, MetadataType::MT_VALUE);
-  int ret = __real_MPI_Fint(message);
-  DFT_LOGGER_UPDATE_TYPE(ret, MetadataType::MT_VALUE);
-  DFT_LOGGER_END();
-  return ret;
-}
-#endif
-#if (defined(BRAHMA_MPI_IMPL_OPENMPI) && \
-     (BRAHMA_MPI_VERSION >= 400106 && BRAHMA_MPI_VERSION < 400200))
-int brahma::MPIDFTracer::MPI_Fint(MPI_Op op) {
-  BRAHMA_MAP_OR_FAIL(MPI_Fint);
-  DFT_LOGGER_START_ALWAYS();
-  DFT_LOGGER_UPDATE_TYPE(op, MetadataType::MT_VALUE);
-  int ret = __real_MPI_Fint(op);
-  DFT_LOGGER_UPDATE_TYPE(ret, MetadataType::MT_VALUE);
-  DFT_LOGGER_END();
-  return ret;
-}
-#endif
-#if (defined(BRAHMA_MPI_IMPL_OPENMPI) && \
-     (BRAHMA_MPI_VERSION >= 400106 && BRAHMA_MPI_VERSION < 400200))
-int brahma::MPIDFTracer::MPI_Fint(MPI_Request request) {
-  BRAHMA_MAP_OR_FAIL(MPI_Fint);
-  DFT_LOGGER_START_ALWAYS();
-  DFT_LOGGER_UPDATE_TYPE(request, MetadataType::MT_VALUE);
-  int ret = __real_MPI_Fint(request);
-  DFT_LOGGER_UPDATE_TYPE(ret, MetadataType::MT_VALUE);
-  DFT_LOGGER_END();
-  return ret;
-}
-#endif
-#if (defined(BRAHMA_MPI_IMPL_OPENMPI) && \
-     (BRAHMA_MPI_VERSION >= 400106 && BRAHMA_MPI_VERSION < 400200))
-int brahma::MPIDFTracer::MPI_Fint(MPI_Win win) {
-  BRAHMA_MAP_OR_FAIL(MPI_Fint);
-  DFT_LOGGER_START_ALWAYS();
-  DFT_LOGGER_UPDATE_TYPE(win, MetadataType::MT_VALUE);
-  int ret = __real_MPI_Fint(win);
-  DFT_LOGGER_UPDATE_TYPE(ret, MetadataType::MT_VALUE);
-  DFT_LOGGER_END();
-  return ret;
-}
-#endif
 #if ((defined(BRAHMA_MPI_IMPL_CRAYMPICH) &&                               \
       ((BRAHMA_MPI_VERSION >= 800108 && BRAHMA_MPI_VERSION < 800200) ||   \
        (BRAHMA_MPI_VERSION >= 900001 && BRAHMA_MPI_VERSION < 900200))) || \
@@ -3978,13 +3940,15 @@ int brahma::MPIDFTracer::MPI_Free_mem(void* base) {
   return ret;
 }
 #endif
-#if ((defined(BRAHMA_MPI_IMPL_CRAYMPICH) &&                               \
-      ((BRAHMA_MPI_VERSION >= 800108 && BRAHMA_MPI_VERSION < 800200) ||   \
-       (BRAHMA_MPI_VERSION >= 900001 && BRAHMA_MPI_VERSION < 900100))) || \
-     (defined(BRAHMA_MPI_IMPL_MPICH) &&                                   \
-      (BRAHMA_MPI_VERSION >= 300403 && BRAHMA_MPI_VERSION < 300500)) ||   \
-     (defined(BRAHMA_MPI_IMPL_OPENMPI) &&                                 \
-      (BRAHMA_MPI_VERSION >= 500006 && BRAHMA_MPI_VERSION < 500100)))
+#if (((defined(BRAHMA_MPI_IMPL_CRAYMPICH) &&                               \
+       ((BRAHMA_MPI_VERSION >= 800108 && BRAHMA_MPI_VERSION < 800200) ||   \
+        (BRAHMA_MPI_VERSION >= 900001 && BRAHMA_MPI_VERSION < 900100))) || \
+      (defined(BRAHMA_MPI_IMPL_MPICH) &&                                   \
+       (BRAHMA_MPI_VERSION >= 300403 && BRAHMA_MPI_VERSION < 300500)) ||   \
+      (defined(BRAHMA_MPI_IMPL_OPENMPI) &&                                 \
+       (BRAHMA_MPI_VERSION >= 500006 && BRAHMA_MPI_VERSION < 500100)))) || \
+    (defined(BRAHMA_MPI_IMPL_OPENMPI) &&                                   \
+     (BRAHMA_MPI_VERSION >= 400106 && BRAHMA_MPI_VERSION < 400200))
 int brahma::MPIDFTracer::MPI_Gather(const void* sendbuf, int sendcount,
                                     MPI_Datatype sendtype, void* recvbuf,
                                     int recvcount, MPI_Datatype recvtype,
@@ -4004,12 +3968,14 @@ int brahma::MPIDFTracer::MPI_Gather(const void* sendbuf, int sendcount,
   return ret;
 }
 #endif
-#if ((defined(BRAHMA_MPI_IMPL_CRAYMPICH) &&                             \
-      (BRAHMA_MPI_VERSION >= 900100 && BRAHMA_MPI_VERSION < 900200)) || \
-     (defined(BRAHMA_MPI_IMPL_MPICH) &&                                 \
-      (BRAHMA_MPI_VERSION >= 400203 && BRAHMA_MPI_VERSION < 400300)) || \
-     (defined(BRAHMA_MPI_IMPL_OPENMPI) &&                               \
-      (BRAHMA_MPI_VERSION >= 400106 && BRAHMA_MPI_VERSION < 400200)))
+#if (((defined(BRAHMA_MPI_IMPL_CRAYMPICH) &&                               \
+       (BRAHMA_MPI_VERSION >= 900100 && BRAHMA_MPI_VERSION < 900200)) ||   \
+      (defined(BRAHMA_MPI_IMPL_MPICH) &&                                   \
+       (BRAHMA_MPI_VERSION >= 400203 && BRAHMA_MPI_VERSION < 400300)) ||   \
+      (defined(BRAHMA_MPI_IMPL_OPENMPI) &&                                 \
+       (BRAHMA_MPI_VERSION >= 400106 && BRAHMA_MPI_VERSION < 400200)))) && \
+    !(defined(BRAHMA_MPI_IMPL_OPENMPI) &&                                  \
+      (BRAHMA_MPI_VERSION >= 400106 && BRAHMA_MPI_VERSION < 400200))
 int brahma::MPIDFTracer::MPI_Gather(const void* sendbuf, int sendcount,
                                     MPI_Datatype sendtype, void* recvbuf,
                                     int recvcount, MPI_Datatype recvtype,
@@ -4195,10 +4161,12 @@ int brahma::MPIDFTracer::MPI_Gatherv(const void* sendbuf, int sendcount,
   return ret;
 }
 #endif
-#if ((defined(BRAHMA_MPI_IMPL_CRAYMPICH) &&                             \
-      (BRAHMA_MPI_VERSION >= 900001 && BRAHMA_MPI_VERSION < 900100)) || \
-     (defined(BRAHMA_MPI_IMPL_OPENMPI) &&                               \
-      (BRAHMA_MPI_VERSION >= 500006 && BRAHMA_MPI_VERSION < 500100)))
+#if (((defined(BRAHMA_MPI_IMPL_CRAYMPICH) &&                               \
+       (BRAHMA_MPI_VERSION >= 900001 && BRAHMA_MPI_VERSION < 900100)) ||   \
+      (defined(BRAHMA_MPI_IMPL_OPENMPI) &&                                 \
+       (BRAHMA_MPI_VERSION >= 500006 && BRAHMA_MPI_VERSION < 500100)))) || \
+    (defined(BRAHMA_MPI_IMPL_OPENMPI) &&                                   \
+     (BRAHMA_MPI_VERSION >= 400106 && BRAHMA_MPI_VERSION < 400200))
 int brahma::MPIDFTracer::MPI_Gatherv(const void* sendbuf, int sendcount,
                                      MPI_Datatype sendtype, void* recvbuf,
                                      const int recvcounts[], const int displs[],
@@ -4218,12 +4186,14 @@ int brahma::MPIDFTracer::MPI_Gatherv(const void* sendbuf, int sendcount,
   return ret;
 }
 #endif
-#if ((defined(BRAHMA_MPI_IMPL_CRAYMPICH) &&                             \
-      (BRAHMA_MPI_VERSION >= 900100 && BRAHMA_MPI_VERSION < 900200)) || \
-     (defined(BRAHMA_MPI_IMPL_MPICH) &&                                 \
-      (BRAHMA_MPI_VERSION >= 400203 && BRAHMA_MPI_VERSION < 400300)) || \
-     (defined(BRAHMA_MPI_IMPL_OPENMPI) &&                               \
-      (BRAHMA_MPI_VERSION >= 400106 && BRAHMA_MPI_VERSION < 400200)))
+#if (((defined(BRAHMA_MPI_IMPL_CRAYMPICH) &&                               \
+       (BRAHMA_MPI_VERSION >= 900100 && BRAHMA_MPI_VERSION < 900200)) ||   \
+      (defined(BRAHMA_MPI_IMPL_MPICH) &&                                   \
+       (BRAHMA_MPI_VERSION >= 400203 && BRAHMA_MPI_VERSION < 400300)) ||   \
+      (defined(BRAHMA_MPI_IMPL_OPENMPI) &&                                 \
+       (BRAHMA_MPI_VERSION >= 400106 && BRAHMA_MPI_VERSION < 400200)))) && \
+    !(defined(BRAHMA_MPI_IMPL_OPENMPI) &&                                  \
+      (BRAHMA_MPI_VERSION >= 400106 && BRAHMA_MPI_VERSION < 400200))
 int brahma::MPIDFTracer::MPI_Gatherv(const void* sendbuf, int sendcount,
                                      MPI_Datatype sendtype, void* recvbuf,
                                      const int recvcounts[], const int displs[],
@@ -4764,13 +4734,15 @@ int brahma::MPIDFTracer::MPI_Get_version(int* version, int* subversion) {
   return ret;
 }
 #endif
-#if ((defined(BRAHMA_MPI_IMPL_CRAYMPICH) &&                               \
-      ((BRAHMA_MPI_VERSION >= 800108 && BRAHMA_MPI_VERSION < 800200) ||   \
-       (BRAHMA_MPI_VERSION >= 900001 && BRAHMA_MPI_VERSION < 900100))) || \
-     (defined(BRAHMA_MPI_IMPL_MPICH) &&                                   \
-      (BRAHMA_MPI_VERSION >= 300403 && BRAHMA_MPI_VERSION < 300500)) ||   \
-     (defined(BRAHMA_MPI_IMPL_OPENMPI) &&                                 \
-      (BRAHMA_MPI_VERSION >= 500006 && BRAHMA_MPI_VERSION < 500100)))
+#if (((defined(BRAHMA_MPI_IMPL_CRAYMPICH) &&                               \
+       ((BRAHMA_MPI_VERSION >= 800108 && BRAHMA_MPI_VERSION < 800200) ||   \
+        (BRAHMA_MPI_VERSION >= 900001 && BRAHMA_MPI_VERSION < 900100))) || \
+      (defined(BRAHMA_MPI_IMPL_MPICH) &&                                   \
+       (BRAHMA_MPI_VERSION >= 300403 && BRAHMA_MPI_VERSION < 300500)) ||   \
+      (defined(BRAHMA_MPI_IMPL_OPENMPI) &&                                 \
+       (BRAHMA_MPI_VERSION >= 500006 && BRAHMA_MPI_VERSION < 500100)))) || \
+    (defined(BRAHMA_MPI_IMPL_OPENMPI) &&                                   \
+     (BRAHMA_MPI_VERSION >= 400106 && BRAHMA_MPI_VERSION < 400200))
 int brahma::MPIDFTracer::MPI_Graph_create(MPI_Comm comm_old, int nnodes,
                                           const int index[], const int edges[],
                                           int reorder, MPI_Comm* comm_graph) {
@@ -4786,12 +4758,14 @@ int brahma::MPIDFTracer::MPI_Graph_create(MPI_Comm comm_old, int nnodes,
   return ret;
 }
 #endif
-#if ((defined(BRAHMA_MPI_IMPL_CRAYMPICH) &&                             \
-      (BRAHMA_MPI_VERSION >= 900100 && BRAHMA_MPI_VERSION < 900200)) || \
-     (defined(BRAHMA_MPI_IMPL_MPICH) &&                                 \
-      (BRAHMA_MPI_VERSION >= 400203 && BRAHMA_MPI_VERSION < 400300)) || \
-     (defined(BRAHMA_MPI_IMPL_OPENMPI) &&                               \
-      (BRAHMA_MPI_VERSION >= 400106 && BRAHMA_MPI_VERSION < 400200)))
+#if (((defined(BRAHMA_MPI_IMPL_CRAYMPICH) &&                               \
+       (BRAHMA_MPI_VERSION >= 900100 && BRAHMA_MPI_VERSION < 900200)) ||   \
+      (defined(BRAHMA_MPI_IMPL_MPICH) &&                                   \
+       (BRAHMA_MPI_VERSION >= 400203 && BRAHMA_MPI_VERSION < 400300)) ||   \
+      (defined(BRAHMA_MPI_IMPL_OPENMPI) &&                                 \
+       (BRAHMA_MPI_VERSION >= 400106 && BRAHMA_MPI_VERSION < 400200)))) && \
+    !(defined(BRAHMA_MPI_IMPL_OPENMPI) &&                                  \
+      (BRAHMA_MPI_VERSION >= 400106 && BRAHMA_MPI_VERSION < 400200))
 int brahma::MPIDFTracer::MPI_Graph_create(int comm_old, int nnodes,
                                           const int index[], const int edges[],
                                           int reorder, int* comm_graph) {
@@ -4807,13 +4781,15 @@ int brahma::MPIDFTracer::MPI_Graph_create(int comm_old, int nnodes,
   return ret;
 }
 #endif
-#if ((defined(BRAHMA_MPI_IMPL_CRAYMPICH) &&                               \
-      ((BRAHMA_MPI_VERSION >= 800108 && BRAHMA_MPI_VERSION < 800200) ||   \
-       (BRAHMA_MPI_VERSION >= 900001 && BRAHMA_MPI_VERSION < 900100))) || \
-     (defined(BRAHMA_MPI_IMPL_MPICH) &&                                   \
-      (BRAHMA_MPI_VERSION >= 300403 && BRAHMA_MPI_VERSION < 300500)) ||   \
-     (defined(BRAHMA_MPI_IMPL_OPENMPI) &&                                 \
-      (BRAHMA_MPI_VERSION >= 500006 && BRAHMA_MPI_VERSION < 500100)))
+#if (((defined(BRAHMA_MPI_IMPL_CRAYMPICH) &&                               \
+       ((BRAHMA_MPI_VERSION >= 800108 && BRAHMA_MPI_VERSION < 800200) ||   \
+        (BRAHMA_MPI_VERSION >= 900001 && BRAHMA_MPI_VERSION < 900100))) || \
+      (defined(BRAHMA_MPI_IMPL_MPICH) &&                                   \
+       (BRAHMA_MPI_VERSION >= 300403 && BRAHMA_MPI_VERSION < 300500)) ||   \
+      (defined(BRAHMA_MPI_IMPL_OPENMPI) &&                                 \
+       (BRAHMA_MPI_VERSION >= 500006 && BRAHMA_MPI_VERSION < 500100)))) || \
+    (defined(BRAHMA_MPI_IMPL_OPENMPI) &&                                   \
+     (BRAHMA_MPI_VERSION >= 400106 && BRAHMA_MPI_VERSION < 400200))
 int brahma::MPIDFTracer::MPI_Graph_get(MPI_Comm comm, int maxindex,
                                        int maxedges, int index[], int edges[]) {
   BRAHMA_MAP_OR_FAIL(MPI_Graph_get);
@@ -4827,12 +4803,14 @@ int brahma::MPIDFTracer::MPI_Graph_get(MPI_Comm comm, int maxindex,
   return ret;
 }
 #endif
-#if ((defined(BRAHMA_MPI_IMPL_CRAYMPICH) &&                             \
-      (BRAHMA_MPI_VERSION >= 900100 && BRAHMA_MPI_VERSION < 900200)) || \
-     (defined(BRAHMA_MPI_IMPL_MPICH) &&                                 \
-      (BRAHMA_MPI_VERSION >= 400203 && BRAHMA_MPI_VERSION < 400300)) || \
-     (defined(BRAHMA_MPI_IMPL_OPENMPI) &&                               \
-      (BRAHMA_MPI_VERSION >= 400106 && BRAHMA_MPI_VERSION < 400200)))
+#if (((defined(BRAHMA_MPI_IMPL_CRAYMPICH) &&                               \
+       (BRAHMA_MPI_VERSION >= 900100 && BRAHMA_MPI_VERSION < 900200)) ||   \
+      (defined(BRAHMA_MPI_IMPL_MPICH) &&                                   \
+       (BRAHMA_MPI_VERSION >= 400203 && BRAHMA_MPI_VERSION < 400300)) ||   \
+      (defined(BRAHMA_MPI_IMPL_OPENMPI) &&                                 \
+       (BRAHMA_MPI_VERSION >= 400106 && BRAHMA_MPI_VERSION < 400200)))) && \
+    !(defined(BRAHMA_MPI_IMPL_OPENMPI) &&                                  \
+      (BRAHMA_MPI_VERSION >= 400106 && BRAHMA_MPI_VERSION < 400200))
 int brahma::MPIDFTracer::MPI_Graph_get(int comm, int maxindex, int maxedges,
                                        int index[], int edges[]) {
   BRAHMA_MAP_OR_FAIL(MPI_Graph_get);
@@ -4846,13 +4824,15 @@ int brahma::MPIDFTracer::MPI_Graph_get(int comm, int maxindex, int maxedges,
   return ret;
 }
 #endif
-#if ((defined(BRAHMA_MPI_IMPL_CRAYMPICH) &&                               \
-      ((BRAHMA_MPI_VERSION >= 800108 && BRAHMA_MPI_VERSION < 800200) ||   \
-       (BRAHMA_MPI_VERSION >= 900001 && BRAHMA_MPI_VERSION < 900100))) || \
-     (defined(BRAHMA_MPI_IMPL_MPICH) &&                                   \
-      (BRAHMA_MPI_VERSION >= 300403 && BRAHMA_MPI_VERSION < 300500)) ||   \
-     (defined(BRAHMA_MPI_IMPL_OPENMPI) &&                                 \
-      (BRAHMA_MPI_VERSION >= 500006 && BRAHMA_MPI_VERSION < 500100)))
+#if (((defined(BRAHMA_MPI_IMPL_CRAYMPICH) &&                               \
+       ((BRAHMA_MPI_VERSION >= 800108 && BRAHMA_MPI_VERSION < 800200) ||   \
+        (BRAHMA_MPI_VERSION >= 900001 && BRAHMA_MPI_VERSION < 900100))) || \
+      (defined(BRAHMA_MPI_IMPL_MPICH) &&                                   \
+       (BRAHMA_MPI_VERSION >= 300403 && BRAHMA_MPI_VERSION < 300500)) ||   \
+      (defined(BRAHMA_MPI_IMPL_OPENMPI) &&                                 \
+       (BRAHMA_MPI_VERSION >= 500006 && BRAHMA_MPI_VERSION < 500100)))) || \
+    (defined(BRAHMA_MPI_IMPL_OPENMPI) &&                                   \
+     (BRAHMA_MPI_VERSION >= 400106 && BRAHMA_MPI_VERSION < 400200))
 int brahma::MPIDFTracer::MPI_Graph_map(MPI_Comm comm, int nnodes,
                                        const int index[], const int edges[],
                                        int* newrank) {
@@ -4866,12 +4846,14 @@ int brahma::MPIDFTracer::MPI_Graph_map(MPI_Comm comm, int nnodes,
   return ret;
 }
 #endif
-#if ((defined(BRAHMA_MPI_IMPL_CRAYMPICH) &&                             \
-      (BRAHMA_MPI_VERSION >= 900100 && BRAHMA_MPI_VERSION < 900200)) || \
-     (defined(BRAHMA_MPI_IMPL_MPICH) &&                                 \
-      (BRAHMA_MPI_VERSION >= 400203 && BRAHMA_MPI_VERSION < 400300)) || \
-     (defined(BRAHMA_MPI_IMPL_OPENMPI) &&                               \
-      (BRAHMA_MPI_VERSION >= 400106 && BRAHMA_MPI_VERSION < 400200)))
+#if (((defined(BRAHMA_MPI_IMPL_CRAYMPICH) &&                               \
+       (BRAHMA_MPI_VERSION >= 900100 && BRAHMA_MPI_VERSION < 900200)) ||   \
+      (defined(BRAHMA_MPI_IMPL_MPICH) &&                                   \
+       (BRAHMA_MPI_VERSION >= 400203 && BRAHMA_MPI_VERSION < 400300)) ||   \
+      (defined(BRAHMA_MPI_IMPL_OPENMPI) &&                                 \
+       (BRAHMA_MPI_VERSION >= 400106 && BRAHMA_MPI_VERSION < 400200)))) && \
+    !(defined(BRAHMA_MPI_IMPL_OPENMPI) &&                                  \
+      (BRAHMA_MPI_VERSION >= 400106 && BRAHMA_MPI_VERSION < 400200))
 int brahma::MPIDFTracer::MPI_Graph_map(int comm, int nnodes, const int index[],
                                        const int edges[], int* newrank) {
   BRAHMA_MAP_OR_FAIL(MPI_Graph_map);
@@ -4884,13 +4866,15 @@ int brahma::MPIDFTracer::MPI_Graph_map(int comm, int nnodes, const int index[],
   return ret;
 }
 #endif
-#if ((defined(BRAHMA_MPI_IMPL_CRAYMPICH) &&                               \
-      ((BRAHMA_MPI_VERSION >= 800108 && BRAHMA_MPI_VERSION < 800200) ||   \
-       (BRAHMA_MPI_VERSION >= 900001 && BRAHMA_MPI_VERSION < 900100))) || \
-     (defined(BRAHMA_MPI_IMPL_MPICH) &&                                   \
-      (BRAHMA_MPI_VERSION >= 300403 && BRAHMA_MPI_VERSION < 300500)) ||   \
-     (defined(BRAHMA_MPI_IMPL_OPENMPI) &&                                 \
-      (BRAHMA_MPI_VERSION >= 500006 && BRAHMA_MPI_VERSION < 500100)))
+#if (((defined(BRAHMA_MPI_IMPL_CRAYMPICH) &&                               \
+       ((BRAHMA_MPI_VERSION >= 800108 && BRAHMA_MPI_VERSION < 800200) ||   \
+        (BRAHMA_MPI_VERSION >= 900001 && BRAHMA_MPI_VERSION < 900100))) || \
+      (defined(BRAHMA_MPI_IMPL_MPICH) &&                                   \
+       (BRAHMA_MPI_VERSION >= 300403 && BRAHMA_MPI_VERSION < 300500)) ||   \
+      (defined(BRAHMA_MPI_IMPL_OPENMPI) &&                                 \
+       (BRAHMA_MPI_VERSION >= 500006 && BRAHMA_MPI_VERSION < 500100)))) || \
+    (defined(BRAHMA_MPI_IMPL_OPENMPI) &&                                   \
+     (BRAHMA_MPI_VERSION >= 400106 && BRAHMA_MPI_VERSION < 400200))
 int brahma::MPIDFTracer::MPI_Graph_neighbors(MPI_Comm comm, int rank,
                                              int maxneighbors,
                                              int neighbors[]) {
@@ -4905,12 +4889,14 @@ int brahma::MPIDFTracer::MPI_Graph_neighbors(MPI_Comm comm, int rank,
   return ret;
 }
 #endif
-#if ((defined(BRAHMA_MPI_IMPL_CRAYMPICH) &&                             \
-      (BRAHMA_MPI_VERSION >= 900100 && BRAHMA_MPI_VERSION < 900200)) || \
-     (defined(BRAHMA_MPI_IMPL_MPICH) &&                                 \
-      (BRAHMA_MPI_VERSION >= 400203 && BRAHMA_MPI_VERSION < 400300)) || \
-     (defined(BRAHMA_MPI_IMPL_OPENMPI) &&                               \
-      (BRAHMA_MPI_VERSION >= 400106 && BRAHMA_MPI_VERSION < 400200)))
+#if (((defined(BRAHMA_MPI_IMPL_CRAYMPICH) &&                               \
+       (BRAHMA_MPI_VERSION >= 900100 && BRAHMA_MPI_VERSION < 900200)) ||   \
+      (defined(BRAHMA_MPI_IMPL_MPICH) &&                                   \
+       (BRAHMA_MPI_VERSION >= 400203 && BRAHMA_MPI_VERSION < 400300)) ||   \
+      (defined(BRAHMA_MPI_IMPL_OPENMPI) &&                                 \
+       (BRAHMA_MPI_VERSION >= 400106 && BRAHMA_MPI_VERSION < 400200)))) && \
+    !(defined(BRAHMA_MPI_IMPL_OPENMPI) &&                                  \
+      (BRAHMA_MPI_VERSION >= 400106 && BRAHMA_MPI_VERSION < 400200))
 int brahma::MPIDFTracer::MPI_Graph_neighbors(int comm, int rank,
                                              int maxneighbors,
                                              int neighbors[]) {
@@ -4925,13 +4911,15 @@ int brahma::MPIDFTracer::MPI_Graph_neighbors(int comm, int rank,
   return ret;
 }
 #endif
-#if ((defined(BRAHMA_MPI_IMPL_CRAYMPICH) &&                               \
-      ((BRAHMA_MPI_VERSION >= 800108 && BRAHMA_MPI_VERSION < 800200) ||   \
-       (BRAHMA_MPI_VERSION >= 900001 && BRAHMA_MPI_VERSION < 900100))) || \
-     (defined(BRAHMA_MPI_IMPL_MPICH) &&                                   \
-      (BRAHMA_MPI_VERSION >= 300403 && BRAHMA_MPI_VERSION < 300500)) ||   \
-     (defined(BRAHMA_MPI_IMPL_OPENMPI) &&                                 \
-      (BRAHMA_MPI_VERSION >= 500006 && BRAHMA_MPI_VERSION < 500100)))
+#if (((defined(BRAHMA_MPI_IMPL_CRAYMPICH) &&                               \
+       ((BRAHMA_MPI_VERSION >= 800108 && BRAHMA_MPI_VERSION < 800200) ||   \
+        (BRAHMA_MPI_VERSION >= 900001 && BRAHMA_MPI_VERSION < 900100))) || \
+      (defined(BRAHMA_MPI_IMPL_MPICH) &&                                   \
+       (BRAHMA_MPI_VERSION >= 300403 && BRAHMA_MPI_VERSION < 300500)) ||   \
+      (defined(BRAHMA_MPI_IMPL_OPENMPI) &&                                 \
+       (BRAHMA_MPI_VERSION >= 500006 && BRAHMA_MPI_VERSION < 500100)))) || \
+    (defined(BRAHMA_MPI_IMPL_OPENMPI) &&                                   \
+     (BRAHMA_MPI_VERSION >= 400106 && BRAHMA_MPI_VERSION < 400200))
 int brahma::MPIDFTracer::MPI_Graph_neighbors_count(MPI_Comm comm, int rank,
                                                    int* nneighbors) {
   BRAHMA_MAP_OR_FAIL(MPI_Graph_neighbors_count);
@@ -4944,12 +4932,14 @@ int brahma::MPIDFTracer::MPI_Graph_neighbors_count(MPI_Comm comm, int rank,
   return ret;
 }
 #endif
-#if ((defined(BRAHMA_MPI_IMPL_CRAYMPICH) &&                             \
-      (BRAHMA_MPI_VERSION >= 900100 && BRAHMA_MPI_VERSION < 900200)) || \
-     (defined(BRAHMA_MPI_IMPL_MPICH) &&                                 \
-      (BRAHMA_MPI_VERSION >= 400203 && BRAHMA_MPI_VERSION < 400300)) || \
-     (defined(BRAHMA_MPI_IMPL_OPENMPI) &&                               \
-      (BRAHMA_MPI_VERSION >= 400106 && BRAHMA_MPI_VERSION < 400200)))
+#if (((defined(BRAHMA_MPI_IMPL_CRAYMPICH) &&                               \
+       (BRAHMA_MPI_VERSION >= 900100 && BRAHMA_MPI_VERSION < 900200)) ||   \
+      (defined(BRAHMA_MPI_IMPL_MPICH) &&                                   \
+       (BRAHMA_MPI_VERSION >= 400203 && BRAHMA_MPI_VERSION < 400300)) ||   \
+      (defined(BRAHMA_MPI_IMPL_OPENMPI) &&                                 \
+       (BRAHMA_MPI_VERSION >= 400106 && BRAHMA_MPI_VERSION < 400200)))) && \
+    !(defined(BRAHMA_MPI_IMPL_OPENMPI) &&                                  \
+      (BRAHMA_MPI_VERSION >= 400106 && BRAHMA_MPI_VERSION < 400200))
 int brahma::MPIDFTracer::MPI_Graph_neighbors_count(int comm, int rank,
                                                    int* nneighbors) {
   BRAHMA_MAP_OR_FAIL(MPI_Graph_neighbors_count);
@@ -4962,13 +4952,15 @@ int brahma::MPIDFTracer::MPI_Graph_neighbors_count(int comm, int rank,
   return ret;
 }
 #endif
-#if ((defined(BRAHMA_MPI_IMPL_CRAYMPICH) &&                               \
-      ((BRAHMA_MPI_VERSION >= 800108 && BRAHMA_MPI_VERSION < 800200) ||   \
-       (BRAHMA_MPI_VERSION >= 900001 && BRAHMA_MPI_VERSION < 900100))) || \
-     (defined(BRAHMA_MPI_IMPL_MPICH) &&                                   \
-      (BRAHMA_MPI_VERSION >= 300403 && BRAHMA_MPI_VERSION < 300500)) ||   \
-     (defined(BRAHMA_MPI_IMPL_OPENMPI) &&                                 \
-      (BRAHMA_MPI_VERSION >= 500006 && BRAHMA_MPI_VERSION < 500100)))
+#if (((defined(BRAHMA_MPI_IMPL_CRAYMPICH) &&                               \
+       ((BRAHMA_MPI_VERSION >= 800108 && BRAHMA_MPI_VERSION < 800200) ||   \
+        (BRAHMA_MPI_VERSION >= 900001 && BRAHMA_MPI_VERSION < 900100))) || \
+      (defined(BRAHMA_MPI_IMPL_MPICH) &&                                   \
+       (BRAHMA_MPI_VERSION >= 300403 && BRAHMA_MPI_VERSION < 300500)) ||   \
+      (defined(BRAHMA_MPI_IMPL_OPENMPI) &&                                 \
+       (BRAHMA_MPI_VERSION >= 500006 && BRAHMA_MPI_VERSION < 500100)))) || \
+    (defined(BRAHMA_MPI_IMPL_OPENMPI) &&                                   \
+     (BRAHMA_MPI_VERSION >= 400106 && BRAHMA_MPI_VERSION < 400200))
 int brahma::MPIDFTracer::MPI_Graphdims_get(MPI_Comm comm, int* nnodes,
                                            int* nedges) {
   BRAHMA_MAP_OR_FAIL(MPI_Graphdims_get);
@@ -4980,12 +4972,14 @@ int brahma::MPIDFTracer::MPI_Graphdims_get(MPI_Comm comm, int* nnodes,
   return ret;
 }
 #endif
-#if ((defined(BRAHMA_MPI_IMPL_CRAYMPICH) &&                             \
-      (BRAHMA_MPI_VERSION >= 900100 && BRAHMA_MPI_VERSION < 900200)) || \
-     (defined(BRAHMA_MPI_IMPL_MPICH) &&                                 \
-      (BRAHMA_MPI_VERSION >= 400203 && BRAHMA_MPI_VERSION < 400300)) || \
-     (defined(BRAHMA_MPI_IMPL_OPENMPI) &&                               \
-      (BRAHMA_MPI_VERSION >= 400106 && BRAHMA_MPI_VERSION < 400200)))
+#if (((defined(BRAHMA_MPI_IMPL_CRAYMPICH) &&                               \
+       (BRAHMA_MPI_VERSION >= 900100 && BRAHMA_MPI_VERSION < 900200)) ||   \
+      (defined(BRAHMA_MPI_IMPL_MPICH) &&                                   \
+       (BRAHMA_MPI_VERSION >= 400203 && BRAHMA_MPI_VERSION < 400300)) ||   \
+      (defined(BRAHMA_MPI_IMPL_OPENMPI) &&                                 \
+       (BRAHMA_MPI_VERSION >= 400106 && BRAHMA_MPI_VERSION < 400200)))) && \
+    !(defined(BRAHMA_MPI_IMPL_OPENMPI) &&                                  \
+      (BRAHMA_MPI_VERSION >= 400106 && BRAHMA_MPI_VERSION < 400200))
 int brahma::MPIDFTracer::MPI_Graphdims_get(int comm, int* nnodes, int* nedges) {
   BRAHMA_MAP_OR_FAIL(MPI_Graphdims_get);
   DFT_LOGGER_START_ALWAYS();
@@ -5032,22 +5026,6 @@ int brahma::MPIDFTracer::MPI_Grequest_start(
   DFT_LOGGER_START_ALWAYS();
   int ret = __real_MPI_Grequest_start(query_fn, free_fn, cancel_fn, extra_state,
                                       request);
-  DFT_LOGGER_UPDATE_TYPE(ret, MetadataType::MT_VALUE);
-  DFT_LOGGER_END();
-  return ret;
-}
-#endif
-#if ((defined(BRAHMA_MPI_IMPL_CRAYMPICH) &&                             \
-      (BRAHMA_MPI_VERSION >= 900100 && BRAHMA_MPI_VERSION < 900200)) || \
-     (defined(BRAHMA_MPI_IMPL_MPICH) &&                                 \
-      (BRAHMA_MPI_VERSION >= 400203 && BRAHMA_MPI_VERSION < 400300)) || \
-     (defined(BRAHMA_MPI_IMPL_OPENMPI) &&                               \
-      (BRAHMA_MPI_VERSION >= 400106 && BRAHMA_MPI_VERSION < 400200)))
-MPI_Group brahma::MPIDFTracer::MPI_Group(int group) {
-  BRAHMA_MAP_OR_FAIL(MPI_Group);
-  DFT_LOGGER_START_ALWAYS();
-  DFT_LOGGER_UPDATE_TYPE(group, MetadataType::MT_VALUE);
-  MPI_Group ret = __real_MPI_Group(group);
   DFT_LOGGER_UPDATE_TYPE(ret, MetadataType::MT_VALUE);
   DFT_LOGGER_END();
   return ret;
@@ -5118,13 +5096,15 @@ int brahma::MPIDFTracer::MPI_Group_excl(MPI_Group group, int n,
   return ret;
 }
 #endif
-#if ((defined(BRAHMA_MPI_IMPL_CRAYMPICH) &&                               \
-      ((BRAHMA_MPI_VERSION >= 800108 && BRAHMA_MPI_VERSION < 800200) ||   \
-       (BRAHMA_MPI_VERSION >= 900001 && BRAHMA_MPI_VERSION < 900100))) || \
-     (defined(BRAHMA_MPI_IMPL_MPICH) &&                                   \
-      (BRAHMA_MPI_VERSION >= 300403 && BRAHMA_MPI_VERSION < 300500)) ||   \
-     (defined(BRAHMA_MPI_IMPL_OPENMPI) &&                                 \
-      (BRAHMA_MPI_VERSION >= 500006 && BRAHMA_MPI_VERSION < 500100)))
+#if (((defined(BRAHMA_MPI_IMPL_CRAYMPICH) &&                               \
+       ((BRAHMA_MPI_VERSION >= 800108 && BRAHMA_MPI_VERSION < 800200) ||   \
+        (BRAHMA_MPI_VERSION >= 900001 && BRAHMA_MPI_VERSION < 900100))) || \
+      (defined(BRAHMA_MPI_IMPL_MPICH) &&                                   \
+       (BRAHMA_MPI_VERSION >= 300403 && BRAHMA_MPI_VERSION < 300500)) ||   \
+      (defined(BRAHMA_MPI_IMPL_OPENMPI) &&                                 \
+       (BRAHMA_MPI_VERSION >= 500006 && BRAHMA_MPI_VERSION < 500100)))) || \
+    (defined(BRAHMA_MPI_IMPL_OPENMPI) &&                                   \
+     (BRAHMA_MPI_VERSION >= 400106 && BRAHMA_MPI_VERSION < 400200))
 int brahma::MPIDFTracer::MPI_Group_free(MPI_Group* group) {
   BRAHMA_MAP_OR_FAIL(MPI_Group_free);
   DFT_LOGGER_START_ALWAYS();
@@ -5134,12 +5114,14 @@ int brahma::MPIDFTracer::MPI_Group_free(MPI_Group* group) {
   return ret;
 }
 #endif
-#if ((defined(BRAHMA_MPI_IMPL_CRAYMPICH) &&                             \
-      (BRAHMA_MPI_VERSION >= 900100 && BRAHMA_MPI_VERSION < 900200)) || \
-     (defined(BRAHMA_MPI_IMPL_MPICH) &&                                 \
-      (BRAHMA_MPI_VERSION >= 400203 && BRAHMA_MPI_VERSION < 400300)) || \
-     (defined(BRAHMA_MPI_IMPL_OPENMPI) &&                               \
-      (BRAHMA_MPI_VERSION >= 400106 && BRAHMA_MPI_VERSION < 400200)))
+#if (((defined(BRAHMA_MPI_IMPL_CRAYMPICH) &&                               \
+       (BRAHMA_MPI_VERSION >= 900100 && BRAHMA_MPI_VERSION < 900200)) ||   \
+      (defined(BRAHMA_MPI_IMPL_MPICH) &&                                   \
+       (BRAHMA_MPI_VERSION >= 400203 && BRAHMA_MPI_VERSION < 400300)) ||   \
+      (defined(BRAHMA_MPI_IMPL_OPENMPI) &&                                 \
+       (BRAHMA_MPI_VERSION >= 400106 && BRAHMA_MPI_VERSION < 400200)))) && \
+    !(defined(BRAHMA_MPI_IMPL_OPENMPI) &&                                  \
+      (BRAHMA_MPI_VERSION >= 400106 && BRAHMA_MPI_VERSION < 400200))
 int brahma::MPIDFTracer::MPI_Group_free(int* group) {
   BRAHMA_MAP_OR_FAIL(MPI_Group_free);
   DFT_LOGGER_START_ALWAYS();
@@ -5149,13 +5131,15 @@ int brahma::MPIDFTracer::MPI_Group_free(int* group) {
   return ret;
 }
 #endif
-#if ((defined(BRAHMA_MPI_IMPL_CRAYMPICH) &&                               \
-      ((BRAHMA_MPI_VERSION >= 800108 && BRAHMA_MPI_VERSION < 800200) ||   \
-       (BRAHMA_MPI_VERSION >= 900001 && BRAHMA_MPI_VERSION < 900100))) || \
-     (defined(BRAHMA_MPI_IMPL_MPICH) &&                                   \
-      (BRAHMA_MPI_VERSION >= 300403 && BRAHMA_MPI_VERSION < 300500)) ||   \
-     (defined(BRAHMA_MPI_IMPL_OPENMPI) &&                                 \
-      (BRAHMA_MPI_VERSION >= 500006 && BRAHMA_MPI_VERSION < 500100)))
+#if (((defined(BRAHMA_MPI_IMPL_CRAYMPICH) &&                               \
+       ((BRAHMA_MPI_VERSION >= 800108 && BRAHMA_MPI_VERSION < 800200) ||   \
+        (BRAHMA_MPI_VERSION >= 900001 && BRAHMA_MPI_VERSION < 900100))) || \
+      (defined(BRAHMA_MPI_IMPL_MPICH) &&                                   \
+       (BRAHMA_MPI_VERSION >= 300403 && BRAHMA_MPI_VERSION < 300500)) ||   \
+      (defined(BRAHMA_MPI_IMPL_OPENMPI) &&                                 \
+       (BRAHMA_MPI_VERSION >= 500006 && BRAHMA_MPI_VERSION < 500100)))) || \
+    (defined(BRAHMA_MPI_IMPL_OPENMPI) &&                                   \
+     (BRAHMA_MPI_VERSION >= 400106 && BRAHMA_MPI_VERSION < 400200))
 int brahma::MPIDFTracer::MPI_Group_incl(MPI_Group group, int n,
                                         const int ranks[],
                                         MPI_Group* newgroup) {
@@ -5169,12 +5153,14 @@ int brahma::MPIDFTracer::MPI_Group_incl(MPI_Group group, int n,
   return ret;
 }
 #endif
-#if ((defined(BRAHMA_MPI_IMPL_CRAYMPICH) &&                             \
-      (BRAHMA_MPI_VERSION >= 900100 && BRAHMA_MPI_VERSION < 900200)) || \
-     (defined(BRAHMA_MPI_IMPL_MPICH) &&                                 \
-      (BRAHMA_MPI_VERSION >= 400203 && BRAHMA_MPI_VERSION < 400300)) || \
-     (defined(BRAHMA_MPI_IMPL_OPENMPI) &&                               \
-      (BRAHMA_MPI_VERSION >= 400106 && BRAHMA_MPI_VERSION < 400200)))
+#if (((defined(BRAHMA_MPI_IMPL_CRAYMPICH) &&                               \
+       (BRAHMA_MPI_VERSION >= 900100 && BRAHMA_MPI_VERSION < 900200)) ||   \
+      (defined(BRAHMA_MPI_IMPL_MPICH) &&                                   \
+       (BRAHMA_MPI_VERSION >= 400203 && BRAHMA_MPI_VERSION < 400300)) ||   \
+      (defined(BRAHMA_MPI_IMPL_OPENMPI) &&                                 \
+       (BRAHMA_MPI_VERSION >= 400106 && BRAHMA_MPI_VERSION < 400200)))) && \
+    !(defined(BRAHMA_MPI_IMPL_OPENMPI) &&                                  \
+      (BRAHMA_MPI_VERSION >= 400106 && BRAHMA_MPI_VERSION < 400200))
 int brahma::MPIDFTracer::MPI_Group_incl(int group, int n, const int ranks[],
                                         int* newgroup) {
   BRAHMA_MAP_OR_FAIL(MPI_Group_incl);
@@ -5187,13 +5173,15 @@ int brahma::MPIDFTracer::MPI_Group_incl(int group, int n, const int ranks[],
   return ret;
 }
 #endif
-#if ((defined(BRAHMA_MPI_IMPL_CRAYMPICH) &&                               \
-      ((BRAHMA_MPI_VERSION >= 800108 && BRAHMA_MPI_VERSION < 800200) ||   \
-       (BRAHMA_MPI_VERSION >= 900001 && BRAHMA_MPI_VERSION < 900100))) || \
-     (defined(BRAHMA_MPI_IMPL_MPICH) &&                                   \
-      (BRAHMA_MPI_VERSION >= 300403 && BRAHMA_MPI_VERSION < 300500)) ||   \
-     (defined(BRAHMA_MPI_IMPL_OPENMPI) &&                                 \
-      (BRAHMA_MPI_VERSION >= 500006 && BRAHMA_MPI_VERSION < 500100)))
+#if (((defined(BRAHMA_MPI_IMPL_CRAYMPICH) &&                               \
+       ((BRAHMA_MPI_VERSION >= 800108 && BRAHMA_MPI_VERSION < 800200) ||   \
+        (BRAHMA_MPI_VERSION >= 900001 && BRAHMA_MPI_VERSION < 900100))) || \
+      (defined(BRAHMA_MPI_IMPL_MPICH) &&                                   \
+       (BRAHMA_MPI_VERSION >= 300403 && BRAHMA_MPI_VERSION < 300500)) ||   \
+      (defined(BRAHMA_MPI_IMPL_OPENMPI) &&                                 \
+       (BRAHMA_MPI_VERSION >= 500006 && BRAHMA_MPI_VERSION < 500100)))) || \
+    (defined(BRAHMA_MPI_IMPL_OPENMPI) &&                                   \
+     (BRAHMA_MPI_VERSION >= 400106 && BRAHMA_MPI_VERSION < 400200))
 int brahma::MPIDFTracer::MPI_Group_intersection(MPI_Group group1,
                                                 MPI_Group group2,
                                                 MPI_Group* newgroup) {
@@ -5207,12 +5195,14 @@ int brahma::MPIDFTracer::MPI_Group_intersection(MPI_Group group1,
   return ret;
 }
 #endif
-#if ((defined(BRAHMA_MPI_IMPL_CRAYMPICH) &&                             \
-      (BRAHMA_MPI_VERSION >= 900100 && BRAHMA_MPI_VERSION < 900200)) || \
-     (defined(BRAHMA_MPI_IMPL_MPICH) &&                                 \
-      (BRAHMA_MPI_VERSION >= 400203 && BRAHMA_MPI_VERSION < 400300)) || \
-     (defined(BRAHMA_MPI_IMPL_OPENMPI) &&                               \
-      (BRAHMA_MPI_VERSION >= 400106 && BRAHMA_MPI_VERSION < 400200)))
+#if (((defined(BRAHMA_MPI_IMPL_CRAYMPICH) &&                               \
+       (BRAHMA_MPI_VERSION >= 900100 && BRAHMA_MPI_VERSION < 900200)) ||   \
+      (defined(BRAHMA_MPI_IMPL_MPICH) &&                                   \
+       (BRAHMA_MPI_VERSION >= 400203 && BRAHMA_MPI_VERSION < 400300)) ||   \
+      (defined(BRAHMA_MPI_IMPL_OPENMPI) &&                                 \
+       (BRAHMA_MPI_VERSION >= 400106 && BRAHMA_MPI_VERSION < 400200)))) && \
+    !(defined(BRAHMA_MPI_IMPL_OPENMPI) &&                                  \
+      (BRAHMA_MPI_VERSION >= 400106 && BRAHMA_MPI_VERSION < 400200))
 int brahma::MPIDFTracer::MPI_Group_intersection(int group1, int group2,
                                                 int* newgroup) {
   BRAHMA_MAP_OR_FAIL(MPI_Group_intersection);
@@ -5225,13 +5215,15 @@ int brahma::MPIDFTracer::MPI_Group_intersection(int group1, int group2,
   return ret;
 }
 #endif
-#if ((defined(BRAHMA_MPI_IMPL_CRAYMPICH) &&                               \
-      ((BRAHMA_MPI_VERSION >= 800108 && BRAHMA_MPI_VERSION < 800200) ||   \
-       (BRAHMA_MPI_VERSION >= 900001 && BRAHMA_MPI_VERSION < 900100))) || \
-     (defined(BRAHMA_MPI_IMPL_MPICH) &&                                   \
-      (BRAHMA_MPI_VERSION >= 300403 && BRAHMA_MPI_VERSION < 300500)) ||   \
-     (defined(BRAHMA_MPI_IMPL_OPENMPI) &&                                 \
-      (BRAHMA_MPI_VERSION >= 500006 && BRAHMA_MPI_VERSION < 500100)))
+#if (((defined(BRAHMA_MPI_IMPL_CRAYMPICH) &&                               \
+       ((BRAHMA_MPI_VERSION >= 800108 && BRAHMA_MPI_VERSION < 800200) ||   \
+        (BRAHMA_MPI_VERSION >= 900001 && BRAHMA_MPI_VERSION < 900100))) || \
+      (defined(BRAHMA_MPI_IMPL_MPICH) &&                                   \
+       (BRAHMA_MPI_VERSION >= 300403 && BRAHMA_MPI_VERSION < 300500)) ||   \
+      (defined(BRAHMA_MPI_IMPL_OPENMPI) &&                                 \
+       (BRAHMA_MPI_VERSION >= 500006 && BRAHMA_MPI_VERSION < 500100)))) || \
+    (defined(BRAHMA_MPI_IMPL_OPENMPI) &&                                   \
+     (BRAHMA_MPI_VERSION >= 400106 && BRAHMA_MPI_VERSION < 400200))
 int brahma::MPIDFTracer::MPI_Group_range_excl(MPI_Group group, int n,
                                               int ranges[][3],
                                               MPI_Group* newgroup) {
@@ -5245,12 +5237,14 @@ int brahma::MPIDFTracer::MPI_Group_range_excl(MPI_Group group, int n,
   return ret;
 }
 #endif
-#if ((defined(BRAHMA_MPI_IMPL_CRAYMPICH) &&                             \
-      (BRAHMA_MPI_VERSION >= 900100 && BRAHMA_MPI_VERSION < 900200)) || \
-     (defined(BRAHMA_MPI_IMPL_MPICH) &&                                 \
-      (BRAHMA_MPI_VERSION >= 400203 && BRAHMA_MPI_VERSION < 400300)) || \
-     (defined(BRAHMA_MPI_IMPL_OPENMPI) &&                               \
-      (BRAHMA_MPI_VERSION >= 400106 && BRAHMA_MPI_VERSION < 400200)))
+#if (((defined(BRAHMA_MPI_IMPL_CRAYMPICH) &&                               \
+       (BRAHMA_MPI_VERSION >= 900100 && BRAHMA_MPI_VERSION < 900200)) ||   \
+      (defined(BRAHMA_MPI_IMPL_MPICH) &&                                   \
+       (BRAHMA_MPI_VERSION >= 400203 && BRAHMA_MPI_VERSION < 400300)) ||   \
+      (defined(BRAHMA_MPI_IMPL_OPENMPI) &&                                 \
+       (BRAHMA_MPI_VERSION >= 400106 && BRAHMA_MPI_VERSION < 400200)))) && \
+    !(defined(BRAHMA_MPI_IMPL_OPENMPI) &&                                  \
+      (BRAHMA_MPI_VERSION >= 400106 && BRAHMA_MPI_VERSION < 400200))
 int brahma::MPIDFTracer::MPI_Group_range_excl(int group, int n, int ranges[][3],
                                               int* newgroup) {
   BRAHMA_MAP_OR_FAIL(MPI_Group_range_excl);
@@ -5263,13 +5257,15 @@ int brahma::MPIDFTracer::MPI_Group_range_excl(int group, int n, int ranges[][3],
   return ret;
 }
 #endif
-#if ((defined(BRAHMA_MPI_IMPL_CRAYMPICH) &&                               \
-      ((BRAHMA_MPI_VERSION >= 800108 && BRAHMA_MPI_VERSION < 800200) ||   \
-       (BRAHMA_MPI_VERSION >= 900001 && BRAHMA_MPI_VERSION < 900100))) || \
-     (defined(BRAHMA_MPI_IMPL_MPICH) &&                                   \
-      (BRAHMA_MPI_VERSION >= 300403 && BRAHMA_MPI_VERSION < 300500)) ||   \
-     (defined(BRAHMA_MPI_IMPL_OPENMPI) &&                                 \
-      (BRAHMA_MPI_VERSION >= 500006 && BRAHMA_MPI_VERSION < 500100)))
+#if (((defined(BRAHMA_MPI_IMPL_CRAYMPICH) &&                               \
+       ((BRAHMA_MPI_VERSION >= 800108 && BRAHMA_MPI_VERSION < 800200) ||   \
+        (BRAHMA_MPI_VERSION >= 900001 && BRAHMA_MPI_VERSION < 900100))) || \
+      (defined(BRAHMA_MPI_IMPL_MPICH) &&                                   \
+       (BRAHMA_MPI_VERSION >= 300403 && BRAHMA_MPI_VERSION < 300500)) ||   \
+      (defined(BRAHMA_MPI_IMPL_OPENMPI) &&                                 \
+       (BRAHMA_MPI_VERSION >= 500006 && BRAHMA_MPI_VERSION < 500100)))) || \
+    (defined(BRAHMA_MPI_IMPL_OPENMPI) &&                                   \
+     (BRAHMA_MPI_VERSION >= 400106 && BRAHMA_MPI_VERSION < 400200))
 int brahma::MPIDFTracer::MPI_Group_range_incl(MPI_Group group, int n,
                                               int ranges[][3],
                                               MPI_Group* newgroup) {
@@ -5283,12 +5279,14 @@ int brahma::MPIDFTracer::MPI_Group_range_incl(MPI_Group group, int n,
   return ret;
 }
 #endif
-#if ((defined(BRAHMA_MPI_IMPL_CRAYMPICH) &&                             \
-      (BRAHMA_MPI_VERSION >= 900100 && BRAHMA_MPI_VERSION < 900200)) || \
-     (defined(BRAHMA_MPI_IMPL_MPICH) &&                                 \
-      (BRAHMA_MPI_VERSION >= 400203 && BRAHMA_MPI_VERSION < 400300)) || \
-     (defined(BRAHMA_MPI_IMPL_OPENMPI) &&                               \
-      (BRAHMA_MPI_VERSION >= 400106 && BRAHMA_MPI_VERSION < 400200)))
+#if (((defined(BRAHMA_MPI_IMPL_CRAYMPICH) &&                               \
+       (BRAHMA_MPI_VERSION >= 900100 && BRAHMA_MPI_VERSION < 900200)) ||   \
+      (defined(BRAHMA_MPI_IMPL_MPICH) &&                                   \
+       (BRAHMA_MPI_VERSION >= 400203 && BRAHMA_MPI_VERSION < 400300)) ||   \
+      (defined(BRAHMA_MPI_IMPL_OPENMPI) &&                                 \
+       (BRAHMA_MPI_VERSION >= 400106 && BRAHMA_MPI_VERSION < 400200)))) && \
+    !(defined(BRAHMA_MPI_IMPL_OPENMPI) &&                                  \
+      (BRAHMA_MPI_VERSION >= 400106 && BRAHMA_MPI_VERSION < 400200))
 int brahma::MPIDFTracer::MPI_Group_range_incl(int group, int n, int ranges[][3],
                                               int* newgroup) {
   BRAHMA_MAP_OR_FAIL(MPI_Group_range_incl);
@@ -5301,13 +5299,15 @@ int brahma::MPIDFTracer::MPI_Group_range_incl(int group, int n, int ranges[][3],
   return ret;
 }
 #endif
-#if ((defined(BRAHMA_MPI_IMPL_CRAYMPICH) &&                               \
-      ((BRAHMA_MPI_VERSION >= 800108 && BRAHMA_MPI_VERSION < 800200) ||   \
-       (BRAHMA_MPI_VERSION >= 900001 && BRAHMA_MPI_VERSION < 900100))) || \
-     (defined(BRAHMA_MPI_IMPL_MPICH) &&                                   \
-      (BRAHMA_MPI_VERSION >= 300403 && BRAHMA_MPI_VERSION < 300500)) ||   \
-     (defined(BRAHMA_MPI_IMPL_OPENMPI) &&                                 \
-      (BRAHMA_MPI_VERSION >= 500006 && BRAHMA_MPI_VERSION < 500100)))
+#if (((defined(BRAHMA_MPI_IMPL_CRAYMPICH) &&                               \
+       ((BRAHMA_MPI_VERSION >= 800108 && BRAHMA_MPI_VERSION < 800200) ||   \
+        (BRAHMA_MPI_VERSION >= 900001 && BRAHMA_MPI_VERSION < 900100))) || \
+      (defined(BRAHMA_MPI_IMPL_MPICH) &&                                   \
+       (BRAHMA_MPI_VERSION >= 300403 && BRAHMA_MPI_VERSION < 300500)) ||   \
+      (defined(BRAHMA_MPI_IMPL_OPENMPI) &&                                 \
+       (BRAHMA_MPI_VERSION >= 500006 && BRAHMA_MPI_VERSION < 500100)))) || \
+    (defined(BRAHMA_MPI_IMPL_OPENMPI) &&                                   \
+     (BRAHMA_MPI_VERSION >= 400106 && BRAHMA_MPI_VERSION < 400200))
 int brahma::MPIDFTracer::MPI_Group_rank(MPI_Group group, int* rank) {
   BRAHMA_MAP_OR_FAIL(MPI_Group_rank);
   DFT_LOGGER_START_ALWAYS();
@@ -5318,12 +5318,14 @@ int brahma::MPIDFTracer::MPI_Group_rank(MPI_Group group, int* rank) {
   return ret;
 }
 #endif
-#if ((defined(BRAHMA_MPI_IMPL_CRAYMPICH) &&                             \
-      (BRAHMA_MPI_VERSION >= 900100 && BRAHMA_MPI_VERSION < 900200)) || \
-     (defined(BRAHMA_MPI_IMPL_MPICH) &&                                 \
-      (BRAHMA_MPI_VERSION >= 400203 && BRAHMA_MPI_VERSION < 400300)) || \
-     (defined(BRAHMA_MPI_IMPL_OPENMPI) &&                               \
-      (BRAHMA_MPI_VERSION >= 400106 && BRAHMA_MPI_VERSION < 400200)))
+#if (((defined(BRAHMA_MPI_IMPL_CRAYMPICH) &&                               \
+       (BRAHMA_MPI_VERSION >= 900100 && BRAHMA_MPI_VERSION < 900200)) ||   \
+      (defined(BRAHMA_MPI_IMPL_MPICH) &&                                   \
+       (BRAHMA_MPI_VERSION >= 400203 && BRAHMA_MPI_VERSION < 400300)) ||   \
+      (defined(BRAHMA_MPI_IMPL_OPENMPI) &&                                 \
+       (BRAHMA_MPI_VERSION >= 400106 && BRAHMA_MPI_VERSION < 400200)))) && \
+    !(defined(BRAHMA_MPI_IMPL_OPENMPI) &&                                  \
+      (BRAHMA_MPI_VERSION >= 400106 && BRAHMA_MPI_VERSION < 400200))
 int brahma::MPIDFTracer::MPI_Group_rank(int group, int* rank) {
   BRAHMA_MAP_OR_FAIL(MPI_Group_rank);
   DFT_LOGGER_START_ALWAYS();
@@ -5334,13 +5336,15 @@ int brahma::MPIDFTracer::MPI_Group_rank(int group, int* rank) {
   return ret;
 }
 #endif
-#if ((defined(BRAHMA_MPI_IMPL_CRAYMPICH) &&                               \
-      ((BRAHMA_MPI_VERSION >= 800108 && BRAHMA_MPI_VERSION < 800200) ||   \
-       (BRAHMA_MPI_VERSION >= 900001 && BRAHMA_MPI_VERSION < 900100))) || \
-     (defined(BRAHMA_MPI_IMPL_MPICH) &&                                   \
-      (BRAHMA_MPI_VERSION >= 300403 && BRAHMA_MPI_VERSION < 300500)) ||   \
-     (defined(BRAHMA_MPI_IMPL_OPENMPI) &&                                 \
-      (BRAHMA_MPI_VERSION >= 500006 && BRAHMA_MPI_VERSION < 500100)))
+#if (((defined(BRAHMA_MPI_IMPL_CRAYMPICH) &&                               \
+       ((BRAHMA_MPI_VERSION >= 800108 && BRAHMA_MPI_VERSION < 800200) ||   \
+        (BRAHMA_MPI_VERSION >= 900001 && BRAHMA_MPI_VERSION < 900100))) || \
+      (defined(BRAHMA_MPI_IMPL_MPICH) &&                                   \
+       (BRAHMA_MPI_VERSION >= 300403 && BRAHMA_MPI_VERSION < 300500)) ||   \
+      (defined(BRAHMA_MPI_IMPL_OPENMPI) &&                                 \
+       (BRAHMA_MPI_VERSION >= 500006 && BRAHMA_MPI_VERSION < 500100)))) || \
+    (defined(BRAHMA_MPI_IMPL_OPENMPI) &&                                   \
+     (BRAHMA_MPI_VERSION >= 400106 && BRAHMA_MPI_VERSION < 400200))
 int brahma::MPIDFTracer::MPI_Group_size(MPI_Group group, int* size) {
   BRAHMA_MAP_OR_FAIL(MPI_Group_size);
   DFT_LOGGER_START_ALWAYS();
@@ -5351,12 +5355,14 @@ int brahma::MPIDFTracer::MPI_Group_size(MPI_Group group, int* size) {
   return ret;
 }
 #endif
-#if ((defined(BRAHMA_MPI_IMPL_CRAYMPICH) &&                             \
-      (BRAHMA_MPI_VERSION >= 900100 && BRAHMA_MPI_VERSION < 900200)) || \
-     (defined(BRAHMA_MPI_IMPL_MPICH) &&                                 \
-      (BRAHMA_MPI_VERSION >= 400203 && BRAHMA_MPI_VERSION < 400300)) || \
-     (defined(BRAHMA_MPI_IMPL_OPENMPI) &&                               \
-      (BRAHMA_MPI_VERSION >= 400106 && BRAHMA_MPI_VERSION < 400200)))
+#if (((defined(BRAHMA_MPI_IMPL_CRAYMPICH) &&                               \
+       (BRAHMA_MPI_VERSION >= 900100 && BRAHMA_MPI_VERSION < 900200)) ||   \
+      (defined(BRAHMA_MPI_IMPL_MPICH) &&                                   \
+       (BRAHMA_MPI_VERSION >= 400203 && BRAHMA_MPI_VERSION < 400300)) ||   \
+      (defined(BRAHMA_MPI_IMPL_OPENMPI) &&                                 \
+       (BRAHMA_MPI_VERSION >= 400106 && BRAHMA_MPI_VERSION < 400200)))) && \
+    !(defined(BRAHMA_MPI_IMPL_OPENMPI) &&                                  \
+      (BRAHMA_MPI_VERSION >= 400106 && BRAHMA_MPI_VERSION < 400200))
 int brahma::MPIDFTracer::MPI_Group_size(int group, int* size) {
   BRAHMA_MAP_OR_FAIL(MPI_Group_size);
   DFT_LOGGER_START_ALWAYS();
@@ -5367,13 +5373,15 @@ int brahma::MPIDFTracer::MPI_Group_size(int group, int* size) {
   return ret;
 }
 #endif
-#if ((defined(BRAHMA_MPI_IMPL_CRAYMPICH) &&                               \
-      ((BRAHMA_MPI_VERSION >= 800108 && BRAHMA_MPI_VERSION < 800200) ||   \
-       (BRAHMA_MPI_VERSION >= 900001 && BRAHMA_MPI_VERSION < 900100))) || \
-     (defined(BRAHMA_MPI_IMPL_MPICH) &&                                   \
-      (BRAHMA_MPI_VERSION >= 300403 && BRAHMA_MPI_VERSION < 300500)) ||   \
-     (defined(BRAHMA_MPI_IMPL_OPENMPI) &&                                 \
-      (BRAHMA_MPI_VERSION >= 500006 && BRAHMA_MPI_VERSION < 500100)))
+#if (((defined(BRAHMA_MPI_IMPL_CRAYMPICH) &&                               \
+       ((BRAHMA_MPI_VERSION >= 800108 && BRAHMA_MPI_VERSION < 800200) ||   \
+        (BRAHMA_MPI_VERSION >= 900001 && BRAHMA_MPI_VERSION < 900100))) || \
+      (defined(BRAHMA_MPI_IMPL_MPICH) &&                                   \
+       (BRAHMA_MPI_VERSION >= 300403 && BRAHMA_MPI_VERSION < 300500)) ||   \
+      (defined(BRAHMA_MPI_IMPL_OPENMPI) &&                                 \
+       (BRAHMA_MPI_VERSION >= 500006 && BRAHMA_MPI_VERSION < 500100)))) || \
+    (defined(BRAHMA_MPI_IMPL_OPENMPI) &&                                   \
+     (BRAHMA_MPI_VERSION >= 400106 && BRAHMA_MPI_VERSION < 400200))
 int brahma::MPIDFTracer::MPI_Group_translate_ranks(MPI_Group group1, int n,
                                                    const int ranks1[],
                                                    MPI_Group group2,
@@ -5389,12 +5397,14 @@ int brahma::MPIDFTracer::MPI_Group_translate_ranks(MPI_Group group1, int n,
   return ret;
 }
 #endif
-#if ((defined(BRAHMA_MPI_IMPL_CRAYMPICH) &&                             \
-      (BRAHMA_MPI_VERSION >= 900100 && BRAHMA_MPI_VERSION < 900200)) || \
-     (defined(BRAHMA_MPI_IMPL_MPICH) &&                                 \
-      (BRAHMA_MPI_VERSION >= 400203 && BRAHMA_MPI_VERSION < 400300)) || \
-     (defined(BRAHMA_MPI_IMPL_OPENMPI) &&                               \
-      (BRAHMA_MPI_VERSION >= 400106 && BRAHMA_MPI_VERSION < 400200)))
+#if (((defined(BRAHMA_MPI_IMPL_CRAYMPICH) &&                               \
+       (BRAHMA_MPI_VERSION >= 900100 && BRAHMA_MPI_VERSION < 900200)) ||   \
+      (defined(BRAHMA_MPI_IMPL_MPICH) &&                                   \
+       (BRAHMA_MPI_VERSION >= 400203 && BRAHMA_MPI_VERSION < 400300)) ||   \
+      (defined(BRAHMA_MPI_IMPL_OPENMPI) &&                                 \
+       (BRAHMA_MPI_VERSION >= 400106 && BRAHMA_MPI_VERSION < 400200)))) && \
+    !(defined(BRAHMA_MPI_IMPL_OPENMPI) &&                                  \
+      (BRAHMA_MPI_VERSION >= 400106 && BRAHMA_MPI_VERSION < 400200))
 int brahma::MPIDFTracer::MPI_Group_translate_ranks(int group1, int n,
                                                    const int ranks1[],
                                                    int group2, int ranks2[]) {
@@ -5409,13 +5419,15 @@ int brahma::MPIDFTracer::MPI_Group_translate_ranks(int group1, int n,
   return ret;
 }
 #endif
-#if ((defined(BRAHMA_MPI_IMPL_CRAYMPICH) &&                               \
-      ((BRAHMA_MPI_VERSION >= 800108 && BRAHMA_MPI_VERSION < 800200) ||   \
-       (BRAHMA_MPI_VERSION >= 900001 && BRAHMA_MPI_VERSION < 900100))) || \
-     (defined(BRAHMA_MPI_IMPL_MPICH) &&                                   \
-      (BRAHMA_MPI_VERSION >= 300403 && BRAHMA_MPI_VERSION < 300500)) ||   \
-     (defined(BRAHMA_MPI_IMPL_OPENMPI) &&                                 \
-      (BRAHMA_MPI_VERSION >= 500006 && BRAHMA_MPI_VERSION < 500100)))
+#if (((defined(BRAHMA_MPI_IMPL_CRAYMPICH) &&                               \
+       ((BRAHMA_MPI_VERSION >= 800108 && BRAHMA_MPI_VERSION < 800200) ||   \
+        (BRAHMA_MPI_VERSION >= 900001 && BRAHMA_MPI_VERSION < 900100))) || \
+      (defined(BRAHMA_MPI_IMPL_MPICH) &&                                   \
+       (BRAHMA_MPI_VERSION >= 300403 && BRAHMA_MPI_VERSION < 300500)) ||   \
+      (defined(BRAHMA_MPI_IMPL_OPENMPI) &&                                 \
+       (BRAHMA_MPI_VERSION >= 500006 && BRAHMA_MPI_VERSION < 500100)))) || \
+    (defined(BRAHMA_MPI_IMPL_OPENMPI) &&                                   \
+     (BRAHMA_MPI_VERSION >= 400106 && BRAHMA_MPI_VERSION < 400200))
 int brahma::MPIDFTracer::MPI_Group_union(MPI_Group group1, MPI_Group group2,
                                          MPI_Group* newgroup) {
   BRAHMA_MAP_OR_FAIL(MPI_Group_union);
@@ -5428,12 +5440,14 @@ int brahma::MPIDFTracer::MPI_Group_union(MPI_Group group1, MPI_Group group2,
   return ret;
 }
 #endif
-#if ((defined(BRAHMA_MPI_IMPL_CRAYMPICH) &&                             \
-      (BRAHMA_MPI_VERSION >= 900100 && BRAHMA_MPI_VERSION < 900200)) || \
-     (defined(BRAHMA_MPI_IMPL_MPICH) &&                                 \
-      (BRAHMA_MPI_VERSION >= 400203 && BRAHMA_MPI_VERSION < 400300)) || \
-     (defined(BRAHMA_MPI_IMPL_OPENMPI) &&                               \
-      (BRAHMA_MPI_VERSION >= 400106 && BRAHMA_MPI_VERSION < 400200)))
+#if (((defined(BRAHMA_MPI_IMPL_CRAYMPICH) &&                               \
+       (BRAHMA_MPI_VERSION >= 900100 && BRAHMA_MPI_VERSION < 900200)) ||   \
+      (defined(BRAHMA_MPI_IMPL_MPICH) &&                                   \
+       (BRAHMA_MPI_VERSION >= 400203 && BRAHMA_MPI_VERSION < 400300)) ||   \
+      (defined(BRAHMA_MPI_IMPL_OPENMPI) &&                                 \
+       (BRAHMA_MPI_VERSION >= 400106 && BRAHMA_MPI_VERSION < 400200)))) && \
+    !(defined(BRAHMA_MPI_IMPL_OPENMPI) &&                                  \
+      (BRAHMA_MPI_VERSION >= 400106 && BRAHMA_MPI_VERSION < 400200))
 int brahma::MPIDFTracer::MPI_Group_union(int group1, int group2,
                                          int* newgroup) {
   BRAHMA_MAP_OR_FAIL(MPI_Group_union);
@@ -5933,13 +5947,15 @@ int brahma::MPIDFTracer::MPI_Ibcast_c(void* buffer, MPI_Count count,
   return ret;
 }
 #endif
-#if ((defined(BRAHMA_MPI_IMPL_CRAYMPICH) &&                               \
-      ((BRAHMA_MPI_VERSION >= 800108 && BRAHMA_MPI_VERSION < 800200) ||   \
-       (BRAHMA_MPI_VERSION >= 900001 && BRAHMA_MPI_VERSION < 900100))) || \
-     (defined(BRAHMA_MPI_IMPL_MPICH) &&                                   \
-      (BRAHMA_MPI_VERSION >= 300403 && BRAHMA_MPI_VERSION < 300500)) ||   \
-     (defined(BRAHMA_MPI_IMPL_OPENMPI) &&                                 \
-      (BRAHMA_MPI_VERSION >= 500006 && BRAHMA_MPI_VERSION < 500100)))
+#if (((defined(BRAHMA_MPI_IMPL_CRAYMPICH) &&                               \
+       ((BRAHMA_MPI_VERSION >= 800108 && BRAHMA_MPI_VERSION < 800200) ||   \
+        (BRAHMA_MPI_VERSION >= 900001 && BRAHMA_MPI_VERSION < 900100))) || \
+      (defined(BRAHMA_MPI_IMPL_MPICH) &&                                   \
+       (BRAHMA_MPI_VERSION >= 300403 && BRAHMA_MPI_VERSION < 300500)) ||   \
+      (defined(BRAHMA_MPI_IMPL_OPENMPI) &&                                 \
+       (BRAHMA_MPI_VERSION >= 500006 && BRAHMA_MPI_VERSION < 500100)))) || \
+    (defined(BRAHMA_MPI_IMPL_OPENMPI) &&                                   \
+     (BRAHMA_MPI_VERSION >= 400106 && BRAHMA_MPI_VERSION < 400200))
 int brahma::MPIDFTracer::MPI_Ibsend(const void* buf, int count,
                                     MPI_Datatype datatype, int dest, int tag,
                                     MPI_Comm comm, MPI_Request* request) {
@@ -5956,12 +5972,14 @@ int brahma::MPIDFTracer::MPI_Ibsend(const void* buf, int count,
   return ret;
 }
 #endif
-#if ((defined(BRAHMA_MPI_IMPL_CRAYMPICH) &&                             \
-      (BRAHMA_MPI_VERSION >= 900100 && BRAHMA_MPI_VERSION < 900200)) || \
-     (defined(BRAHMA_MPI_IMPL_MPICH) &&                                 \
-      (BRAHMA_MPI_VERSION >= 400203 && BRAHMA_MPI_VERSION < 400300)) || \
-     (defined(BRAHMA_MPI_IMPL_OPENMPI) &&                               \
-      (BRAHMA_MPI_VERSION >= 400106 && BRAHMA_MPI_VERSION < 400200)))
+#if (((defined(BRAHMA_MPI_IMPL_CRAYMPICH) &&                               \
+       (BRAHMA_MPI_VERSION >= 900100 && BRAHMA_MPI_VERSION < 900200)) ||   \
+      (defined(BRAHMA_MPI_IMPL_MPICH) &&                                   \
+       (BRAHMA_MPI_VERSION >= 400203 && BRAHMA_MPI_VERSION < 400300)) ||   \
+      (defined(BRAHMA_MPI_IMPL_OPENMPI) &&                                 \
+       (BRAHMA_MPI_VERSION >= 400106 && BRAHMA_MPI_VERSION < 400200)))) && \
+    !(defined(BRAHMA_MPI_IMPL_OPENMPI) &&                                  \
+      (BRAHMA_MPI_VERSION >= 400106 && BRAHMA_MPI_VERSION < 400200))
 int brahma::MPIDFTracer::MPI_Ibsend(const void* buf, int count,
                                     MPI_Datatype datatype, int dest, int tag,
                                     int comm, MPI_Request* request) {
@@ -6016,13 +6034,15 @@ int brahma::MPIDFTracer::MPI_Ibsend_c(const void* buf, MPI_Count count,
   return ret;
 }
 #endif
-#if ((defined(BRAHMA_MPI_IMPL_CRAYMPICH) &&                               \
-      ((BRAHMA_MPI_VERSION >= 800108 && BRAHMA_MPI_VERSION < 800200) ||   \
-       (BRAHMA_MPI_VERSION >= 900001 && BRAHMA_MPI_VERSION < 900100))) || \
-     (defined(BRAHMA_MPI_IMPL_MPICH) &&                                   \
-      (BRAHMA_MPI_VERSION >= 300403 && BRAHMA_MPI_VERSION < 300500)) ||   \
-     (defined(BRAHMA_MPI_IMPL_OPENMPI) &&                                 \
-      (BRAHMA_MPI_VERSION >= 500006 && BRAHMA_MPI_VERSION < 500100)))
+#if (((defined(BRAHMA_MPI_IMPL_CRAYMPICH) &&                               \
+       ((BRAHMA_MPI_VERSION >= 800108 && BRAHMA_MPI_VERSION < 800200) ||   \
+        (BRAHMA_MPI_VERSION >= 900001 && BRAHMA_MPI_VERSION < 900100))) || \
+      (defined(BRAHMA_MPI_IMPL_MPICH) &&                                   \
+       (BRAHMA_MPI_VERSION >= 300403 && BRAHMA_MPI_VERSION < 300500)) ||   \
+      (defined(BRAHMA_MPI_IMPL_OPENMPI) &&                                 \
+       (BRAHMA_MPI_VERSION >= 500006 && BRAHMA_MPI_VERSION < 500100)))) || \
+    (defined(BRAHMA_MPI_IMPL_OPENMPI) &&                                   \
+     (BRAHMA_MPI_VERSION >= 400106 && BRAHMA_MPI_VERSION < 400200))
 int brahma::MPIDFTracer::MPI_Iexscan(const void* sendbuf, void* recvbuf,
                                      int count, MPI_Datatype datatype,
                                      MPI_Op op, MPI_Comm comm,
@@ -6040,12 +6060,14 @@ int brahma::MPIDFTracer::MPI_Iexscan(const void* sendbuf, void* recvbuf,
   return ret;
 }
 #endif
-#if ((defined(BRAHMA_MPI_IMPL_CRAYMPICH) &&                             \
-      (BRAHMA_MPI_VERSION >= 900100 && BRAHMA_MPI_VERSION < 900200)) || \
-     (defined(BRAHMA_MPI_IMPL_MPICH) &&                                 \
-      (BRAHMA_MPI_VERSION >= 400203 && BRAHMA_MPI_VERSION < 400300)) || \
-     (defined(BRAHMA_MPI_IMPL_OPENMPI) &&                               \
-      (BRAHMA_MPI_VERSION >= 400106 && BRAHMA_MPI_VERSION < 400200)))
+#if (((defined(BRAHMA_MPI_IMPL_CRAYMPICH) &&                               \
+       (BRAHMA_MPI_VERSION >= 900100 && BRAHMA_MPI_VERSION < 900200)) ||   \
+      (defined(BRAHMA_MPI_IMPL_MPICH) &&                                   \
+       (BRAHMA_MPI_VERSION >= 400203 && BRAHMA_MPI_VERSION < 400300)) ||   \
+      (defined(BRAHMA_MPI_IMPL_OPENMPI) &&                                 \
+       (BRAHMA_MPI_VERSION >= 400106 && BRAHMA_MPI_VERSION < 400200)))) && \
+    !(defined(BRAHMA_MPI_IMPL_OPENMPI) &&                                  \
+      (BRAHMA_MPI_VERSION >= 400106 && BRAHMA_MPI_VERSION < 400200))
 int brahma::MPIDFTracer::MPI_Iexscan(const void* sendbuf, void* recvbuf,
                                      int count, MPI_Datatype datatype,
                                      MPI_Op op, int comm,
@@ -6102,13 +6124,15 @@ int brahma::MPIDFTracer::MPI_Iexscan_c(const void* sendbuf, void* recvbuf,
   return ret;
 }
 #endif
-#if ((defined(BRAHMA_MPI_IMPL_CRAYMPICH) &&                               \
-      ((BRAHMA_MPI_VERSION >= 800108 && BRAHMA_MPI_VERSION < 800200) ||   \
-       (BRAHMA_MPI_VERSION >= 900001 && BRAHMA_MPI_VERSION < 900100))) || \
-     (defined(BRAHMA_MPI_IMPL_MPICH) &&                                   \
-      (BRAHMA_MPI_VERSION >= 300403 && BRAHMA_MPI_VERSION < 300500)) ||   \
-     (defined(BRAHMA_MPI_IMPL_OPENMPI) &&                                 \
-      (BRAHMA_MPI_VERSION >= 500006 && BRAHMA_MPI_VERSION < 500100)))
+#if (((defined(BRAHMA_MPI_IMPL_CRAYMPICH) &&                               \
+       ((BRAHMA_MPI_VERSION >= 800108 && BRAHMA_MPI_VERSION < 800200) ||   \
+        (BRAHMA_MPI_VERSION >= 900001 && BRAHMA_MPI_VERSION < 900100))) || \
+      (defined(BRAHMA_MPI_IMPL_MPICH) &&                                   \
+       (BRAHMA_MPI_VERSION >= 300403 && BRAHMA_MPI_VERSION < 300500)) ||   \
+      (defined(BRAHMA_MPI_IMPL_OPENMPI) &&                                 \
+       (BRAHMA_MPI_VERSION >= 500006 && BRAHMA_MPI_VERSION < 500100)))) || \
+    (defined(BRAHMA_MPI_IMPL_OPENMPI) &&                                   \
+     (BRAHMA_MPI_VERSION >= 400106 && BRAHMA_MPI_VERSION < 400200))
 int brahma::MPIDFTracer::MPI_Igather(const void* sendbuf, int sendcount,
                                      MPI_Datatype sendtype, void* recvbuf,
                                      int recvcount, MPI_Datatype recvtype,
@@ -6129,12 +6153,14 @@ int brahma::MPIDFTracer::MPI_Igather(const void* sendbuf, int sendcount,
   return ret;
 }
 #endif
-#if ((defined(BRAHMA_MPI_IMPL_CRAYMPICH) &&                             \
-      (BRAHMA_MPI_VERSION >= 900100 && BRAHMA_MPI_VERSION < 900200)) || \
-     (defined(BRAHMA_MPI_IMPL_MPICH) &&                                 \
-      (BRAHMA_MPI_VERSION >= 400203 && BRAHMA_MPI_VERSION < 400300)) || \
-     (defined(BRAHMA_MPI_IMPL_OPENMPI) &&                               \
-      (BRAHMA_MPI_VERSION >= 400106 && BRAHMA_MPI_VERSION < 400200)))
+#if (((defined(BRAHMA_MPI_IMPL_CRAYMPICH) &&                               \
+       (BRAHMA_MPI_VERSION >= 900100 && BRAHMA_MPI_VERSION < 900200)) ||   \
+      (defined(BRAHMA_MPI_IMPL_MPICH) &&                                   \
+       (BRAHMA_MPI_VERSION >= 400203 && BRAHMA_MPI_VERSION < 400300)) ||   \
+      (defined(BRAHMA_MPI_IMPL_OPENMPI) &&                                 \
+       (BRAHMA_MPI_VERSION >= 400106 && BRAHMA_MPI_VERSION < 400200)))) && \
+    !(defined(BRAHMA_MPI_IMPL_OPENMPI) &&                                  \
+      (BRAHMA_MPI_VERSION >= 400106 && BRAHMA_MPI_VERSION < 400200))
 int brahma::MPIDFTracer::MPI_Igather(const void* sendbuf, int sendcount,
                                      MPI_Datatype sendtype, void* recvbuf,
                                      int recvcount, MPI_Datatype recvtype,
@@ -6199,13 +6225,15 @@ int brahma::MPIDFTracer::MPI_Igather_c(const void* sendbuf, MPI_Count sendcount,
   return ret;
 }
 #endif
-#if ((defined(BRAHMA_MPI_IMPL_CRAYMPICH) &&                               \
-      ((BRAHMA_MPI_VERSION >= 800108 && BRAHMA_MPI_VERSION < 800200) ||   \
-       (BRAHMA_MPI_VERSION >= 900001 && BRAHMA_MPI_VERSION < 900100))) || \
-     (defined(BRAHMA_MPI_IMPL_MPICH) &&                                   \
-      (BRAHMA_MPI_VERSION >= 300403 && BRAHMA_MPI_VERSION < 300500)) ||   \
-     (defined(BRAHMA_MPI_IMPL_OPENMPI) &&                                 \
-      (BRAHMA_MPI_VERSION >= 500006 && BRAHMA_MPI_VERSION < 500100)))
+#if (((defined(BRAHMA_MPI_IMPL_CRAYMPICH) &&                               \
+       ((BRAHMA_MPI_VERSION >= 800108 && BRAHMA_MPI_VERSION < 800200) ||   \
+        (BRAHMA_MPI_VERSION >= 900001 && BRAHMA_MPI_VERSION < 900100))) || \
+      (defined(BRAHMA_MPI_IMPL_MPICH) &&                                   \
+       (BRAHMA_MPI_VERSION >= 300403 && BRAHMA_MPI_VERSION < 300500)) ||   \
+      (defined(BRAHMA_MPI_IMPL_OPENMPI) &&                                 \
+       (BRAHMA_MPI_VERSION >= 500006 && BRAHMA_MPI_VERSION < 500100)))) || \
+    (defined(BRAHMA_MPI_IMPL_OPENMPI) &&                                   \
+     (BRAHMA_MPI_VERSION >= 400106 && BRAHMA_MPI_VERSION < 400200))
 int brahma::MPIDFTracer::MPI_Igatherv(const void* sendbuf, int sendcount,
                                       MPI_Datatype sendtype, void* recvbuf,
                                       const int recvcounts[],
@@ -6227,12 +6255,14 @@ int brahma::MPIDFTracer::MPI_Igatherv(const void* sendbuf, int sendcount,
   return ret;
 }
 #endif
-#if ((defined(BRAHMA_MPI_IMPL_CRAYMPICH) &&                             \
-      (BRAHMA_MPI_VERSION >= 900100 && BRAHMA_MPI_VERSION < 900200)) || \
-     (defined(BRAHMA_MPI_IMPL_MPICH) &&                                 \
-      (BRAHMA_MPI_VERSION >= 400203 && BRAHMA_MPI_VERSION < 400300)) || \
-     (defined(BRAHMA_MPI_IMPL_OPENMPI) &&                               \
-      (BRAHMA_MPI_VERSION >= 400106 && BRAHMA_MPI_VERSION < 400200)))
+#if (((defined(BRAHMA_MPI_IMPL_CRAYMPICH) &&                               \
+       (BRAHMA_MPI_VERSION >= 900100 && BRAHMA_MPI_VERSION < 900200)) ||   \
+      (defined(BRAHMA_MPI_IMPL_MPICH) &&                                   \
+       (BRAHMA_MPI_VERSION >= 400203 && BRAHMA_MPI_VERSION < 400300)) ||   \
+      (defined(BRAHMA_MPI_IMPL_OPENMPI) &&                                 \
+       (BRAHMA_MPI_VERSION >= 400106 && BRAHMA_MPI_VERSION < 400200)))) && \
+    !(defined(BRAHMA_MPI_IMPL_OPENMPI) &&                                  \
+      (BRAHMA_MPI_VERSION >= 400106 && BRAHMA_MPI_VERSION < 400200))
 int brahma::MPIDFTracer::MPI_Igatherv(const void* sendbuf, int sendcount,
                                       MPI_Datatype sendtype, void* recvbuf,
                                       const int recvcounts[],
@@ -6300,13 +6330,15 @@ int brahma::MPIDFTracer::MPI_Igatherv_c(const void* sendbuf,
   return ret;
 }
 #endif
-#if ((defined(BRAHMA_MPI_IMPL_CRAYMPICH) &&                               \
-      ((BRAHMA_MPI_VERSION >= 800108 && BRAHMA_MPI_VERSION < 800200) ||   \
-       (BRAHMA_MPI_VERSION >= 900001 && BRAHMA_MPI_VERSION < 900100))) || \
-     (defined(BRAHMA_MPI_IMPL_MPICH) &&                                   \
-      (BRAHMA_MPI_VERSION >= 300403 && BRAHMA_MPI_VERSION < 300500)) ||   \
-     (defined(BRAHMA_MPI_IMPL_OPENMPI) &&                                 \
-      (BRAHMA_MPI_VERSION >= 500006 && BRAHMA_MPI_VERSION < 500100)))
+#if (((defined(BRAHMA_MPI_IMPL_CRAYMPICH) &&                               \
+       ((BRAHMA_MPI_VERSION >= 800108 && BRAHMA_MPI_VERSION < 800200) ||   \
+        (BRAHMA_MPI_VERSION >= 900001 && BRAHMA_MPI_VERSION < 900100))) || \
+      (defined(BRAHMA_MPI_IMPL_MPICH) &&                                   \
+       (BRAHMA_MPI_VERSION >= 300403 && BRAHMA_MPI_VERSION < 300500)) ||   \
+      (defined(BRAHMA_MPI_IMPL_OPENMPI) &&                                 \
+       (BRAHMA_MPI_VERSION >= 500006 && BRAHMA_MPI_VERSION < 500100)))) || \
+    (defined(BRAHMA_MPI_IMPL_OPENMPI) &&                                   \
+     (BRAHMA_MPI_VERSION >= 400106 && BRAHMA_MPI_VERSION < 400200))
 int brahma::MPIDFTracer::MPI_Improbe(int source, int tag, MPI_Comm comm,
                                      int* flag, MPI_Message* message,
                                      MPI_Status* status) {
@@ -6321,12 +6353,14 @@ int brahma::MPIDFTracer::MPI_Improbe(int source, int tag, MPI_Comm comm,
   return ret;
 }
 #endif
-#if ((defined(BRAHMA_MPI_IMPL_CRAYMPICH) &&                             \
-      (BRAHMA_MPI_VERSION >= 900100 && BRAHMA_MPI_VERSION < 900200)) || \
-     (defined(BRAHMA_MPI_IMPL_MPICH) &&                                 \
-      (BRAHMA_MPI_VERSION >= 400203 && BRAHMA_MPI_VERSION < 400300)) || \
-     (defined(BRAHMA_MPI_IMPL_OPENMPI) &&                               \
-      (BRAHMA_MPI_VERSION >= 400106 && BRAHMA_MPI_VERSION < 400200)))
+#if (((defined(BRAHMA_MPI_IMPL_CRAYMPICH) &&                               \
+       (BRAHMA_MPI_VERSION >= 900100 && BRAHMA_MPI_VERSION < 900200)) ||   \
+      (defined(BRAHMA_MPI_IMPL_MPICH) &&                                   \
+       (BRAHMA_MPI_VERSION >= 400203 && BRAHMA_MPI_VERSION < 400300)) ||   \
+      (defined(BRAHMA_MPI_IMPL_OPENMPI) &&                                 \
+       (BRAHMA_MPI_VERSION >= 400106 && BRAHMA_MPI_VERSION < 400200)))) && \
+    !(defined(BRAHMA_MPI_IMPL_OPENMPI) &&                                  \
+      (BRAHMA_MPI_VERSION >= 400106 && BRAHMA_MPI_VERSION < 400200))
 int brahma::MPIDFTracer::MPI_Improbe(int source, int tag, int comm, int* flag,
                                      MPI_Message* message, MPI_Status* status) {
   BRAHMA_MAP_OR_FAIL(MPI_Improbe);
@@ -6394,13 +6428,15 @@ int brahma::MPIDFTracer::MPI_Imrecv_c(void* buf, MPI_Count count, int datatype,
   return ret;
 }
 #endif
-#if ((defined(BRAHMA_MPI_IMPL_CRAYMPICH) &&                               \
-      ((BRAHMA_MPI_VERSION >= 800108 && BRAHMA_MPI_VERSION < 800200) ||   \
-       (BRAHMA_MPI_VERSION >= 900001 && BRAHMA_MPI_VERSION < 900100))) || \
-     (defined(BRAHMA_MPI_IMPL_MPICH) &&                                   \
-      (BRAHMA_MPI_VERSION >= 300403 && BRAHMA_MPI_VERSION < 300500)) ||   \
-     (defined(BRAHMA_MPI_IMPL_OPENMPI) &&                                 \
-      (BRAHMA_MPI_VERSION >= 500006 && BRAHMA_MPI_VERSION < 500100)))
+#if (((defined(BRAHMA_MPI_IMPL_CRAYMPICH) &&                               \
+       ((BRAHMA_MPI_VERSION >= 800108 && BRAHMA_MPI_VERSION < 800200) ||   \
+        (BRAHMA_MPI_VERSION >= 900001 && BRAHMA_MPI_VERSION < 900100))) || \
+      (defined(BRAHMA_MPI_IMPL_MPICH) &&                                   \
+       (BRAHMA_MPI_VERSION >= 300403 && BRAHMA_MPI_VERSION < 300500)) ||   \
+      (defined(BRAHMA_MPI_IMPL_OPENMPI) &&                                 \
+       (BRAHMA_MPI_VERSION >= 500006 && BRAHMA_MPI_VERSION < 500100)))) || \
+    (defined(BRAHMA_MPI_IMPL_OPENMPI) &&                                   \
+     (BRAHMA_MPI_VERSION >= 400106 && BRAHMA_MPI_VERSION < 400200))
 int brahma::MPIDFTracer::MPI_Ineighbor_allgather(
     const void* sendbuf, int sendcount, MPI_Datatype sendtype, void* recvbuf,
     int recvcount, MPI_Datatype recvtype, MPI_Comm comm, MPI_Request* request) {
@@ -6419,12 +6455,14 @@ int brahma::MPIDFTracer::MPI_Ineighbor_allgather(
   return ret;
 }
 #endif
-#if ((defined(BRAHMA_MPI_IMPL_CRAYMPICH) &&                             \
-      (BRAHMA_MPI_VERSION >= 900100 && BRAHMA_MPI_VERSION < 900200)) || \
-     (defined(BRAHMA_MPI_IMPL_MPICH) &&                                 \
-      (BRAHMA_MPI_VERSION >= 400203 && BRAHMA_MPI_VERSION < 400300)) || \
-     (defined(BRAHMA_MPI_IMPL_OPENMPI) &&                               \
-      (BRAHMA_MPI_VERSION >= 400106 && BRAHMA_MPI_VERSION < 400200)))
+#if (((defined(BRAHMA_MPI_IMPL_CRAYMPICH) &&                               \
+       (BRAHMA_MPI_VERSION >= 900100 && BRAHMA_MPI_VERSION < 900200)) ||   \
+      (defined(BRAHMA_MPI_IMPL_MPICH) &&                                   \
+       (BRAHMA_MPI_VERSION >= 400203 && BRAHMA_MPI_VERSION < 400300)) ||   \
+      (defined(BRAHMA_MPI_IMPL_OPENMPI) &&                                 \
+       (BRAHMA_MPI_VERSION >= 400106 && BRAHMA_MPI_VERSION < 400200)))) && \
+    !(defined(BRAHMA_MPI_IMPL_OPENMPI) &&                                  \
+      (BRAHMA_MPI_VERSION >= 400106 && BRAHMA_MPI_VERSION < 400200))
 int brahma::MPIDFTracer::MPI_Ineighbor_allgather(
     const void* sendbuf, int sendcount, MPI_Datatype sendtype, void* recvbuf,
     int recvcount, MPI_Datatype recvtype, int comm, MPI_Request* request) {
@@ -6486,13 +6524,15 @@ int brahma::MPIDFTracer::MPI_Ineighbor_allgather_c(
   return ret;
 }
 #endif
-#if ((defined(BRAHMA_MPI_IMPL_CRAYMPICH) &&                               \
-      ((BRAHMA_MPI_VERSION >= 800108 && BRAHMA_MPI_VERSION < 800200) ||   \
-       (BRAHMA_MPI_VERSION >= 900001 && BRAHMA_MPI_VERSION < 900100))) || \
-     (defined(BRAHMA_MPI_IMPL_MPICH) &&                                   \
-      (BRAHMA_MPI_VERSION >= 300403 && BRAHMA_MPI_VERSION < 300500)) ||   \
-     (defined(BRAHMA_MPI_IMPL_OPENMPI) &&                                 \
-      (BRAHMA_MPI_VERSION >= 500006 && BRAHMA_MPI_VERSION < 500100)))
+#if (((defined(BRAHMA_MPI_IMPL_CRAYMPICH) &&                               \
+       ((BRAHMA_MPI_VERSION >= 800108 && BRAHMA_MPI_VERSION < 800200) ||   \
+        (BRAHMA_MPI_VERSION >= 900001 && BRAHMA_MPI_VERSION < 900100))) || \
+      (defined(BRAHMA_MPI_IMPL_MPICH) &&                                   \
+       (BRAHMA_MPI_VERSION >= 300403 && BRAHMA_MPI_VERSION < 300500)) ||   \
+      (defined(BRAHMA_MPI_IMPL_OPENMPI) &&                                 \
+       (BRAHMA_MPI_VERSION >= 500006 && BRAHMA_MPI_VERSION < 500100)))) || \
+    (defined(BRAHMA_MPI_IMPL_OPENMPI) &&                                   \
+     (BRAHMA_MPI_VERSION >= 400106 && BRAHMA_MPI_VERSION < 400200))
 int brahma::MPIDFTracer::MPI_Ineighbor_allgatherv(
     const void* sendbuf, int sendcount, MPI_Datatype sendtype, void* recvbuf,
     const int recvcounts[], const int displs[], MPI_Datatype recvtype,
@@ -6511,12 +6551,14 @@ int brahma::MPIDFTracer::MPI_Ineighbor_allgatherv(
   return ret;
 }
 #endif
-#if ((defined(BRAHMA_MPI_IMPL_CRAYMPICH) &&                             \
-      (BRAHMA_MPI_VERSION >= 900100 && BRAHMA_MPI_VERSION < 900200)) || \
-     (defined(BRAHMA_MPI_IMPL_MPICH) &&                                 \
-      (BRAHMA_MPI_VERSION >= 400203 && BRAHMA_MPI_VERSION < 400300)) || \
-     (defined(BRAHMA_MPI_IMPL_OPENMPI) &&                               \
-      (BRAHMA_MPI_VERSION >= 400106 && BRAHMA_MPI_VERSION < 400200)))
+#if (((defined(BRAHMA_MPI_IMPL_CRAYMPICH) &&                               \
+       (BRAHMA_MPI_VERSION >= 900100 && BRAHMA_MPI_VERSION < 900200)) ||   \
+      (defined(BRAHMA_MPI_IMPL_MPICH) &&                                   \
+       (BRAHMA_MPI_VERSION >= 400203 && BRAHMA_MPI_VERSION < 400300)) ||   \
+      (defined(BRAHMA_MPI_IMPL_OPENMPI) &&                                 \
+       (BRAHMA_MPI_VERSION >= 400106 && BRAHMA_MPI_VERSION < 400200)))) && \
+    !(defined(BRAHMA_MPI_IMPL_OPENMPI) &&                                  \
+      (BRAHMA_MPI_VERSION >= 400106 && BRAHMA_MPI_VERSION < 400200))
 int brahma::MPIDFTracer::MPI_Ineighbor_allgatherv(
     const void* sendbuf, int sendcount, MPI_Datatype sendtype, void* recvbuf,
     const int recvcounts[], const int displs[], MPI_Datatype recvtype, int comm,
@@ -6577,13 +6619,15 @@ int brahma::MPIDFTracer::MPI_Ineighbor_allgatherv_c(
   return ret;
 }
 #endif
-#if ((defined(BRAHMA_MPI_IMPL_CRAYMPICH) &&                               \
-      ((BRAHMA_MPI_VERSION >= 800108 && BRAHMA_MPI_VERSION < 800200) ||   \
-       (BRAHMA_MPI_VERSION >= 900001 && BRAHMA_MPI_VERSION < 900100))) || \
-     (defined(BRAHMA_MPI_IMPL_MPICH) &&                                   \
-      (BRAHMA_MPI_VERSION >= 300403 && BRAHMA_MPI_VERSION < 300500)) ||   \
-     (defined(BRAHMA_MPI_IMPL_OPENMPI) &&                                 \
-      (BRAHMA_MPI_VERSION >= 500006 && BRAHMA_MPI_VERSION < 500100)))
+#if (((defined(BRAHMA_MPI_IMPL_CRAYMPICH) &&                               \
+       ((BRAHMA_MPI_VERSION >= 800108 && BRAHMA_MPI_VERSION < 800200) ||   \
+        (BRAHMA_MPI_VERSION >= 900001 && BRAHMA_MPI_VERSION < 900100))) || \
+      (defined(BRAHMA_MPI_IMPL_MPICH) &&                                   \
+       (BRAHMA_MPI_VERSION >= 300403 && BRAHMA_MPI_VERSION < 300500)) ||   \
+      (defined(BRAHMA_MPI_IMPL_OPENMPI) &&                                 \
+       (BRAHMA_MPI_VERSION >= 500006 && BRAHMA_MPI_VERSION < 500100)))) || \
+    (defined(BRAHMA_MPI_IMPL_OPENMPI) &&                                   \
+     (BRAHMA_MPI_VERSION >= 400106 && BRAHMA_MPI_VERSION < 400200))
 int brahma::MPIDFTracer::MPI_Ineighbor_alltoall(
     const void* sendbuf, int sendcount, MPI_Datatype sendtype, void* recvbuf,
     int recvcount, MPI_Datatype recvtype, MPI_Comm comm, MPI_Request* request) {
@@ -6601,12 +6645,14 @@ int brahma::MPIDFTracer::MPI_Ineighbor_alltoall(
   return ret;
 }
 #endif
-#if ((defined(BRAHMA_MPI_IMPL_CRAYMPICH) &&                             \
-      (BRAHMA_MPI_VERSION >= 900100 && BRAHMA_MPI_VERSION < 900200)) || \
-     (defined(BRAHMA_MPI_IMPL_MPICH) &&                                 \
-      (BRAHMA_MPI_VERSION >= 400203 && BRAHMA_MPI_VERSION < 400300)) || \
-     (defined(BRAHMA_MPI_IMPL_OPENMPI) &&                               \
-      (BRAHMA_MPI_VERSION >= 400106 && BRAHMA_MPI_VERSION < 400200)))
+#if (((defined(BRAHMA_MPI_IMPL_CRAYMPICH) &&                               \
+       (BRAHMA_MPI_VERSION >= 900100 && BRAHMA_MPI_VERSION < 900200)) ||   \
+      (defined(BRAHMA_MPI_IMPL_MPICH) &&                                   \
+       (BRAHMA_MPI_VERSION >= 400203 && BRAHMA_MPI_VERSION < 400300)) ||   \
+      (defined(BRAHMA_MPI_IMPL_OPENMPI) &&                                 \
+       (BRAHMA_MPI_VERSION >= 400106 && BRAHMA_MPI_VERSION < 400200)))) && \
+    !(defined(BRAHMA_MPI_IMPL_OPENMPI) &&                                  \
+      (BRAHMA_MPI_VERSION >= 400106 && BRAHMA_MPI_VERSION < 400200))
 int brahma::MPIDFTracer::MPI_Ineighbor_alltoall(
     const void* sendbuf, int sendcount, MPI_Datatype sendtype, void* recvbuf,
     int recvcount, MPI_Datatype recvtype, int comm, MPI_Request* request) {
@@ -6667,13 +6713,15 @@ int brahma::MPIDFTracer::MPI_Ineighbor_alltoall_c(
   return ret;
 }
 #endif
-#if ((defined(BRAHMA_MPI_IMPL_CRAYMPICH) &&                               \
-      ((BRAHMA_MPI_VERSION >= 800108 && BRAHMA_MPI_VERSION < 800200) ||   \
-       (BRAHMA_MPI_VERSION >= 900001 && BRAHMA_MPI_VERSION < 900100))) || \
-     (defined(BRAHMA_MPI_IMPL_MPICH) &&                                   \
-      (BRAHMA_MPI_VERSION >= 300403 && BRAHMA_MPI_VERSION < 300500)) ||   \
-     (defined(BRAHMA_MPI_IMPL_OPENMPI) &&                                 \
-      (BRAHMA_MPI_VERSION >= 500006 && BRAHMA_MPI_VERSION < 500100)))
+#if (((defined(BRAHMA_MPI_IMPL_CRAYMPICH) &&                               \
+       ((BRAHMA_MPI_VERSION >= 800108 && BRAHMA_MPI_VERSION < 800200) ||   \
+        (BRAHMA_MPI_VERSION >= 900001 && BRAHMA_MPI_VERSION < 900100))) || \
+      (defined(BRAHMA_MPI_IMPL_MPICH) &&                                   \
+       (BRAHMA_MPI_VERSION >= 300403 && BRAHMA_MPI_VERSION < 300500)) ||   \
+      (defined(BRAHMA_MPI_IMPL_OPENMPI) &&                                 \
+       (BRAHMA_MPI_VERSION >= 500006 && BRAHMA_MPI_VERSION < 500100)))) || \
+    (defined(BRAHMA_MPI_IMPL_OPENMPI) &&                                   \
+     (BRAHMA_MPI_VERSION >= 400106 && BRAHMA_MPI_VERSION < 400200))
 int brahma::MPIDFTracer::MPI_Ineighbor_alltoallv(
     const void* sendbuf, const int sendcounts[], const int sdispls[],
     MPI_Datatype sendtype, void* recvbuf, const int recvcounts[],
@@ -6692,12 +6740,14 @@ int brahma::MPIDFTracer::MPI_Ineighbor_alltoallv(
   return ret;
 }
 #endif
-#if ((defined(BRAHMA_MPI_IMPL_CRAYMPICH) &&                             \
-      (BRAHMA_MPI_VERSION >= 900100 && BRAHMA_MPI_VERSION < 900200)) || \
-     (defined(BRAHMA_MPI_IMPL_MPICH) &&                                 \
-      (BRAHMA_MPI_VERSION >= 400203 && BRAHMA_MPI_VERSION < 400300)) || \
-     (defined(BRAHMA_MPI_IMPL_OPENMPI) &&                               \
-      (BRAHMA_MPI_VERSION >= 400106 && BRAHMA_MPI_VERSION < 400200)))
+#if (((defined(BRAHMA_MPI_IMPL_CRAYMPICH) &&                               \
+       (BRAHMA_MPI_VERSION >= 900100 && BRAHMA_MPI_VERSION < 900200)) ||   \
+      (defined(BRAHMA_MPI_IMPL_MPICH) &&                                   \
+       (BRAHMA_MPI_VERSION >= 400203 && BRAHMA_MPI_VERSION < 400300)) ||   \
+      (defined(BRAHMA_MPI_IMPL_OPENMPI) &&                                 \
+       (BRAHMA_MPI_VERSION >= 400106 && BRAHMA_MPI_VERSION < 400200)))) && \
+    !(defined(BRAHMA_MPI_IMPL_OPENMPI) &&                                  \
+      (BRAHMA_MPI_VERSION >= 400106 && BRAHMA_MPI_VERSION < 400200))
 int brahma::MPIDFTracer::MPI_Ineighbor_alltoallv(
     const void* sendbuf, const int sendcounts[], const int sdispls[],
     MPI_Datatype sendtype, void* recvbuf, const int recvcounts[],
@@ -6757,13 +6807,15 @@ int brahma::MPIDFTracer::MPI_Ineighbor_alltoallv_c(
   return ret;
 }
 #endif
-#if ((defined(BRAHMA_MPI_IMPL_CRAYMPICH) &&                               \
-      ((BRAHMA_MPI_VERSION >= 800108 && BRAHMA_MPI_VERSION < 800200) ||   \
-       (BRAHMA_MPI_VERSION >= 900001 && BRAHMA_MPI_VERSION < 900100))) || \
-     (defined(BRAHMA_MPI_IMPL_MPICH) &&                                   \
-      (BRAHMA_MPI_VERSION >= 300403 && BRAHMA_MPI_VERSION < 300500)) ||   \
-     (defined(BRAHMA_MPI_IMPL_OPENMPI) &&                                 \
-      (BRAHMA_MPI_VERSION >= 500006 && BRAHMA_MPI_VERSION < 500100)))
+#if (((defined(BRAHMA_MPI_IMPL_CRAYMPICH) &&                               \
+       ((BRAHMA_MPI_VERSION >= 800108 && BRAHMA_MPI_VERSION < 800200) ||   \
+        (BRAHMA_MPI_VERSION >= 900001 && BRAHMA_MPI_VERSION < 900100))) || \
+      (defined(BRAHMA_MPI_IMPL_MPICH) &&                                   \
+       (BRAHMA_MPI_VERSION >= 300403 && BRAHMA_MPI_VERSION < 300500)) ||   \
+      (defined(BRAHMA_MPI_IMPL_OPENMPI) &&                                 \
+       (BRAHMA_MPI_VERSION >= 500006 && BRAHMA_MPI_VERSION < 500100)))) || \
+    (defined(BRAHMA_MPI_IMPL_OPENMPI) &&                                   \
+     (BRAHMA_MPI_VERSION >= 400106 && BRAHMA_MPI_VERSION < 400200))
 int brahma::MPIDFTracer::MPI_Ineighbor_alltoallw(
     const void* sendbuf, const int sendcounts[], const MPI_Aint sdispls[],
     const MPI_Datatype sendtypes[], void* recvbuf, const int recvcounts[],
@@ -6780,12 +6832,14 @@ int brahma::MPIDFTracer::MPI_Ineighbor_alltoallw(
   return ret;
 }
 #endif
-#if ((defined(BRAHMA_MPI_IMPL_CRAYMPICH) &&                             \
-      (BRAHMA_MPI_VERSION >= 900100 && BRAHMA_MPI_VERSION < 900200)) || \
-     (defined(BRAHMA_MPI_IMPL_MPICH) &&                                 \
-      (BRAHMA_MPI_VERSION >= 400203 && BRAHMA_MPI_VERSION < 400300)) || \
-     (defined(BRAHMA_MPI_IMPL_OPENMPI) &&                               \
-      (BRAHMA_MPI_VERSION >= 400106 && BRAHMA_MPI_VERSION < 400200)))
+#if (((defined(BRAHMA_MPI_IMPL_CRAYMPICH) &&                               \
+       (BRAHMA_MPI_VERSION >= 900100 && BRAHMA_MPI_VERSION < 900200)) ||   \
+      (defined(BRAHMA_MPI_IMPL_MPICH) &&                                   \
+       (BRAHMA_MPI_VERSION >= 400203 && BRAHMA_MPI_VERSION < 400300)) ||   \
+      (defined(BRAHMA_MPI_IMPL_OPENMPI) &&                                 \
+       (BRAHMA_MPI_VERSION >= 400106 && BRAHMA_MPI_VERSION < 400200)))) && \
+    !(defined(BRAHMA_MPI_IMPL_OPENMPI) &&                                  \
+      (BRAHMA_MPI_VERSION >= 400106 && BRAHMA_MPI_VERSION < 400200))
 int brahma::MPIDFTracer::MPI_Ineighbor_alltoallw(
     const void* sendbuf, const int sendcounts[], const MPI_Aint sdispls[],
     const MPI_Datatype sendtypes[], void* recvbuf, const int recvcounts[],
@@ -6834,22 +6888,6 @@ int brahma::MPIDFTracer::MPI_Ineighbor_alltoallw_c(
   int ret = __real_MPI_Ineighbor_alltoallw_c(sendbuf, sendcounts, sdispls,
                                              sendtypes, recvbuf, recvcounts,
                                              rdispls, recvtypes, comm, request);
-  DFT_LOGGER_UPDATE_TYPE(ret, MetadataType::MT_VALUE);
-  DFT_LOGGER_END();
-  return ret;
-}
-#endif
-#if ((defined(BRAHMA_MPI_IMPL_CRAYMPICH) &&                             \
-      (BRAHMA_MPI_VERSION >= 900100 && BRAHMA_MPI_VERSION < 900200)) || \
-     (defined(BRAHMA_MPI_IMPL_MPICH) &&                                 \
-      (BRAHMA_MPI_VERSION >= 400203 && BRAHMA_MPI_VERSION < 400300)) || \
-     (defined(BRAHMA_MPI_IMPL_OPENMPI) &&                               \
-      (BRAHMA_MPI_VERSION >= 400106 && BRAHMA_MPI_VERSION < 400200)))
-MPI_Info brahma::MPIDFTracer::MPI_Info(int info) {
-  BRAHMA_MAP_OR_FAIL(MPI_Info);
-  DFT_LOGGER_START_ALWAYS();
-  DFT_LOGGER_UPDATE_TYPE(info, MetadataType::MT_VALUE);
-  MPI_Info ret = __real_MPI_Info(info);
   DFT_LOGGER_UPDATE_TYPE(ret, MetadataType::MT_VALUE);
   DFT_LOGGER_END();
   return ret;
@@ -6941,13 +6979,15 @@ int brahma::MPIDFTracer::MPI_Info_dup(MPI_Info info, MPI_Info* newinfo) {
   return ret;
 }
 #endif
-#if ((defined(BRAHMA_MPI_IMPL_CRAYMPICH) &&                               \
-      ((BRAHMA_MPI_VERSION >= 800108 && BRAHMA_MPI_VERSION < 800200) ||   \
-       (BRAHMA_MPI_VERSION >= 900001 && BRAHMA_MPI_VERSION < 900100))) || \
-     (defined(BRAHMA_MPI_IMPL_MPICH) &&                                   \
-      (BRAHMA_MPI_VERSION >= 300403 && BRAHMA_MPI_VERSION < 300500)) ||   \
-     (defined(BRAHMA_MPI_IMPL_OPENMPI) &&                                 \
-      (BRAHMA_MPI_VERSION >= 500006 && BRAHMA_MPI_VERSION < 500100)))
+#if (((defined(BRAHMA_MPI_IMPL_CRAYMPICH) &&                               \
+       ((BRAHMA_MPI_VERSION >= 800108 && BRAHMA_MPI_VERSION < 800200) ||   \
+        (BRAHMA_MPI_VERSION >= 900001 && BRAHMA_MPI_VERSION < 900100))) || \
+      (defined(BRAHMA_MPI_IMPL_MPICH) &&                                   \
+       (BRAHMA_MPI_VERSION >= 300403 && BRAHMA_MPI_VERSION < 300500)) ||   \
+      (defined(BRAHMA_MPI_IMPL_OPENMPI) &&                                 \
+       (BRAHMA_MPI_VERSION >= 500006 && BRAHMA_MPI_VERSION < 500100)))) || \
+    (defined(BRAHMA_MPI_IMPL_OPENMPI) &&                                   \
+     (BRAHMA_MPI_VERSION >= 400106 && BRAHMA_MPI_VERSION < 400200))
 int brahma::MPIDFTracer::MPI_Info_free(MPI_Info* info) {
   BRAHMA_MAP_OR_FAIL(MPI_Info_free);
   DFT_LOGGER_START_ALWAYS();
@@ -6957,12 +6997,14 @@ int brahma::MPIDFTracer::MPI_Info_free(MPI_Info* info) {
   return ret;
 }
 #endif
-#if ((defined(BRAHMA_MPI_IMPL_CRAYMPICH) &&                             \
-      (BRAHMA_MPI_VERSION >= 900100 && BRAHMA_MPI_VERSION < 900200)) || \
-     (defined(BRAHMA_MPI_IMPL_MPICH) &&                                 \
-      (BRAHMA_MPI_VERSION >= 400203 && BRAHMA_MPI_VERSION < 400300)) || \
-     (defined(BRAHMA_MPI_IMPL_OPENMPI) &&                               \
-      (BRAHMA_MPI_VERSION >= 400106 && BRAHMA_MPI_VERSION < 400200)))
+#if (((defined(BRAHMA_MPI_IMPL_CRAYMPICH) &&                               \
+       (BRAHMA_MPI_VERSION >= 900100 && BRAHMA_MPI_VERSION < 900200)) ||   \
+      (defined(BRAHMA_MPI_IMPL_MPICH) &&                                   \
+       (BRAHMA_MPI_VERSION >= 400203 && BRAHMA_MPI_VERSION < 400300)) ||   \
+      (defined(BRAHMA_MPI_IMPL_OPENMPI) &&                                 \
+       (BRAHMA_MPI_VERSION >= 400106 && BRAHMA_MPI_VERSION < 400200)))) && \
+    !(defined(BRAHMA_MPI_IMPL_OPENMPI) &&                                  \
+      (BRAHMA_MPI_VERSION >= 400106 && BRAHMA_MPI_VERSION < 400200))
 int brahma::MPIDFTracer::MPI_Info_free(int* info) {
   BRAHMA_MAP_OR_FAIL(MPI_Info_free);
   DFT_LOGGER_START_ALWAYS();
@@ -6972,13 +7014,15 @@ int brahma::MPIDFTracer::MPI_Info_free(int* info) {
   return ret;
 }
 #endif
-#if ((defined(BRAHMA_MPI_IMPL_CRAYMPICH) &&                               \
-      ((BRAHMA_MPI_VERSION >= 800108 && BRAHMA_MPI_VERSION < 800200) ||   \
-       (BRAHMA_MPI_VERSION >= 900001 && BRAHMA_MPI_VERSION < 900100))) || \
-     (defined(BRAHMA_MPI_IMPL_MPICH) &&                                   \
-      (BRAHMA_MPI_VERSION >= 300403 && BRAHMA_MPI_VERSION < 300500)) ||   \
-     (defined(BRAHMA_MPI_IMPL_OPENMPI) &&                                 \
-      (BRAHMA_MPI_VERSION >= 500006 && BRAHMA_MPI_VERSION < 500100)))
+#if (((defined(BRAHMA_MPI_IMPL_CRAYMPICH) &&                               \
+       ((BRAHMA_MPI_VERSION >= 800108 && BRAHMA_MPI_VERSION < 800200) ||   \
+        (BRAHMA_MPI_VERSION >= 900001 && BRAHMA_MPI_VERSION < 900100))) || \
+      (defined(BRAHMA_MPI_IMPL_MPICH) &&                                   \
+       (BRAHMA_MPI_VERSION >= 300403 && BRAHMA_MPI_VERSION < 300500)) ||   \
+      (defined(BRAHMA_MPI_IMPL_OPENMPI) &&                                 \
+       (BRAHMA_MPI_VERSION >= 500006 && BRAHMA_MPI_VERSION < 500100)))) || \
+    (defined(BRAHMA_MPI_IMPL_OPENMPI) &&                                   \
+     (BRAHMA_MPI_VERSION >= 400106 && BRAHMA_MPI_VERSION < 400200))
 int brahma::MPIDFTracer::MPI_Info_get(MPI_Info info, const char* key,
                                       int valuelen, char* value, int* flag) {
   BRAHMA_MAP_OR_FAIL(MPI_Info_get);
@@ -6991,12 +7035,14 @@ int brahma::MPIDFTracer::MPI_Info_get(MPI_Info info, const char* key,
   return ret;
 }
 #endif
-#if ((defined(BRAHMA_MPI_IMPL_CRAYMPICH) &&                             \
-      (BRAHMA_MPI_VERSION >= 900100 && BRAHMA_MPI_VERSION < 900200)) || \
-     (defined(BRAHMA_MPI_IMPL_MPICH) &&                                 \
-      (BRAHMA_MPI_VERSION >= 400203 && BRAHMA_MPI_VERSION < 400300)) || \
-     (defined(BRAHMA_MPI_IMPL_OPENMPI) &&                               \
-      (BRAHMA_MPI_VERSION >= 400106 && BRAHMA_MPI_VERSION < 400200)))
+#if (((defined(BRAHMA_MPI_IMPL_CRAYMPICH) &&                               \
+       (BRAHMA_MPI_VERSION >= 900100 && BRAHMA_MPI_VERSION < 900200)) ||   \
+      (defined(BRAHMA_MPI_IMPL_MPICH) &&                                   \
+       (BRAHMA_MPI_VERSION >= 400203 && BRAHMA_MPI_VERSION < 400300)) ||   \
+      (defined(BRAHMA_MPI_IMPL_OPENMPI) &&                                 \
+       (BRAHMA_MPI_VERSION >= 400106 && BRAHMA_MPI_VERSION < 400200)))) && \
+    !(defined(BRAHMA_MPI_IMPL_OPENMPI) &&                                  \
+      (BRAHMA_MPI_VERSION >= 400106 && BRAHMA_MPI_VERSION < 400200))
 int brahma::MPIDFTracer::MPI_Info_get(int info, const char* key, int valuelen,
                                       char* value, int* flag) {
   BRAHMA_MAP_OR_FAIL(MPI_Info_get);
@@ -7009,13 +7055,15 @@ int brahma::MPIDFTracer::MPI_Info_get(int info, const char* key, int valuelen,
   return ret;
 }
 #endif
-#if ((defined(BRAHMA_MPI_IMPL_CRAYMPICH) &&                               \
-      ((BRAHMA_MPI_VERSION >= 800108 && BRAHMA_MPI_VERSION < 800200) ||   \
-       (BRAHMA_MPI_VERSION >= 900001 && BRAHMA_MPI_VERSION < 900100))) || \
-     (defined(BRAHMA_MPI_IMPL_MPICH) &&                                   \
-      (BRAHMA_MPI_VERSION >= 300403 && BRAHMA_MPI_VERSION < 300500)) ||   \
-     (defined(BRAHMA_MPI_IMPL_OPENMPI) &&                                 \
-      (BRAHMA_MPI_VERSION >= 500006 && BRAHMA_MPI_VERSION < 500100)))
+#if (((defined(BRAHMA_MPI_IMPL_CRAYMPICH) &&                               \
+       ((BRAHMA_MPI_VERSION >= 800108 && BRAHMA_MPI_VERSION < 800200) ||   \
+        (BRAHMA_MPI_VERSION >= 900001 && BRAHMA_MPI_VERSION < 900100))) || \
+      (defined(BRAHMA_MPI_IMPL_MPICH) &&                                   \
+       (BRAHMA_MPI_VERSION >= 300403 && BRAHMA_MPI_VERSION < 300500)) ||   \
+      (defined(BRAHMA_MPI_IMPL_OPENMPI) &&                                 \
+       (BRAHMA_MPI_VERSION >= 500006 && BRAHMA_MPI_VERSION < 500100)))) || \
+    (defined(BRAHMA_MPI_IMPL_OPENMPI) &&                                   \
+     (BRAHMA_MPI_VERSION >= 400106 && BRAHMA_MPI_VERSION < 400200))
 int brahma::MPIDFTracer::MPI_Info_get_nkeys(MPI_Info info, int* nkeys) {
   BRAHMA_MAP_OR_FAIL(MPI_Info_get_nkeys);
   DFT_LOGGER_START_ALWAYS();
@@ -7026,12 +7074,14 @@ int brahma::MPIDFTracer::MPI_Info_get_nkeys(MPI_Info info, int* nkeys) {
   return ret;
 }
 #endif
-#if ((defined(BRAHMA_MPI_IMPL_CRAYMPICH) &&                             \
-      (BRAHMA_MPI_VERSION >= 900100 && BRAHMA_MPI_VERSION < 900200)) || \
-     (defined(BRAHMA_MPI_IMPL_MPICH) &&                                 \
-      (BRAHMA_MPI_VERSION >= 400203 && BRAHMA_MPI_VERSION < 400300)) || \
-     (defined(BRAHMA_MPI_IMPL_OPENMPI) &&                               \
-      (BRAHMA_MPI_VERSION >= 400106 && BRAHMA_MPI_VERSION < 400200)))
+#if (((defined(BRAHMA_MPI_IMPL_CRAYMPICH) &&                               \
+       (BRAHMA_MPI_VERSION >= 900100 && BRAHMA_MPI_VERSION < 900200)) ||   \
+      (defined(BRAHMA_MPI_IMPL_MPICH) &&                                   \
+       (BRAHMA_MPI_VERSION >= 400203 && BRAHMA_MPI_VERSION < 400300)) ||   \
+      (defined(BRAHMA_MPI_IMPL_OPENMPI) &&                                 \
+       (BRAHMA_MPI_VERSION >= 400106 && BRAHMA_MPI_VERSION < 400200)))) && \
+    !(defined(BRAHMA_MPI_IMPL_OPENMPI) &&                                  \
+      (BRAHMA_MPI_VERSION >= 400106 && BRAHMA_MPI_VERSION < 400200))
 int brahma::MPIDFTracer::MPI_Info_get_nkeys(int info, int* nkeys) {
   BRAHMA_MAP_OR_FAIL(MPI_Info_get_nkeys);
   DFT_LOGGER_START_ALWAYS();
@@ -7042,13 +7092,15 @@ int brahma::MPIDFTracer::MPI_Info_get_nkeys(int info, int* nkeys) {
   return ret;
 }
 #endif
-#if ((defined(BRAHMA_MPI_IMPL_CRAYMPICH) &&                               \
-      ((BRAHMA_MPI_VERSION >= 800108 && BRAHMA_MPI_VERSION < 800200) ||   \
-       (BRAHMA_MPI_VERSION >= 900001 && BRAHMA_MPI_VERSION < 900100))) || \
-     (defined(BRAHMA_MPI_IMPL_MPICH) &&                                   \
-      (BRAHMA_MPI_VERSION >= 300403 && BRAHMA_MPI_VERSION < 300500)) ||   \
-     (defined(BRAHMA_MPI_IMPL_OPENMPI) &&                                 \
-      (BRAHMA_MPI_VERSION >= 500006 && BRAHMA_MPI_VERSION < 500100)))
+#if (((defined(BRAHMA_MPI_IMPL_CRAYMPICH) &&                               \
+       ((BRAHMA_MPI_VERSION >= 800108 && BRAHMA_MPI_VERSION < 800200) ||   \
+        (BRAHMA_MPI_VERSION >= 900001 && BRAHMA_MPI_VERSION < 900100))) || \
+      (defined(BRAHMA_MPI_IMPL_MPICH) &&                                   \
+       (BRAHMA_MPI_VERSION >= 300403 && BRAHMA_MPI_VERSION < 300500)) ||   \
+      (defined(BRAHMA_MPI_IMPL_OPENMPI) &&                                 \
+       (BRAHMA_MPI_VERSION >= 500006 && BRAHMA_MPI_VERSION < 500100)))) || \
+    (defined(BRAHMA_MPI_IMPL_OPENMPI) &&                                   \
+     (BRAHMA_MPI_VERSION >= 400106 && BRAHMA_MPI_VERSION < 400200))
 int brahma::MPIDFTracer::MPI_Info_get_nthkey(MPI_Info info, int n, char* key) {
   BRAHMA_MAP_OR_FAIL(MPI_Info_get_nthkey);
   DFT_LOGGER_START_ALWAYS();
@@ -7060,12 +7112,14 @@ int brahma::MPIDFTracer::MPI_Info_get_nthkey(MPI_Info info, int n, char* key) {
   return ret;
 }
 #endif
-#if ((defined(BRAHMA_MPI_IMPL_CRAYMPICH) &&                             \
-      (BRAHMA_MPI_VERSION >= 900100 && BRAHMA_MPI_VERSION < 900200)) || \
-     (defined(BRAHMA_MPI_IMPL_MPICH) &&                                 \
-      (BRAHMA_MPI_VERSION >= 400203 && BRAHMA_MPI_VERSION < 400300)) || \
-     (defined(BRAHMA_MPI_IMPL_OPENMPI) &&                               \
-      (BRAHMA_MPI_VERSION >= 400106 && BRAHMA_MPI_VERSION < 400200)))
+#if (((defined(BRAHMA_MPI_IMPL_CRAYMPICH) &&                               \
+       (BRAHMA_MPI_VERSION >= 900100 && BRAHMA_MPI_VERSION < 900200)) ||   \
+      (defined(BRAHMA_MPI_IMPL_MPICH) &&                                   \
+       (BRAHMA_MPI_VERSION >= 400203 && BRAHMA_MPI_VERSION < 400300)) ||   \
+      (defined(BRAHMA_MPI_IMPL_OPENMPI) &&                                 \
+       (BRAHMA_MPI_VERSION >= 400106 && BRAHMA_MPI_VERSION < 400200)))) && \
+    !(defined(BRAHMA_MPI_IMPL_OPENMPI) &&                                  \
+      (BRAHMA_MPI_VERSION >= 400106 && BRAHMA_MPI_VERSION < 400200))
 int brahma::MPIDFTracer::MPI_Info_get_nthkey(int info, int n, char* key) {
   BRAHMA_MAP_OR_FAIL(MPI_Info_get_nthkey);
   DFT_LOGGER_START_ALWAYS();
@@ -7109,13 +7163,15 @@ int brahma::MPIDFTracer::MPI_Info_get_string(int info, const char* key,
   return ret;
 }
 #endif
-#if ((defined(BRAHMA_MPI_IMPL_CRAYMPICH) &&                               \
-      ((BRAHMA_MPI_VERSION >= 800108 && BRAHMA_MPI_VERSION < 800200) ||   \
-       (BRAHMA_MPI_VERSION >= 900001 && BRAHMA_MPI_VERSION < 900100))) || \
-     (defined(BRAHMA_MPI_IMPL_MPICH) &&                                   \
-      (BRAHMA_MPI_VERSION >= 300403 && BRAHMA_MPI_VERSION < 300500)) ||   \
-     (defined(BRAHMA_MPI_IMPL_OPENMPI) &&                                 \
-      (BRAHMA_MPI_VERSION >= 500006 && BRAHMA_MPI_VERSION < 500100)))
+#if (((defined(BRAHMA_MPI_IMPL_CRAYMPICH) &&                               \
+       ((BRAHMA_MPI_VERSION >= 800108 && BRAHMA_MPI_VERSION < 800200) ||   \
+        (BRAHMA_MPI_VERSION >= 900001 && BRAHMA_MPI_VERSION < 900100))) || \
+      (defined(BRAHMA_MPI_IMPL_MPICH) &&                                   \
+       (BRAHMA_MPI_VERSION >= 300403 && BRAHMA_MPI_VERSION < 300500)) ||   \
+      (defined(BRAHMA_MPI_IMPL_OPENMPI) &&                                 \
+       (BRAHMA_MPI_VERSION >= 500006 && BRAHMA_MPI_VERSION < 500100)))) || \
+    (defined(BRAHMA_MPI_IMPL_OPENMPI) &&                                   \
+     (BRAHMA_MPI_VERSION >= 400106 && BRAHMA_MPI_VERSION < 400200))
 int brahma::MPIDFTracer::MPI_Info_get_valuelen(MPI_Info info, const char* key,
                                                int* valuelen, int* flag) {
   BRAHMA_MAP_OR_FAIL(MPI_Info_get_valuelen);
@@ -7127,12 +7183,14 @@ int brahma::MPIDFTracer::MPI_Info_get_valuelen(MPI_Info info, const char* key,
   return ret;
 }
 #endif
-#if ((defined(BRAHMA_MPI_IMPL_CRAYMPICH) &&                             \
-      (BRAHMA_MPI_VERSION >= 900100 && BRAHMA_MPI_VERSION < 900200)) || \
-     (defined(BRAHMA_MPI_IMPL_MPICH) &&                                 \
-      (BRAHMA_MPI_VERSION >= 400203 && BRAHMA_MPI_VERSION < 400300)) || \
-     (defined(BRAHMA_MPI_IMPL_OPENMPI) &&                               \
-      (BRAHMA_MPI_VERSION >= 400106 && BRAHMA_MPI_VERSION < 400200)))
+#if (((defined(BRAHMA_MPI_IMPL_CRAYMPICH) &&                               \
+       (BRAHMA_MPI_VERSION >= 900100 && BRAHMA_MPI_VERSION < 900200)) ||   \
+      (defined(BRAHMA_MPI_IMPL_MPICH) &&                                   \
+       (BRAHMA_MPI_VERSION >= 400203 && BRAHMA_MPI_VERSION < 400300)) ||   \
+      (defined(BRAHMA_MPI_IMPL_OPENMPI) &&                                 \
+       (BRAHMA_MPI_VERSION >= 400106 && BRAHMA_MPI_VERSION < 400200)))) && \
+    !(defined(BRAHMA_MPI_IMPL_OPENMPI) &&                                  \
+      (BRAHMA_MPI_VERSION >= 400106 && BRAHMA_MPI_VERSION < 400200))
 int brahma::MPIDFTracer::MPI_Info_get_valuelen(int info, const char* key,
                                                int* valuelen, int* flag) {
   BRAHMA_MAP_OR_FAIL(MPI_Info_get_valuelen);
@@ -7144,13 +7202,15 @@ int brahma::MPIDFTracer::MPI_Info_get_valuelen(int info, const char* key,
   return ret;
 }
 #endif
-#if ((defined(BRAHMA_MPI_IMPL_CRAYMPICH) &&                               \
-      ((BRAHMA_MPI_VERSION >= 800108 && BRAHMA_MPI_VERSION < 800200) ||   \
-       (BRAHMA_MPI_VERSION >= 900001 && BRAHMA_MPI_VERSION < 900100))) || \
-     (defined(BRAHMA_MPI_IMPL_MPICH) &&                                   \
-      (BRAHMA_MPI_VERSION >= 300403 && BRAHMA_MPI_VERSION < 300500)) ||   \
-     (defined(BRAHMA_MPI_IMPL_OPENMPI) &&                                 \
-      (BRAHMA_MPI_VERSION >= 500006 && BRAHMA_MPI_VERSION < 500100)))
+#if (((defined(BRAHMA_MPI_IMPL_CRAYMPICH) &&                               \
+       ((BRAHMA_MPI_VERSION >= 800108 && BRAHMA_MPI_VERSION < 800200) ||   \
+        (BRAHMA_MPI_VERSION >= 900001 && BRAHMA_MPI_VERSION < 900100))) || \
+      (defined(BRAHMA_MPI_IMPL_MPICH) &&                                   \
+       (BRAHMA_MPI_VERSION >= 300403 && BRAHMA_MPI_VERSION < 300500)) ||   \
+      (defined(BRAHMA_MPI_IMPL_OPENMPI) &&                                 \
+       (BRAHMA_MPI_VERSION >= 500006 && BRAHMA_MPI_VERSION < 500100)))) || \
+    (defined(BRAHMA_MPI_IMPL_OPENMPI) &&                                   \
+     (BRAHMA_MPI_VERSION >= 400106 && BRAHMA_MPI_VERSION < 400200))
 int brahma::MPIDFTracer::MPI_Info_set(MPI_Info info, const char* key,
                                       const char* value) {
   BRAHMA_MAP_OR_FAIL(MPI_Info_set);
@@ -7162,12 +7222,14 @@ int brahma::MPIDFTracer::MPI_Info_set(MPI_Info info, const char* key,
   return ret;
 }
 #endif
-#if ((defined(BRAHMA_MPI_IMPL_CRAYMPICH) &&                             \
-      (BRAHMA_MPI_VERSION >= 900100 && BRAHMA_MPI_VERSION < 900200)) || \
-     (defined(BRAHMA_MPI_IMPL_MPICH) &&                                 \
-      (BRAHMA_MPI_VERSION >= 400203 && BRAHMA_MPI_VERSION < 400300)) || \
-     (defined(BRAHMA_MPI_IMPL_OPENMPI) &&                               \
-      (BRAHMA_MPI_VERSION >= 400106 && BRAHMA_MPI_VERSION < 400200)))
+#if (((defined(BRAHMA_MPI_IMPL_CRAYMPICH) &&                               \
+       (BRAHMA_MPI_VERSION >= 900100 && BRAHMA_MPI_VERSION < 900200)) ||   \
+      (defined(BRAHMA_MPI_IMPL_MPICH) &&                                   \
+       (BRAHMA_MPI_VERSION >= 400203 && BRAHMA_MPI_VERSION < 400300)) ||   \
+      (defined(BRAHMA_MPI_IMPL_OPENMPI) &&                                 \
+       (BRAHMA_MPI_VERSION >= 400106 && BRAHMA_MPI_VERSION < 400200)))) && \
+    !(defined(BRAHMA_MPI_IMPL_OPENMPI) &&                                  \
+      (BRAHMA_MPI_VERSION >= 400106 && BRAHMA_MPI_VERSION < 400200))
 int brahma::MPIDFTracer::MPI_Info_set(int info, const char* key,
                                       const char* value) {
   BRAHMA_MAP_OR_FAIL(MPI_Info_set);
@@ -7231,13 +7293,15 @@ int brahma::MPIDFTracer::MPI_Initialized(int* flag) {
   return __real_MPI_Initialized(flag);
 }
 #endif
-#if ((defined(BRAHMA_MPI_IMPL_CRAYMPICH) &&                               \
-      ((BRAHMA_MPI_VERSION >= 800108 && BRAHMA_MPI_VERSION < 800200) ||   \
-       (BRAHMA_MPI_VERSION >= 900001 && BRAHMA_MPI_VERSION < 900100))) || \
-     (defined(BRAHMA_MPI_IMPL_MPICH) &&                                   \
-      (BRAHMA_MPI_VERSION >= 300403 && BRAHMA_MPI_VERSION < 300500)) ||   \
-     (defined(BRAHMA_MPI_IMPL_OPENMPI) &&                                 \
-      (BRAHMA_MPI_VERSION >= 500006 && BRAHMA_MPI_VERSION < 500100)))
+#if (((defined(BRAHMA_MPI_IMPL_CRAYMPICH) &&                               \
+       ((BRAHMA_MPI_VERSION >= 800108 && BRAHMA_MPI_VERSION < 800200) ||   \
+        (BRAHMA_MPI_VERSION >= 900001 && BRAHMA_MPI_VERSION < 900100))) || \
+      (defined(BRAHMA_MPI_IMPL_MPICH) &&                                   \
+       (BRAHMA_MPI_VERSION >= 300403 && BRAHMA_MPI_VERSION < 300500)) ||   \
+      (defined(BRAHMA_MPI_IMPL_OPENMPI) &&                                 \
+       (BRAHMA_MPI_VERSION >= 500006 && BRAHMA_MPI_VERSION < 500100)))) || \
+    (defined(BRAHMA_MPI_IMPL_OPENMPI) &&                                   \
+     (BRAHMA_MPI_VERSION >= 400106 && BRAHMA_MPI_VERSION < 400200))
 int brahma::MPIDFTracer::MPI_Intercomm_create(MPI_Comm local_comm,
                                               int local_leader,
                                               MPI_Comm bridge_comm,
@@ -7257,12 +7321,14 @@ int brahma::MPIDFTracer::MPI_Intercomm_create(MPI_Comm local_comm,
   return ret;
 }
 #endif
-#if ((defined(BRAHMA_MPI_IMPL_CRAYMPICH) &&                             \
-      (BRAHMA_MPI_VERSION >= 900100 && BRAHMA_MPI_VERSION < 900200)) || \
-     (defined(BRAHMA_MPI_IMPL_MPICH) &&                                 \
-      (BRAHMA_MPI_VERSION >= 400203 && BRAHMA_MPI_VERSION < 400300)) || \
-     (defined(BRAHMA_MPI_IMPL_OPENMPI) &&                               \
-      (BRAHMA_MPI_VERSION >= 400106 && BRAHMA_MPI_VERSION < 400200)))
+#if (((defined(BRAHMA_MPI_IMPL_CRAYMPICH) &&                               \
+       (BRAHMA_MPI_VERSION >= 900100 && BRAHMA_MPI_VERSION < 900200)) ||   \
+      (defined(BRAHMA_MPI_IMPL_MPICH) &&                                   \
+       (BRAHMA_MPI_VERSION >= 400203 && BRAHMA_MPI_VERSION < 400300)) ||   \
+      (defined(BRAHMA_MPI_IMPL_OPENMPI) &&                                 \
+       (BRAHMA_MPI_VERSION >= 400106 && BRAHMA_MPI_VERSION < 400200)))) && \
+    !(defined(BRAHMA_MPI_IMPL_OPENMPI) &&                                  \
+      (BRAHMA_MPI_VERSION >= 400106 && BRAHMA_MPI_VERSION < 400200))
 int brahma::MPIDFTracer::MPI_Intercomm_create(int local_comm, int local_leader,
                                               int bridge_comm,
                                               int remote_leader, int tag,
@@ -7328,13 +7394,15 @@ int brahma::MPIDFTracer::MPI_Intercomm_create_from_groups(
   return ret;
 }
 #endif
-#if ((defined(BRAHMA_MPI_IMPL_CRAYMPICH) &&                               \
-      ((BRAHMA_MPI_VERSION >= 800108 && BRAHMA_MPI_VERSION < 800200) ||   \
-       (BRAHMA_MPI_VERSION >= 900001 && BRAHMA_MPI_VERSION < 900100))) || \
-     (defined(BRAHMA_MPI_IMPL_MPICH) &&                                   \
-      (BRAHMA_MPI_VERSION >= 300403 && BRAHMA_MPI_VERSION < 300500)) ||   \
-     (defined(BRAHMA_MPI_IMPL_OPENMPI) &&                                 \
-      (BRAHMA_MPI_VERSION >= 500006 && BRAHMA_MPI_VERSION < 500100)))
+#if (((defined(BRAHMA_MPI_IMPL_CRAYMPICH) &&                               \
+       ((BRAHMA_MPI_VERSION >= 800108 && BRAHMA_MPI_VERSION < 800200) ||   \
+        (BRAHMA_MPI_VERSION >= 900001 && BRAHMA_MPI_VERSION < 900100))) || \
+      (defined(BRAHMA_MPI_IMPL_MPICH) &&                                   \
+       (BRAHMA_MPI_VERSION >= 300403 && BRAHMA_MPI_VERSION < 300500)) ||   \
+      (defined(BRAHMA_MPI_IMPL_OPENMPI) &&                                 \
+       (BRAHMA_MPI_VERSION >= 500006 && BRAHMA_MPI_VERSION < 500100)))) || \
+    (defined(BRAHMA_MPI_IMPL_OPENMPI) &&                                   \
+     (BRAHMA_MPI_VERSION >= 400106 && BRAHMA_MPI_VERSION < 400200))
 int brahma::MPIDFTracer::MPI_Intercomm_merge(MPI_Comm intercomm, int high,
                                              MPI_Comm* newintercomm) {
   BRAHMA_MAP_OR_FAIL(MPI_Intercomm_merge);
@@ -7347,12 +7415,14 @@ int brahma::MPIDFTracer::MPI_Intercomm_merge(MPI_Comm intercomm, int high,
   return ret;
 }
 #endif
-#if ((defined(BRAHMA_MPI_IMPL_CRAYMPICH) &&                             \
-      (BRAHMA_MPI_VERSION >= 900100 && BRAHMA_MPI_VERSION < 900200)) || \
-     (defined(BRAHMA_MPI_IMPL_MPICH) &&                                 \
-      (BRAHMA_MPI_VERSION >= 400203 && BRAHMA_MPI_VERSION < 400300)) || \
-     (defined(BRAHMA_MPI_IMPL_OPENMPI) &&                               \
-      (BRAHMA_MPI_VERSION >= 400106 && BRAHMA_MPI_VERSION < 400200)))
+#if (((defined(BRAHMA_MPI_IMPL_CRAYMPICH) &&                               \
+       (BRAHMA_MPI_VERSION >= 900100 && BRAHMA_MPI_VERSION < 900200)) ||   \
+      (defined(BRAHMA_MPI_IMPL_MPICH) &&                                   \
+       (BRAHMA_MPI_VERSION >= 400203 && BRAHMA_MPI_VERSION < 400300)) ||   \
+      (defined(BRAHMA_MPI_IMPL_OPENMPI) &&                                 \
+       (BRAHMA_MPI_VERSION >= 400106 && BRAHMA_MPI_VERSION < 400200)))) && \
+    !(defined(BRAHMA_MPI_IMPL_OPENMPI) &&                                  \
+      (BRAHMA_MPI_VERSION >= 400106 && BRAHMA_MPI_VERSION < 400200))
 int brahma::MPIDFTracer::MPI_Intercomm_merge(int intercomm, int high,
                                              int* newintercomm) {
   BRAHMA_MAP_OR_FAIL(MPI_Intercomm_merge);
@@ -7365,13 +7435,15 @@ int brahma::MPIDFTracer::MPI_Intercomm_merge(int intercomm, int high,
   return ret;
 }
 #endif
-#if ((defined(BRAHMA_MPI_IMPL_CRAYMPICH) &&                               \
-      ((BRAHMA_MPI_VERSION >= 800108 && BRAHMA_MPI_VERSION < 800200) ||   \
-       (BRAHMA_MPI_VERSION >= 900001 && BRAHMA_MPI_VERSION < 900100))) || \
-     (defined(BRAHMA_MPI_IMPL_MPICH) &&                                   \
-      (BRAHMA_MPI_VERSION >= 300403 && BRAHMA_MPI_VERSION < 300500)) ||   \
-     (defined(BRAHMA_MPI_IMPL_OPENMPI) &&                                 \
-      (BRAHMA_MPI_VERSION >= 500006 && BRAHMA_MPI_VERSION < 500100)))
+#if (((defined(BRAHMA_MPI_IMPL_CRAYMPICH) &&                               \
+       ((BRAHMA_MPI_VERSION >= 800108 && BRAHMA_MPI_VERSION < 800200) ||   \
+        (BRAHMA_MPI_VERSION >= 900001 && BRAHMA_MPI_VERSION < 900100))) || \
+      (defined(BRAHMA_MPI_IMPL_MPICH) &&                                   \
+       (BRAHMA_MPI_VERSION >= 300403 && BRAHMA_MPI_VERSION < 300500)) ||   \
+      (defined(BRAHMA_MPI_IMPL_OPENMPI) &&                                 \
+       (BRAHMA_MPI_VERSION >= 500006 && BRAHMA_MPI_VERSION < 500100)))) || \
+    (defined(BRAHMA_MPI_IMPL_OPENMPI) &&                                   \
+     (BRAHMA_MPI_VERSION >= 400106 && BRAHMA_MPI_VERSION < 400200))
 int brahma::MPIDFTracer::MPI_Iprobe(int source, int tag, MPI_Comm comm,
                                     int* flag, MPI_Status* status) {
   BRAHMA_MAP_OR_FAIL(MPI_Iprobe);
@@ -7385,12 +7457,14 @@ int brahma::MPIDFTracer::MPI_Iprobe(int source, int tag, MPI_Comm comm,
   return ret;
 }
 #endif
-#if ((defined(BRAHMA_MPI_IMPL_CRAYMPICH) &&                             \
-      (BRAHMA_MPI_VERSION >= 900100 && BRAHMA_MPI_VERSION < 900200)) || \
-     (defined(BRAHMA_MPI_IMPL_MPICH) &&                                 \
-      (BRAHMA_MPI_VERSION >= 400203 && BRAHMA_MPI_VERSION < 400300)) || \
-     (defined(BRAHMA_MPI_IMPL_OPENMPI) &&                               \
-      (BRAHMA_MPI_VERSION >= 400106 && BRAHMA_MPI_VERSION < 400200)))
+#if (((defined(BRAHMA_MPI_IMPL_CRAYMPICH) &&                               \
+       (BRAHMA_MPI_VERSION >= 900100 && BRAHMA_MPI_VERSION < 900200)) ||   \
+      (defined(BRAHMA_MPI_IMPL_MPICH) &&                                   \
+       (BRAHMA_MPI_VERSION >= 400203 && BRAHMA_MPI_VERSION < 400300)) ||   \
+      (defined(BRAHMA_MPI_IMPL_OPENMPI) &&                                 \
+       (BRAHMA_MPI_VERSION >= 400106 && BRAHMA_MPI_VERSION < 400200)))) && \
+    !(defined(BRAHMA_MPI_IMPL_OPENMPI) &&                                  \
+      (BRAHMA_MPI_VERSION >= 400106 && BRAHMA_MPI_VERSION < 400200))
 int brahma::MPIDFTracer::MPI_Iprobe(int source, int tag, int comm, int* flag,
                                     MPI_Status* status) {
   BRAHMA_MAP_OR_FAIL(MPI_Iprobe);
@@ -7404,13 +7478,15 @@ int brahma::MPIDFTracer::MPI_Iprobe(int source, int tag, int comm, int* flag,
   return ret;
 }
 #endif
-#if ((defined(BRAHMA_MPI_IMPL_CRAYMPICH) &&                               \
-      ((BRAHMA_MPI_VERSION >= 800108 && BRAHMA_MPI_VERSION < 800200) ||   \
-       (BRAHMA_MPI_VERSION >= 900001 && BRAHMA_MPI_VERSION < 900100))) || \
-     (defined(BRAHMA_MPI_IMPL_MPICH) &&                                   \
-      (BRAHMA_MPI_VERSION >= 300403 && BRAHMA_MPI_VERSION < 300500)) ||   \
-     (defined(BRAHMA_MPI_IMPL_OPENMPI) &&                                 \
-      (BRAHMA_MPI_VERSION >= 500006 && BRAHMA_MPI_VERSION < 500100)))
+#if (((defined(BRAHMA_MPI_IMPL_CRAYMPICH) &&                               \
+       ((BRAHMA_MPI_VERSION >= 800108 && BRAHMA_MPI_VERSION < 800200) ||   \
+        (BRAHMA_MPI_VERSION >= 900001 && BRAHMA_MPI_VERSION < 900100))) || \
+      (defined(BRAHMA_MPI_IMPL_MPICH) &&                                   \
+       (BRAHMA_MPI_VERSION >= 300403 && BRAHMA_MPI_VERSION < 300500)) ||   \
+      (defined(BRAHMA_MPI_IMPL_OPENMPI) &&                                 \
+       (BRAHMA_MPI_VERSION >= 500006 && BRAHMA_MPI_VERSION < 500100)))) || \
+    (defined(BRAHMA_MPI_IMPL_OPENMPI) &&                                   \
+     (BRAHMA_MPI_VERSION >= 400106 && BRAHMA_MPI_VERSION < 400200))
 int brahma::MPIDFTracer::MPI_Irecv(void* buf, int count, MPI_Datatype datatype,
                                    int source, int tag, MPI_Comm comm,
                                    MPI_Request* request) {
@@ -7427,12 +7503,14 @@ int brahma::MPIDFTracer::MPI_Irecv(void* buf, int count, MPI_Datatype datatype,
   return ret;
 }
 #endif
-#if ((defined(BRAHMA_MPI_IMPL_CRAYMPICH) &&                             \
-      (BRAHMA_MPI_VERSION >= 900100 && BRAHMA_MPI_VERSION < 900200)) || \
-     (defined(BRAHMA_MPI_IMPL_MPICH) &&                                 \
-      (BRAHMA_MPI_VERSION >= 400203 && BRAHMA_MPI_VERSION < 400300)) || \
-     (defined(BRAHMA_MPI_IMPL_OPENMPI) &&                               \
-      (BRAHMA_MPI_VERSION >= 400106 && BRAHMA_MPI_VERSION < 400200)))
+#if (((defined(BRAHMA_MPI_IMPL_CRAYMPICH) &&                               \
+       (BRAHMA_MPI_VERSION >= 900100 && BRAHMA_MPI_VERSION < 900200)) ||   \
+      (defined(BRAHMA_MPI_IMPL_MPICH) &&                                   \
+       (BRAHMA_MPI_VERSION >= 400203 && BRAHMA_MPI_VERSION < 400300)) ||   \
+      (defined(BRAHMA_MPI_IMPL_OPENMPI) &&                                 \
+       (BRAHMA_MPI_VERSION >= 400106 && BRAHMA_MPI_VERSION < 400200)))) && \
+    !(defined(BRAHMA_MPI_IMPL_OPENMPI) &&                                  \
+      (BRAHMA_MPI_VERSION >= 400106 && BRAHMA_MPI_VERSION < 400200))
 int brahma::MPIDFTracer::MPI_Irecv(void* buf, int count, MPI_Datatype datatype,
                                    int source, int tag, int comm,
                                    MPI_Request* request) {
@@ -7489,13 +7567,15 @@ int brahma::MPIDFTracer::MPI_Irecv_c(void* buf, MPI_Count count, int datatype,
   return ret;
 }
 #endif
-#if ((defined(BRAHMA_MPI_IMPL_CRAYMPICH) &&                               \
-      ((BRAHMA_MPI_VERSION >= 800108 && BRAHMA_MPI_VERSION < 800200) ||   \
-       (BRAHMA_MPI_VERSION >= 900001 && BRAHMA_MPI_VERSION < 900100))) || \
-     (defined(BRAHMA_MPI_IMPL_MPICH) &&                                   \
-      (BRAHMA_MPI_VERSION >= 300403 && BRAHMA_MPI_VERSION < 300500)) ||   \
-     (defined(BRAHMA_MPI_IMPL_OPENMPI) &&                                 \
-      (BRAHMA_MPI_VERSION >= 500006 && BRAHMA_MPI_VERSION < 500100)))
+#if (((defined(BRAHMA_MPI_IMPL_CRAYMPICH) &&                               \
+       ((BRAHMA_MPI_VERSION >= 800108 && BRAHMA_MPI_VERSION < 800200) ||   \
+        (BRAHMA_MPI_VERSION >= 900001 && BRAHMA_MPI_VERSION < 900100))) || \
+      (defined(BRAHMA_MPI_IMPL_MPICH) &&                                   \
+       (BRAHMA_MPI_VERSION >= 300403 && BRAHMA_MPI_VERSION < 300500)) ||   \
+      (defined(BRAHMA_MPI_IMPL_OPENMPI) &&                                 \
+       (BRAHMA_MPI_VERSION >= 500006 && BRAHMA_MPI_VERSION < 500100)))) || \
+    (defined(BRAHMA_MPI_IMPL_OPENMPI) &&                                   \
+     (BRAHMA_MPI_VERSION >= 400106 && BRAHMA_MPI_VERSION < 400200))
 int brahma::MPIDFTracer::MPI_Ireduce(const void* sendbuf, void* recvbuf,
                                      int count, MPI_Datatype datatype,
                                      MPI_Op op, int root, MPI_Comm comm,
@@ -7514,12 +7594,14 @@ int brahma::MPIDFTracer::MPI_Ireduce(const void* sendbuf, void* recvbuf,
   return ret;
 }
 #endif
-#if ((defined(BRAHMA_MPI_IMPL_CRAYMPICH) &&                             \
-      (BRAHMA_MPI_VERSION >= 900100 && BRAHMA_MPI_VERSION < 900200)) || \
-     (defined(BRAHMA_MPI_IMPL_MPICH) &&                                 \
-      (BRAHMA_MPI_VERSION >= 400203 && BRAHMA_MPI_VERSION < 400300)) || \
-     (defined(BRAHMA_MPI_IMPL_OPENMPI) &&                               \
-      (BRAHMA_MPI_VERSION >= 400106 && BRAHMA_MPI_VERSION < 400200)))
+#if (((defined(BRAHMA_MPI_IMPL_CRAYMPICH) &&                               \
+       (BRAHMA_MPI_VERSION >= 900100 && BRAHMA_MPI_VERSION < 900200)) ||   \
+      (defined(BRAHMA_MPI_IMPL_MPICH) &&                                   \
+       (BRAHMA_MPI_VERSION >= 400203 && BRAHMA_MPI_VERSION < 400300)) ||   \
+      (defined(BRAHMA_MPI_IMPL_OPENMPI) &&                                 \
+       (BRAHMA_MPI_VERSION >= 400106 && BRAHMA_MPI_VERSION < 400200)))) && \
+    !(defined(BRAHMA_MPI_IMPL_OPENMPI) &&                                  \
+      (BRAHMA_MPI_VERSION >= 400106 && BRAHMA_MPI_VERSION < 400200))
 int brahma::MPIDFTracer::MPI_Ireduce(const void* sendbuf, void* recvbuf,
                                      int count, MPI_Datatype datatype, int op,
                                      int root, int comm, MPI_Request* request) {
@@ -7578,13 +7660,15 @@ int brahma::MPIDFTracer::MPI_Ireduce_c(const void* sendbuf, void* recvbuf,
   return ret;
 }
 #endif
-#if ((defined(BRAHMA_MPI_IMPL_CRAYMPICH) &&                               \
-      ((BRAHMA_MPI_VERSION >= 800108 && BRAHMA_MPI_VERSION < 800200) ||   \
-       (BRAHMA_MPI_VERSION >= 900001 && BRAHMA_MPI_VERSION < 900100))) || \
-     (defined(BRAHMA_MPI_IMPL_MPICH) &&                                   \
-      (BRAHMA_MPI_VERSION >= 300403 && BRAHMA_MPI_VERSION < 300500)) ||   \
-     (defined(BRAHMA_MPI_IMPL_OPENMPI) &&                                 \
-      (BRAHMA_MPI_VERSION >= 500006 && BRAHMA_MPI_VERSION < 500100)))
+#if (((defined(BRAHMA_MPI_IMPL_CRAYMPICH) &&                               \
+       ((BRAHMA_MPI_VERSION >= 800108 && BRAHMA_MPI_VERSION < 800200) ||   \
+        (BRAHMA_MPI_VERSION >= 900001 && BRAHMA_MPI_VERSION < 900100))) || \
+      (defined(BRAHMA_MPI_IMPL_MPICH) &&                                   \
+       (BRAHMA_MPI_VERSION >= 300403 && BRAHMA_MPI_VERSION < 300500)) ||   \
+      (defined(BRAHMA_MPI_IMPL_OPENMPI) &&                                 \
+       (BRAHMA_MPI_VERSION >= 500006 && BRAHMA_MPI_VERSION < 500100)))) || \
+    (defined(BRAHMA_MPI_IMPL_OPENMPI) &&                                   \
+     (BRAHMA_MPI_VERSION >= 400106 && BRAHMA_MPI_VERSION < 400200))
 int brahma::MPIDFTracer::MPI_Ireduce_scatter(const void* sendbuf, void* recvbuf,
                                              const int recvcounts[],
                                              MPI_Datatype datatype, MPI_Op op,
@@ -7602,12 +7686,14 @@ int brahma::MPIDFTracer::MPI_Ireduce_scatter(const void* sendbuf, void* recvbuf,
   return ret;
 }
 #endif
-#if ((defined(BRAHMA_MPI_IMPL_CRAYMPICH) &&                             \
-      (BRAHMA_MPI_VERSION >= 900100 && BRAHMA_MPI_VERSION < 900200)) || \
-     (defined(BRAHMA_MPI_IMPL_MPICH) &&                                 \
-      (BRAHMA_MPI_VERSION >= 400203 && BRAHMA_MPI_VERSION < 400300)) || \
-     (defined(BRAHMA_MPI_IMPL_OPENMPI) &&                               \
-      (BRAHMA_MPI_VERSION >= 400106 && BRAHMA_MPI_VERSION < 400200)))
+#if (((defined(BRAHMA_MPI_IMPL_CRAYMPICH) &&                               \
+       (BRAHMA_MPI_VERSION >= 900100 && BRAHMA_MPI_VERSION < 900200)) ||   \
+      (defined(BRAHMA_MPI_IMPL_MPICH) &&                                   \
+       (BRAHMA_MPI_VERSION >= 400203 && BRAHMA_MPI_VERSION < 400300)) ||   \
+      (defined(BRAHMA_MPI_IMPL_OPENMPI) &&                                 \
+       (BRAHMA_MPI_VERSION >= 400106 && BRAHMA_MPI_VERSION < 400200)))) && \
+    !(defined(BRAHMA_MPI_IMPL_OPENMPI) &&                                  \
+      (BRAHMA_MPI_VERSION >= 400106 && BRAHMA_MPI_VERSION < 400200))
 int brahma::MPIDFTracer::MPI_Ireduce_scatter(const void* sendbuf, void* recvbuf,
                                              const int recvcounts[],
                                              MPI_Datatype datatype, int op,
@@ -7624,13 +7710,15 @@ int brahma::MPIDFTracer::MPI_Ireduce_scatter(const void* sendbuf, void* recvbuf,
   return ret;
 }
 #endif
-#if ((defined(BRAHMA_MPI_IMPL_CRAYMPICH) &&                               \
-      ((BRAHMA_MPI_VERSION >= 800108 && BRAHMA_MPI_VERSION < 800200) ||   \
-       (BRAHMA_MPI_VERSION >= 900001 && BRAHMA_MPI_VERSION < 900100))) || \
-     (defined(BRAHMA_MPI_IMPL_MPICH) &&                                   \
-      (BRAHMA_MPI_VERSION >= 300403 && BRAHMA_MPI_VERSION < 300500)) ||   \
-     (defined(BRAHMA_MPI_IMPL_OPENMPI) &&                                 \
-      (BRAHMA_MPI_VERSION >= 500006 && BRAHMA_MPI_VERSION < 500100)))
+#if (((defined(BRAHMA_MPI_IMPL_CRAYMPICH) &&                               \
+       ((BRAHMA_MPI_VERSION >= 800108 && BRAHMA_MPI_VERSION < 800200) ||   \
+        (BRAHMA_MPI_VERSION >= 900001 && BRAHMA_MPI_VERSION < 900100))) || \
+      (defined(BRAHMA_MPI_IMPL_MPICH) &&                                   \
+       (BRAHMA_MPI_VERSION >= 300403 && BRAHMA_MPI_VERSION < 300500)) ||   \
+      (defined(BRAHMA_MPI_IMPL_OPENMPI) &&                                 \
+       (BRAHMA_MPI_VERSION >= 500006 && BRAHMA_MPI_VERSION < 500100)))) || \
+    (defined(BRAHMA_MPI_IMPL_OPENMPI) &&                                   \
+     (BRAHMA_MPI_VERSION >= 400106 && BRAHMA_MPI_VERSION < 400200))
 int brahma::MPIDFTracer::MPI_Ireduce_scatter_block(const void* sendbuf,
                                                    void* recvbuf, int recvcount,
                                                    MPI_Datatype datatype,
@@ -7649,12 +7737,14 @@ int brahma::MPIDFTracer::MPI_Ireduce_scatter_block(const void* sendbuf,
   return ret;
 }
 #endif
-#if ((defined(BRAHMA_MPI_IMPL_CRAYMPICH) &&                             \
-      (BRAHMA_MPI_VERSION >= 900100 && BRAHMA_MPI_VERSION < 900200)) || \
-     (defined(BRAHMA_MPI_IMPL_MPICH) &&                                 \
-      (BRAHMA_MPI_VERSION >= 400203 && BRAHMA_MPI_VERSION < 400300)) || \
-     (defined(BRAHMA_MPI_IMPL_OPENMPI) &&                               \
-      (BRAHMA_MPI_VERSION >= 400106 && BRAHMA_MPI_VERSION < 400200)))
+#if (((defined(BRAHMA_MPI_IMPL_CRAYMPICH) &&                               \
+       (BRAHMA_MPI_VERSION >= 900100 && BRAHMA_MPI_VERSION < 900200)) ||   \
+      (defined(BRAHMA_MPI_IMPL_MPICH) &&                                   \
+       (BRAHMA_MPI_VERSION >= 400203 && BRAHMA_MPI_VERSION < 400300)) ||   \
+      (defined(BRAHMA_MPI_IMPL_OPENMPI) &&                                 \
+       (BRAHMA_MPI_VERSION >= 400106 && BRAHMA_MPI_VERSION < 400200)))) && \
+    !(defined(BRAHMA_MPI_IMPL_OPENMPI) &&                                  \
+      (BRAHMA_MPI_VERSION >= 400106 && BRAHMA_MPI_VERSION < 400200))
 int brahma::MPIDFTracer::MPI_Ireduce_scatter_block(const void* sendbuf,
                                                    void* recvbuf, int recvcount,
                                                    MPI_Datatype datatype,
@@ -7751,13 +7841,15 @@ int brahma::MPIDFTracer::MPI_Ireduce_scatter_c(const void* sendbuf,
   return ret;
 }
 #endif
-#if ((defined(BRAHMA_MPI_IMPL_CRAYMPICH) &&                               \
-      ((BRAHMA_MPI_VERSION >= 800108 && BRAHMA_MPI_VERSION < 800200) ||   \
-       (BRAHMA_MPI_VERSION >= 900001 && BRAHMA_MPI_VERSION < 900100))) || \
-     (defined(BRAHMA_MPI_IMPL_MPICH) &&                                   \
-      (BRAHMA_MPI_VERSION >= 300403 && BRAHMA_MPI_VERSION < 300500)) ||   \
-     (defined(BRAHMA_MPI_IMPL_OPENMPI) &&                                 \
-      (BRAHMA_MPI_VERSION >= 500006 && BRAHMA_MPI_VERSION < 500100)))
+#if (((defined(BRAHMA_MPI_IMPL_CRAYMPICH) &&                               \
+       ((BRAHMA_MPI_VERSION >= 800108 && BRAHMA_MPI_VERSION < 800200) ||   \
+        (BRAHMA_MPI_VERSION >= 900001 && BRAHMA_MPI_VERSION < 900100))) || \
+      (defined(BRAHMA_MPI_IMPL_MPICH) &&                                   \
+       (BRAHMA_MPI_VERSION >= 300403 && BRAHMA_MPI_VERSION < 300500)) ||   \
+      (defined(BRAHMA_MPI_IMPL_OPENMPI) &&                                 \
+       (BRAHMA_MPI_VERSION >= 500006 && BRAHMA_MPI_VERSION < 500100)))) || \
+    (defined(BRAHMA_MPI_IMPL_OPENMPI) &&                                   \
+     (BRAHMA_MPI_VERSION >= 400106 && BRAHMA_MPI_VERSION < 400200))
 int brahma::MPIDFTracer::MPI_Irsend(const void* buf, int count,
                                     MPI_Datatype datatype, int dest, int tag,
                                     MPI_Comm comm, MPI_Request* request) {
@@ -7774,12 +7866,14 @@ int brahma::MPIDFTracer::MPI_Irsend(const void* buf, int count,
   return ret;
 }
 #endif
-#if ((defined(BRAHMA_MPI_IMPL_CRAYMPICH) &&                             \
-      (BRAHMA_MPI_VERSION >= 900100 && BRAHMA_MPI_VERSION < 900200)) || \
-     (defined(BRAHMA_MPI_IMPL_MPICH) &&                                 \
-      (BRAHMA_MPI_VERSION >= 400203 && BRAHMA_MPI_VERSION < 400300)) || \
-     (defined(BRAHMA_MPI_IMPL_OPENMPI) &&                               \
-      (BRAHMA_MPI_VERSION >= 400106 && BRAHMA_MPI_VERSION < 400200)))
+#if (((defined(BRAHMA_MPI_IMPL_CRAYMPICH) &&                               \
+       (BRAHMA_MPI_VERSION >= 900100 && BRAHMA_MPI_VERSION < 900200)) ||   \
+      (defined(BRAHMA_MPI_IMPL_MPICH) &&                                   \
+       (BRAHMA_MPI_VERSION >= 400203 && BRAHMA_MPI_VERSION < 400300)) ||   \
+      (defined(BRAHMA_MPI_IMPL_OPENMPI) &&                                 \
+       (BRAHMA_MPI_VERSION >= 400106 && BRAHMA_MPI_VERSION < 400200)))) && \
+    !(defined(BRAHMA_MPI_IMPL_OPENMPI) &&                                  \
+      (BRAHMA_MPI_VERSION >= 400106 && BRAHMA_MPI_VERSION < 400200))
 int brahma::MPIDFTracer::MPI_Irsend(const void* buf, int count,
                                     MPI_Datatype datatype, int dest, int tag,
                                     int comm, MPI_Request* request) {
@@ -7852,13 +7946,15 @@ int brahma::MPIDFTracer::MPI_Is_thread_main(int* flag) {
   return ret;
 }
 #endif
-#if ((defined(BRAHMA_MPI_IMPL_CRAYMPICH) &&                               \
-      ((BRAHMA_MPI_VERSION >= 800108 && BRAHMA_MPI_VERSION < 800200) ||   \
-       (BRAHMA_MPI_VERSION >= 900001 && BRAHMA_MPI_VERSION < 900100))) || \
-     (defined(BRAHMA_MPI_IMPL_MPICH) &&                                   \
-      (BRAHMA_MPI_VERSION >= 300403 && BRAHMA_MPI_VERSION < 300500)) ||   \
-     (defined(BRAHMA_MPI_IMPL_OPENMPI) &&                                 \
-      (BRAHMA_MPI_VERSION >= 500006 && BRAHMA_MPI_VERSION < 500100)))
+#if (((defined(BRAHMA_MPI_IMPL_CRAYMPICH) &&                               \
+       ((BRAHMA_MPI_VERSION >= 800108 && BRAHMA_MPI_VERSION < 800200) ||   \
+        (BRAHMA_MPI_VERSION >= 900001 && BRAHMA_MPI_VERSION < 900100))) || \
+      (defined(BRAHMA_MPI_IMPL_MPICH) &&                                   \
+       (BRAHMA_MPI_VERSION >= 300403 && BRAHMA_MPI_VERSION < 300500)) ||   \
+      (defined(BRAHMA_MPI_IMPL_OPENMPI) &&                                 \
+       (BRAHMA_MPI_VERSION >= 500006 && BRAHMA_MPI_VERSION < 500100)))) || \
+    (defined(BRAHMA_MPI_IMPL_OPENMPI) &&                                   \
+     (BRAHMA_MPI_VERSION >= 400106 && BRAHMA_MPI_VERSION < 400200))
 int brahma::MPIDFTracer::MPI_Iscan(const void* sendbuf, void* recvbuf,
                                    int count, MPI_Datatype datatype, MPI_Op op,
                                    MPI_Comm comm, MPI_Request* request) {
@@ -7875,12 +7971,14 @@ int brahma::MPIDFTracer::MPI_Iscan(const void* sendbuf, void* recvbuf,
   return ret;
 }
 #endif
-#if ((defined(BRAHMA_MPI_IMPL_CRAYMPICH) &&                             \
-      (BRAHMA_MPI_VERSION >= 900100 && BRAHMA_MPI_VERSION < 900200)) || \
-     (defined(BRAHMA_MPI_IMPL_MPICH) &&                                 \
-      (BRAHMA_MPI_VERSION >= 400203 && BRAHMA_MPI_VERSION < 400300)) || \
-     (defined(BRAHMA_MPI_IMPL_OPENMPI) &&                               \
-      (BRAHMA_MPI_VERSION >= 400106 && BRAHMA_MPI_VERSION < 400200)))
+#if (((defined(BRAHMA_MPI_IMPL_CRAYMPICH) &&                               \
+       (BRAHMA_MPI_VERSION >= 900100 && BRAHMA_MPI_VERSION < 900200)) ||   \
+      (defined(BRAHMA_MPI_IMPL_MPICH) &&                                   \
+       (BRAHMA_MPI_VERSION >= 400203 && BRAHMA_MPI_VERSION < 400300)) ||   \
+      (defined(BRAHMA_MPI_IMPL_OPENMPI) &&                                 \
+       (BRAHMA_MPI_VERSION >= 400106 && BRAHMA_MPI_VERSION < 400200)))) && \
+    !(defined(BRAHMA_MPI_IMPL_OPENMPI) &&                                  \
+      (BRAHMA_MPI_VERSION >= 400106 && BRAHMA_MPI_VERSION < 400200))
 int brahma::MPIDFTracer::MPI_Iscan(const void* sendbuf, void* recvbuf,
                                    int count, MPI_Datatype datatype, int op,
                                    int comm, int* request) {
@@ -7936,13 +8034,15 @@ int brahma::MPIDFTracer::MPI_Iscan_c(const void* sendbuf, void* recvbuf,
   return ret;
 }
 #endif
-#if ((defined(BRAHMA_MPI_IMPL_CRAYMPICH) &&                               \
-      ((BRAHMA_MPI_VERSION >= 800108 && BRAHMA_MPI_VERSION < 800200) ||   \
-       (BRAHMA_MPI_VERSION >= 900001 && BRAHMA_MPI_VERSION < 900100))) || \
-     (defined(BRAHMA_MPI_IMPL_MPICH) &&                                   \
-      (BRAHMA_MPI_VERSION >= 300403 && BRAHMA_MPI_VERSION < 300500)) ||   \
-     (defined(BRAHMA_MPI_IMPL_OPENMPI) &&                                 \
-      (BRAHMA_MPI_VERSION >= 500006 && BRAHMA_MPI_VERSION < 500100)))
+#if (((defined(BRAHMA_MPI_IMPL_CRAYMPICH) &&                               \
+       ((BRAHMA_MPI_VERSION >= 800108 && BRAHMA_MPI_VERSION < 800200) ||   \
+        (BRAHMA_MPI_VERSION >= 900001 && BRAHMA_MPI_VERSION < 900100))) || \
+      (defined(BRAHMA_MPI_IMPL_MPICH) &&                                   \
+       (BRAHMA_MPI_VERSION >= 300403 && BRAHMA_MPI_VERSION < 300500)) ||   \
+      (defined(BRAHMA_MPI_IMPL_OPENMPI) &&                                 \
+       (BRAHMA_MPI_VERSION >= 500006 && BRAHMA_MPI_VERSION < 500100)))) || \
+    (defined(BRAHMA_MPI_IMPL_OPENMPI) &&                                   \
+     (BRAHMA_MPI_VERSION >= 400106 && BRAHMA_MPI_VERSION < 400200))
 int brahma::MPIDFTracer::MPI_Iscatter(const void* sendbuf, int sendcount,
                                       MPI_Datatype sendtype, void* recvbuf,
                                       int recvcount, MPI_Datatype recvtype,
@@ -7963,12 +8063,14 @@ int brahma::MPIDFTracer::MPI_Iscatter(const void* sendbuf, int sendcount,
   return ret;
 }
 #endif
-#if ((defined(BRAHMA_MPI_IMPL_CRAYMPICH) &&                             \
-      (BRAHMA_MPI_VERSION >= 900100 && BRAHMA_MPI_VERSION < 900200)) || \
-     (defined(BRAHMA_MPI_IMPL_MPICH) &&                                 \
-      (BRAHMA_MPI_VERSION >= 400203 && BRAHMA_MPI_VERSION < 400300)) || \
-     (defined(BRAHMA_MPI_IMPL_OPENMPI) &&                               \
-      (BRAHMA_MPI_VERSION >= 400106 && BRAHMA_MPI_VERSION < 400200)))
+#if (((defined(BRAHMA_MPI_IMPL_CRAYMPICH) &&                               \
+       (BRAHMA_MPI_VERSION >= 900100 && BRAHMA_MPI_VERSION < 900200)) ||   \
+      (defined(BRAHMA_MPI_IMPL_MPICH) &&                                   \
+       (BRAHMA_MPI_VERSION >= 400203 && BRAHMA_MPI_VERSION < 400300)) ||   \
+      (defined(BRAHMA_MPI_IMPL_OPENMPI) &&                                 \
+       (BRAHMA_MPI_VERSION >= 400106 && BRAHMA_MPI_VERSION < 400200)))) && \
+    !(defined(BRAHMA_MPI_IMPL_OPENMPI) &&                                  \
+      (BRAHMA_MPI_VERSION >= 400106 && BRAHMA_MPI_VERSION < 400200))
 int brahma::MPIDFTracer::MPI_Iscatter(const void* sendbuf, int sendcount,
                                       MPI_Datatype sendtype, void* recvbuf,
                                       int recvcount, MPI_Datatype recvtype,
@@ -8035,13 +8137,15 @@ int brahma::MPIDFTracer::MPI_Iscatter_c(const void* sendbuf,
   return ret;
 }
 #endif
-#if ((defined(BRAHMA_MPI_IMPL_CRAYMPICH) &&                               \
-      ((BRAHMA_MPI_VERSION >= 800108 && BRAHMA_MPI_VERSION < 800200) ||   \
-       (BRAHMA_MPI_VERSION >= 900001 && BRAHMA_MPI_VERSION < 900100))) || \
-     (defined(BRAHMA_MPI_IMPL_MPICH) &&                                   \
-      (BRAHMA_MPI_VERSION >= 300403 && BRAHMA_MPI_VERSION < 300500)) ||   \
-     (defined(BRAHMA_MPI_IMPL_OPENMPI) &&                                 \
-      (BRAHMA_MPI_VERSION >= 500006 && BRAHMA_MPI_VERSION < 500100)))
+#if (((defined(BRAHMA_MPI_IMPL_CRAYMPICH) &&                               \
+       ((BRAHMA_MPI_VERSION >= 800108 && BRAHMA_MPI_VERSION < 800200) ||   \
+        (BRAHMA_MPI_VERSION >= 900001 && BRAHMA_MPI_VERSION < 900100))) || \
+      (defined(BRAHMA_MPI_IMPL_MPICH) &&                                   \
+       (BRAHMA_MPI_VERSION >= 300403 && BRAHMA_MPI_VERSION < 300500)) ||   \
+      (defined(BRAHMA_MPI_IMPL_OPENMPI) &&                                 \
+       (BRAHMA_MPI_VERSION >= 500006 && BRAHMA_MPI_VERSION < 500100)))) || \
+    (defined(BRAHMA_MPI_IMPL_OPENMPI) &&                                   \
+     (BRAHMA_MPI_VERSION >= 400106 && BRAHMA_MPI_VERSION < 400200))
 int brahma::MPIDFTracer::MPI_Iscatterv(
     const void* sendbuf, const int sendcounts[], const int displs[],
     MPI_Datatype sendtype, void* recvbuf, int recvcount, MPI_Datatype recvtype,
@@ -8060,12 +8164,14 @@ int brahma::MPIDFTracer::MPI_Iscatterv(
   return ret;
 }
 #endif
-#if ((defined(BRAHMA_MPI_IMPL_CRAYMPICH) &&                             \
-      (BRAHMA_MPI_VERSION >= 900100 && BRAHMA_MPI_VERSION < 900200)) || \
-     (defined(BRAHMA_MPI_IMPL_MPICH) &&                                 \
-      (BRAHMA_MPI_VERSION >= 400203 && BRAHMA_MPI_VERSION < 400300)) || \
-     (defined(BRAHMA_MPI_IMPL_OPENMPI) &&                               \
-      (BRAHMA_MPI_VERSION >= 400106 && BRAHMA_MPI_VERSION < 400200)))
+#if (((defined(BRAHMA_MPI_IMPL_CRAYMPICH) &&                               \
+       (BRAHMA_MPI_VERSION >= 900100 && BRAHMA_MPI_VERSION < 900200)) ||   \
+      (defined(BRAHMA_MPI_IMPL_MPICH) &&                                   \
+       (BRAHMA_MPI_VERSION >= 400203 && BRAHMA_MPI_VERSION < 400300)) ||   \
+      (defined(BRAHMA_MPI_IMPL_OPENMPI) &&                                 \
+       (BRAHMA_MPI_VERSION >= 400106 && BRAHMA_MPI_VERSION < 400200)))) && \
+    !(defined(BRAHMA_MPI_IMPL_OPENMPI) &&                                  \
+      (BRAHMA_MPI_VERSION >= 400106 && BRAHMA_MPI_VERSION < 400200))
 int brahma::MPIDFTracer::MPI_Iscatterv(const void* sendbuf,
                                        const int sendcounts[],
                                        const int displs[],
@@ -8132,13 +8238,15 @@ int brahma::MPIDFTracer::MPI_Iscatterv_c(const void* sendbuf,
   return ret;
 }
 #endif
-#if ((defined(BRAHMA_MPI_IMPL_CRAYMPICH) &&                               \
-      ((BRAHMA_MPI_VERSION >= 800108 && BRAHMA_MPI_VERSION < 800200) ||   \
-       (BRAHMA_MPI_VERSION >= 900001 && BRAHMA_MPI_VERSION < 900100))) || \
-     (defined(BRAHMA_MPI_IMPL_MPICH) &&                                   \
-      (BRAHMA_MPI_VERSION >= 300403 && BRAHMA_MPI_VERSION < 300500)) ||   \
-     (defined(BRAHMA_MPI_IMPL_OPENMPI) &&                                 \
-      (BRAHMA_MPI_VERSION >= 500006 && BRAHMA_MPI_VERSION < 500100)))
+#if (((defined(BRAHMA_MPI_IMPL_CRAYMPICH) &&                               \
+       ((BRAHMA_MPI_VERSION >= 800108 && BRAHMA_MPI_VERSION < 800200) ||   \
+        (BRAHMA_MPI_VERSION >= 900001 && BRAHMA_MPI_VERSION < 900100))) || \
+      (defined(BRAHMA_MPI_IMPL_MPICH) &&                                   \
+       (BRAHMA_MPI_VERSION >= 300403 && BRAHMA_MPI_VERSION < 300500)) ||   \
+      (defined(BRAHMA_MPI_IMPL_OPENMPI) &&                                 \
+       (BRAHMA_MPI_VERSION >= 500006 && BRAHMA_MPI_VERSION < 500100)))) || \
+    (defined(BRAHMA_MPI_IMPL_OPENMPI) &&                                   \
+     (BRAHMA_MPI_VERSION >= 400106 && BRAHMA_MPI_VERSION < 400200))
 int brahma::MPIDFTracer::MPI_Isend(const void* buf, int count,
                                    MPI_Datatype datatype, int dest, int tag,
                                    MPI_Comm comm, MPI_Request* request) {
@@ -8155,12 +8263,14 @@ int brahma::MPIDFTracer::MPI_Isend(const void* buf, int count,
   return ret;
 }
 #endif
-#if ((defined(BRAHMA_MPI_IMPL_CRAYMPICH) &&                             \
-      (BRAHMA_MPI_VERSION >= 900100 && BRAHMA_MPI_VERSION < 900200)) || \
-     (defined(BRAHMA_MPI_IMPL_MPICH) &&                                 \
-      (BRAHMA_MPI_VERSION >= 400203 && BRAHMA_MPI_VERSION < 400300)) || \
-     (defined(BRAHMA_MPI_IMPL_OPENMPI) &&                               \
-      (BRAHMA_MPI_VERSION >= 400106 && BRAHMA_MPI_VERSION < 400200)))
+#if (((defined(BRAHMA_MPI_IMPL_CRAYMPICH) &&                               \
+       (BRAHMA_MPI_VERSION >= 900100 && BRAHMA_MPI_VERSION < 900200)) ||   \
+      (defined(BRAHMA_MPI_IMPL_MPICH) &&                                   \
+       (BRAHMA_MPI_VERSION >= 400203 && BRAHMA_MPI_VERSION < 400300)) ||   \
+      (defined(BRAHMA_MPI_IMPL_OPENMPI) &&                                 \
+       (BRAHMA_MPI_VERSION >= 400106 && BRAHMA_MPI_VERSION < 400200)))) && \
+    !(defined(BRAHMA_MPI_IMPL_OPENMPI) &&                                  \
+      (BRAHMA_MPI_VERSION >= 400106 && BRAHMA_MPI_VERSION < 400200))
 int brahma::MPIDFTracer::MPI_Isend(const void* buf, int count,
                                    MPI_Datatype datatype, int dest, int tag,
                                    int comm, MPI_Request* request) {
@@ -8422,13 +8532,15 @@ int brahma::MPIDFTracer::MPI_Isendrecv_replace_c(void* buf, MPI_Count count,
   return ret;
 }
 #endif
-#if ((defined(BRAHMA_MPI_IMPL_CRAYMPICH) &&                               \
-      ((BRAHMA_MPI_VERSION >= 800108 && BRAHMA_MPI_VERSION < 800200) ||   \
-       (BRAHMA_MPI_VERSION >= 900001 && BRAHMA_MPI_VERSION < 900100))) || \
-     (defined(BRAHMA_MPI_IMPL_MPICH) &&                                   \
-      (BRAHMA_MPI_VERSION >= 300403 && BRAHMA_MPI_VERSION < 300500)) ||   \
-     (defined(BRAHMA_MPI_IMPL_OPENMPI) &&                                 \
-      (BRAHMA_MPI_VERSION >= 500006 && BRAHMA_MPI_VERSION < 500100)))
+#if (((defined(BRAHMA_MPI_IMPL_CRAYMPICH) &&                               \
+       ((BRAHMA_MPI_VERSION >= 800108 && BRAHMA_MPI_VERSION < 800200) ||   \
+        (BRAHMA_MPI_VERSION >= 900001 && BRAHMA_MPI_VERSION < 900100))) || \
+      (defined(BRAHMA_MPI_IMPL_MPICH) &&                                   \
+       (BRAHMA_MPI_VERSION >= 300403 && BRAHMA_MPI_VERSION < 300500)) ||   \
+      (defined(BRAHMA_MPI_IMPL_OPENMPI) &&                                 \
+       (BRAHMA_MPI_VERSION >= 500006 && BRAHMA_MPI_VERSION < 500100)))) || \
+    (defined(BRAHMA_MPI_IMPL_OPENMPI) &&                                   \
+     (BRAHMA_MPI_VERSION >= 400106 && BRAHMA_MPI_VERSION < 400200))
 int brahma::MPIDFTracer::MPI_Issend(const void* buf, int count,
                                     MPI_Datatype datatype, int dest, int tag,
                                     MPI_Comm comm, MPI_Request* request) {
@@ -8445,12 +8557,14 @@ int brahma::MPIDFTracer::MPI_Issend(const void* buf, int count,
   return ret;
 }
 #endif
-#if ((defined(BRAHMA_MPI_IMPL_CRAYMPICH) &&                             \
-      (BRAHMA_MPI_VERSION >= 900100 && BRAHMA_MPI_VERSION < 900200)) || \
-     (defined(BRAHMA_MPI_IMPL_MPICH) &&                                 \
-      (BRAHMA_MPI_VERSION >= 400203 && BRAHMA_MPI_VERSION < 400300)) || \
-     (defined(BRAHMA_MPI_IMPL_OPENMPI) &&                               \
-      (BRAHMA_MPI_VERSION >= 400106 && BRAHMA_MPI_VERSION < 400200)))
+#if (((defined(BRAHMA_MPI_IMPL_CRAYMPICH) &&                               \
+       (BRAHMA_MPI_VERSION >= 900100 && BRAHMA_MPI_VERSION < 900200)) ||   \
+      (defined(BRAHMA_MPI_IMPL_MPICH) &&                                   \
+       (BRAHMA_MPI_VERSION >= 400203 && BRAHMA_MPI_VERSION < 400300)) ||   \
+      (defined(BRAHMA_MPI_IMPL_OPENMPI) &&                                 \
+       (BRAHMA_MPI_VERSION >= 400106 && BRAHMA_MPI_VERSION < 400200)))) && \
+    !(defined(BRAHMA_MPI_IMPL_OPENMPI) &&                                  \
+      (BRAHMA_MPI_VERSION >= 400106 && BRAHMA_MPI_VERSION < 400200))
 int brahma::MPIDFTracer::MPI_Issend(const void* buf, int count,
                                     MPI_Datatype datatype, int dest, int tag,
                                     int comm, MPI_Request* request) {
@@ -8543,13 +8657,15 @@ int brahma::MPIDFTracer::MPI_Keyval_free(int* keyval) {
   return ret;
 }
 #endif
-#if ((defined(BRAHMA_MPI_IMPL_CRAYMPICH) &&                               \
-      ((BRAHMA_MPI_VERSION >= 800108 && BRAHMA_MPI_VERSION < 800200) ||   \
-       (BRAHMA_MPI_VERSION >= 900001 && BRAHMA_MPI_VERSION < 900100))) || \
-     (defined(BRAHMA_MPI_IMPL_MPICH) &&                                   \
-      (BRAHMA_MPI_VERSION >= 300403 && BRAHMA_MPI_VERSION < 300500)) ||   \
-     (defined(BRAHMA_MPI_IMPL_OPENMPI) &&                                 \
-      (BRAHMA_MPI_VERSION >= 500006 && BRAHMA_MPI_VERSION < 500100)))
+#if (((defined(BRAHMA_MPI_IMPL_CRAYMPICH) &&                               \
+       ((BRAHMA_MPI_VERSION >= 800108 && BRAHMA_MPI_VERSION < 800200) ||   \
+        (BRAHMA_MPI_VERSION >= 900001 && BRAHMA_MPI_VERSION < 900100))) || \
+      (defined(BRAHMA_MPI_IMPL_MPICH) &&                                   \
+       (BRAHMA_MPI_VERSION >= 300403 && BRAHMA_MPI_VERSION < 300500)) ||   \
+      (defined(BRAHMA_MPI_IMPL_OPENMPI) &&                                 \
+       (BRAHMA_MPI_VERSION >= 500006 && BRAHMA_MPI_VERSION < 500100)))) || \
+    (defined(BRAHMA_MPI_IMPL_OPENMPI) &&                                   \
+     (BRAHMA_MPI_VERSION >= 400106 && BRAHMA_MPI_VERSION < 400200))
 int brahma::MPIDFTracer::MPI_Lookup_name(const char* service_name,
                                          MPI_Info info, char* port_name) {
   BRAHMA_MAP_OR_FAIL(MPI_Lookup_name);
@@ -8561,12 +8677,14 @@ int brahma::MPIDFTracer::MPI_Lookup_name(const char* service_name,
   return ret;
 }
 #endif
-#if ((defined(BRAHMA_MPI_IMPL_CRAYMPICH) &&                             \
-      (BRAHMA_MPI_VERSION >= 900100 && BRAHMA_MPI_VERSION < 900200)) || \
-     (defined(BRAHMA_MPI_IMPL_MPICH) &&                                 \
-      (BRAHMA_MPI_VERSION >= 400203 && BRAHMA_MPI_VERSION < 400300)) || \
-     (defined(BRAHMA_MPI_IMPL_OPENMPI) &&                               \
-      (BRAHMA_MPI_VERSION >= 400106 && BRAHMA_MPI_VERSION < 400200)))
+#if (((defined(BRAHMA_MPI_IMPL_CRAYMPICH) &&                               \
+       (BRAHMA_MPI_VERSION >= 900100 && BRAHMA_MPI_VERSION < 900200)) ||   \
+      (defined(BRAHMA_MPI_IMPL_MPICH) &&                                   \
+       (BRAHMA_MPI_VERSION >= 400203 && BRAHMA_MPI_VERSION < 400300)) ||   \
+      (defined(BRAHMA_MPI_IMPL_OPENMPI) &&                                 \
+       (BRAHMA_MPI_VERSION >= 400106 && BRAHMA_MPI_VERSION < 400200)))) && \
+    !(defined(BRAHMA_MPI_IMPL_OPENMPI) &&                                  \
+      (BRAHMA_MPI_VERSION >= 400106 && BRAHMA_MPI_VERSION < 400200))
 int brahma::MPIDFTracer::MPI_Lookup_name(const char* service_name, int info,
                                          char* port_name) {
   BRAHMA_MAP_OR_FAIL(MPI_Lookup_name);
@@ -8578,29 +8696,15 @@ int brahma::MPIDFTracer::MPI_Lookup_name(const char* service_name, int info,
   return ret;
 }
 #endif
-#if ((defined(BRAHMA_MPI_IMPL_CRAYMPICH) &&                             \
-      (BRAHMA_MPI_VERSION >= 900100 && BRAHMA_MPI_VERSION < 900200)) || \
-     (defined(BRAHMA_MPI_IMPL_MPICH) &&                                 \
-      (BRAHMA_MPI_VERSION >= 400203 && BRAHMA_MPI_VERSION < 400300)) || \
-     (defined(BRAHMA_MPI_IMPL_OPENMPI) &&                               \
-      (BRAHMA_MPI_VERSION >= 400106 && BRAHMA_MPI_VERSION < 400200)))
-MPI_Message brahma::MPIDFTracer::MPI_Message(int message) {
-  BRAHMA_MAP_OR_FAIL(MPI_Message);
-  DFT_LOGGER_START_ALWAYS();
-  DFT_LOGGER_UPDATE_TYPE(message, MetadataType::MT_VALUE);
-  MPI_Message ret = __real_MPI_Message(message);
-  DFT_LOGGER_UPDATE_TYPE(ret, MetadataType::MT_VALUE);
-  DFT_LOGGER_END();
-  return ret;
-}
-#endif
-#if ((defined(BRAHMA_MPI_IMPL_CRAYMPICH) &&                               \
-      ((BRAHMA_MPI_VERSION >= 800108 && BRAHMA_MPI_VERSION < 800200) ||   \
-       (BRAHMA_MPI_VERSION >= 900001 && BRAHMA_MPI_VERSION < 900100))) || \
-     (defined(BRAHMA_MPI_IMPL_MPICH) &&                                   \
-      (BRAHMA_MPI_VERSION >= 300403 && BRAHMA_MPI_VERSION < 300500)) ||   \
-     (defined(BRAHMA_MPI_IMPL_OPENMPI) &&                                 \
-      (BRAHMA_MPI_VERSION >= 500006 && BRAHMA_MPI_VERSION < 500100)))
+#if (((defined(BRAHMA_MPI_IMPL_CRAYMPICH) &&                               \
+       ((BRAHMA_MPI_VERSION >= 800108 && BRAHMA_MPI_VERSION < 800200) ||   \
+        (BRAHMA_MPI_VERSION >= 900001 && BRAHMA_MPI_VERSION < 900100))) || \
+      (defined(BRAHMA_MPI_IMPL_MPICH) &&                                   \
+       (BRAHMA_MPI_VERSION >= 300403 && BRAHMA_MPI_VERSION < 300500)) ||   \
+      (defined(BRAHMA_MPI_IMPL_OPENMPI) &&                                 \
+       (BRAHMA_MPI_VERSION >= 500006 && BRAHMA_MPI_VERSION < 500100)))) || \
+    (defined(BRAHMA_MPI_IMPL_OPENMPI) &&                                   \
+     (BRAHMA_MPI_VERSION >= 400106 && BRAHMA_MPI_VERSION < 400200))
 int brahma::MPIDFTracer::MPI_Mprobe(int source, int tag, MPI_Comm comm,
                                     MPI_Message* message, MPI_Status* status) {
   BRAHMA_MAP_OR_FAIL(MPI_Mprobe);
@@ -8614,12 +8718,14 @@ int brahma::MPIDFTracer::MPI_Mprobe(int source, int tag, MPI_Comm comm,
   return ret;
 }
 #endif
-#if ((defined(BRAHMA_MPI_IMPL_CRAYMPICH) &&                             \
-      (BRAHMA_MPI_VERSION >= 900100 && BRAHMA_MPI_VERSION < 900200)) || \
-     (defined(BRAHMA_MPI_IMPL_MPICH) &&                                 \
-      (BRAHMA_MPI_VERSION >= 400203 && BRAHMA_MPI_VERSION < 400300)) || \
-     (defined(BRAHMA_MPI_IMPL_OPENMPI) &&                               \
-      (BRAHMA_MPI_VERSION >= 400106 && BRAHMA_MPI_VERSION < 400200)))
+#if (((defined(BRAHMA_MPI_IMPL_CRAYMPICH) &&                               \
+       (BRAHMA_MPI_VERSION >= 900100 && BRAHMA_MPI_VERSION < 900200)) ||   \
+      (defined(BRAHMA_MPI_IMPL_MPICH) &&                                   \
+       (BRAHMA_MPI_VERSION >= 400203 && BRAHMA_MPI_VERSION < 400300)) ||   \
+      (defined(BRAHMA_MPI_IMPL_OPENMPI) &&                                 \
+       (BRAHMA_MPI_VERSION >= 400106 && BRAHMA_MPI_VERSION < 400200)))) && \
+    !(defined(BRAHMA_MPI_IMPL_OPENMPI) &&                                  \
+      (BRAHMA_MPI_VERSION >= 400106 && BRAHMA_MPI_VERSION < 400200))
 int brahma::MPIDFTracer::MPI_Mprobe(int source, int tag, int comm, int* message,
                                     MPI_Status* status) {
   BRAHMA_MAP_OR_FAIL(MPI_Mprobe);
@@ -8633,13 +8739,15 @@ int brahma::MPIDFTracer::MPI_Mprobe(int source, int tag, int comm, int* message,
   return ret;
 }
 #endif
-#if ((defined(BRAHMA_MPI_IMPL_CRAYMPICH) &&                               \
-      ((BRAHMA_MPI_VERSION >= 800108 && BRAHMA_MPI_VERSION < 800200) ||   \
-       (BRAHMA_MPI_VERSION >= 900001 && BRAHMA_MPI_VERSION < 900100))) || \
-     (defined(BRAHMA_MPI_IMPL_MPICH) &&                                   \
-      (BRAHMA_MPI_VERSION >= 300403 && BRAHMA_MPI_VERSION < 300500)) ||   \
-     (defined(BRAHMA_MPI_IMPL_OPENMPI) &&                                 \
-      (BRAHMA_MPI_VERSION >= 500006 && BRAHMA_MPI_VERSION < 500100)))
+#if (((defined(BRAHMA_MPI_IMPL_CRAYMPICH) &&                               \
+       ((BRAHMA_MPI_VERSION >= 800108 && BRAHMA_MPI_VERSION < 800200) ||   \
+        (BRAHMA_MPI_VERSION >= 900001 && BRAHMA_MPI_VERSION < 900100))) || \
+      (defined(BRAHMA_MPI_IMPL_MPICH) &&                                   \
+       (BRAHMA_MPI_VERSION >= 300403 && BRAHMA_MPI_VERSION < 300500)) ||   \
+      (defined(BRAHMA_MPI_IMPL_OPENMPI) &&                                 \
+       (BRAHMA_MPI_VERSION >= 500006 && BRAHMA_MPI_VERSION < 500100)))) || \
+    (defined(BRAHMA_MPI_IMPL_OPENMPI) &&                                   \
+     (BRAHMA_MPI_VERSION >= 400106 && BRAHMA_MPI_VERSION < 400200))
 int brahma::MPIDFTracer::MPI_Mrecv(void* buf, int count, MPI_Datatype type,
                                    MPI_Message* message, MPI_Status* status) {
   BRAHMA_MAP_OR_FAIL(MPI_Mrecv);
@@ -8652,12 +8760,14 @@ int brahma::MPIDFTracer::MPI_Mrecv(void* buf, int count, MPI_Datatype type,
   return ret;
 }
 #endif
-#if ((defined(BRAHMA_MPI_IMPL_CRAYMPICH) &&                             \
-      (BRAHMA_MPI_VERSION >= 900100 && BRAHMA_MPI_VERSION < 900200)) || \
-     (defined(BRAHMA_MPI_IMPL_MPICH) &&                                 \
-      (BRAHMA_MPI_VERSION >= 400203 && BRAHMA_MPI_VERSION < 400300)) || \
-     (defined(BRAHMA_MPI_IMPL_OPENMPI) &&                               \
-      (BRAHMA_MPI_VERSION >= 400106 && BRAHMA_MPI_VERSION < 400200)))
+#if (((defined(BRAHMA_MPI_IMPL_CRAYMPICH) &&                               \
+       (BRAHMA_MPI_VERSION >= 900100 && BRAHMA_MPI_VERSION < 900200)) ||   \
+      (defined(BRAHMA_MPI_IMPL_MPICH) &&                                   \
+       (BRAHMA_MPI_VERSION >= 400203 && BRAHMA_MPI_VERSION < 400300)) ||   \
+      (defined(BRAHMA_MPI_IMPL_OPENMPI) &&                                 \
+       (BRAHMA_MPI_VERSION >= 400106 && BRAHMA_MPI_VERSION < 400200)))) && \
+    !(defined(BRAHMA_MPI_IMPL_OPENMPI) &&                                  \
+      (BRAHMA_MPI_VERSION >= 400106 && BRAHMA_MPI_VERSION < 400200))
 int brahma::MPIDFTracer::MPI_Mrecv(void* buf, int count, MPI_Datatype type,
                                    int* message, MPI_Status* status) {
   BRAHMA_MAP_OR_FAIL(MPI_Mrecv);
@@ -8701,13 +8811,15 @@ int brahma::MPIDFTracer::MPI_Mrecv_c(void* buf, MPI_Count count, int datatype,
   return ret;
 }
 #endif
-#if ((defined(BRAHMA_MPI_IMPL_CRAYMPICH) &&                               \
-      ((BRAHMA_MPI_VERSION >= 800108 && BRAHMA_MPI_VERSION < 800200) ||   \
-       (BRAHMA_MPI_VERSION >= 900001 && BRAHMA_MPI_VERSION < 900100))) || \
-     (defined(BRAHMA_MPI_IMPL_MPICH) &&                                   \
-      (BRAHMA_MPI_VERSION >= 300403 && BRAHMA_MPI_VERSION < 300500)) ||   \
-     (defined(BRAHMA_MPI_IMPL_OPENMPI) &&                                 \
-      (BRAHMA_MPI_VERSION >= 500006 && BRAHMA_MPI_VERSION < 500100)))
+#if (((defined(BRAHMA_MPI_IMPL_CRAYMPICH) &&                               \
+       ((BRAHMA_MPI_VERSION >= 800108 && BRAHMA_MPI_VERSION < 800200) ||   \
+        (BRAHMA_MPI_VERSION >= 900001 && BRAHMA_MPI_VERSION < 900100))) || \
+      (defined(BRAHMA_MPI_IMPL_MPICH) &&                                   \
+       (BRAHMA_MPI_VERSION >= 300403 && BRAHMA_MPI_VERSION < 300500)) ||   \
+      (defined(BRAHMA_MPI_IMPL_OPENMPI) &&                                 \
+       (BRAHMA_MPI_VERSION >= 500006 && BRAHMA_MPI_VERSION < 500100)))) || \
+    (defined(BRAHMA_MPI_IMPL_OPENMPI) &&                                   \
+     (BRAHMA_MPI_VERSION >= 400106 && BRAHMA_MPI_VERSION < 400200))
 int brahma::MPIDFTracer::MPI_Neighbor_allgather(
     const void* sendbuf, int sendcount, MPI_Datatype sendtype, void* recvbuf,
     int recvcount, MPI_Datatype recvtype, MPI_Comm comm) {
@@ -8725,12 +8837,14 @@ int brahma::MPIDFTracer::MPI_Neighbor_allgather(
   return ret;
 }
 #endif
-#if ((defined(BRAHMA_MPI_IMPL_CRAYMPICH) &&                             \
-      (BRAHMA_MPI_VERSION >= 900100 && BRAHMA_MPI_VERSION < 900200)) || \
-     (defined(BRAHMA_MPI_IMPL_MPICH) &&                                 \
-      (BRAHMA_MPI_VERSION >= 400203 && BRAHMA_MPI_VERSION < 400300)) || \
-     (defined(BRAHMA_MPI_IMPL_OPENMPI) &&                               \
-      (BRAHMA_MPI_VERSION >= 400106 && BRAHMA_MPI_VERSION < 400200)))
+#if (((defined(BRAHMA_MPI_IMPL_CRAYMPICH) &&                               \
+       (BRAHMA_MPI_VERSION >= 900100 && BRAHMA_MPI_VERSION < 900200)) ||   \
+      (defined(BRAHMA_MPI_IMPL_MPICH) &&                                   \
+       (BRAHMA_MPI_VERSION >= 400203 && BRAHMA_MPI_VERSION < 400300)) ||   \
+      (defined(BRAHMA_MPI_IMPL_OPENMPI) &&                                 \
+       (BRAHMA_MPI_VERSION >= 400106 && BRAHMA_MPI_VERSION < 400200)))) && \
+    !(defined(BRAHMA_MPI_IMPL_OPENMPI) &&                                  \
+      (BRAHMA_MPI_VERSION >= 400106 && BRAHMA_MPI_VERSION < 400200))
 int brahma::MPIDFTracer::MPI_Neighbor_allgather(
     const void* sendbuf, int sendcount, MPI_Datatype sendtype, void* recvbuf,
     int recvcount, MPI_Datatype recvtype, int comm) {
@@ -8882,13 +8996,15 @@ int brahma::MPIDFTracer::MPI_Neighbor_allgather_init_c(
   return ret;
 }
 #endif
-#if ((defined(BRAHMA_MPI_IMPL_CRAYMPICH) &&                               \
-      ((BRAHMA_MPI_VERSION >= 800108 && BRAHMA_MPI_VERSION < 800200) ||   \
-       (BRAHMA_MPI_VERSION >= 900001 && BRAHMA_MPI_VERSION < 900100))) || \
-     (defined(BRAHMA_MPI_IMPL_MPICH) &&                                   \
-      (BRAHMA_MPI_VERSION >= 300403 && BRAHMA_MPI_VERSION < 300500)) ||   \
-     (defined(BRAHMA_MPI_IMPL_OPENMPI) &&                                 \
-      (BRAHMA_MPI_VERSION >= 500006 && BRAHMA_MPI_VERSION < 500100)))
+#if (((defined(BRAHMA_MPI_IMPL_CRAYMPICH) &&                               \
+       ((BRAHMA_MPI_VERSION >= 800108 && BRAHMA_MPI_VERSION < 800200) ||   \
+        (BRAHMA_MPI_VERSION >= 900001 && BRAHMA_MPI_VERSION < 900100))) || \
+      (defined(BRAHMA_MPI_IMPL_MPICH) &&                                   \
+       (BRAHMA_MPI_VERSION >= 300403 && BRAHMA_MPI_VERSION < 300500)) ||   \
+      (defined(BRAHMA_MPI_IMPL_OPENMPI) &&                                 \
+       (BRAHMA_MPI_VERSION >= 500006 && BRAHMA_MPI_VERSION < 500100)))) || \
+    (defined(BRAHMA_MPI_IMPL_OPENMPI) &&                                   \
+     (BRAHMA_MPI_VERSION >= 400106 && BRAHMA_MPI_VERSION < 400200))
 int brahma::MPIDFTracer::MPI_Neighbor_allgatherv(
     const void* sendbuf, int sendcount, MPI_Datatype sendtype, void* recvbuf,
     const int recvcounts[], const int displs[], MPI_Datatype recvtype,
@@ -8907,12 +9023,14 @@ int brahma::MPIDFTracer::MPI_Neighbor_allgatherv(
   return ret;
 }
 #endif
-#if ((defined(BRAHMA_MPI_IMPL_CRAYMPICH) &&                             \
-      (BRAHMA_MPI_VERSION >= 900100 && BRAHMA_MPI_VERSION < 900200)) || \
-     (defined(BRAHMA_MPI_IMPL_MPICH) &&                                 \
-      (BRAHMA_MPI_VERSION >= 400203 && BRAHMA_MPI_VERSION < 400300)) || \
-     (defined(BRAHMA_MPI_IMPL_OPENMPI) &&                               \
-      (BRAHMA_MPI_VERSION >= 400106 && BRAHMA_MPI_VERSION < 400200)))
+#if (((defined(BRAHMA_MPI_IMPL_CRAYMPICH) &&                               \
+       (BRAHMA_MPI_VERSION >= 900100 && BRAHMA_MPI_VERSION < 900200)) ||   \
+      (defined(BRAHMA_MPI_IMPL_MPICH) &&                                   \
+       (BRAHMA_MPI_VERSION >= 400203 && BRAHMA_MPI_VERSION < 400300)) ||   \
+      (defined(BRAHMA_MPI_IMPL_OPENMPI) &&                                 \
+       (BRAHMA_MPI_VERSION >= 400106 && BRAHMA_MPI_VERSION < 400200)))) && \
+    !(defined(BRAHMA_MPI_IMPL_OPENMPI) &&                                  \
+      (BRAHMA_MPI_VERSION >= 400106 && BRAHMA_MPI_VERSION < 400200))
 int brahma::MPIDFTracer::MPI_Neighbor_allgatherv(
     const void* sendbuf, int sendcount, MPI_Datatype sendtype, void* recvbuf,
     const int recvcounts[], const int displs[], MPI_Datatype recvtype,
@@ -9065,13 +9183,15 @@ int brahma::MPIDFTracer::MPI_Neighbor_allgatherv_init_c(
   return ret;
 }
 #endif
-#if ((defined(BRAHMA_MPI_IMPL_CRAYMPICH) &&                               \
-      ((BRAHMA_MPI_VERSION >= 800108 && BRAHMA_MPI_VERSION < 800200) ||   \
-       (BRAHMA_MPI_VERSION >= 900001 && BRAHMA_MPI_VERSION < 900100))) || \
-     (defined(BRAHMA_MPI_IMPL_MPICH) &&                                   \
-      (BRAHMA_MPI_VERSION >= 300403 && BRAHMA_MPI_VERSION < 300500)) ||   \
-     (defined(BRAHMA_MPI_IMPL_OPENMPI) &&                                 \
-      (BRAHMA_MPI_VERSION >= 500006 && BRAHMA_MPI_VERSION < 500100)))
+#if (((defined(BRAHMA_MPI_IMPL_CRAYMPICH) &&                               \
+       ((BRAHMA_MPI_VERSION >= 800108 && BRAHMA_MPI_VERSION < 800200) ||   \
+        (BRAHMA_MPI_VERSION >= 900001 && BRAHMA_MPI_VERSION < 900100))) || \
+      (defined(BRAHMA_MPI_IMPL_MPICH) &&                                   \
+       (BRAHMA_MPI_VERSION >= 300403 && BRAHMA_MPI_VERSION < 300500)) ||   \
+      (defined(BRAHMA_MPI_IMPL_OPENMPI) &&                                 \
+       (BRAHMA_MPI_VERSION >= 500006 && BRAHMA_MPI_VERSION < 500100)))) || \
+    (defined(BRAHMA_MPI_IMPL_OPENMPI) &&                                   \
+     (BRAHMA_MPI_VERSION >= 400106 && BRAHMA_MPI_VERSION < 400200))
 int brahma::MPIDFTracer::MPI_Neighbor_alltoall(
     const void* sendbuf, int sendcount, MPI_Datatype sendtype, void* recvbuf,
     int recvcount, MPI_Datatype recvtype, MPI_Comm comm) {
@@ -9089,12 +9209,14 @@ int brahma::MPIDFTracer::MPI_Neighbor_alltoall(
   return ret;
 }
 #endif
-#if ((defined(BRAHMA_MPI_IMPL_CRAYMPICH) &&                             \
-      (BRAHMA_MPI_VERSION >= 900100 && BRAHMA_MPI_VERSION < 900200)) || \
-     (defined(BRAHMA_MPI_IMPL_MPICH) &&                                 \
-      (BRAHMA_MPI_VERSION >= 400203 && BRAHMA_MPI_VERSION < 400300)) || \
-     (defined(BRAHMA_MPI_IMPL_OPENMPI) &&                               \
-      (BRAHMA_MPI_VERSION >= 400106 && BRAHMA_MPI_VERSION < 400200)))
+#if (((defined(BRAHMA_MPI_IMPL_CRAYMPICH) &&                               \
+       (BRAHMA_MPI_VERSION >= 900100 && BRAHMA_MPI_VERSION < 900200)) ||   \
+      (defined(BRAHMA_MPI_IMPL_MPICH) &&                                   \
+       (BRAHMA_MPI_VERSION >= 400203 && BRAHMA_MPI_VERSION < 400300)) ||   \
+      (defined(BRAHMA_MPI_IMPL_OPENMPI) &&                                 \
+       (BRAHMA_MPI_VERSION >= 400106 && BRAHMA_MPI_VERSION < 400200)))) && \
+    !(defined(BRAHMA_MPI_IMPL_OPENMPI) &&                                  \
+      (BRAHMA_MPI_VERSION >= 400106 && BRAHMA_MPI_VERSION < 400200))
 int brahma::MPIDFTracer::MPI_Neighbor_alltoall(
     const void* sendbuf, int sendcount, MPI_Datatype sendtype, void* recvbuf,
     int recvcount, MPI_Datatype recvtype, int comm) {
@@ -9246,13 +9368,15 @@ int brahma::MPIDFTracer::MPI_Neighbor_alltoall_init_c(
   return ret;
 }
 #endif
-#if ((defined(BRAHMA_MPI_IMPL_CRAYMPICH) &&                               \
-      ((BRAHMA_MPI_VERSION >= 800108 && BRAHMA_MPI_VERSION < 800200) ||   \
-       (BRAHMA_MPI_VERSION >= 900001 && BRAHMA_MPI_VERSION < 900100))) || \
-     (defined(BRAHMA_MPI_IMPL_MPICH) &&                                   \
-      (BRAHMA_MPI_VERSION >= 300403 && BRAHMA_MPI_VERSION < 300500)) ||   \
-     (defined(BRAHMA_MPI_IMPL_OPENMPI) &&                                 \
-      (BRAHMA_MPI_VERSION >= 500006 && BRAHMA_MPI_VERSION < 500100)))
+#if (((defined(BRAHMA_MPI_IMPL_CRAYMPICH) &&                               \
+       ((BRAHMA_MPI_VERSION >= 800108 && BRAHMA_MPI_VERSION < 800200) ||   \
+        (BRAHMA_MPI_VERSION >= 900001 && BRAHMA_MPI_VERSION < 900100))) || \
+      (defined(BRAHMA_MPI_IMPL_MPICH) &&                                   \
+       (BRAHMA_MPI_VERSION >= 300403 && BRAHMA_MPI_VERSION < 300500)) ||   \
+      (defined(BRAHMA_MPI_IMPL_OPENMPI) &&                                 \
+       (BRAHMA_MPI_VERSION >= 500006 && BRAHMA_MPI_VERSION < 500100)))) || \
+    (defined(BRAHMA_MPI_IMPL_OPENMPI) &&                                   \
+     (BRAHMA_MPI_VERSION >= 400106 && BRAHMA_MPI_VERSION < 400200))
 int brahma::MPIDFTracer::MPI_Neighbor_alltoallv(
     const void* sendbuf, const int sendcounts[], const int sdispls[],
     MPI_Datatype sendtype, void* recvbuf, const int recvcounts[],
@@ -9270,12 +9394,14 @@ int brahma::MPIDFTracer::MPI_Neighbor_alltoallv(
   return ret;
 }
 #endif
-#if ((defined(BRAHMA_MPI_IMPL_CRAYMPICH) &&                             \
-      (BRAHMA_MPI_VERSION >= 900100 && BRAHMA_MPI_VERSION < 900200)) || \
-     (defined(BRAHMA_MPI_IMPL_MPICH) &&                                 \
-      (BRAHMA_MPI_VERSION >= 400203 && BRAHMA_MPI_VERSION < 400300)) || \
-     (defined(BRAHMA_MPI_IMPL_OPENMPI) &&                               \
-      (BRAHMA_MPI_VERSION >= 400106 && BRAHMA_MPI_VERSION < 400200)))
+#if (((defined(BRAHMA_MPI_IMPL_CRAYMPICH) &&                               \
+       (BRAHMA_MPI_VERSION >= 900100 && BRAHMA_MPI_VERSION < 900200)) ||   \
+      (defined(BRAHMA_MPI_IMPL_MPICH) &&                                   \
+       (BRAHMA_MPI_VERSION >= 400203 && BRAHMA_MPI_VERSION < 400300)) ||   \
+      (defined(BRAHMA_MPI_IMPL_OPENMPI) &&                                 \
+       (BRAHMA_MPI_VERSION >= 400106 && BRAHMA_MPI_VERSION < 400200)))) && \
+    !(defined(BRAHMA_MPI_IMPL_OPENMPI) &&                                  \
+      (BRAHMA_MPI_VERSION >= 400106 && BRAHMA_MPI_VERSION < 400200))
 int brahma::MPIDFTracer::MPI_Neighbor_alltoallv(
     const void* sendbuf, const int sendcounts[], const int sdispls[],
     MPI_Datatype sendtype, void* recvbuf, const int recvcounts[],
@@ -9421,13 +9547,15 @@ int brahma::MPIDFTracer::MPI_Neighbor_alltoallv_init_c(
   return ret;
 }
 #endif
-#if ((defined(BRAHMA_MPI_IMPL_CRAYMPICH) &&                               \
-      ((BRAHMA_MPI_VERSION >= 800108 && BRAHMA_MPI_VERSION < 800200) ||   \
-       (BRAHMA_MPI_VERSION >= 900001 && BRAHMA_MPI_VERSION < 900100))) || \
-     (defined(BRAHMA_MPI_IMPL_MPICH) &&                                   \
-      (BRAHMA_MPI_VERSION >= 300403 && BRAHMA_MPI_VERSION < 300500)) ||   \
-     (defined(BRAHMA_MPI_IMPL_OPENMPI) &&                                 \
-      (BRAHMA_MPI_VERSION >= 500006 && BRAHMA_MPI_VERSION < 500100)))
+#if (((defined(BRAHMA_MPI_IMPL_CRAYMPICH) &&                               \
+       ((BRAHMA_MPI_VERSION >= 800108 && BRAHMA_MPI_VERSION < 800200) ||   \
+        (BRAHMA_MPI_VERSION >= 900001 && BRAHMA_MPI_VERSION < 900100))) || \
+      (defined(BRAHMA_MPI_IMPL_MPICH) &&                                   \
+       (BRAHMA_MPI_VERSION >= 300403 && BRAHMA_MPI_VERSION < 300500)) ||   \
+      (defined(BRAHMA_MPI_IMPL_OPENMPI) &&                                 \
+       (BRAHMA_MPI_VERSION >= 500006 && BRAHMA_MPI_VERSION < 500100)))) || \
+    (defined(BRAHMA_MPI_IMPL_OPENMPI) &&                                   \
+     (BRAHMA_MPI_VERSION >= 400106 && BRAHMA_MPI_VERSION < 400200))
 int brahma::MPIDFTracer::MPI_Neighbor_alltoallw(
     const void* sendbuf, const int sendcounts[], const MPI_Aint sdispls[],
     const MPI_Datatype sendtypes[], void* recvbuf, const int recvcounts[],
@@ -9443,12 +9571,14 @@ int brahma::MPIDFTracer::MPI_Neighbor_alltoallw(
   return ret;
 }
 #endif
-#if ((defined(BRAHMA_MPI_IMPL_CRAYMPICH) &&                             \
-      (BRAHMA_MPI_VERSION >= 900100 && BRAHMA_MPI_VERSION < 900200)) || \
-     (defined(BRAHMA_MPI_IMPL_MPICH) &&                                 \
-      (BRAHMA_MPI_VERSION >= 400203 && BRAHMA_MPI_VERSION < 400300)) || \
-     (defined(BRAHMA_MPI_IMPL_OPENMPI) &&                               \
-      (BRAHMA_MPI_VERSION >= 400106 && BRAHMA_MPI_VERSION < 400200)))
+#if (((defined(BRAHMA_MPI_IMPL_CRAYMPICH) &&                               \
+       (BRAHMA_MPI_VERSION >= 900100 && BRAHMA_MPI_VERSION < 900200)) ||   \
+      (defined(BRAHMA_MPI_IMPL_MPICH) &&                                   \
+       (BRAHMA_MPI_VERSION >= 400203 && BRAHMA_MPI_VERSION < 400300)) ||   \
+      (defined(BRAHMA_MPI_IMPL_OPENMPI) &&                                 \
+       (BRAHMA_MPI_VERSION >= 400106 && BRAHMA_MPI_VERSION < 400200)))) && \
+    !(defined(BRAHMA_MPI_IMPL_OPENMPI) &&                                  \
+      (BRAHMA_MPI_VERSION >= 400106 && BRAHMA_MPI_VERSION < 400200))
 int brahma::MPIDFTracer::MPI_Neighbor_alltoallw(
     const void* sendbuf, const int sendcounts[], const MPI_Aint sdispls[],
     const MPI_Datatype sendtypes[], void* recvbuf, const int recvcounts[],
@@ -9582,22 +9712,6 @@ int brahma::MPIDFTracer::MPI_Neighbor_alltoallw_init_c(
   return ret;
 }
 #endif
-#if ((defined(BRAHMA_MPI_IMPL_CRAYMPICH) &&                             \
-      (BRAHMA_MPI_VERSION >= 900100 && BRAHMA_MPI_VERSION < 900200)) || \
-     (defined(BRAHMA_MPI_IMPL_MPICH) &&                                 \
-      (BRAHMA_MPI_VERSION >= 400203 && BRAHMA_MPI_VERSION < 400300)) || \
-     (defined(BRAHMA_MPI_IMPL_OPENMPI) &&                               \
-      (BRAHMA_MPI_VERSION >= 400106 && BRAHMA_MPI_VERSION < 400200)))
-MPI_Op brahma::MPIDFTracer::MPI_Op(int op) {
-  BRAHMA_MAP_OR_FAIL(MPI_Op);
-  DFT_LOGGER_START_ALWAYS();
-  DFT_LOGGER_UPDATE_TYPE(op, MetadataType::MT_VALUE);
-  MPI_Op ret = __real_MPI_Op(op);
-  DFT_LOGGER_UPDATE_TYPE(ret, MetadataType::MT_VALUE);
-  DFT_LOGGER_END();
-  return ret;
-}
-#endif
 #if ((defined(BRAHMA_MPI_IMPL_CRAYMPICH) &&                               \
       ((BRAHMA_MPI_VERSION >= 800108 && BRAHMA_MPI_VERSION < 800200) ||   \
        (BRAHMA_MPI_VERSION >= 900001 && BRAHMA_MPI_VERSION < 900200))) || \
@@ -9665,13 +9779,15 @@ int brahma::MPIDFTracer::MPI_Op_create_c(MPI_User_function_c* user_fn,
   return ret;
 }
 #endif
-#if ((defined(BRAHMA_MPI_IMPL_CRAYMPICH) &&                               \
-      ((BRAHMA_MPI_VERSION >= 800108 && BRAHMA_MPI_VERSION < 800200) ||   \
-       (BRAHMA_MPI_VERSION >= 900001 && BRAHMA_MPI_VERSION < 900100))) || \
-     (defined(BRAHMA_MPI_IMPL_MPICH) &&                                   \
-      (BRAHMA_MPI_VERSION >= 300403 && BRAHMA_MPI_VERSION < 300500)) ||   \
-     (defined(BRAHMA_MPI_IMPL_OPENMPI) &&                                 \
-      (BRAHMA_MPI_VERSION >= 500006 && BRAHMA_MPI_VERSION < 500100)))
+#if (((defined(BRAHMA_MPI_IMPL_CRAYMPICH) &&                               \
+       ((BRAHMA_MPI_VERSION >= 800108 && BRAHMA_MPI_VERSION < 800200) ||   \
+        (BRAHMA_MPI_VERSION >= 900001 && BRAHMA_MPI_VERSION < 900100))) || \
+      (defined(BRAHMA_MPI_IMPL_MPICH) &&                                   \
+       (BRAHMA_MPI_VERSION >= 300403 && BRAHMA_MPI_VERSION < 300500)) ||   \
+      (defined(BRAHMA_MPI_IMPL_OPENMPI) &&                                 \
+       (BRAHMA_MPI_VERSION >= 500006 && BRAHMA_MPI_VERSION < 500100)))) || \
+    (defined(BRAHMA_MPI_IMPL_OPENMPI) &&                                   \
+     (BRAHMA_MPI_VERSION >= 400106 && BRAHMA_MPI_VERSION < 400200))
 int brahma::MPIDFTracer::MPI_Op_free(MPI_Op* op) {
   BRAHMA_MAP_OR_FAIL(MPI_Op_free);
   DFT_LOGGER_START_ALWAYS();
@@ -9681,12 +9797,14 @@ int brahma::MPIDFTracer::MPI_Op_free(MPI_Op* op) {
   return ret;
 }
 #endif
-#if ((defined(BRAHMA_MPI_IMPL_CRAYMPICH) &&                             \
-      (BRAHMA_MPI_VERSION >= 900100 && BRAHMA_MPI_VERSION < 900200)) || \
-     (defined(BRAHMA_MPI_IMPL_MPICH) &&                                 \
-      (BRAHMA_MPI_VERSION >= 400203 && BRAHMA_MPI_VERSION < 400300)) || \
-     (defined(BRAHMA_MPI_IMPL_OPENMPI) &&                               \
-      (BRAHMA_MPI_VERSION >= 400106 && BRAHMA_MPI_VERSION < 400200)))
+#if (((defined(BRAHMA_MPI_IMPL_CRAYMPICH) &&                               \
+       (BRAHMA_MPI_VERSION >= 900100 && BRAHMA_MPI_VERSION < 900200)) ||   \
+      (defined(BRAHMA_MPI_IMPL_MPICH) &&                                   \
+       (BRAHMA_MPI_VERSION >= 400203 && BRAHMA_MPI_VERSION < 400300)) ||   \
+      (defined(BRAHMA_MPI_IMPL_OPENMPI) &&                                 \
+       (BRAHMA_MPI_VERSION >= 400106 && BRAHMA_MPI_VERSION < 400200)))) && \
+    !(defined(BRAHMA_MPI_IMPL_OPENMPI) &&                                  \
+      (BRAHMA_MPI_VERSION >= 400106 && BRAHMA_MPI_VERSION < 400200))
 int brahma::MPIDFTracer::MPI_Op_free(int* op) {
   BRAHMA_MAP_OR_FAIL(MPI_Op_free);
   DFT_LOGGER_START_ALWAYS();
@@ -9696,13 +9814,15 @@ int brahma::MPIDFTracer::MPI_Op_free(int* op) {
   return ret;
 }
 #endif
-#if ((defined(BRAHMA_MPI_IMPL_CRAYMPICH) &&                               \
-      ((BRAHMA_MPI_VERSION >= 800108 && BRAHMA_MPI_VERSION < 800200) ||   \
-       (BRAHMA_MPI_VERSION >= 900001 && BRAHMA_MPI_VERSION < 900100))) || \
-     (defined(BRAHMA_MPI_IMPL_MPICH) &&                                   \
-      (BRAHMA_MPI_VERSION >= 300403 && BRAHMA_MPI_VERSION < 300500)) ||   \
-     (defined(BRAHMA_MPI_IMPL_OPENMPI) &&                                 \
-      (BRAHMA_MPI_VERSION >= 500006 && BRAHMA_MPI_VERSION < 500100)))
+#if (((defined(BRAHMA_MPI_IMPL_CRAYMPICH) &&                               \
+       ((BRAHMA_MPI_VERSION >= 800108 && BRAHMA_MPI_VERSION < 800200) ||   \
+        (BRAHMA_MPI_VERSION >= 900001 && BRAHMA_MPI_VERSION < 900100))) || \
+      (defined(BRAHMA_MPI_IMPL_MPICH) &&                                   \
+       (BRAHMA_MPI_VERSION >= 300403 && BRAHMA_MPI_VERSION < 300500)) ||   \
+      (defined(BRAHMA_MPI_IMPL_OPENMPI) &&                                 \
+       (BRAHMA_MPI_VERSION >= 500006 && BRAHMA_MPI_VERSION < 500100)))) || \
+    (defined(BRAHMA_MPI_IMPL_OPENMPI) &&                                   \
+     (BRAHMA_MPI_VERSION >= 400106 && BRAHMA_MPI_VERSION < 400200))
 int brahma::MPIDFTracer::MPI_Open_port(MPI_Info info, char* port_name) {
   BRAHMA_MAP_OR_FAIL(MPI_Open_port);
   DFT_LOGGER_START_ALWAYS();
@@ -9713,12 +9833,14 @@ int brahma::MPIDFTracer::MPI_Open_port(MPI_Info info, char* port_name) {
   return ret;
 }
 #endif
-#if ((defined(BRAHMA_MPI_IMPL_CRAYMPICH) &&                             \
-      (BRAHMA_MPI_VERSION >= 900100 && BRAHMA_MPI_VERSION < 900200)) || \
-     (defined(BRAHMA_MPI_IMPL_MPICH) &&                                 \
-      (BRAHMA_MPI_VERSION >= 400203 && BRAHMA_MPI_VERSION < 400300)) || \
-     (defined(BRAHMA_MPI_IMPL_OPENMPI) &&                               \
-      (BRAHMA_MPI_VERSION >= 400106 && BRAHMA_MPI_VERSION < 400200)))
+#if (((defined(BRAHMA_MPI_IMPL_CRAYMPICH) &&                               \
+       (BRAHMA_MPI_VERSION >= 900100 && BRAHMA_MPI_VERSION < 900200)) ||   \
+      (defined(BRAHMA_MPI_IMPL_MPICH) &&                                   \
+       (BRAHMA_MPI_VERSION >= 400203 && BRAHMA_MPI_VERSION < 400300)) ||   \
+      (defined(BRAHMA_MPI_IMPL_OPENMPI) &&                                 \
+       (BRAHMA_MPI_VERSION >= 400106 && BRAHMA_MPI_VERSION < 400200)))) && \
+    !(defined(BRAHMA_MPI_IMPL_OPENMPI) &&                                  \
+      (BRAHMA_MPI_VERSION >= 400106 && BRAHMA_MPI_VERSION < 400200))
 int brahma::MPIDFTracer::MPI_Open_port(int info, char* port_name) {
   BRAHMA_MAP_OR_FAIL(MPI_Open_port);
   DFT_LOGGER_START_ALWAYS();
@@ -9729,13 +9851,15 @@ int brahma::MPIDFTracer::MPI_Open_port(int info, char* port_name) {
   return ret;
 }
 #endif
-#if ((defined(BRAHMA_MPI_IMPL_CRAYMPICH) &&                               \
-      ((BRAHMA_MPI_VERSION >= 800108 && BRAHMA_MPI_VERSION < 800200) ||   \
-       (BRAHMA_MPI_VERSION >= 900001 && BRAHMA_MPI_VERSION < 900100))) || \
-     (defined(BRAHMA_MPI_IMPL_MPICH) &&                                   \
-      (BRAHMA_MPI_VERSION >= 300403 && BRAHMA_MPI_VERSION < 300500)) ||   \
-     (defined(BRAHMA_MPI_IMPL_OPENMPI) &&                                 \
-      (BRAHMA_MPI_VERSION >= 500006 && BRAHMA_MPI_VERSION < 500100)))
+#if (((defined(BRAHMA_MPI_IMPL_CRAYMPICH) &&                               \
+       ((BRAHMA_MPI_VERSION >= 800108 && BRAHMA_MPI_VERSION < 800200) ||   \
+        (BRAHMA_MPI_VERSION >= 900001 && BRAHMA_MPI_VERSION < 900100))) || \
+      (defined(BRAHMA_MPI_IMPL_MPICH) &&                                   \
+       (BRAHMA_MPI_VERSION >= 300403 && BRAHMA_MPI_VERSION < 300500)) ||   \
+      (defined(BRAHMA_MPI_IMPL_OPENMPI) &&                                 \
+       (BRAHMA_MPI_VERSION >= 500006 && BRAHMA_MPI_VERSION < 500100)))) || \
+    (defined(BRAHMA_MPI_IMPL_OPENMPI) &&                                   \
+     (BRAHMA_MPI_VERSION >= 400106 && BRAHMA_MPI_VERSION < 400200))
 int brahma::MPIDFTracer::MPI_Pack(const void* inbuf, int incount,
                                   MPI_Datatype datatype, void* outbuf,
                                   int outsize, int* position, MPI_Comm comm) {
@@ -9752,12 +9876,14 @@ int brahma::MPIDFTracer::MPI_Pack(const void* inbuf, int incount,
   return ret;
 }
 #endif
-#if ((defined(BRAHMA_MPI_IMPL_CRAYMPICH) &&                             \
-      (BRAHMA_MPI_VERSION >= 900100 && BRAHMA_MPI_VERSION < 900200)) || \
-     (defined(BRAHMA_MPI_IMPL_MPICH) &&                                 \
-      (BRAHMA_MPI_VERSION >= 400203 && BRAHMA_MPI_VERSION < 400300)) || \
-     (defined(BRAHMA_MPI_IMPL_OPENMPI) &&                               \
-      (BRAHMA_MPI_VERSION >= 400106 && BRAHMA_MPI_VERSION < 400200)))
+#if (((defined(BRAHMA_MPI_IMPL_CRAYMPICH) &&                               \
+       (BRAHMA_MPI_VERSION >= 900100 && BRAHMA_MPI_VERSION < 900200)) ||   \
+      (defined(BRAHMA_MPI_IMPL_MPICH) &&                                   \
+       (BRAHMA_MPI_VERSION >= 400203 && BRAHMA_MPI_VERSION < 400300)) ||   \
+      (defined(BRAHMA_MPI_IMPL_OPENMPI) &&                                 \
+       (BRAHMA_MPI_VERSION >= 400106 && BRAHMA_MPI_VERSION < 400200)))) && \
+    !(defined(BRAHMA_MPI_IMPL_OPENMPI) &&                                  \
+      (BRAHMA_MPI_VERSION >= 400106 && BRAHMA_MPI_VERSION < 400200))
 int brahma::MPIDFTracer::MPI_Pack(const void* inbuf, int incount,
                                   MPI_Datatype datatype, void* outbuf,
                                   int outsize, int* position, int comm) {
@@ -9965,13 +10091,15 @@ int brahma::MPIDFTracer::MPI_Pack_external_size_c(const char* datarep,
   return ret;
 }
 #endif
-#if ((defined(BRAHMA_MPI_IMPL_CRAYMPICH) &&                               \
-      ((BRAHMA_MPI_VERSION >= 800108 && BRAHMA_MPI_VERSION < 800200) ||   \
-       (BRAHMA_MPI_VERSION >= 900001 && BRAHMA_MPI_VERSION < 900100))) || \
-     (defined(BRAHMA_MPI_IMPL_MPICH) &&                                   \
-      (BRAHMA_MPI_VERSION >= 300403 && BRAHMA_MPI_VERSION < 300500)) ||   \
-     (defined(BRAHMA_MPI_IMPL_OPENMPI) &&                                 \
-      (BRAHMA_MPI_VERSION >= 500006 && BRAHMA_MPI_VERSION < 500100)))
+#if (((defined(BRAHMA_MPI_IMPL_CRAYMPICH) &&                               \
+       ((BRAHMA_MPI_VERSION >= 800108 && BRAHMA_MPI_VERSION < 800200) ||   \
+        (BRAHMA_MPI_VERSION >= 900001 && BRAHMA_MPI_VERSION < 900100))) || \
+      (defined(BRAHMA_MPI_IMPL_MPICH) &&                                   \
+       (BRAHMA_MPI_VERSION >= 300403 && BRAHMA_MPI_VERSION < 300500)) ||   \
+      (defined(BRAHMA_MPI_IMPL_OPENMPI) &&                                 \
+       (BRAHMA_MPI_VERSION >= 500006 && BRAHMA_MPI_VERSION < 500100)))) || \
+    (defined(BRAHMA_MPI_IMPL_OPENMPI) &&                                   \
+     (BRAHMA_MPI_VERSION >= 400106 && BRAHMA_MPI_VERSION < 400200))
 int brahma::MPIDFTracer::MPI_Pack_size(int incount, MPI_Datatype datatype,
                                        MPI_Comm comm, int* size) {
   BRAHMA_MAP_OR_FAIL(MPI_Pack_size);
@@ -9985,12 +10113,14 @@ int brahma::MPIDFTracer::MPI_Pack_size(int incount, MPI_Datatype datatype,
   return ret;
 }
 #endif
-#if ((defined(BRAHMA_MPI_IMPL_CRAYMPICH) &&                             \
-      (BRAHMA_MPI_VERSION >= 900100 && BRAHMA_MPI_VERSION < 900200)) || \
-     (defined(BRAHMA_MPI_IMPL_MPICH) &&                                 \
-      (BRAHMA_MPI_VERSION >= 400203 && BRAHMA_MPI_VERSION < 400300)) || \
-     (defined(BRAHMA_MPI_IMPL_OPENMPI) &&                               \
-      (BRAHMA_MPI_VERSION >= 400106 && BRAHMA_MPI_VERSION < 400200)))
+#if (((defined(BRAHMA_MPI_IMPL_CRAYMPICH) &&                               \
+       (BRAHMA_MPI_VERSION >= 900100 && BRAHMA_MPI_VERSION < 900200)) ||   \
+      (defined(BRAHMA_MPI_IMPL_MPICH) &&                                   \
+       (BRAHMA_MPI_VERSION >= 400203 && BRAHMA_MPI_VERSION < 400300)) ||   \
+      (defined(BRAHMA_MPI_IMPL_OPENMPI) &&                                 \
+       (BRAHMA_MPI_VERSION >= 400106 && BRAHMA_MPI_VERSION < 400200)))) && \
+    !(defined(BRAHMA_MPI_IMPL_OPENMPI) &&                                  \
+      (BRAHMA_MPI_VERSION >= 400106 && BRAHMA_MPI_VERSION < 400200))
 int brahma::MPIDFTracer::MPI_Pack_size(int incount, MPI_Datatype datatype,
                                        int comm, int* size) {
   BRAHMA_MAP_OR_FAIL(MPI_Pack_size);
@@ -10209,13 +10339,15 @@ int brahma::MPIDFTracer::MPI_Precv_init(void* buf, int partitions,
   return ret;
 }
 #endif
-#if ((defined(BRAHMA_MPI_IMPL_CRAYMPICH) &&                               \
-      ((BRAHMA_MPI_VERSION >= 800108 && BRAHMA_MPI_VERSION < 800200) ||   \
-       (BRAHMA_MPI_VERSION >= 900001 && BRAHMA_MPI_VERSION < 900100))) || \
-     (defined(BRAHMA_MPI_IMPL_MPICH) &&                                   \
-      (BRAHMA_MPI_VERSION >= 300403 && BRAHMA_MPI_VERSION < 300500)) ||   \
-     (defined(BRAHMA_MPI_IMPL_OPENMPI) &&                                 \
-      (BRAHMA_MPI_VERSION >= 500006 && BRAHMA_MPI_VERSION < 500100)))
+#if (((defined(BRAHMA_MPI_IMPL_CRAYMPICH) &&                               \
+       ((BRAHMA_MPI_VERSION >= 800108 && BRAHMA_MPI_VERSION < 800200) ||   \
+        (BRAHMA_MPI_VERSION >= 900001 && BRAHMA_MPI_VERSION < 900100))) || \
+      (defined(BRAHMA_MPI_IMPL_MPICH) &&                                   \
+       (BRAHMA_MPI_VERSION >= 300403 && BRAHMA_MPI_VERSION < 300500)) ||   \
+      (defined(BRAHMA_MPI_IMPL_OPENMPI) &&                                 \
+       (BRAHMA_MPI_VERSION >= 500006 && BRAHMA_MPI_VERSION < 500100)))) || \
+    (defined(BRAHMA_MPI_IMPL_OPENMPI) &&                                   \
+     (BRAHMA_MPI_VERSION >= 400106 && BRAHMA_MPI_VERSION < 400200))
 int brahma::MPIDFTracer::MPI_Probe(int source, int tag, MPI_Comm comm,
                                    MPI_Status* status) {
   BRAHMA_MAP_OR_FAIL(MPI_Probe);
@@ -10229,12 +10361,14 @@ int brahma::MPIDFTracer::MPI_Probe(int source, int tag, MPI_Comm comm,
   return ret;
 }
 #endif
-#if ((defined(BRAHMA_MPI_IMPL_CRAYMPICH) &&                             \
-      (BRAHMA_MPI_VERSION >= 900100 && BRAHMA_MPI_VERSION < 900200)) || \
-     (defined(BRAHMA_MPI_IMPL_MPICH) &&                                 \
-      (BRAHMA_MPI_VERSION >= 400203 && BRAHMA_MPI_VERSION < 400300)) || \
-     (defined(BRAHMA_MPI_IMPL_OPENMPI) &&                               \
-      (BRAHMA_MPI_VERSION >= 400106 && BRAHMA_MPI_VERSION < 400200)))
+#if (((defined(BRAHMA_MPI_IMPL_CRAYMPICH) &&                               \
+       (BRAHMA_MPI_VERSION >= 900100 && BRAHMA_MPI_VERSION < 900200)) ||   \
+      (defined(BRAHMA_MPI_IMPL_MPICH) &&                                   \
+       (BRAHMA_MPI_VERSION >= 400203 && BRAHMA_MPI_VERSION < 400300)) ||   \
+      (defined(BRAHMA_MPI_IMPL_OPENMPI) &&                                 \
+       (BRAHMA_MPI_VERSION >= 400106 && BRAHMA_MPI_VERSION < 400200)))) && \
+    !(defined(BRAHMA_MPI_IMPL_OPENMPI) &&                                  \
+      (BRAHMA_MPI_VERSION >= 400106 && BRAHMA_MPI_VERSION < 400200))
 int brahma::MPIDFTracer::MPI_Probe(int source, int tag, int comm,
                                    MPI_Status* status) {
   BRAHMA_MAP_OR_FAIL(MPI_Probe);
@@ -10296,13 +10430,15 @@ int brahma::MPIDFTracer::MPI_Psend_init(const void* buf, int partitions,
   return ret;
 }
 #endif
-#if ((defined(BRAHMA_MPI_IMPL_CRAYMPICH) &&                               \
-      ((BRAHMA_MPI_VERSION >= 800108 && BRAHMA_MPI_VERSION < 800200) ||   \
-       (BRAHMA_MPI_VERSION >= 900001 && BRAHMA_MPI_VERSION < 900100))) || \
-     (defined(BRAHMA_MPI_IMPL_MPICH) &&                                   \
-      (BRAHMA_MPI_VERSION >= 300403 && BRAHMA_MPI_VERSION < 300500)) ||   \
-     (defined(BRAHMA_MPI_IMPL_OPENMPI) &&                                 \
-      (BRAHMA_MPI_VERSION >= 500006 && BRAHMA_MPI_VERSION < 500100)))
+#if (((defined(BRAHMA_MPI_IMPL_CRAYMPICH) &&                               \
+       ((BRAHMA_MPI_VERSION >= 800108 && BRAHMA_MPI_VERSION < 800200) ||   \
+        (BRAHMA_MPI_VERSION >= 900001 && BRAHMA_MPI_VERSION < 900100))) || \
+      (defined(BRAHMA_MPI_IMPL_MPICH) &&                                   \
+       (BRAHMA_MPI_VERSION >= 300403 && BRAHMA_MPI_VERSION < 300500)) ||   \
+      (defined(BRAHMA_MPI_IMPL_OPENMPI) &&                                 \
+       (BRAHMA_MPI_VERSION >= 500006 && BRAHMA_MPI_VERSION < 500100)))) || \
+    (defined(BRAHMA_MPI_IMPL_OPENMPI) &&                                   \
+     (BRAHMA_MPI_VERSION >= 400106 && BRAHMA_MPI_VERSION < 400200))
 int brahma::MPIDFTracer::MPI_Publish_name(const char* service_name,
                                           MPI_Info info,
                                           const char* port_name) {
@@ -10315,12 +10451,14 @@ int brahma::MPIDFTracer::MPI_Publish_name(const char* service_name,
   return ret;
 }
 #endif
-#if ((defined(BRAHMA_MPI_IMPL_CRAYMPICH) &&                             \
-      (BRAHMA_MPI_VERSION >= 900100 && BRAHMA_MPI_VERSION < 900200)) || \
-     (defined(BRAHMA_MPI_IMPL_MPICH) &&                                 \
-      (BRAHMA_MPI_VERSION >= 400203 && BRAHMA_MPI_VERSION < 400300)) || \
-     (defined(BRAHMA_MPI_IMPL_OPENMPI) &&                               \
-      (BRAHMA_MPI_VERSION >= 400106 && BRAHMA_MPI_VERSION < 400200)))
+#if (((defined(BRAHMA_MPI_IMPL_CRAYMPICH) &&                               \
+       (BRAHMA_MPI_VERSION >= 900100 && BRAHMA_MPI_VERSION < 900200)) ||   \
+      (defined(BRAHMA_MPI_IMPL_MPICH) &&                                   \
+       (BRAHMA_MPI_VERSION >= 400203 && BRAHMA_MPI_VERSION < 400300)) ||   \
+      (defined(BRAHMA_MPI_IMPL_OPENMPI) &&                                 \
+       (BRAHMA_MPI_VERSION >= 400106 && BRAHMA_MPI_VERSION < 400200)))) && \
+    !(defined(BRAHMA_MPI_IMPL_OPENMPI) &&                                  \
+      (BRAHMA_MPI_VERSION >= 400106 && BRAHMA_MPI_VERSION < 400200))
 int brahma::MPIDFTracer::MPI_Publish_name(const char* service_name, int info,
                                           const char* port_name) {
   BRAHMA_MAP_OR_FAIL(MPI_Publish_name);
@@ -10431,13 +10569,15 @@ int brahma::MPIDFTracer::MPI_Query_thread(int* provided) {
   return ret;
 }
 #endif
-#if ((defined(BRAHMA_MPI_IMPL_CRAYMPICH) &&                               \
-      ((BRAHMA_MPI_VERSION >= 800108 && BRAHMA_MPI_VERSION < 800200) ||   \
-       (BRAHMA_MPI_VERSION >= 900001 && BRAHMA_MPI_VERSION < 900100))) || \
-     (defined(BRAHMA_MPI_IMPL_MPICH) &&                                   \
-      (BRAHMA_MPI_VERSION >= 300403 && BRAHMA_MPI_VERSION < 300500)) ||   \
-     (defined(BRAHMA_MPI_IMPL_OPENMPI) &&                                 \
-      (BRAHMA_MPI_VERSION >= 500006 && BRAHMA_MPI_VERSION < 500100)))
+#if (((defined(BRAHMA_MPI_IMPL_CRAYMPICH) &&                               \
+       ((BRAHMA_MPI_VERSION >= 800108 && BRAHMA_MPI_VERSION < 800200) ||   \
+        (BRAHMA_MPI_VERSION >= 900001 && BRAHMA_MPI_VERSION < 900100))) || \
+      (defined(BRAHMA_MPI_IMPL_MPICH) &&                                   \
+       (BRAHMA_MPI_VERSION >= 300403 && BRAHMA_MPI_VERSION < 300500)) ||   \
+      (defined(BRAHMA_MPI_IMPL_OPENMPI) &&                                 \
+       (BRAHMA_MPI_VERSION >= 500006 && BRAHMA_MPI_VERSION < 500100)))) || \
+    (defined(BRAHMA_MPI_IMPL_OPENMPI) &&                                   \
+     (BRAHMA_MPI_VERSION >= 400106 && BRAHMA_MPI_VERSION < 400200))
 int brahma::MPIDFTracer::MPI_Raccumulate(
     const void* origin_addr, int origin_count, MPI_Datatype origin_datatype,
     int target_rank, MPI_Aint target_disp, int target_count,
@@ -10461,12 +10601,14 @@ int brahma::MPIDFTracer::MPI_Raccumulate(
   return ret;
 }
 #endif
-#if ((defined(BRAHMA_MPI_IMPL_CRAYMPICH) &&                             \
-      (BRAHMA_MPI_VERSION >= 900100 && BRAHMA_MPI_VERSION < 900200)) || \
-     (defined(BRAHMA_MPI_IMPL_MPICH) &&                                 \
-      (BRAHMA_MPI_VERSION >= 400203 && BRAHMA_MPI_VERSION < 400300)) || \
-     (defined(BRAHMA_MPI_IMPL_OPENMPI) &&                               \
-      (BRAHMA_MPI_VERSION >= 400106 && BRAHMA_MPI_VERSION < 400200)))
+#if (((defined(BRAHMA_MPI_IMPL_CRAYMPICH) &&                               \
+       (BRAHMA_MPI_VERSION >= 900100 && BRAHMA_MPI_VERSION < 900200)) ||   \
+      (defined(BRAHMA_MPI_IMPL_MPICH) &&                                   \
+       (BRAHMA_MPI_VERSION >= 400203 && BRAHMA_MPI_VERSION < 400300)) ||   \
+      (defined(BRAHMA_MPI_IMPL_OPENMPI) &&                                 \
+       (BRAHMA_MPI_VERSION >= 400106 && BRAHMA_MPI_VERSION < 400200)))) && \
+    !(defined(BRAHMA_MPI_IMPL_OPENMPI) &&                                  \
+      (BRAHMA_MPI_VERSION >= 400106 && BRAHMA_MPI_VERSION < 400200))
 int brahma::MPIDFTracer::MPI_Raccumulate(
     const void* origin_addr, int origin_count, MPI_Datatype origin_datatype,
     int target_rank, MPI_Aint target_disp, int target_count,
@@ -10540,13 +10682,15 @@ int brahma::MPIDFTracer::MPI_Raccumulate_c(
   return ret;
 }
 #endif
-#if ((defined(BRAHMA_MPI_IMPL_CRAYMPICH) &&                               \
-      ((BRAHMA_MPI_VERSION >= 800108 && BRAHMA_MPI_VERSION < 800200) ||   \
-       (BRAHMA_MPI_VERSION >= 900001 && BRAHMA_MPI_VERSION < 900100))) || \
-     (defined(BRAHMA_MPI_IMPL_MPICH) &&                                   \
-      (BRAHMA_MPI_VERSION >= 300403 && BRAHMA_MPI_VERSION < 300500)) ||   \
-     (defined(BRAHMA_MPI_IMPL_OPENMPI) &&                                 \
-      (BRAHMA_MPI_VERSION >= 500006 && BRAHMA_MPI_VERSION < 500100)))
+#if (((defined(BRAHMA_MPI_IMPL_CRAYMPICH) &&                               \
+       ((BRAHMA_MPI_VERSION >= 800108 && BRAHMA_MPI_VERSION < 800200) ||   \
+        (BRAHMA_MPI_VERSION >= 900001 && BRAHMA_MPI_VERSION < 900100))) || \
+      (defined(BRAHMA_MPI_IMPL_MPICH) &&                                   \
+       (BRAHMA_MPI_VERSION >= 300403 && BRAHMA_MPI_VERSION < 300500)) ||   \
+      (defined(BRAHMA_MPI_IMPL_OPENMPI) &&                                 \
+       (BRAHMA_MPI_VERSION >= 500006 && BRAHMA_MPI_VERSION < 500100)))) || \
+    (defined(BRAHMA_MPI_IMPL_OPENMPI) &&                                   \
+     (BRAHMA_MPI_VERSION >= 400106 && BRAHMA_MPI_VERSION < 400200))
 int brahma::MPIDFTracer::MPI_Recv(void* buf, int count, MPI_Datatype datatype,
                                   int source, int tag, MPI_Comm comm,
                                   MPI_Status* status) {
@@ -10563,12 +10707,14 @@ int brahma::MPIDFTracer::MPI_Recv(void* buf, int count, MPI_Datatype datatype,
   return ret;
 }
 #endif
-#if ((defined(BRAHMA_MPI_IMPL_CRAYMPICH) &&                             \
-      (BRAHMA_MPI_VERSION >= 900100 && BRAHMA_MPI_VERSION < 900200)) || \
-     (defined(BRAHMA_MPI_IMPL_MPICH) &&                                 \
-      (BRAHMA_MPI_VERSION >= 400203 && BRAHMA_MPI_VERSION < 400300)) || \
-     (defined(BRAHMA_MPI_IMPL_OPENMPI) &&                               \
-      (BRAHMA_MPI_VERSION >= 400106 && BRAHMA_MPI_VERSION < 400200)))
+#if (((defined(BRAHMA_MPI_IMPL_CRAYMPICH) &&                               \
+       (BRAHMA_MPI_VERSION >= 900100 && BRAHMA_MPI_VERSION < 900200)) ||   \
+      (defined(BRAHMA_MPI_IMPL_MPICH) &&                                   \
+       (BRAHMA_MPI_VERSION >= 400203 && BRAHMA_MPI_VERSION < 400300)) ||   \
+      (defined(BRAHMA_MPI_IMPL_OPENMPI) &&                                 \
+       (BRAHMA_MPI_VERSION >= 400106 && BRAHMA_MPI_VERSION < 400200)))) && \
+    !(defined(BRAHMA_MPI_IMPL_OPENMPI) &&                                  \
+      (BRAHMA_MPI_VERSION >= 400106 && BRAHMA_MPI_VERSION < 400200))
 int brahma::MPIDFTracer::MPI_Recv(void* buf, int count, MPI_Datatype datatype,
                                   int source, int tag, int comm,
                                   MPI_Status* status) {
@@ -10623,13 +10769,15 @@ int brahma::MPIDFTracer::MPI_Recv_c(void* buf, MPI_Count count, int datatype,
   return ret;
 }
 #endif
-#if ((defined(BRAHMA_MPI_IMPL_CRAYMPICH) &&                               \
-      ((BRAHMA_MPI_VERSION >= 800108 && BRAHMA_MPI_VERSION < 800200) ||   \
-       (BRAHMA_MPI_VERSION >= 900001 && BRAHMA_MPI_VERSION < 900100))) || \
-     (defined(BRAHMA_MPI_IMPL_MPICH) &&                                   \
-      (BRAHMA_MPI_VERSION >= 300403 && BRAHMA_MPI_VERSION < 300500)) ||   \
-     (defined(BRAHMA_MPI_IMPL_OPENMPI) &&                                 \
-      (BRAHMA_MPI_VERSION >= 500006 && BRAHMA_MPI_VERSION < 500100)))
+#if (((defined(BRAHMA_MPI_IMPL_CRAYMPICH) &&                               \
+       ((BRAHMA_MPI_VERSION >= 800108 && BRAHMA_MPI_VERSION < 800200) ||   \
+        (BRAHMA_MPI_VERSION >= 900001 && BRAHMA_MPI_VERSION < 900100))) || \
+      (defined(BRAHMA_MPI_IMPL_MPICH) &&                                   \
+       (BRAHMA_MPI_VERSION >= 300403 && BRAHMA_MPI_VERSION < 300500)) ||   \
+      (defined(BRAHMA_MPI_IMPL_OPENMPI) &&                                 \
+       (BRAHMA_MPI_VERSION >= 500006 && BRAHMA_MPI_VERSION < 500100)))) || \
+    (defined(BRAHMA_MPI_IMPL_OPENMPI) &&                                   \
+     (BRAHMA_MPI_VERSION >= 400106 && BRAHMA_MPI_VERSION < 400200))
 int brahma::MPIDFTracer::MPI_Recv_init(void* buf, int count,
                                        MPI_Datatype datatype, int source,
                                        int tag, MPI_Comm comm,
@@ -10648,12 +10796,14 @@ int brahma::MPIDFTracer::MPI_Recv_init(void* buf, int count,
   return ret;
 }
 #endif
-#if ((defined(BRAHMA_MPI_IMPL_CRAYMPICH) &&                             \
-      (BRAHMA_MPI_VERSION >= 900100 && BRAHMA_MPI_VERSION < 900200)) || \
-     (defined(BRAHMA_MPI_IMPL_MPICH) &&                                 \
-      (BRAHMA_MPI_VERSION >= 400203 && BRAHMA_MPI_VERSION < 400300)) || \
-     (defined(BRAHMA_MPI_IMPL_OPENMPI) &&                               \
-      (BRAHMA_MPI_VERSION >= 400106 && BRAHMA_MPI_VERSION < 400200)))
+#if (((defined(BRAHMA_MPI_IMPL_CRAYMPICH) &&                               \
+       (BRAHMA_MPI_VERSION >= 900100 && BRAHMA_MPI_VERSION < 900200)) ||   \
+      (defined(BRAHMA_MPI_IMPL_MPICH) &&                                   \
+       (BRAHMA_MPI_VERSION >= 400203 && BRAHMA_MPI_VERSION < 400300)) ||   \
+      (defined(BRAHMA_MPI_IMPL_OPENMPI) &&                                 \
+       (BRAHMA_MPI_VERSION >= 400106 && BRAHMA_MPI_VERSION < 400200)))) && \
+    !(defined(BRAHMA_MPI_IMPL_OPENMPI) &&                                  \
+      (BRAHMA_MPI_VERSION >= 400106 && BRAHMA_MPI_VERSION < 400200))
 int brahma::MPIDFTracer::MPI_Recv_init(void* buf, int count,
                                        MPI_Datatype datatype, int source,
                                        int tag, int comm,
@@ -10713,13 +10863,15 @@ int brahma::MPIDFTracer::MPI_Recv_init_c(void* buf, MPI_Count count,
   return ret;
 }
 #endif
-#if ((defined(BRAHMA_MPI_IMPL_CRAYMPICH) &&                               \
-      ((BRAHMA_MPI_VERSION >= 800108 && BRAHMA_MPI_VERSION < 800200) ||   \
-       (BRAHMA_MPI_VERSION >= 900001 && BRAHMA_MPI_VERSION < 900100))) || \
-     (defined(BRAHMA_MPI_IMPL_MPICH) &&                                   \
-      (BRAHMA_MPI_VERSION >= 300403 && BRAHMA_MPI_VERSION < 300500)) ||   \
-     (defined(BRAHMA_MPI_IMPL_OPENMPI) &&                                 \
-      (BRAHMA_MPI_VERSION >= 500006 && BRAHMA_MPI_VERSION < 500100)))
+#if (((defined(BRAHMA_MPI_IMPL_CRAYMPICH) &&                               \
+       ((BRAHMA_MPI_VERSION >= 800108 && BRAHMA_MPI_VERSION < 800200) ||   \
+        (BRAHMA_MPI_VERSION >= 900001 && BRAHMA_MPI_VERSION < 900100))) || \
+      (defined(BRAHMA_MPI_IMPL_MPICH) &&                                   \
+       (BRAHMA_MPI_VERSION >= 300403 && BRAHMA_MPI_VERSION < 300500)) ||   \
+      (defined(BRAHMA_MPI_IMPL_OPENMPI) &&                                 \
+       (BRAHMA_MPI_VERSION >= 500006 && BRAHMA_MPI_VERSION < 500100)))) || \
+    (defined(BRAHMA_MPI_IMPL_OPENMPI) &&                                   \
+     (BRAHMA_MPI_VERSION >= 400106 && BRAHMA_MPI_VERSION < 400200))
 int brahma::MPIDFTracer::MPI_Reduce(const void* sendbuf, void* recvbuf,
                                     int count, MPI_Datatype datatype, MPI_Op op,
                                     int root, MPI_Comm comm) {
@@ -10737,12 +10889,14 @@ int brahma::MPIDFTracer::MPI_Reduce(const void* sendbuf, void* recvbuf,
   return ret;
 }
 #endif
-#if ((defined(BRAHMA_MPI_IMPL_CRAYMPICH) &&                             \
-      (BRAHMA_MPI_VERSION >= 900100 && BRAHMA_MPI_VERSION < 900200)) || \
-     (defined(BRAHMA_MPI_IMPL_MPICH) &&                                 \
-      (BRAHMA_MPI_VERSION >= 400203 && BRAHMA_MPI_VERSION < 400300)) || \
-     (defined(BRAHMA_MPI_IMPL_OPENMPI) &&                               \
-      (BRAHMA_MPI_VERSION >= 400106 && BRAHMA_MPI_VERSION < 400200)))
+#if (((defined(BRAHMA_MPI_IMPL_CRAYMPICH) &&                               \
+       (BRAHMA_MPI_VERSION >= 900100 && BRAHMA_MPI_VERSION < 900200)) ||   \
+      (defined(BRAHMA_MPI_IMPL_MPICH) &&                                   \
+       (BRAHMA_MPI_VERSION >= 400203 && BRAHMA_MPI_VERSION < 400300)) ||   \
+      (defined(BRAHMA_MPI_IMPL_OPENMPI) &&                                 \
+       (BRAHMA_MPI_VERSION >= 400106 && BRAHMA_MPI_VERSION < 400200)))) && \
+    !(defined(BRAHMA_MPI_IMPL_OPENMPI) &&                                  \
+      (BRAHMA_MPI_VERSION >= 400106 && BRAHMA_MPI_VERSION < 400200))
 int brahma::MPIDFTracer::MPI_Reduce(const void* sendbuf, void* recvbuf,
                                     int count, MPI_Datatype datatype, int op,
                                     int root, int comm) {
@@ -10889,13 +11043,15 @@ int brahma::MPIDFTracer::MPI_Reduce_init_c(const void* sendbuf, void* recvbuf,
   return ret;
 }
 #endif
-#if ((defined(BRAHMA_MPI_IMPL_CRAYMPICH) &&                               \
-      ((BRAHMA_MPI_VERSION >= 800108 && BRAHMA_MPI_VERSION < 800200) ||   \
-       (BRAHMA_MPI_VERSION >= 900001 && BRAHMA_MPI_VERSION < 900100))) || \
-     (defined(BRAHMA_MPI_IMPL_MPICH) &&                                   \
-      (BRAHMA_MPI_VERSION >= 300403 && BRAHMA_MPI_VERSION < 300500)) ||   \
-     (defined(BRAHMA_MPI_IMPL_OPENMPI) &&                                 \
-      (BRAHMA_MPI_VERSION >= 500006 && BRAHMA_MPI_VERSION < 500100)))
+#if (((defined(BRAHMA_MPI_IMPL_CRAYMPICH) &&                               \
+       ((BRAHMA_MPI_VERSION >= 800108 && BRAHMA_MPI_VERSION < 800200) ||   \
+        (BRAHMA_MPI_VERSION >= 900001 && BRAHMA_MPI_VERSION < 900100))) || \
+      (defined(BRAHMA_MPI_IMPL_MPICH) &&                                   \
+       (BRAHMA_MPI_VERSION >= 300403 && BRAHMA_MPI_VERSION < 300500)) ||   \
+      (defined(BRAHMA_MPI_IMPL_OPENMPI) &&                                 \
+       (BRAHMA_MPI_VERSION >= 500006 && BRAHMA_MPI_VERSION < 500100)))) || \
+    (defined(BRAHMA_MPI_IMPL_OPENMPI) &&                                   \
+     (BRAHMA_MPI_VERSION >= 400106 && BRAHMA_MPI_VERSION < 400200))
 int brahma::MPIDFTracer::MPI_Reduce_local(const void* inbuf, void* inoutbuf,
                                           int count, MPI_Datatype datatype,
                                           MPI_Op op) {
@@ -10910,12 +11066,14 @@ int brahma::MPIDFTracer::MPI_Reduce_local(const void* inbuf, void* inoutbuf,
   return ret;
 }
 #endif
-#if ((defined(BRAHMA_MPI_IMPL_CRAYMPICH) &&                             \
-      (BRAHMA_MPI_VERSION >= 900100 && BRAHMA_MPI_VERSION < 900200)) || \
-     (defined(BRAHMA_MPI_IMPL_MPICH) &&                                 \
-      (BRAHMA_MPI_VERSION >= 400203 && BRAHMA_MPI_VERSION < 400300)) || \
-     (defined(BRAHMA_MPI_IMPL_OPENMPI) &&                               \
-      (BRAHMA_MPI_VERSION >= 400106 && BRAHMA_MPI_VERSION < 400200)))
+#if (((defined(BRAHMA_MPI_IMPL_CRAYMPICH) &&                               \
+       (BRAHMA_MPI_VERSION >= 900100 && BRAHMA_MPI_VERSION < 900200)) ||   \
+      (defined(BRAHMA_MPI_IMPL_MPICH) &&                                   \
+       (BRAHMA_MPI_VERSION >= 400203 && BRAHMA_MPI_VERSION < 400300)) ||   \
+      (defined(BRAHMA_MPI_IMPL_OPENMPI) &&                                 \
+       (BRAHMA_MPI_VERSION >= 400106 && BRAHMA_MPI_VERSION < 400200)))) && \
+    !(defined(BRAHMA_MPI_IMPL_OPENMPI) &&                                  \
+      (BRAHMA_MPI_VERSION >= 400106 && BRAHMA_MPI_VERSION < 400200))
 int brahma::MPIDFTracer::MPI_Reduce_local(const void* inbuf, void* inoutbuf,
                                           int count, MPI_Datatype datatype,
                                           int op) {
@@ -10964,13 +11122,15 @@ int brahma::MPIDFTracer::MPI_Reduce_local_c(const void* inbuf, void* inoutbuf,
   return ret;
 }
 #endif
-#if ((defined(BRAHMA_MPI_IMPL_CRAYMPICH) &&                               \
-      ((BRAHMA_MPI_VERSION >= 800108 && BRAHMA_MPI_VERSION < 800200) ||   \
-       (BRAHMA_MPI_VERSION >= 900001 && BRAHMA_MPI_VERSION < 900100))) || \
-     (defined(BRAHMA_MPI_IMPL_MPICH) &&                                   \
-      (BRAHMA_MPI_VERSION >= 300403 && BRAHMA_MPI_VERSION < 300500)) ||   \
-     (defined(BRAHMA_MPI_IMPL_OPENMPI) &&                                 \
-      (BRAHMA_MPI_VERSION >= 500006 && BRAHMA_MPI_VERSION < 500100)))
+#if (((defined(BRAHMA_MPI_IMPL_CRAYMPICH) &&                               \
+       ((BRAHMA_MPI_VERSION >= 800108 && BRAHMA_MPI_VERSION < 800200) ||   \
+        (BRAHMA_MPI_VERSION >= 900001 && BRAHMA_MPI_VERSION < 900100))) || \
+      (defined(BRAHMA_MPI_IMPL_MPICH) &&                                   \
+       (BRAHMA_MPI_VERSION >= 300403 && BRAHMA_MPI_VERSION < 300500)) ||   \
+      (defined(BRAHMA_MPI_IMPL_OPENMPI) &&                                 \
+       (BRAHMA_MPI_VERSION >= 500006 && BRAHMA_MPI_VERSION < 500100)))) || \
+    (defined(BRAHMA_MPI_IMPL_OPENMPI) &&                                   \
+     (BRAHMA_MPI_VERSION >= 400106 && BRAHMA_MPI_VERSION < 400200))
 int brahma::MPIDFTracer::MPI_Reduce_scatter(const void* sendbuf, void* recvbuf,
                                             const int recvcounts[],
                                             MPI_Datatype datatype, MPI_Op op,
@@ -10987,12 +11147,14 @@ int brahma::MPIDFTracer::MPI_Reduce_scatter(const void* sendbuf, void* recvbuf,
   return ret;
 }
 #endif
-#if ((defined(BRAHMA_MPI_IMPL_CRAYMPICH) &&                             \
-      (BRAHMA_MPI_VERSION >= 900100 && BRAHMA_MPI_VERSION < 900200)) || \
-     (defined(BRAHMA_MPI_IMPL_MPICH) &&                                 \
-      (BRAHMA_MPI_VERSION >= 400203 && BRAHMA_MPI_VERSION < 400300)) || \
-     (defined(BRAHMA_MPI_IMPL_OPENMPI) &&                               \
-      (BRAHMA_MPI_VERSION >= 400106 && BRAHMA_MPI_VERSION < 400200)))
+#if (((defined(BRAHMA_MPI_IMPL_CRAYMPICH) &&                               \
+       (BRAHMA_MPI_VERSION >= 900100 && BRAHMA_MPI_VERSION < 900200)) ||   \
+      (defined(BRAHMA_MPI_IMPL_MPICH) &&                                   \
+       (BRAHMA_MPI_VERSION >= 400203 && BRAHMA_MPI_VERSION < 400300)) ||   \
+      (defined(BRAHMA_MPI_IMPL_OPENMPI) &&                                 \
+       (BRAHMA_MPI_VERSION >= 400106 && BRAHMA_MPI_VERSION < 400200)))) && \
+    !(defined(BRAHMA_MPI_IMPL_OPENMPI) &&                                  \
+      (BRAHMA_MPI_VERSION >= 400106 && BRAHMA_MPI_VERSION < 400200))
 int brahma::MPIDFTracer::MPI_Reduce_scatter(const void* sendbuf, void* recvbuf,
                                             const int recvcounts[],
                                             MPI_Datatype datatype, int op,
@@ -11009,13 +11171,15 @@ int brahma::MPIDFTracer::MPI_Reduce_scatter(const void* sendbuf, void* recvbuf,
   return ret;
 }
 #endif
-#if ((defined(BRAHMA_MPI_IMPL_CRAYMPICH) &&                               \
-      ((BRAHMA_MPI_VERSION >= 800108 && BRAHMA_MPI_VERSION < 800200) ||   \
-       (BRAHMA_MPI_VERSION >= 900001 && BRAHMA_MPI_VERSION < 900100))) || \
-     (defined(BRAHMA_MPI_IMPL_MPICH) &&                                   \
-      (BRAHMA_MPI_VERSION >= 300403 && BRAHMA_MPI_VERSION < 300500)) ||   \
-     (defined(BRAHMA_MPI_IMPL_OPENMPI) &&                                 \
-      (BRAHMA_MPI_VERSION >= 500006 && BRAHMA_MPI_VERSION < 500100)))
+#if (((defined(BRAHMA_MPI_IMPL_CRAYMPICH) &&                               \
+       ((BRAHMA_MPI_VERSION >= 800108 && BRAHMA_MPI_VERSION < 800200) ||   \
+        (BRAHMA_MPI_VERSION >= 900001 && BRAHMA_MPI_VERSION < 900100))) || \
+      (defined(BRAHMA_MPI_IMPL_MPICH) &&                                   \
+       (BRAHMA_MPI_VERSION >= 300403 && BRAHMA_MPI_VERSION < 300500)) ||   \
+      (defined(BRAHMA_MPI_IMPL_OPENMPI) &&                                 \
+       (BRAHMA_MPI_VERSION >= 500006 && BRAHMA_MPI_VERSION < 500100)))) || \
+    (defined(BRAHMA_MPI_IMPL_OPENMPI) &&                                   \
+     (BRAHMA_MPI_VERSION >= 400106 && BRAHMA_MPI_VERSION < 400200))
 int brahma::MPIDFTracer::MPI_Reduce_scatter_block(const void* sendbuf,
                                                   void* recvbuf, int recvcount,
                                                   MPI_Datatype datatype,
@@ -11033,12 +11197,14 @@ int brahma::MPIDFTracer::MPI_Reduce_scatter_block(const void* sendbuf,
   return ret;
 }
 #endif
-#if ((defined(BRAHMA_MPI_IMPL_CRAYMPICH) &&                             \
-      (BRAHMA_MPI_VERSION >= 900100 && BRAHMA_MPI_VERSION < 900200)) || \
-     (defined(BRAHMA_MPI_IMPL_MPICH) &&                                 \
-      (BRAHMA_MPI_VERSION >= 400203 && BRAHMA_MPI_VERSION < 400300)) || \
-     (defined(BRAHMA_MPI_IMPL_OPENMPI) &&                               \
-      (BRAHMA_MPI_VERSION >= 400106 && BRAHMA_MPI_VERSION < 400200)))
+#if (((defined(BRAHMA_MPI_IMPL_CRAYMPICH) &&                               \
+       (BRAHMA_MPI_VERSION >= 900100 && BRAHMA_MPI_VERSION < 900200)) ||   \
+      (defined(BRAHMA_MPI_IMPL_MPICH) &&                                   \
+       (BRAHMA_MPI_VERSION >= 400203 && BRAHMA_MPI_VERSION < 400300)) ||   \
+      (defined(BRAHMA_MPI_IMPL_OPENMPI) &&                                 \
+       (BRAHMA_MPI_VERSION >= 400106 && BRAHMA_MPI_VERSION < 400200)))) && \
+    !(defined(BRAHMA_MPI_IMPL_OPENMPI) &&                                  \
+      (BRAHMA_MPI_VERSION >= 400106 && BRAHMA_MPI_VERSION < 400200))
 int brahma::MPIDFTracer::MPI_Reduce_scatter_block(const void* sendbuf,
                                                   void* recvbuf, int recvcount,
                                                   MPI_Datatype datatype, int op,
@@ -11385,29 +11551,15 @@ int brahma::MPIDFTracer::MPI_Remove_error_string(int errorcode) {
   return ret;
 }
 #endif
-#if ((defined(BRAHMA_MPI_IMPL_CRAYMPICH) &&                             \
-      (BRAHMA_MPI_VERSION >= 900100 && BRAHMA_MPI_VERSION < 900200)) || \
-     (defined(BRAHMA_MPI_IMPL_MPICH) &&                                 \
-      (BRAHMA_MPI_VERSION >= 400203 && BRAHMA_MPI_VERSION < 400300)) || \
-     (defined(BRAHMA_MPI_IMPL_OPENMPI) &&                               \
-      (BRAHMA_MPI_VERSION >= 400106 && BRAHMA_MPI_VERSION < 400200)))
-MPI_Request brahma::MPIDFTracer::MPI_Request(int request) {
-  BRAHMA_MAP_OR_FAIL(MPI_Request);
-  DFT_LOGGER_START_ALWAYS();
-  DFT_LOGGER_UPDATE_TYPE(request, MetadataType::MT_VALUE);
-  MPI_Request ret = __real_MPI_Request(request);
-  DFT_LOGGER_UPDATE_TYPE(ret, MetadataType::MT_VALUE);
-  DFT_LOGGER_END();
-  return ret;
-}
-#endif
-#if ((defined(BRAHMA_MPI_IMPL_CRAYMPICH) &&                               \
-      ((BRAHMA_MPI_VERSION >= 800108 && BRAHMA_MPI_VERSION < 800200) ||   \
-       (BRAHMA_MPI_VERSION >= 900001 && BRAHMA_MPI_VERSION < 900100))) || \
-     (defined(BRAHMA_MPI_IMPL_MPICH) &&                                   \
-      (BRAHMA_MPI_VERSION >= 300403 && BRAHMA_MPI_VERSION < 300500)) ||   \
-     (defined(BRAHMA_MPI_IMPL_OPENMPI) &&                                 \
-      (BRAHMA_MPI_VERSION >= 500006 && BRAHMA_MPI_VERSION < 500100)))
+#if (((defined(BRAHMA_MPI_IMPL_CRAYMPICH) &&                               \
+       ((BRAHMA_MPI_VERSION >= 800108 && BRAHMA_MPI_VERSION < 800200) ||   \
+        (BRAHMA_MPI_VERSION >= 900001 && BRAHMA_MPI_VERSION < 900100))) || \
+      (defined(BRAHMA_MPI_IMPL_MPICH) &&                                   \
+       (BRAHMA_MPI_VERSION >= 300403 && BRAHMA_MPI_VERSION < 300500)) ||   \
+      (defined(BRAHMA_MPI_IMPL_OPENMPI) &&                                 \
+       (BRAHMA_MPI_VERSION >= 500006 && BRAHMA_MPI_VERSION < 500100)))) || \
+    (defined(BRAHMA_MPI_IMPL_OPENMPI) &&                                   \
+     (BRAHMA_MPI_VERSION >= 400106 && BRAHMA_MPI_VERSION < 400200))
 int brahma::MPIDFTracer::MPI_Request_free(MPI_Request* request) {
   BRAHMA_MAP_OR_FAIL(MPI_Request_free);
   DFT_LOGGER_START_ALWAYS();
@@ -11417,12 +11569,14 @@ int brahma::MPIDFTracer::MPI_Request_free(MPI_Request* request) {
   return ret;
 }
 #endif
-#if ((defined(BRAHMA_MPI_IMPL_CRAYMPICH) &&                             \
-      (BRAHMA_MPI_VERSION >= 900100 && BRAHMA_MPI_VERSION < 900200)) || \
-     (defined(BRAHMA_MPI_IMPL_MPICH) &&                                 \
-      (BRAHMA_MPI_VERSION >= 400203 && BRAHMA_MPI_VERSION < 400300)) || \
-     (defined(BRAHMA_MPI_IMPL_OPENMPI) &&                               \
-      (BRAHMA_MPI_VERSION >= 400106 && BRAHMA_MPI_VERSION < 400200)))
+#if (((defined(BRAHMA_MPI_IMPL_CRAYMPICH) &&                               \
+       (BRAHMA_MPI_VERSION >= 900100 && BRAHMA_MPI_VERSION < 900200)) ||   \
+      (defined(BRAHMA_MPI_IMPL_MPICH) &&                                   \
+       (BRAHMA_MPI_VERSION >= 400203 && BRAHMA_MPI_VERSION < 400300)) ||   \
+      (defined(BRAHMA_MPI_IMPL_OPENMPI) &&                                 \
+       (BRAHMA_MPI_VERSION >= 400106 && BRAHMA_MPI_VERSION < 400200)))) && \
+    !(defined(BRAHMA_MPI_IMPL_OPENMPI) &&                                  \
+      (BRAHMA_MPI_VERSION >= 400106 && BRAHMA_MPI_VERSION < 400200))
 int brahma::MPIDFTracer::MPI_Request_free(int* request) {
   BRAHMA_MAP_OR_FAIL(MPI_Request_free);
   DFT_LOGGER_START_ALWAYS();
@@ -11432,13 +11586,15 @@ int brahma::MPIDFTracer::MPI_Request_free(int* request) {
   return ret;
 }
 #endif
-#if ((defined(BRAHMA_MPI_IMPL_CRAYMPICH) &&                               \
-      ((BRAHMA_MPI_VERSION >= 800108 && BRAHMA_MPI_VERSION < 800200) ||   \
-       (BRAHMA_MPI_VERSION >= 900001 && BRAHMA_MPI_VERSION < 900100))) || \
-     (defined(BRAHMA_MPI_IMPL_MPICH) &&                                   \
-      (BRAHMA_MPI_VERSION >= 300403 && BRAHMA_MPI_VERSION < 300500)) ||   \
-     (defined(BRAHMA_MPI_IMPL_OPENMPI) &&                                 \
-      (BRAHMA_MPI_VERSION >= 500006 && BRAHMA_MPI_VERSION < 500100)))
+#if (((defined(BRAHMA_MPI_IMPL_CRAYMPICH) &&                               \
+       ((BRAHMA_MPI_VERSION >= 800108 && BRAHMA_MPI_VERSION < 800200) ||   \
+        (BRAHMA_MPI_VERSION >= 900001 && BRAHMA_MPI_VERSION < 900100))) || \
+      (defined(BRAHMA_MPI_IMPL_MPICH) &&                                   \
+       (BRAHMA_MPI_VERSION >= 300403 && BRAHMA_MPI_VERSION < 300500)) ||   \
+      (defined(BRAHMA_MPI_IMPL_OPENMPI) &&                                 \
+       (BRAHMA_MPI_VERSION >= 500006 && BRAHMA_MPI_VERSION < 500100)))) || \
+    (defined(BRAHMA_MPI_IMPL_OPENMPI) &&                                   \
+     (BRAHMA_MPI_VERSION >= 400106 && BRAHMA_MPI_VERSION < 400200))
 int brahma::MPIDFTracer::MPI_Request_get_status(MPI_Request request, int* flag,
                                                 MPI_Status* status) {
   BRAHMA_MAP_OR_FAIL(MPI_Request_get_status);
@@ -11450,12 +11606,14 @@ int brahma::MPIDFTracer::MPI_Request_get_status(MPI_Request request, int* flag,
   return ret;
 }
 #endif
-#if ((defined(BRAHMA_MPI_IMPL_CRAYMPICH) &&                             \
-      (BRAHMA_MPI_VERSION >= 900100 && BRAHMA_MPI_VERSION < 900200)) || \
-     (defined(BRAHMA_MPI_IMPL_MPICH) &&                                 \
-      (BRAHMA_MPI_VERSION >= 400203 && BRAHMA_MPI_VERSION < 400300)) || \
-     (defined(BRAHMA_MPI_IMPL_OPENMPI) &&                               \
-      (BRAHMA_MPI_VERSION >= 400106 && BRAHMA_MPI_VERSION < 400200)))
+#if (((defined(BRAHMA_MPI_IMPL_CRAYMPICH) &&                               \
+       (BRAHMA_MPI_VERSION >= 900100 && BRAHMA_MPI_VERSION < 900200)) ||   \
+      (defined(BRAHMA_MPI_IMPL_MPICH) &&                                   \
+       (BRAHMA_MPI_VERSION >= 400203 && BRAHMA_MPI_VERSION < 400300)) ||   \
+      (defined(BRAHMA_MPI_IMPL_OPENMPI) &&                                 \
+       (BRAHMA_MPI_VERSION >= 400106 && BRAHMA_MPI_VERSION < 400200)))) && \
+    !(defined(BRAHMA_MPI_IMPL_OPENMPI) &&                                  \
+      (BRAHMA_MPI_VERSION >= 400106 && BRAHMA_MPI_VERSION < 400200))
 int brahma::MPIDFTracer::MPI_Request_get_status(int request, int* flag,
                                                 MPI_Status* status) {
   BRAHMA_MAP_OR_FAIL(MPI_Request_get_status);
@@ -11520,13 +11678,15 @@ int brahma::MPIDFTracer::MPI_Request_get_status_some(
   return ret;
 }
 #endif
-#if ((defined(BRAHMA_MPI_IMPL_CRAYMPICH) &&                               \
-      ((BRAHMA_MPI_VERSION >= 800108 && BRAHMA_MPI_VERSION < 800200) ||   \
-       (BRAHMA_MPI_VERSION >= 900001 && BRAHMA_MPI_VERSION < 900100))) || \
-     (defined(BRAHMA_MPI_IMPL_MPICH) &&                                   \
-      (BRAHMA_MPI_VERSION >= 300403 && BRAHMA_MPI_VERSION < 300500)) ||   \
-     (defined(BRAHMA_MPI_IMPL_OPENMPI) &&                                 \
-      (BRAHMA_MPI_VERSION >= 500006 && BRAHMA_MPI_VERSION < 500100)))
+#if (((defined(BRAHMA_MPI_IMPL_CRAYMPICH) &&                               \
+       ((BRAHMA_MPI_VERSION >= 800108 && BRAHMA_MPI_VERSION < 800200) ||   \
+        (BRAHMA_MPI_VERSION >= 900001 && BRAHMA_MPI_VERSION < 900100))) || \
+      (defined(BRAHMA_MPI_IMPL_MPICH) &&                                   \
+       (BRAHMA_MPI_VERSION >= 300403 && BRAHMA_MPI_VERSION < 300500)) ||   \
+      (defined(BRAHMA_MPI_IMPL_OPENMPI) &&                                 \
+       (BRAHMA_MPI_VERSION >= 500006 && BRAHMA_MPI_VERSION < 500100)))) || \
+    (defined(BRAHMA_MPI_IMPL_OPENMPI) &&                                   \
+     (BRAHMA_MPI_VERSION >= 400106 && BRAHMA_MPI_VERSION < 400200))
 int brahma::MPIDFTracer::MPI_Rget(void* origin_addr, int origin_count,
                                   MPI_Datatype origin_datatype, int target_rank,
                                   MPI_Aint target_disp, int target_count,
@@ -11549,12 +11709,14 @@ int brahma::MPIDFTracer::MPI_Rget(void* origin_addr, int origin_count,
   return ret;
 }
 #endif
-#if ((defined(BRAHMA_MPI_IMPL_CRAYMPICH) &&                             \
-      (BRAHMA_MPI_VERSION >= 900100 && BRAHMA_MPI_VERSION < 900200)) || \
-     (defined(BRAHMA_MPI_IMPL_MPICH) &&                                 \
-      (BRAHMA_MPI_VERSION >= 400203 && BRAHMA_MPI_VERSION < 400300)) || \
-     (defined(BRAHMA_MPI_IMPL_OPENMPI) &&                               \
-      (BRAHMA_MPI_VERSION >= 400106 && BRAHMA_MPI_VERSION < 400200)))
+#if (((defined(BRAHMA_MPI_IMPL_CRAYMPICH) &&                               \
+       (BRAHMA_MPI_VERSION >= 900100 && BRAHMA_MPI_VERSION < 900200)) ||   \
+      (defined(BRAHMA_MPI_IMPL_MPICH) &&                                   \
+       (BRAHMA_MPI_VERSION >= 400203 && BRAHMA_MPI_VERSION < 400300)) ||   \
+      (defined(BRAHMA_MPI_IMPL_OPENMPI) &&                                 \
+       (BRAHMA_MPI_VERSION >= 400106 && BRAHMA_MPI_VERSION < 400200)))) && \
+    !(defined(BRAHMA_MPI_IMPL_OPENMPI) &&                                  \
+      (BRAHMA_MPI_VERSION >= 400106 && BRAHMA_MPI_VERSION < 400200))
 int brahma::MPIDFTracer::MPI_Rget(void* origin_addr, int origin_count,
                                   MPI_Datatype origin_datatype, int target_rank,
                                   MPI_Aint target_disp, int target_count,
@@ -11577,13 +11739,15 @@ int brahma::MPIDFTracer::MPI_Rget(void* origin_addr, int origin_count,
   return ret;
 }
 #endif
-#if ((defined(BRAHMA_MPI_IMPL_CRAYMPICH) &&                               \
-      ((BRAHMA_MPI_VERSION >= 800108 && BRAHMA_MPI_VERSION < 800200) ||   \
-       (BRAHMA_MPI_VERSION >= 900001 && BRAHMA_MPI_VERSION < 900100))) || \
-     (defined(BRAHMA_MPI_IMPL_MPICH) &&                                   \
-      (BRAHMA_MPI_VERSION >= 300403 && BRAHMA_MPI_VERSION < 300500)) ||   \
-     (defined(BRAHMA_MPI_IMPL_OPENMPI) &&                                 \
-      (BRAHMA_MPI_VERSION >= 500006 && BRAHMA_MPI_VERSION < 500100)))
+#if (((defined(BRAHMA_MPI_IMPL_CRAYMPICH) &&                               \
+       ((BRAHMA_MPI_VERSION >= 800108 && BRAHMA_MPI_VERSION < 800200) ||   \
+        (BRAHMA_MPI_VERSION >= 900001 && BRAHMA_MPI_VERSION < 900100))) || \
+      (defined(BRAHMA_MPI_IMPL_MPICH) &&                                   \
+       (BRAHMA_MPI_VERSION >= 300403 && BRAHMA_MPI_VERSION < 300500)) ||   \
+      (defined(BRAHMA_MPI_IMPL_OPENMPI) &&                                 \
+       (BRAHMA_MPI_VERSION >= 500006 && BRAHMA_MPI_VERSION < 500100)))) || \
+    (defined(BRAHMA_MPI_IMPL_OPENMPI) &&                                   \
+     (BRAHMA_MPI_VERSION >= 400106 && BRAHMA_MPI_VERSION < 400200))
 int brahma::MPIDFTracer::MPI_Rget_accumulate(
     const void* origin_addr, int origin_count, MPI_Datatype origin_datatype,
     void* result_addr, int result_count, MPI_Datatype result_datatype,
@@ -11611,12 +11775,14 @@ int brahma::MPIDFTracer::MPI_Rget_accumulate(
   return ret;
 }
 #endif
-#if ((defined(BRAHMA_MPI_IMPL_CRAYMPICH) &&                             \
-      (BRAHMA_MPI_VERSION >= 900100 && BRAHMA_MPI_VERSION < 900200)) || \
-     (defined(BRAHMA_MPI_IMPL_MPICH) &&                                 \
-      (BRAHMA_MPI_VERSION >= 400203 && BRAHMA_MPI_VERSION < 400300)) || \
-     (defined(BRAHMA_MPI_IMPL_OPENMPI) &&                               \
-      (BRAHMA_MPI_VERSION >= 400106 && BRAHMA_MPI_VERSION < 400200)))
+#if (((defined(BRAHMA_MPI_IMPL_CRAYMPICH) &&                               \
+       (BRAHMA_MPI_VERSION >= 900100 && BRAHMA_MPI_VERSION < 900200)) ||   \
+      (defined(BRAHMA_MPI_IMPL_MPICH) &&                                   \
+       (BRAHMA_MPI_VERSION >= 400203 && BRAHMA_MPI_VERSION < 400300)) ||   \
+      (defined(BRAHMA_MPI_IMPL_OPENMPI) &&                                 \
+       (BRAHMA_MPI_VERSION >= 400106 && BRAHMA_MPI_VERSION < 400200)))) && \
+    !(defined(BRAHMA_MPI_IMPL_OPENMPI) &&                                  \
+      (BRAHMA_MPI_VERSION >= 400106 && BRAHMA_MPI_VERSION < 400200))
 int brahma::MPIDFTracer::MPI_Rget_accumulate(
     const void* origin_addr, int origin_count, MPI_Datatype origin_datatype,
     void* result_addr, int result_count, MPI_Datatype result_datatype,
@@ -11753,13 +11919,15 @@ int brahma::MPIDFTracer::MPI_Rget_c(void* origin_addr, MPI_Count origin_count,
   return ret;
 }
 #endif
-#if ((defined(BRAHMA_MPI_IMPL_CRAYMPICH) &&                               \
-      ((BRAHMA_MPI_VERSION >= 800108 && BRAHMA_MPI_VERSION < 800200) ||   \
-       (BRAHMA_MPI_VERSION >= 900001 && BRAHMA_MPI_VERSION < 900100))) || \
-     (defined(BRAHMA_MPI_IMPL_MPICH) &&                                   \
-      (BRAHMA_MPI_VERSION >= 300403 && BRAHMA_MPI_VERSION < 300500)) ||   \
-     (defined(BRAHMA_MPI_IMPL_OPENMPI) &&                                 \
-      (BRAHMA_MPI_VERSION >= 500006 && BRAHMA_MPI_VERSION < 500100)))
+#if (((defined(BRAHMA_MPI_IMPL_CRAYMPICH) &&                               \
+       ((BRAHMA_MPI_VERSION >= 800108 && BRAHMA_MPI_VERSION < 800200) ||   \
+        (BRAHMA_MPI_VERSION >= 900001 && BRAHMA_MPI_VERSION < 900100))) || \
+      (defined(BRAHMA_MPI_IMPL_MPICH) &&                                   \
+       (BRAHMA_MPI_VERSION >= 300403 && BRAHMA_MPI_VERSION < 300500)) ||   \
+      (defined(BRAHMA_MPI_IMPL_OPENMPI) &&                                 \
+       (BRAHMA_MPI_VERSION >= 500006 && BRAHMA_MPI_VERSION < 500100)))) || \
+    (defined(BRAHMA_MPI_IMPL_OPENMPI) &&                                   \
+     (BRAHMA_MPI_VERSION >= 400106 && BRAHMA_MPI_VERSION < 400200))
 int brahma::MPIDFTracer::MPI_Rput(const void* origin_addr, int origin_count,
                                   MPI_Datatype origin_datatype, int target_rank,
                                   MPI_Aint target_disp, int target_cout,
@@ -11782,12 +11950,14 @@ int brahma::MPIDFTracer::MPI_Rput(const void* origin_addr, int origin_count,
   return ret;
 }
 #endif
-#if ((defined(BRAHMA_MPI_IMPL_CRAYMPICH) &&                             \
-      (BRAHMA_MPI_VERSION >= 900100 && BRAHMA_MPI_VERSION < 900200)) || \
-     (defined(BRAHMA_MPI_IMPL_MPICH) &&                                 \
-      (BRAHMA_MPI_VERSION >= 400203 && BRAHMA_MPI_VERSION < 400300)) || \
-     (defined(BRAHMA_MPI_IMPL_OPENMPI) &&                               \
-      (BRAHMA_MPI_VERSION >= 400106 && BRAHMA_MPI_VERSION < 400200)))
+#if (((defined(BRAHMA_MPI_IMPL_CRAYMPICH) &&                               \
+       (BRAHMA_MPI_VERSION >= 900100 && BRAHMA_MPI_VERSION < 900200)) ||   \
+      (defined(BRAHMA_MPI_IMPL_MPICH) &&                                   \
+       (BRAHMA_MPI_VERSION >= 400203 && BRAHMA_MPI_VERSION < 400300)) ||   \
+      (defined(BRAHMA_MPI_IMPL_OPENMPI) &&                                 \
+       (BRAHMA_MPI_VERSION >= 400106 && BRAHMA_MPI_VERSION < 400200)))) && \
+    !(defined(BRAHMA_MPI_IMPL_OPENMPI) &&                                  \
+      (BRAHMA_MPI_VERSION >= 400106 && BRAHMA_MPI_VERSION < 400200))
 int brahma::MPIDFTracer::MPI_Rput(const void* origin_addr, int origin_count,
                                   MPI_Datatype origin_datatype, int target_rank,
                                   MPI_Aint target_disp, int target_cout,
@@ -11862,13 +12032,15 @@ int brahma::MPIDFTracer::MPI_Rput_c(const void* origin_addr,
   return ret;
 }
 #endif
-#if ((defined(BRAHMA_MPI_IMPL_CRAYMPICH) &&                               \
-      ((BRAHMA_MPI_VERSION >= 800108 && BRAHMA_MPI_VERSION < 800200) ||   \
-       (BRAHMA_MPI_VERSION >= 900001 && BRAHMA_MPI_VERSION < 900100))) || \
-     (defined(BRAHMA_MPI_IMPL_MPICH) &&                                   \
-      (BRAHMA_MPI_VERSION >= 300403 && BRAHMA_MPI_VERSION < 300500)) ||   \
-     (defined(BRAHMA_MPI_IMPL_OPENMPI) &&                                 \
-      (BRAHMA_MPI_VERSION >= 500006 && BRAHMA_MPI_VERSION < 500100)))
+#if (((defined(BRAHMA_MPI_IMPL_CRAYMPICH) &&                               \
+       ((BRAHMA_MPI_VERSION >= 800108 && BRAHMA_MPI_VERSION < 800200) ||   \
+        (BRAHMA_MPI_VERSION >= 900001 && BRAHMA_MPI_VERSION < 900100))) || \
+      (defined(BRAHMA_MPI_IMPL_MPICH) &&                                   \
+       (BRAHMA_MPI_VERSION >= 300403 && BRAHMA_MPI_VERSION < 300500)) ||   \
+      (defined(BRAHMA_MPI_IMPL_OPENMPI) &&                                 \
+       (BRAHMA_MPI_VERSION >= 500006 && BRAHMA_MPI_VERSION < 500100)))) || \
+    (defined(BRAHMA_MPI_IMPL_OPENMPI) &&                                   \
+     (BRAHMA_MPI_VERSION >= 400106 && BRAHMA_MPI_VERSION < 400200))
 int brahma::MPIDFTracer::MPI_Rsend(const void* ibuf, int count,
                                    MPI_Datatype datatype, int dest, int tag,
                                    MPI_Comm comm) {
@@ -11885,12 +12057,14 @@ int brahma::MPIDFTracer::MPI_Rsend(const void* ibuf, int count,
   return ret;
 }
 #endif
-#if ((defined(BRAHMA_MPI_IMPL_CRAYMPICH) &&                             \
-      (BRAHMA_MPI_VERSION >= 900100 && BRAHMA_MPI_VERSION < 900200)) || \
-     (defined(BRAHMA_MPI_IMPL_MPICH) &&                                 \
-      (BRAHMA_MPI_VERSION >= 400203 && BRAHMA_MPI_VERSION < 400300)) || \
-     (defined(BRAHMA_MPI_IMPL_OPENMPI) &&                               \
-      (BRAHMA_MPI_VERSION >= 400106 && BRAHMA_MPI_VERSION < 400200)))
+#if (((defined(BRAHMA_MPI_IMPL_CRAYMPICH) &&                               \
+       (BRAHMA_MPI_VERSION >= 900100 && BRAHMA_MPI_VERSION < 900200)) ||   \
+      (defined(BRAHMA_MPI_IMPL_MPICH) &&                                   \
+       (BRAHMA_MPI_VERSION >= 400203 && BRAHMA_MPI_VERSION < 400300)) ||   \
+      (defined(BRAHMA_MPI_IMPL_OPENMPI) &&                                 \
+       (BRAHMA_MPI_VERSION >= 400106 && BRAHMA_MPI_VERSION < 400200)))) && \
+    !(defined(BRAHMA_MPI_IMPL_OPENMPI) &&                                  \
+      (BRAHMA_MPI_VERSION >= 400106 && BRAHMA_MPI_VERSION < 400200))
 int brahma::MPIDFTracer::MPI_Rsend(const void* ibuf, int count,
                                    MPI_Datatype datatype, int dest, int tag,
                                    int comm) {
@@ -11945,13 +12119,15 @@ int brahma::MPIDFTracer::MPI_Rsend_c(const void* buf, MPI_Count count,
   return ret;
 }
 #endif
-#if ((defined(BRAHMA_MPI_IMPL_CRAYMPICH) &&                               \
-      ((BRAHMA_MPI_VERSION >= 800108 && BRAHMA_MPI_VERSION < 800200) ||   \
-       (BRAHMA_MPI_VERSION >= 900001 && BRAHMA_MPI_VERSION < 900100))) || \
-     (defined(BRAHMA_MPI_IMPL_MPICH) &&                                   \
-      (BRAHMA_MPI_VERSION >= 300403 && BRAHMA_MPI_VERSION < 300500)) ||   \
-     (defined(BRAHMA_MPI_IMPL_OPENMPI) &&                                 \
-      (BRAHMA_MPI_VERSION >= 500006 && BRAHMA_MPI_VERSION < 500100)))
+#if (((defined(BRAHMA_MPI_IMPL_CRAYMPICH) &&                               \
+       ((BRAHMA_MPI_VERSION >= 800108 && BRAHMA_MPI_VERSION < 800200) ||   \
+        (BRAHMA_MPI_VERSION >= 900001 && BRAHMA_MPI_VERSION < 900100))) || \
+      (defined(BRAHMA_MPI_IMPL_MPICH) &&                                   \
+       (BRAHMA_MPI_VERSION >= 300403 && BRAHMA_MPI_VERSION < 300500)) ||   \
+      (defined(BRAHMA_MPI_IMPL_OPENMPI) &&                                 \
+       (BRAHMA_MPI_VERSION >= 500006 && BRAHMA_MPI_VERSION < 500100)))) || \
+    (defined(BRAHMA_MPI_IMPL_OPENMPI) &&                                   \
+     (BRAHMA_MPI_VERSION >= 400106 && BRAHMA_MPI_VERSION < 400200))
 int brahma::MPIDFTracer::MPI_Rsend_init(const void* buf, int count,
                                         MPI_Datatype datatype, int dest,
                                         int tag, MPI_Comm comm,
@@ -11970,12 +12146,14 @@ int brahma::MPIDFTracer::MPI_Rsend_init(const void* buf, int count,
   return ret;
 }
 #endif
-#if ((defined(BRAHMA_MPI_IMPL_CRAYMPICH) &&                             \
-      (BRAHMA_MPI_VERSION >= 900100 && BRAHMA_MPI_VERSION < 900200)) || \
-     (defined(BRAHMA_MPI_IMPL_MPICH) &&                                 \
-      (BRAHMA_MPI_VERSION >= 400203 && BRAHMA_MPI_VERSION < 400300)) || \
-     (defined(BRAHMA_MPI_IMPL_OPENMPI) &&                               \
-      (BRAHMA_MPI_VERSION >= 400106 && BRAHMA_MPI_VERSION < 400200)))
+#if (((defined(BRAHMA_MPI_IMPL_CRAYMPICH) &&                               \
+       (BRAHMA_MPI_VERSION >= 900100 && BRAHMA_MPI_VERSION < 900200)) ||   \
+      (defined(BRAHMA_MPI_IMPL_MPICH) &&                                   \
+       (BRAHMA_MPI_VERSION >= 400203 && BRAHMA_MPI_VERSION < 400300)) ||   \
+      (defined(BRAHMA_MPI_IMPL_OPENMPI) &&                                 \
+       (BRAHMA_MPI_VERSION >= 400106 && BRAHMA_MPI_VERSION < 400200)))) && \
+    !(defined(BRAHMA_MPI_IMPL_OPENMPI) &&                                  \
+      (BRAHMA_MPI_VERSION >= 400106 && BRAHMA_MPI_VERSION < 400200))
 int brahma::MPIDFTracer::MPI_Rsend_init(const void* buf, int count,
                                         MPI_Datatype datatype, int dest,
                                         int tag, int comm, int* request) {
@@ -12034,13 +12212,15 @@ int brahma::MPIDFTracer::MPI_Rsend_init_c(const void* buf, MPI_Count count,
   return ret;
 }
 #endif
-#if ((defined(BRAHMA_MPI_IMPL_CRAYMPICH) &&                               \
-      ((BRAHMA_MPI_VERSION >= 800108 && BRAHMA_MPI_VERSION < 800200) ||   \
-       (BRAHMA_MPI_VERSION >= 900001 && BRAHMA_MPI_VERSION < 900100))) || \
-     (defined(BRAHMA_MPI_IMPL_MPICH) &&                                   \
-      (BRAHMA_MPI_VERSION >= 300403 && BRAHMA_MPI_VERSION < 300500)) ||   \
-     (defined(BRAHMA_MPI_IMPL_OPENMPI) &&                                 \
-      (BRAHMA_MPI_VERSION >= 500006 && BRAHMA_MPI_VERSION < 500100)))
+#if (((defined(BRAHMA_MPI_IMPL_CRAYMPICH) &&                               \
+       ((BRAHMA_MPI_VERSION >= 800108 && BRAHMA_MPI_VERSION < 800200) ||   \
+        (BRAHMA_MPI_VERSION >= 900001 && BRAHMA_MPI_VERSION < 900100))) || \
+      (defined(BRAHMA_MPI_IMPL_MPICH) &&                                   \
+       (BRAHMA_MPI_VERSION >= 300403 && BRAHMA_MPI_VERSION < 300500)) ||   \
+      (defined(BRAHMA_MPI_IMPL_OPENMPI) &&                                 \
+       (BRAHMA_MPI_VERSION >= 500006 && BRAHMA_MPI_VERSION < 500100)))) || \
+    (defined(BRAHMA_MPI_IMPL_OPENMPI) &&                                   \
+     (BRAHMA_MPI_VERSION >= 400106 && BRAHMA_MPI_VERSION < 400200))
 int brahma::MPIDFTracer::MPI_Scan(const void* sendbuf, void* recvbuf, int count,
                                   MPI_Datatype datatype, MPI_Op op,
                                   MPI_Comm comm) {
@@ -12056,12 +12236,14 @@ int brahma::MPIDFTracer::MPI_Scan(const void* sendbuf, void* recvbuf, int count,
   return ret;
 }
 #endif
-#if ((defined(BRAHMA_MPI_IMPL_CRAYMPICH) &&                             \
-      (BRAHMA_MPI_VERSION >= 900100 && BRAHMA_MPI_VERSION < 900200)) || \
-     (defined(BRAHMA_MPI_IMPL_MPICH) &&                                 \
-      (BRAHMA_MPI_VERSION >= 400203 && BRAHMA_MPI_VERSION < 400300)) || \
-     (defined(BRAHMA_MPI_IMPL_OPENMPI) &&                               \
-      (BRAHMA_MPI_VERSION >= 400106 && BRAHMA_MPI_VERSION < 400200)))
+#if (((defined(BRAHMA_MPI_IMPL_CRAYMPICH) &&                               \
+       (BRAHMA_MPI_VERSION >= 900100 && BRAHMA_MPI_VERSION < 900200)) ||   \
+      (defined(BRAHMA_MPI_IMPL_MPICH) &&                                   \
+       (BRAHMA_MPI_VERSION >= 400203 && BRAHMA_MPI_VERSION < 400300)) ||   \
+      (defined(BRAHMA_MPI_IMPL_OPENMPI) &&                                 \
+       (BRAHMA_MPI_VERSION >= 400106 && BRAHMA_MPI_VERSION < 400200)))) && \
+    !(defined(BRAHMA_MPI_IMPL_OPENMPI) &&                                  \
+      (BRAHMA_MPI_VERSION >= 400106 && BRAHMA_MPI_VERSION < 400200))
 int brahma::MPIDFTracer::MPI_Scan(const void* sendbuf, void* recvbuf, int count,
                                   MPI_Datatype datatype, int op, int comm) {
   BRAHMA_MAP_OR_FAIL(MPI_Scan);
@@ -12196,13 +12378,15 @@ int brahma::MPIDFTracer::MPI_Scan_init_c(const void* sendbuf, void* recvbuf,
   return ret;
 }
 #endif
-#if ((defined(BRAHMA_MPI_IMPL_CRAYMPICH) &&                               \
-      ((BRAHMA_MPI_VERSION >= 800108 && BRAHMA_MPI_VERSION < 800200) ||   \
-       (BRAHMA_MPI_VERSION >= 900001 && BRAHMA_MPI_VERSION < 900100))) || \
-     (defined(BRAHMA_MPI_IMPL_MPICH) &&                                   \
-      (BRAHMA_MPI_VERSION >= 300403 && BRAHMA_MPI_VERSION < 300500)) ||   \
-     (defined(BRAHMA_MPI_IMPL_OPENMPI) &&                                 \
-      (BRAHMA_MPI_VERSION >= 500006 && BRAHMA_MPI_VERSION < 500100)))
+#if (((defined(BRAHMA_MPI_IMPL_CRAYMPICH) &&                               \
+       ((BRAHMA_MPI_VERSION >= 800108 && BRAHMA_MPI_VERSION < 800200) ||   \
+        (BRAHMA_MPI_VERSION >= 900001 && BRAHMA_MPI_VERSION < 900100))) || \
+      (defined(BRAHMA_MPI_IMPL_MPICH) &&                                   \
+       (BRAHMA_MPI_VERSION >= 300403 && BRAHMA_MPI_VERSION < 300500)) ||   \
+      (defined(BRAHMA_MPI_IMPL_OPENMPI) &&                                 \
+       (BRAHMA_MPI_VERSION >= 500006 && BRAHMA_MPI_VERSION < 500100)))) || \
+    (defined(BRAHMA_MPI_IMPL_OPENMPI) &&                                   \
+     (BRAHMA_MPI_VERSION >= 400106 && BRAHMA_MPI_VERSION < 400200))
 int brahma::MPIDFTracer::MPI_Scatter(const void* sendbuf, int sendcount,
                                      MPI_Datatype sendtype, void* recvbuf,
                                      int recvcount, MPI_Datatype recvtype,
@@ -12222,12 +12406,14 @@ int brahma::MPIDFTracer::MPI_Scatter(const void* sendbuf, int sendcount,
   return ret;
 }
 #endif
-#if ((defined(BRAHMA_MPI_IMPL_CRAYMPICH) &&                             \
-      (BRAHMA_MPI_VERSION >= 900100 && BRAHMA_MPI_VERSION < 900200)) || \
-     (defined(BRAHMA_MPI_IMPL_MPICH) &&                                 \
-      (BRAHMA_MPI_VERSION >= 400203 && BRAHMA_MPI_VERSION < 400300)) || \
-     (defined(BRAHMA_MPI_IMPL_OPENMPI) &&                               \
-      (BRAHMA_MPI_VERSION >= 400106 && BRAHMA_MPI_VERSION < 400200)))
+#if (((defined(BRAHMA_MPI_IMPL_CRAYMPICH) &&                               \
+       (BRAHMA_MPI_VERSION >= 900100 && BRAHMA_MPI_VERSION < 900200)) ||   \
+      (defined(BRAHMA_MPI_IMPL_MPICH) &&                                   \
+       (BRAHMA_MPI_VERSION >= 400203 && BRAHMA_MPI_VERSION < 400300)) ||   \
+      (defined(BRAHMA_MPI_IMPL_OPENMPI) &&                                 \
+       (BRAHMA_MPI_VERSION >= 400106 && BRAHMA_MPI_VERSION < 400200)))) && \
+    !(defined(BRAHMA_MPI_IMPL_OPENMPI) &&                                  \
+      (BRAHMA_MPI_VERSION >= 400106 && BRAHMA_MPI_VERSION < 400200))
 int brahma::MPIDFTracer::MPI_Scatter(const void* sendbuf, int sendcount,
                                      MPI_Datatype sendtype, void* recvbuf,
                                      int recvcount, MPI_Datatype recvtype,
@@ -12413,10 +12599,12 @@ int brahma::MPIDFTracer::MPI_Scatterv(const void* sendbuf,
   return ret;
 }
 #endif
-#if ((defined(BRAHMA_MPI_IMPL_CRAYMPICH) &&                             \
-      (BRAHMA_MPI_VERSION >= 900001 && BRAHMA_MPI_VERSION < 900100)) || \
-     (defined(BRAHMA_MPI_IMPL_OPENMPI) &&                               \
-      (BRAHMA_MPI_VERSION >= 500006 && BRAHMA_MPI_VERSION < 500100)))
+#if (((defined(BRAHMA_MPI_IMPL_CRAYMPICH) &&                               \
+       (BRAHMA_MPI_VERSION >= 900001 && BRAHMA_MPI_VERSION < 900100)) ||   \
+      (defined(BRAHMA_MPI_IMPL_OPENMPI) &&                                 \
+       (BRAHMA_MPI_VERSION >= 500006 && BRAHMA_MPI_VERSION < 500100)))) || \
+    (defined(BRAHMA_MPI_IMPL_OPENMPI) &&                                   \
+     (BRAHMA_MPI_VERSION >= 400106 && BRAHMA_MPI_VERSION < 400200))
 int brahma::MPIDFTracer::MPI_Scatterv(const void* sendbuf,
                                       const int sendcounts[],
                                       const int displs[], MPI_Datatype sendtype,
@@ -12437,12 +12625,14 @@ int brahma::MPIDFTracer::MPI_Scatterv(const void* sendbuf,
   return ret;
 }
 #endif
-#if ((defined(BRAHMA_MPI_IMPL_CRAYMPICH) &&                             \
-      (BRAHMA_MPI_VERSION >= 900100 && BRAHMA_MPI_VERSION < 900200)) || \
-     (defined(BRAHMA_MPI_IMPL_MPICH) &&                                 \
-      (BRAHMA_MPI_VERSION >= 400203 && BRAHMA_MPI_VERSION < 400300)) || \
-     (defined(BRAHMA_MPI_IMPL_OPENMPI) &&                               \
-      (BRAHMA_MPI_VERSION >= 400106 && BRAHMA_MPI_VERSION < 400200)))
+#if (((defined(BRAHMA_MPI_IMPL_CRAYMPICH) &&                               \
+       (BRAHMA_MPI_VERSION >= 900100 && BRAHMA_MPI_VERSION < 900200)) ||   \
+      (defined(BRAHMA_MPI_IMPL_MPICH) &&                                   \
+       (BRAHMA_MPI_VERSION >= 400203 && BRAHMA_MPI_VERSION < 400300)) ||   \
+      (defined(BRAHMA_MPI_IMPL_OPENMPI) &&                                 \
+       (BRAHMA_MPI_VERSION >= 400106 && BRAHMA_MPI_VERSION < 400200)))) && \
+    !(defined(BRAHMA_MPI_IMPL_OPENMPI) &&                                  \
+      (BRAHMA_MPI_VERSION >= 400106 && BRAHMA_MPI_VERSION < 400200))
 int brahma::MPIDFTracer::MPI_Scatterv(const void* sendbuf,
                                       const int sendcounts[],
                                       const int displs[], MPI_Datatype sendtype,
@@ -12603,13 +12793,15 @@ int brahma::MPIDFTracer::MPI_Scatterv_init_c(
   return ret;
 }
 #endif
-#if ((defined(BRAHMA_MPI_IMPL_CRAYMPICH) &&                               \
-      ((BRAHMA_MPI_VERSION >= 800108 && BRAHMA_MPI_VERSION < 800200) ||   \
-       (BRAHMA_MPI_VERSION >= 900001 && BRAHMA_MPI_VERSION < 900100))) || \
-     (defined(BRAHMA_MPI_IMPL_MPICH) &&                                   \
-      (BRAHMA_MPI_VERSION >= 300403 && BRAHMA_MPI_VERSION < 300500)) ||   \
-     (defined(BRAHMA_MPI_IMPL_OPENMPI) &&                                 \
-      (BRAHMA_MPI_VERSION >= 500006 && BRAHMA_MPI_VERSION < 500100)))
+#if (((defined(BRAHMA_MPI_IMPL_CRAYMPICH) &&                               \
+       ((BRAHMA_MPI_VERSION >= 800108 && BRAHMA_MPI_VERSION < 800200) ||   \
+        (BRAHMA_MPI_VERSION >= 900001 && BRAHMA_MPI_VERSION < 900100))) || \
+      (defined(BRAHMA_MPI_IMPL_MPICH) &&                                   \
+       (BRAHMA_MPI_VERSION >= 300403 && BRAHMA_MPI_VERSION < 300500)) ||   \
+      (defined(BRAHMA_MPI_IMPL_OPENMPI) &&                                 \
+       (BRAHMA_MPI_VERSION >= 500006 && BRAHMA_MPI_VERSION < 500100)))) || \
+    (defined(BRAHMA_MPI_IMPL_OPENMPI) &&                                   \
+     (BRAHMA_MPI_VERSION >= 400106 && BRAHMA_MPI_VERSION < 400200))
 int brahma::MPIDFTracer::MPI_Send(const void* buf, int count,
                                   MPI_Datatype datatype, int dest, int tag,
                                   MPI_Comm comm) {
@@ -12626,12 +12818,14 @@ int brahma::MPIDFTracer::MPI_Send(const void* buf, int count,
   return ret;
 }
 #endif
-#if ((defined(BRAHMA_MPI_IMPL_CRAYMPICH) &&                             \
-      (BRAHMA_MPI_VERSION >= 900100 && BRAHMA_MPI_VERSION < 900200)) || \
-     (defined(BRAHMA_MPI_IMPL_MPICH) &&                                 \
-      (BRAHMA_MPI_VERSION >= 400203 && BRAHMA_MPI_VERSION < 400300)) || \
-     (defined(BRAHMA_MPI_IMPL_OPENMPI) &&                               \
-      (BRAHMA_MPI_VERSION >= 400106 && BRAHMA_MPI_VERSION < 400200)))
+#if (((defined(BRAHMA_MPI_IMPL_CRAYMPICH) &&                               \
+       (BRAHMA_MPI_VERSION >= 900100 && BRAHMA_MPI_VERSION < 900200)) ||   \
+      (defined(BRAHMA_MPI_IMPL_MPICH) &&                                   \
+       (BRAHMA_MPI_VERSION >= 400203 && BRAHMA_MPI_VERSION < 400300)) ||   \
+      (defined(BRAHMA_MPI_IMPL_OPENMPI) &&                                 \
+       (BRAHMA_MPI_VERSION >= 400106 && BRAHMA_MPI_VERSION < 400200)))) && \
+    !(defined(BRAHMA_MPI_IMPL_OPENMPI) &&                                  \
+      (BRAHMA_MPI_VERSION >= 400106 && BRAHMA_MPI_VERSION < 400200))
 int brahma::MPIDFTracer::MPI_Send(const void* buf, int count,
                                   MPI_Datatype datatype, int dest, int tag,
                                   int comm) {
@@ -12685,13 +12879,15 @@ int brahma::MPIDFTracer::MPI_Send_c(const void* buf, MPI_Count count,
   return ret;
 }
 #endif
-#if ((defined(BRAHMA_MPI_IMPL_CRAYMPICH) &&                               \
-      ((BRAHMA_MPI_VERSION >= 800108 && BRAHMA_MPI_VERSION < 800200) ||   \
-       (BRAHMA_MPI_VERSION >= 900001 && BRAHMA_MPI_VERSION < 900100))) || \
-     (defined(BRAHMA_MPI_IMPL_MPICH) &&                                   \
-      (BRAHMA_MPI_VERSION >= 300403 && BRAHMA_MPI_VERSION < 300500)) ||   \
-     (defined(BRAHMA_MPI_IMPL_OPENMPI) &&                                 \
-      (BRAHMA_MPI_VERSION >= 500006 && BRAHMA_MPI_VERSION < 500100)))
+#if (((defined(BRAHMA_MPI_IMPL_CRAYMPICH) &&                               \
+       ((BRAHMA_MPI_VERSION >= 800108 && BRAHMA_MPI_VERSION < 800200) ||   \
+        (BRAHMA_MPI_VERSION >= 900001 && BRAHMA_MPI_VERSION < 900100))) || \
+      (defined(BRAHMA_MPI_IMPL_MPICH) &&                                   \
+       (BRAHMA_MPI_VERSION >= 300403 && BRAHMA_MPI_VERSION < 300500)) ||   \
+      (defined(BRAHMA_MPI_IMPL_OPENMPI) &&                                 \
+       (BRAHMA_MPI_VERSION >= 500006 && BRAHMA_MPI_VERSION < 500100)))) || \
+    (defined(BRAHMA_MPI_IMPL_OPENMPI) &&                                   \
+     (BRAHMA_MPI_VERSION >= 400106 && BRAHMA_MPI_VERSION < 400200))
 int brahma::MPIDFTracer::MPI_Send_init(const void* buf, int count,
                                        MPI_Datatype datatype, int dest, int tag,
                                        MPI_Comm comm, MPI_Request* request) {
@@ -12709,12 +12905,14 @@ int brahma::MPIDFTracer::MPI_Send_init(const void* buf, int count,
   return ret;
 }
 #endif
-#if ((defined(BRAHMA_MPI_IMPL_CRAYMPICH) &&                             \
-      (BRAHMA_MPI_VERSION >= 900100 && BRAHMA_MPI_VERSION < 900200)) || \
-     (defined(BRAHMA_MPI_IMPL_MPICH) &&                                 \
-      (BRAHMA_MPI_VERSION >= 400203 && BRAHMA_MPI_VERSION < 400300)) || \
-     (defined(BRAHMA_MPI_IMPL_OPENMPI) &&                               \
-      (BRAHMA_MPI_VERSION >= 400106 && BRAHMA_MPI_VERSION < 400200)))
+#if (((defined(BRAHMA_MPI_IMPL_CRAYMPICH) &&                               \
+       (BRAHMA_MPI_VERSION >= 900100 && BRAHMA_MPI_VERSION < 900200)) ||   \
+      (defined(BRAHMA_MPI_IMPL_MPICH) &&                                   \
+       (BRAHMA_MPI_VERSION >= 400203 && BRAHMA_MPI_VERSION < 400300)) ||   \
+      (defined(BRAHMA_MPI_IMPL_OPENMPI) &&                                 \
+       (BRAHMA_MPI_VERSION >= 400106 && BRAHMA_MPI_VERSION < 400200)))) && \
+    !(defined(BRAHMA_MPI_IMPL_OPENMPI) &&                                  \
+      (BRAHMA_MPI_VERSION >= 400106 && BRAHMA_MPI_VERSION < 400200))
 int brahma::MPIDFTracer::MPI_Send_init(const void* buf, int count,
                                        MPI_Datatype datatype, int dest, int tag,
                                        int comm, int* request) {
@@ -12773,13 +12971,15 @@ int brahma::MPIDFTracer::MPI_Send_init_c(const void* buf, MPI_Count count,
   return ret;
 }
 #endif
-#if ((defined(BRAHMA_MPI_IMPL_CRAYMPICH) &&                               \
-      ((BRAHMA_MPI_VERSION >= 800108 && BRAHMA_MPI_VERSION < 800200) ||   \
-       (BRAHMA_MPI_VERSION >= 900001 && BRAHMA_MPI_VERSION < 900100))) || \
-     (defined(BRAHMA_MPI_IMPL_MPICH) &&                                   \
-      (BRAHMA_MPI_VERSION >= 300403 && BRAHMA_MPI_VERSION < 300500)) ||   \
-     (defined(BRAHMA_MPI_IMPL_OPENMPI) &&                                 \
-      (BRAHMA_MPI_VERSION >= 500006 && BRAHMA_MPI_VERSION < 500100)))
+#if (((defined(BRAHMA_MPI_IMPL_CRAYMPICH) &&                               \
+       ((BRAHMA_MPI_VERSION >= 800108 && BRAHMA_MPI_VERSION < 800200) ||   \
+        (BRAHMA_MPI_VERSION >= 900001 && BRAHMA_MPI_VERSION < 900100))) || \
+      (defined(BRAHMA_MPI_IMPL_MPICH) &&                                   \
+       (BRAHMA_MPI_VERSION >= 300403 && BRAHMA_MPI_VERSION < 300500)) ||   \
+      (defined(BRAHMA_MPI_IMPL_OPENMPI) &&                                 \
+       (BRAHMA_MPI_VERSION >= 500006 && BRAHMA_MPI_VERSION < 500100)))) || \
+    (defined(BRAHMA_MPI_IMPL_OPENMPI) &&                                   \
+     (BRAHMA_MPI_VERSION >= 400106 && BRAHMA_MPI_VERSION < 400200))
 int brahma::MPIDFTracer::MPI_Sendrecv(const void* sendbuf, int sendcount,
                                       MPI_Datatype sendtype, int dest,
                                       int sendtag, void* recvbuf, int recvcount,
@@ -12805,12 +13005,14 @@ int brahma::MPIDFTracer::MPI_Sendrecv(const void* sendbuf, int sendcount,
   return ret;
 }
 #endif
-#if ((defined(BRAHMA_MPI_IMPL_CRAYMPICH) &&                             \
-      (BRAHMA_MPI_VERSION >= 900100 && BRAHMA_MPI_VERSION < 900200)) || \
-     (defined(BRAHMA_MPI_IMPL_MPICH) &&                                 \
-      (BRAHMA_MPI_VERSION >= 400203 && BRAHMA_MPI_VERSION < 400300)) || \
-     (defined(BRAHMA_MPI_IMPL_OPENMPI) &&                               \
-      (BRAHMA_MPI_VERSION >= 400106 && BRAHMA_MPI_VERSION < 400200)))
+#if (((defined(BRAHMA_MPI_IMPL_CRAYMPICH) &&                               \
+       (BRAHMA_MPI_VERSION >= 900100 && BRAHMA_MPI_VERSION < 900200)) ||   \
+      (defined(BRAHMA_MPI_IMPL_MPICH) &&                                   \
+       (BRAHMA_MPI_VERSION >= 400203 && BRAHMA_MPI_VERSION < 400300)) ||   \
+      (defined(BRAHMA_MPI_IMPL_OPENMPI) &&                                 \
+       (BRAHMA_MPI_VERSION >= 400106 && BRAHMA_MPI_VERSION < 400200)))) && \
+    !(defined(BRAHMA_MPI_IMPL_OPENMPI) &&                                  \
+      (BRAHMA_MPI_VERSION >= 400106 && BRAHMA_MPI_VERSION < 400200))
 int brahma::MPIDFTracer::MPI_Sendrecv(const void* sendbuf, int sendcount,
                                       MPI_Datatype sendtype, int dest,
                                       int sendtag, void* recvbuf, int recvcount,
@@ -12890,13 +13092,15 @@ int brahma::MPIDFTracer::MPI_Sendrecv_c(const void* sendbuf,
   return ret;
 }
 #endif
-#if ((defined(BRAHMA_MPI_IMPL_CRAYMPICH) &&                               \
-      ((BRAHMA_MPI_VERSION >= 800108 && BRAHMA_MPI_VERSION < 800200) ||   \
-       (BRAHMA_MPI_VERSION >= 900001 && BRAHMA_MPI_VERSION < 900100))) || \
-     (defined(BRAHMA_MPI_IMPL_MPICH) &&                                   \
-      (BRAHMA_MPI_VERSION >= 300403 && BRAHMA_MPI_VERSION < 300500)) ||   \
-     (defined(BRAHMA_MPI_IMPL_OPENMPI) &&                                 \
-      (BRAHMA_MPI_VERSION >= 500006 && BRAHMA_MPI_VERSION < 500100)))
+#if (((defined(BRAHMA_MPI_IMPL_CRAYMPICH) &&                               \
+       ((BRAHMA_MPI_VERSION >= 800108 && BRAHMA_MPI_VERSION < 800200) ||   \
+        (BRAHMA_MPI_VERSION >= 900001 && BRAHMA_MPI_VERSION < 900100))) || \
+      (defined(BRAHMA_MPI_IMPL_MPICH) &&                                   \
+       (BRAHMA_MPI_VERSION >= 300403 && BRAHMA_MPI_VERSION < 300500)) ||   \
+      (defined(BRAHMA_MPI_IMPL_OPENMPI) &&                                 \
+       (BRAHMA_MPI_VERSION >= 500006 && BRAHMA_MPI_VERSION < 500100)))) || \
+    (defined(BRAHMA_MPI_IMPL_OPENMPI) &&                                   \
+     (BRAHMA_MPI_VERSION >= 400106 && BRAHMA_MPI_VERSION < 400200))
 int brahma::MPIDFTracer::MPI_Sendrecv_replace(void* buf, int count,
                                               MPI_Datatype datatype, int dest,
                                               int sendtag, int source,
@@ -12918,12 +13122,14 @@ int brahma::MPIDFTracer::MPI_Sendrecv_replace(void* buf, int count,
   return ret;
 }
 #endif
-#if ((defined(BRAHMA_MPI_IMPL_CRAYMPICH) &&                             \
-      (BRAHMA_MPI_VERSION >= 900100 && BRAHMA_MPI_VERSION < 900200)) || \
-     (defined(BRAHMA_MPI_IMPL_MPICH) &&                                 \
-      (BRAHMA_MPI_VERSION >= 400203 && BRAHMA_MPI_VERSION < 400300)) || \
-     (defined(BRAHMA_MPI_IMPL_OPENMPI) &&                               \
-      (BRAHMA_MPI_VERSION >= 400106 && BRAHMA_MPI_VERSION < 400200)))
+#if (((defined(BRAHMA_MPI_IMPL_CRAYMPICH) &&                               \
+       (BRAHMA_MPI_VERSION >= 900100 && BRAHMA_MPI_VERSION < 900200)) ||   \
+      (defined(BRAHMA_MPI_IMPL_MPICH) &&                                   \
+       (BRAHMA_MPI_VERSION >= 400203 && BRAHMA_MPI_VERSION < 400300)) ||   \
+      (defined(BRAHMA_MPI_IMPL_OPENMPI) &&                                 \
+       (BRAHMA_MPI_VERSION >= 400106 && BRAHMA_MPI_VERSION < 400200)))) && \
+    !(defined(BRAHMA_MPI_IMPL_OPENMPI) &&                                  \
+      (BRAHMA_MPI_VERSION >= 400106 && BRAHMA_MPI_VERSION < 400200))
 int brahma::MPIDFTracer::MPI_Sendrecv_replace(void* buf, int count,
                                               MPI_Datatype datatype, int dest,
                                               int sendtag, int source,
@@ -12993,27 +13199,15 @@ int brahma::MPIDFTracer::MPI_Sendrecv_replace_c(void* buf, MPI_Count count,
   return ret;
 }
 #endif
-#if ((defined(BRAHMA_MPI_IMPL_MPICH) &&                                 \
-      (BRAHMA_MPI_VERSION >= 400203 && BRAHMA_MPI_VERSION < 400300)) || \
-     (defined(BRAHMA_MPI_IMPL_OPENMPI) &&                               \
-      (BRAHMA_MPI_VERSION >= 500006 && BRAHMA_MPI_VERSION < 500100)))
-MPI_Session brahma::MPIDFTracer::MPI_Session(int session) {
-  BRAHMA_MAP_OR_FAIL(MPI_Session);
-  DFT_LOGGER_START_ALWAYS();
-  DFT_LOGGER_UPDATE_TYPE(session, MetadataType::MT_VALUE);
-  MPI_Session ret = __real_MPI_Session(session);
-  DFT_LOGGER_UPDATE_TYPE(ret, MetadataType::MT_VALUE);
-  DFT_LOGGER_END();
-  return ret;
-}
-#endif
-#if ((defined(BRAHMA_MPI_IMPL_CRAYMPICH) &&                               \
-      ((BRAHMA_MPI_VERSION >= 800108 && BRAHMA_MPI_VERSION < 800200) ||   \
-       (BRAHMA_MPI_VERSION >= 900001 && BRAHMA_MPI_VERSION < 900100))) || \
-     (defined(BRAHMA_MPI_IMPL_MPICH) &&                                   \
-      (BRAHMA_MPI_VERSION >= 300403 && BRAHMA_MPI_VERSION < 300500)) ||   \
-     (defined(BRAHMA_MPI_IMPL_OPENMPI) &&                                 \
-      (BRAHMA_MPI_VERSION >= 500006 && BRAHMA_MPI_VERSION < 500100)))
+#if (((defined(BRAHMA_MPI_IMPL_CRAYMPICH) &&                               \
+       ((BRAHMA_MPI_VERSION >= 800108 && BRAHMA_MPI_VERSION < 800200) ||   \
+        (BRAHMA_MPI_VERSION >= 900001 && BRAHMA_MPI_VERSION < 900100))) || \
+      (defined(BRAHMA_MPI_IMPL_MPICH) &&                                   \
+       (BRAHMA_MPI_VERSION >= 300403 && BRAHMA_MPI_VERSION < 300500)) ||   \
+      (defined(BRAHMA_MPI_IMPL_OPENMPI) &&                                 \
+       (BRAHMA_MPI_VERSION >= 500006 && BRAHMA_MPI_VERSION < 500100)))) || \
+    (defined(BRAHMA_MPI_IMPL_OPENMPI) &&                                   \
+     (BRAHMA_MPI_VERSION >= 400106 && BRAHMA_MPI_VERSION < 400200))
 int brahma::MPIDFTracer::MPI_Ssend(const void* buf, int count,
                                    MPI_Datatype datatype, int dest, int tag,
                                    MPI_Comm comm) {
@@ -13030,12 +13224,14 @@ int brahma::MPIDFTracer::MPI_Ssend(const void* buf, int count,
   return ret;
 }
 #endif
-#if ((defined(BRAHMA_MPI_IMPL_CRAYMPICH) &&                             \
-      (BRAHMA_MPI_VERSION >= 900100 && BRAHMA_MPI_VERSION < 900200)) || \
-     (defined(BRAHMA_MPI_IMPL_MPICH) &&                                 \
-      (BRAHMA_MPI_VERSION >= 400203 && BRAHMA_MPI_VERSION < 400300)) || \
-     (defined(BRAHMA_MPI_IMPL_OPENMPI) &&                               \
-      (BRAHMA_MPI_VERSION >= 400106 && BRAHMA_MPI_VERSION < 400200)))
+#if (((defined(BRAHMA_MPI_IMPL_CRAYMPICH) &&                               \
+       (BRAHMA_MPI_VERSION >= 900100 && BRAHMA_MPI_VERSION < 900200)) ||   \
+      (defined(BRAHMA_MPI_IMPL_MPICH) &&                                   \
+       (BRAHMA_MPI_VERSION >= 400203 && BRAHMA_MPI_VERSION < 400300)) ||   \
+      (defined(BRAHMA_MPI_IMPL_OPENMPI) &&                                 \
+       (BRAHMA_MPI_VERSION >= 400106 && BRAHMA_MPI_VERSION < 400200)))) && \
+    !(defined(BRAHMA_MPI_IMPL_OPENMPI) &&                                  \
+      (BRAHMA_MPI_VERSION >= 400106 && BRAHMA_MPI_VERSION < 400200))
 int brahma::MPIDFTracer::MPI_Ssend(const void* buf, int count,
                                    MPI_Datatype datatype, int dest, int tag,
                                    int comm) {
@@ -13090,13 +13286,15 @@ int brahma::MPIDFTracer::MPI_Ssend_c(const void* buf, MPI_Count count,
   return ret;
 }
 #endif
-#if ((defined(BRAHMA_MPI_IMPL_CRAYMPICH) &&                               \
-      ((BRAHMA_MPI_VERSION >= 800108 && BRAHMA_MPI_VERSION < 800200) ||   \
-       (BRAHMA_MPI_VERSION >= 900001 && BRAHMA_MPI_VERSION < 900100))) || \
-     (defined(BRAHMA_MPI_IMPL_MPICH) &&                                   \
-      (BRAHMA_MPI_VERSION >= 300403 && BRAHMA_MPI_VERSION < 300500)) ||   \
-     (defined(BRAHMA_MPI_IMPL_OPENMPI) &&                                 \
-      (BRAHMA_MPI_VERSION >= 500006 && BRAHMA_MPI_VERSION < 500100)))
+#if (((defined(BRAHMA_MPI_IMPL_CRAYMPICH) &&                               \
+       ((BRAHMA_MPI_VERSION >= 800108 && BRAHMA_MPI_VERSION < 800200) ||   \
+        (BRAHMA_MPI_VERSION >= 900001 && BRAHMA_MPI_VERSION < 900100))) || \
+      (defined(BRAHMA_MPI_IMPL_MPICH) &&                                   \
+       (BRAHMA_MPI_VERSION >= 300403 && BRAHMA_MPI_VERSION < 300500)) ||   \
+      (defined(BRAHMA_MPI_IMPL_OPENMPI) &&                                 \
+       (BRAHMA_MPI_VERSION >= 500006 && BRAHMA_MPI_VERSION < 500100)))) || \
+    (defined(BRAHMA_MPI_IMPL_OPENMPI) &&                                   \
+     (BRAHMA_MPI_VERSION >= 400106 && BRAHMA_MPI_VERSION < 400200))
 int brahma::MPIDFTracer::MPI_Ssend_init(const void* buf, int count,
                                         MPI_Datatype datatype, int dest,
                                         int tag, MPI_Comm comm,
@@ -13115,12 +13313,14 @@ int brahma::MPIDFTracer::MPI_Ssend_init(const void* buf, int count,
   return ret;
 }
 #endif
-#if ((defined(BRAHMA_MPI_IMPL_CRAYMPICH) &&                             \
-      (BRAHMA_MPI_VERSION >= 900100 && BRAHMA_MPI_VERSION < 900200)) || \
-     (defined(BRAHMA_MPI_IMPL_MPICH) &&                                 \
-      (BRAHMA_MPI_VERSION >= 400203 && BRAHMA_MPI_VERSION < 400300)) || \
-     (defined(BRAHMA_MPI_IMPL_OPENMPI) &&                               \
-      (BRAHMA_MPI_VERSION >= 400106 && BRAHMA_MPI_VERSION < 400200)))
+#if (((defined(BRAHMA_MPI_IMPL_CRAYMPICH) &&                               \
+       (BRAHMA_MPI_VERSION >= 900100 && BRAHMA_MPI_VERSION < 900200)) ||   \
+      (defined(BRAHMA_MPI_IMPL_MPICH) &&                                   \
+       (BRAHMA_MPI_VERSION >= 400203 && BRAHMA_MPI_VERSION < 400300)) ||   \
+      (defined(BRAHMA_MPI_IMPL_OPENMPI) &&                                 \
+       (BRAHMA_MPI_VERSION >= 400106 && BRAHMA_MPI_VERSION < 400200)))) && \
+    !(defined(BRAHMA_MPI_IMPL_OPENMPI) &&                                  \
+      (BRAHMA_MPI_VERSION >= 400106 && BRAHMA_MPI_VERSION < 400200))
 int brahma::MPIDFTracer::MPI_Ssend_init(const void* buf, int count,
                                         MPI_Datatype datatype, int dest,
                                         int tag, int comm, int* request) {
@@ -13179,13 +13379,15 @@ int brahma::MPIDFTracer::MPI_Ssend_init_c(const void* buf, MPI_Count count,
   return ret;
 }
 #endif
-#if ((defined(BRAHMA_MPI_IMPL_CRAYMPICH) &&                               \
-      ((BRAHMA_MPI_VERSION >= 800108 && BRAHMA_MPI_VERSION < 800200) ||   \
-       (BRAHMA_MPI_VERSION >= 900001 && BRAHMA_MPI_VERSION < 900100))) || \
-     (defined(BRAHMA_MPI_IMPL_MPICH) &&                                   \
-      (BRAHMA_MPI_VERSION >= 300403 && BRAHMA_MPI_VERSION < 300500)) ||   \
-     (defined(BRAHMA_MPI_IMPL_OPENMPI) &&                                 \
-      (BRAHMA_MPI_VERSION >= 500006 && BRAHMA_MPI_VERSION < 500100)))
+#if (((defined(BRAHMA_MPI_IMPL_CRAYMPICH) &&                               \
+       ((BRAHMA_MPI_VERSION >= 800108 && BRAHMA_MPI_VERSION < 800200) ||   \
+        (BRAHMA_MPI_VERSION >= 900001 && BRAHMA_MPI_VERSION < 900100))) || \
+      (defined(BRAHMA_MPI_IMPL_MPICH) &&                                   \
+       (BRAHMA_MPI_VERSION >= 300403 && BRAHMA_MPI_VERSION < 300500)) ||   \
+      (defined(BRAHMA_MPI_IMPL_OPENMPI) &&                                 \
+       (BRAHMA_MPI_VERSION >= 500006 && BRAHMA_MPI_VERSION < 500100)))) || \
+    (defined(BRAHMA_MPI_IMPL_OPENMPI) &&                                   \
+     (BRAHMA_MPI_VERSION >= 400106 && BRAHMA_MPI_VERSION < 400200))
 int brahma::MPIDFTracer::MPI_Start(MPI_Request* request) {
   BRAHMA_MAP_OR_FAIL(MPI_Start);
   DFT_LOGGER_START_ALWAYS();
@@ -13195,12 +13397,14 @@ int brahma::MPIDFTracer::MPI_Start(MPI_Request* request) {
   return ret;
 }
 #endif
-#if ((defined(BRAHMA_MPI_IMPL_CRAYMPICH) &&                             \
-      (BRAHMA_MPI_VERSION >= 900100 && BRAHMA_MPI_VERSION < 900200)) || \
-     (defined(BRAHMA_MPI_IMPL_MPICH) &&                                 \
-      (BRAHMA_MPI_VERSION >= 400203 && BRAHMA_MPI_VERSION < 400300)) || \
-     (defined(BRAHMA_MPI_IMPL_OPENMPI) &&                               \
-      (BRAHMA_MPI_VERSION >= 400106 && BRAHMA_MPI_VERSION < 400200)))
+#if (((defined(BRAHMA_MPI_IMPL_CRAYMPICH) &&                               \
+       (BRAHMA_MPI_VERSION >= 900100 && BRAHMA_MPI_VERSION < 900200)) ||   \
+      (defined(BRAHMA_MPI_IMPL_MPICH) &&                                   \
+       (BRAHMA_MPI_VERSION >= 400203 && BRAHMA_MPI_VERSION < 400300)) ||   \
+      (defined(BRAHMA_MPI_IMPL_OPENMPI) &&                                 \
+       (BRAHMA_MPI_VERSION >= 400106 && BRAHMA_MPI_VERSION < 400200)))) && \
+    !(defined(BRAHMA_MPI_IMPL_OPENMPI) &&                                  \
+      (BRAHMA_MPI_VERSION >= 400106 && BRAHMA_MPI_VERSION < 400200))
 int brahma::MPIDFTracer::MPI_Start(int* request) {
   BRAHMA_MAP_OR_FAIL(MPI_Start);
   DFT_LOGGER_START_ALWAYS();
@@ -13210,13 +13414,15 @@ int brahma::MPIDFTracer::MPI_Start(int* request) {
   return ret;
 }
 #endif
-#if ((defined(BRAHMA_MPI_IMPL_CRAYMPICH) &&                               \
-      ((BRAHMA_MPI_VERSION >= 800108 && BRAHMA_MPI_VERSION < 800200) ||   \
-       (BRAHMA_MPI_VERSION >= 900001 && BRAHMA_MPI_VERSION < 900100))) || \
-     (defined(BRAHMA_MPI_IMPL_MPICH) &&                                   \
-      (BRAHMA_MPI_VERSION >= 300403 && BRAHMA_MPI_VERSION < 300500)) ||   \
-     (defined(BRAHMA_MPI_IMPL_OPENMPI) &&                                 \
-      (BRAHMA_MPI_VERSION >= 500006 && BRAHMA_MPI_VERSION < 500100)))
+#if (((defined(BRAHMA_MPI_IMPL_CRAYMPICH) &&                               \
+       ((BRAHMA_MPI_VERSION >= 800108 && BRAHMA_MPI_VERSION < 800200) ||   \
+        (BRAHMA_MPI_VERSION >= 900001 && BRAHMA_MPI_VERSION < 900100))) || \
+      (defined(BRAHMA_MPI_IMPL_MPICH) &&                                   \
+       (BRAHMA_MPI_VERSION >= 300403 && BRAHMA_MPI_VERSION < 300500)) ||   \
+      (defined(BRAHMA_MPI_IMPL_OPENMPI) &&                                 \
+       (BRAHMA_MPI_VERSION >= 500006 && BRAHMA_MPI_VERSION < 500100)))) || \
+    (defined(BRAHMA_MPI_IMPL_OPENMPI) &&                                   \
+     (BRAHMA_MPI_VERSION >= 400106 && BRAHMA_MPI_VERSION < 400200))
 int brahma::MPIDFTracer::MPI_Startall(int count,
                                       MPI_Request array_of_requests[]) {
   BRAHMA_MAP_OR_FAIL(MPI_Startall);
@@ -13228,67 +13434,19 @@ int brahma::MPIDFTracer::MPI_Startall(int count,
   return ret;
 }
 #endif
-#if ((defined(BRAHMA_MPI_IMPL_CRAYMPICH) &&                             \
-      (BRAHMA_MPI_VERSION >= 900100 && BRAHMA_MPI_VERSION < 900200)) || \
-     (defined(BRAHMA_MPI_IMPL_MPICH) &&                                 \
-      (BRAHMA_MPI_VERSION >= 400203 && BRAHMA_MPI_VERSION < 400300)) || \
-     (defined(BRAHMA_MPI_IMPL_OPENMPI) &&                               \
-      (BRAHMA_MPI_VERSION >= 400106 && BRAHMA_MPI_VERSION < 400200)))
+#if (((defined(BRAHMA_MPI_IMPL_CRAYMPICH) &&                               \
+       (BRAHMA_MPI_VERSION >= 900100 && BRAHMA_MPI_VERSION < 900200)) ||   \
+      (defined(BRAHMA_MPI_IMPL_MPICH) &&                                   \
+       (BRAHMA_MPI_VERSION >= 400203 && BRAHMA_MPI_VERSION < 400300)) ||   \
+      (defined(BRAHMA_MPI_IMPL_OPENMPI) &&                                 \
+       (BRAHMA_MPI_VERSION >= 400106 && BRAHMA_MPI_VERSION < 400200)))) && \
+    !(defined(BRAHMA_MPI_IMPL_OPENMPI) &&                                  \
+      (BRAHMA_MPI_VERSION >= 400106 && BRAHMA_MPI_VERSION < 400200))
 int brahma::MPIDFTracer::MPI_Startall(int count, int array_of_requests[]) {
   BRAHMA_MAP_OR_FAIL(MPI_Startall);
   DFT_LOGGER_START_ALWAYS();
   DFT_LOGGER_UPDATE_TYPE(count, MetadataType::MT_VALUE);
   int ret = __real_MPI_Startall(count, array_of_requests);
-  DFT_LOGGER_UPDATE_TYPE(ret, MetadataType::MT_VALUE);
-  DFT_LOGGER_END();
-  return ret;
-}
-#endif
-#if (defined(BRAHMA_MPI_IMPL_MPICH) && \
-     (BRAHMA_MPI_VERSION >= 300403 && BRAHMA_MPI_VERSION < 300500))
-int brahma::MPIDFTracer::MPI_Status_c2f(const MPI_Status* c_status,
-                                        MPI_Fint* f_status) {
-  BRAHMA_MAP_OR_FAIL(MPI_Status_c2f);
-  DFT_LOGGER_START_ALWAYS();
-  int ret = __real_MPI_Status_c2f(c_status, f_status);
-  DFT_LOGGER_UPDATE_TYPE(ret, MetadataType::MT_VALUE);
-  DFT_LOGGER_END();
-  return ret;
-}
-#endif
-#if (defined(BRAHMA_MPI_IMPL_OPENMPI) &&                               \
-     ((BRAHMA_MPI_VERSION >= 400106 && BRAHMA_MPI_VERSION < 400200) || \
-      (BRAHMA_MPI_VERSION >= 500006 && BRAHMA_MPI_VERSION < 500100)))
-int brahma::MPIDFTracer::MPI_Status_c2f(const MPI_Status* c_status,
-                                        int* f_status) {
-  BRAHMA_MAP_OR_FAIL(MPI_Status_c2f);
-  DFT_LOGGER_START_ALWAYS();
-  int ret = __real_MPI_Status_c2f(c_status, f_status);
-  DFT_LOGGER_UPDATE_TYPE(ret, MetadataType::MT_VALUE);
-  DFT_LOGGER_END();
-  return ret;
-}
-#endif
-#if (defined(BRAHMA_MPI_IMPL_MPICH) && \
-     (BRAHMA_MPI_VERSION >= 300403 && BRAHMA_MPI_VERSION < 300500))
-int brahma::MPIDFTracer::MPI_Status_f2c(const MPI_Fint* f_status,
-                                        MPI_Status* c_status) {
-  BRAHMA_MAP_OR_FAIL(MPI_Status_f2c);
-  DFT_LOGGER_START_ALWAYS();
-  int ret = __real_MPI_Status_f2c(f_status, c_status);
-  DFT_LOGGER_UPDATE_TYPE(ret, MetadataType::MT_VALUE);
-  DFT_LOGGER_END();
-  return ret;
-}
-#endif
-#if (defined(BRAHMA_MPI_IMPL_OPENMPI) &&                               \
-     ((BRAHMA_MPI_VERSION >= 400106 && BRAHMA_MPI_VERSION < 400200) || \
-      (BRAHMA_MPI_VERSION >= 500006 && BRAHMA_MPI_VERSION < 500100)))
-int brahma::MPIDFTracer::MPI_Status_f2c(const int* f_status,
-                                        MPI_Status* c_status) {
-  BRAHMA_MAP_OR_FAIL(MPI_Status_f2c);
-  DFT_LOGGER_START_ALWAYS();
-  int ret = __real_MPI_Status_f2c(f_status, c_status);
   DFT_LOGGER_UPDATE_TYPE(ret, MetadataType::MT_VALUE);
   DFT_LOGGER_END();
   return ret;
@@ -13472,13 +13630,15 @@ int brahma::MPIDFTracer::MPI_Status_set_tag(MPI_Status* status, int tag) {
   return ret;
 }
 #endif
-#if ((defined(BRAHMA_MPI_IMPL_CRAYMPICH) &&                               \
-      ((BRAHMA_MPI_VERSION >= 800108 && BRAHMA_MPI_VERSION < 800200) ||   \
-       (BRAHMA_MPI_VERSION >= 900001 && BRAHMA_MPI_VERSION < 900100))) || \
-     (defined(BRAHMA_MPI_IMPL_MPICH) &&                                   \
-      (BRAHMA_MPI_VERSION >= 300403 && BRAHMA_MPI_VERSION < 300500)) ||   \
-     (defined(BRAHMA_MPI_IMPL_OPENMPI) &&                                 \
-      (BRAHMA_MPI_VERSION >= 500006 && BRAHMA_MPI_VERSION < 500100)))
+#if (((defined(BRAHMA_MPI_IMPL_CRAYMPICH) &&                               \
+       ((BRAHMA_MPI_VERSION >= 800108 && BRAHMA_MPI_VERSION < 800200) ||   \
+        (BRAHMA_MPI_VERSION >= 900001 && BRAHMA_MPI_VERSION < 900100))) || \
+      (defined(BRAHMA_MPI_IMPL_MPICH) &&                                   \
+       (BRAHMA_MPI_VERSION >= 300403 && BRAHMA_MPI_VERSION < 300500)) ||   \
+      (defined(BRAHMA_MPI_IMPL_OPENMPI) &&                                 \
+       (BRAHMA_MPI_VERSION >= 500006 && BRAHMA_MPI_VERSION < 500100)))) || \
+    (defined(BRAHMA_MPI_IMPL_OPENMPI) &&                                   \
+     (BRAHMA_MPI_VERSION >= 400106 && BRAHMA_MPI_VERSION < 400200))
 int brahma::MPIDFTracer::MPI_Test(MPI_Request* request, int* flag,
                                   MPI_Status* status) {
   BRAHMA_MAP_OR_FAIL(MPI_Test);
@@ -13489,12 +13649,14 @@ int brahma::MPIDFTracer::MPI_Test(MPI_Request* request, int* flag,
   return ret;
 }
 #endif
-#if ((defined(BRAHMA_MPI_IMPL_CRAYMPICH) &&                             \
-      (BRAHMA_MPI_VERSION >= 900100 && BRAHMA_MPI_VERSION < 900200)) || \
-     (defined(BRAHMA_MPI_IMPL_MPICH) &&                                 \
-      (BRAHMA_MPI_VERSION >= 400203 && BRAHMA_MPI_VERSION < 400300)) || \
-     (defined(BRAHMA_MPI_IMPL_OPENMPI) &&                               \
-      (BRAHMA_MPI_VERSION >= 400106 && BRAHMA_MPI_VERSION < 400200)))
+#if (((defined(BRAHMA_MPI_IMPL_CRAYMPICH) &&                               \
+       (BRAHMA_MPI_VERSION >= 900100 && BRAHMA_MPI_VERSION < 900200)) ||   \
+      (defined(BRAHMA_MPI_IMPL_MPICH) &&                                   \
+       (BRAHMA_MPI_VERSION >= 400203 && BRAHMA_MPI_VERSION < 400300)) ||   \
+      (defined(BRAHMA_MPI_IMPL_OPENMPI) &&                                 \
+       (BRAHMA_MPI_VERSION >= 400106 && BRAHMA_MPI_VERSION < 400200)))) && \
+    !(defined(BRAHMA_MPI_IMPL_OPENMPI) &&                                  \
+      (BRAHMA_MPI_VERSION >= 400106 && BRAHMA_MPI_VERSION < 400200))
 int brahma::MPIDFTracer::MPI_Test(int* request, int* flag, MPI_Status* status) {
   BRAHMA_MAP_OR_FAIL(MPI_Test);
   DFT_LOGGER_START_ALWAYS();
@@ -13537,8 +13699,10 @@ int brahma::MPIDFTracer::MPI_Testall(int count, MPI_Request array_of_requests[],
   return ret;
 }
 #endif
-#if (defined(BRAHMA_MPI_IMPL_OPENMPI) && \
-     (BRAHMA_MPI_VERSION >= 300403 && BRAHMA_MPI_VERSION < 300500))
+#if ((defined(BRAHMA_MPI_IMPL_OPENMPI) &&                                \
+      (BRAHMA_MPI_VERSION >= 300403 && BRAHMA_MPI_VERSION < 300500))) || \
+    (defined(BRAHMA_MPI_IMPL_OPENMPI) &&                                 \
+     (BRAHMA_MPI_VERSION >= 400106 && BRAHMA_MPI_VERSION < 400200))
 int brahma::MPIDFTracer::MPI_Testall(int count, MPI_Request array_of_requests[],
                                      int* flag,
                                      MPI_Status array_of_statuses[]) {
@@ -13568,8 +13732,10 @@ int brahma::MPIDFTracer::MPI_Testall(int count, int array_of_requests[],
   return ret;
 }
 #endif
-#if (defined(BRAHMA_MPI_IMPL_OPENMPI) && \
-     (BRAHMA_MPI_VERSION >= 400106 && BRAHMA_MPI_VERSION < 400200))
+#if ((defined(BRAHMA_MPI_IMPL_OPENMPI) &&                                \
+      (BRAHMA_MPI_VERSION >= 400106 && BRAHMA_MPI_VERSION < 400200))) && \
+    !(defined(BRAHMA_MPI_IMPL_OPENMPI) &&                                \
+      (BRAHMA_MPI_VERSION >= 400106 && BRAHMA_MPI_VERSION < 400200))
 int brahma::MPIDFTracer::MPI_Testall(int count, int array_of_requests[],
                                      int* flag,
                                      MPI_Status array_of_statuses[]) {
@@ -13583,13 +13749,15 @@ int brahma::MPIDFTracer::MPI_Testall(int count, int array_of_requests[],
   return ret;
 }
 #endif
-#if ((defined(BRAHMA_MPI_IMPL_CRAYMPICH) &&                               \
-      ((BRAHMA_MPI_VERSION >= 800108 && BRAHMA_MPI_VERSION < 800200) ||   \
-       (BRAHMA_MPI_VERSION >= 900001 && BRAHMA_MPI_VERSION < 900100))) || \
-     (defined(BRAHMA_MPI_IMPL_MPICH) &&                                   \
-      (BRAHMA_MPI_VERSION >= 300403 && BRAHMA_MPI_VERSION < 300500)) ||   \
-     (defined(BRAHMA_MPI_IMPL_OPENMPI) &&                                 \
-      (BRAHMA_MPI_VERSION >= 500006 && BRAHMA_MPI_VERSION < 500100)))
+#if (((defined(BRAHMA_MPI_IMPL_CRAYMPICH) &&                               \
+       ((BRAHMA_MPI_VERSION >= 800108 && BRAHMA_MPI_VERSION < 800200) ||   \
+        (BRAHMA_MPI_VERSION >= 900001 && BRAHMA_MPI_VERSION < 900100))) || \
+      (defined(BRAHMA_MPI_IMPL_MPICH) &&                                   \
+       (BRAHMA_MPI_VERSION >= 300403 && BRAHMA_MPI_VERSION < 300500)) ||   \
+      (defined(BRAHMA_MPI_IMPL_OPENMPI) &&                                 \
+       (BRAHMA_MPI_VERSION >= 500006 && BRAHMA_MPI_VERSION < 500100)))) || \
+    (defined(BRAHMA_MPI_IMPL_OPENMPI) &&                                   \
+     (BRAHMA_MPI_VERSION >= 400106 && BRAHMA_MPI_VERSION < 400200))
 int brahma::MPIDFTracer::MPI_Testany(int count, MPI_Request array_of_requests[],
                                      int* index, int* flag,
                                      MPI_Status* status) {
@@ -13602,12 +13770,14 @@ int brahma::MPIDFTracer::MPI_Testany(int count, MPI_Request array_of_requests[],
   return ret;
 }
 #endif
-#if ((defined(BRAHMA_MPI_IMPL_CRAYMPICH) &&                             \
-      (BRAHMA_MPI_VERSION >= 900100 && BRAHMA_MPI_VERSION < 900200)) || \
-     (defined(BRAHMA_MPI_IMPL_MPICH) &&                                 \
-      (BRAHMA_MPI_VERSION >= 400203 && BRAHMA_MPI_VERSION < 400300)) || \
-     (defined(BRAHMA_MPI_IMPL_OPENMPI) &&                               \
-      (BRAHMA_MPI_VERSION >= 400106 && BRAHMA_MPI_VERSION < 400200)))
+#if (((defined(BRAHMA_MPI_IMPL_CRAYMPICH) &&                               \
+       (BRAHMA_MPI_VERSION >= 900100 && BRAHMA_MPI_VERSION < 900200)) ||   \
+      (defined(BRAHMA_MPI_IMPL_MPICH) &&                                   \
+       (BRAHMA_MPI_VERSION >= 400203 && BRAHMA_MPI_VERSION < 400300)) ||   \
+      (defined(BRAHMA_MPI_IMPL_OPENMPI) &&                                 \
+       (BRAHMA_MPI_VERSION >= 400106 && BRAHMA_MPI_VERSION < 400200)))) && \
+    !(defined(BRAHMA_MPI_IMPL_OPENMPI) &&                                  \
+      (BRAHMA_MPI_VERSION >= 400106 && BRAHMA_MPI_VERSION < 400200))
 int brahma::MPIDFTracer::MPI_Testany(int count, int array_of_requests[],
                                      int* index, int* flag,
                                      MPI_Status* status) {
@@ -13636,8 +13806,10 @@ int brahma::MPIDFTracer::MPI_Testsome(int incount,
   return ret;
 }
 #endif
-#if (defined(BRAHMA_MPI_IMPL_OPENMPI) && \
-     (BRAHMA_MPI_VERSION >= 300403 && BRAHMA_MPI_VERSION < 300500))
+#if ((defined(BRAHMA_MPI_IMPL_OPENMPI) &&                                \
+      (BRAHMA_MPI_VERSION >= 300403 && BRAHMA_MPI_VERSION < 300500))) || \
+    (defined(BRAHMA_MPI_IMPL_OPENMPI) &&                                 \
+     (BRAHMA_MPI_VERSION >= 400106 && BRAHMA_MPI_VERSION < 400200))
 int brahma::MPIDFTracer::MPI_Testsome(int incount,
                                       MPI_Request array_of_requests[],
                                       int* outcount, int array_of_indices[],
@@ -13669,8 +13841,10 @@ int brahma::MPIDFTracer::MPI_Testsome(int incount, int array_of_requests[],
   return ret;
 }
 #endif
-#if (defined(BRAHMA_MPI_IMPL_OPENMPI) && \
-     (BRAHMA_MPI_VERSION >= 400106 && BRAHMA_MPI_VERSION < 400200))
+#if ((defined(BRAHMA_MPI_IMPL_OPENMPI) &&                                \
+      (BRAHMA_MPI_VERSION >= 400106 && BRAHMA_MPI_VERSION < 400200))) && \
+    !(defined(BRAHMA_MPI_IMPL_OPENMPI) &&                                \
+      (BRAHMA_MPI_VERSION >= 400106 && BRAHMA_MPI_VERSION < 400200))
 int brahma::MPIDFTracer::MPI_Testsome(int incount, int array_of_requests[],
                                       int* outcount, int array_of_indices[],
                                       MPI_Status array_of_statuses[]) {
@@ -13684,13 +13858,15 @@ int brahma::MPIDFTracer::MPI_Testsome(int incount, int array_of_requests[],
   return ret;
 }
 #endif
-#if ((defined(BRAHMA_MPI_IMPL_CRAYMPICH) &&                               \
-      ((BRAHMA_MPI_VERSION >= 800108 && BRAHMA_MPI_VERSION < 800200) ||   \
-       (BRAHMA_MPI_VERSION >= 900001 && BRAHMA_MPI_VERSION < 900100))) || \
-     (defined(BRAHMA_MPI_IMPL_MPICH) &&                                   \
-      (BRAHMA_MPI_VERSION >= 300403 && BRAHMA_MPI_VERSION < 300500)) ||   \
-     (defined(BRAHMA_MPI_IMPL_OPENMPI) &&                                 \
-      (BRAHMA_MPI_VERSION >= 500006 && BRAHMA_MPI_VERSION < 500100)))
+#if (((defined(BRAHMA_MPI_IMPL_CRAYMPICH) &&                               \
+       ((BRAHMA_MPI_VERSION >= 800108 && BRAHMA_MPI_VERSION < 800200) ||   \
+        (BRAHMA_MPI_VERSION >= 900001 && BRAHMA_MPI_VERSION < 900100))) || \
+      (defined(BRAHMA_MPI_IMPL_MPICH) &&                                   \
+       (BRAHMA_MPI_VERSION >= 300403 && BRAHMA_MPI_VERSION < 300500)) ||   \
+      (defined(BRAHMA_MPI_IMPL_OPENMPI) &&                                 \
+       (BRAHMA_MPI_VERSION >= 500006 && BRAHMA_MPI_VERSION < 500100)))) || \
+    (defined(BRAHMA_MPI_IMPL_OPENMPI) &&                                   \
+     (BRAHMA_MPI_VERSION >= 400106 && BRAHMA_MPI_VERSION < 400200))
 int brahma::MPIDFTracer::MPI_Topo_test(MPI_Comm comm, int* status) {
   BRAHMA_MAP_OR_FAIL(MPI_Topo_test);
   DFT_LOGGER_START_ALWAYS();
@@ -13701,12 +13877,14 @@ int brahma::MPIDFTracer::MPI_Topo_test(MPI_Comm comm, int* status) {
   return ret;
 }
 #endif
-#if ((defined(BRAHMA_MPI_IMPL_CRAYMPICH) &&                             \
-      (BRAHMA_MPI_VERSION >= 900100 && BRAHMA_MPI_VERSION < 900200)) || \
-     (defined(BRAHMA_MPI_IMPL_MPICH) &&                                 \
-      (BRAHMA_MPI_VERSION >= 400203 && BRAHMA_MPI_VERSION < 400300)) || \
-     (defined(BRAHMA_MPI_IMPL_OPENMPI) &&                               \
-      (BRAHMA_MPI_VERSION >= 400106 && BRAHMA_MPI_VERSION < 400200)))
+#if (((defined(BRAHMA_MPI_IMPL_CRAYMPICH) &&                               \
+       (BRAHMA_MPI_VERSION >= 900100 && BRAHMA_MPI_VERSION < 900200)) ||   \
+      (defined(BRAHMA_MPI_IMPL_MPICH) &&                                   \
+       (BRAHMA_MPI_VERSION >= 400203 && BRAHMA_MPI_VERSION < 400300)) ||   \
+      (defined(BRAHMA_MPI_IMPL_OPENMPI) &&                                 \
+       (BRAHMA_MPI_VERSION >= 400106 && BRAHMA_MPI_VERSION < 400200)))) && \
+    !(defined(BRAHMA_MPI_IMPL_OPENMPI) &&                                  \
+      (BRAHMA_MPI_VERSION >= 400106 && BRAHMA_MPI_VERSION < 400200))
 int brahma::MPIDFTracer::MPI_Topo_test(int comm, int* status) {
   BRAHMA_MAP_OR_FAIL(MPI_Topo_test);
   DFT_LOGGER_START_ALWAYS();
@@ -14416,13 +14594,15 @@ int brahma::MPIDFTracer::MPI_Type_dup(MPI_Datatype type,
   return ret;
 }
 #endif
-#if ((defined(BRAHMA_MPI_IMPL_CRAYMPICH) &&                               \
-      ((BRAHMA_MPI_VERSION >= 800108 && BRAHMA_MPI_VERSION < 800200) ||   \
-       (BRAHMA_MPI_VERSION >= 900001 && BRAHMA_MPI_VERSION < 900100))) || \
-     (defined(BRAHMA_MPI_IMPL_MPICH) &&                                   \
-      (BRAHMA_MPI_VERSION >= 300403 && BRAHMA_MPI_VERSION < 300500)) ||   \
-     (defined(BRAHMA_MPI_IMPL_OPENMPI) &&                                 \
-      (BRAHMA_MPI_VERSION >= 500006 && BRAHMA_MPI_VERSION < 500100)))
+#if (((defined(BRAHMA_MPI_IMPL_CRAYMPICH) &&                               \
+       ((BRAHMA_MPI_VERSION >= 800108 && BRAHMA_MPI_VERSION < 800200) ||   \
+        (BRAHMA_MPI_VERSION >= 900001 && BRAHMA_MPI_VERSION < 900100))) || \
+      (defined(BRAHMA_MPI_IMPL_MPICH) &&                                   \
+       (BRAHMA_MPI_VERSION >= 300403 && BRAHMA_MPI_VERSION < 300500)) ||   \
+      (defined(BRAHMA_MPI_IMPL_OPENMPI) &&                                 \
+       (BRAHMA_MPI_VERSION >= 500006 && BRAHMA_MPI_VERSION < 500100)))) || \
+    (defined(BRAHMA_MPI_IMPL_OPENMPI) &&                                   \
+     (BRAHMA_MPI_VERSION >= 400106 && BRAHMA_MPI_VERSION < 400200))
 int brahma::MPIDFTracer::MPI_Type_extent(MPI_Datatype type, MPI_Aint* extent) {
   BRAHMA_MAP_OR_FAIL(MPI_Type_extent);
   DFT_LOGGER_START_ALWAYS();
@@ -14433,12 +14613,14 @@ int brahma::MPIDFTracer::MPI_Type_extent(MPI_Datatype type, MPI_Aint* extent) {
   return ret;
 }
 #endif
-#if ((defined(BRAHMA_MPI_IMPL_CRAYMPICH) &&                             \
-      (BRAHMA_MPI_VERSION >= 900100 && BRAHMA_MPI_VERSION < 900200)) || \
-     (defined(BRAHMA_MPI_IMPL_MPICH) &&                                 \
-      (BRAHMA_MPI_VERSION >= 400203 && BRAHMA_MPI_VERSION < 400300)) || \
-     (defined(BRAHMA_MPI_IMPL_OPENMPI) &&                               \
-      (BRAHMA_MPI_VERSION >= 400106 && BRAHMA_MPI_VERSION < 400200)))
+#if (((defined(BRAHMA_MPI_IMPL_CRAYMPICH) &&                               \
+       (BRAHMA_MPI_VERSION >= 900100 && BRAHMA_MPI_VERSION < 900200)) ||   \
+      (defined(BRAHMA_MPI_IMPL_MPICH) &&                                   \
+       (BRAHMA_MPI_VERSION >= 400203 && BRAHMA_MPI_VERSION < 400300)) ||   \
+      (defined(BRAHMA_MPI_IMPL_OPENMPI) &&                                 \
+       (BRAHMA_MPI_VERSION >= 400106 && BRAHMA_MPI_VERSION < 400200)))) && \
+    !(defined(BRAHMA_MPI_IMPL_OPENMPI) &&                                  \
+      (BRAHMA_MPI_VERSION >= 400106 && BRAHMA_MPI_VERSION < 400200))
 int brahma::MPIDFTracer::MPI_Type_extent(int type, MPI_Aint* extent) {
   BRAHMA_MAP_OR_FAIL(MPI_Type_extent);
   DFT_LOGGER_START_ALWAYS();
@@ -14485,13 +14667,15 @@ int brahma::MPIDFTracer::MPI_Type_free_keyval(int* type_keyval) {
   return ret;
 }
 #endif
-#if ((defined(BRAHMA_MPI_IMPL_CRAYMPICH) &&                               \
-      ((BRAHMA_MPI_VERSION >= 800108 && BRAHMA_MPI_VERSION < 800200) ||   \
-       (BRAHMA_MPI_VERSION >= 900001 && BRAHMA_MPI_VERSION < 900100))) || \
-     (defined(BRAHMA_MPI_IMPL_MPICH) &&                                   \
-      (BRAHMA_MPI_VERSION >= 300403 && BRAHMA_MPI_VERSION < 300500)) ||   \
-     (defined(BRAHMA_MPI_IMPL_OPENMPI) &&                                 \
-      (BRAHMA_MPI_VERSION >= 500006 && BRAHMA_MPI_VERSION < 500100)))
+#if (((defined(BRAHMA_MPI_IMPL_CRAYMPICH) &&                               \
+       ((BRAHMA_MPI_VERSION >= 800108 && BRAHMA_MPI_VERSION < 800200) ||   \
+        (BRAHMA_MPI_VERSION >= 900001 && BRAHMA_MPI_VERSION < 900100))) || \
+      (defined(BRAHMA_MPI_IMPL_MPICH) &&                                   \
+       (BRAHMA_MPI_VERSION >= 300403 && BRAHMA_MPI_VERSION < 300500)) ||   \
+      (defined(BRAHMA_MPI_IMPL_OPENMPI) &&                                 \
+       (BRAHMA_MPI_VERSION >= 500006 && BRAHMA_MPI_VERSION < 500100)))) || \
+    (defined(BRAHMA_MPI_IMPL_OPENMPI) &&                                   \
+     (BRAHMA_MPI_VERSION >= 400106 && BRAHMA_MPI_VERSION < 400200))
 int brahma::MPIDFTracer::MPI_Type_get_attr(MPI_Datatype type, int type_keyval,
                                            void* attribute_val, int* flag) {
   BRAHMA_MAP_OR_FAIL(MPI_Type_get_attr);
@@ -14504,12 +14688,14 @@ int brahma::MPIDFTracer::MPI_Type_get_attr(MPI_Datatype type, int type_keyval,
   return ret;
 }
 #endif
-#if ((defined(BRAHMA_MPI_IMPL_CRAYMPICH) &&                             \
-      (BRAHMA_MPI_VERSION >= 900100 && BRAHMA_MPI_VERSION < 900200)) || \
-     (defined(BRAHMA_MPI_IMPL_MPICH) &&                                 \
-      (BRAHMA_MPI_VERSION >= 400203 && BRAHMA_MPI_VERSION < 400300)) || \
-     (defined(BRAHMA_MPI_IMPL_OPENMPI) &&                               \
-      (BRAHMA_MPI_VERSION >= 400106 && BRAHMA_MPI_VERSION < 400200)))
+#if (((defined(BRAHMA_MPI_IMPL_CRAYMPICH) &&                               \
+       (BRAHMA_MPI_VERSION >= 900100 && BRAHMA_MPI_VERSION < 900200)) ||   \
+      (defined(BRAHMA_MPI_IMPL_MPICH) &&                                   \
+       (BRAHMA_MPI_VERSION >= 400203 && BRAHMA_MPI_VERSION < 400300)) ||   \
+      (defined(BRAHMA_MPI_IMPL_OPENMPI) &&                                 \
+       (BRAHMA_MPI_VERSION >= 400106 && BRAHMA_MPI_VERSION < 400200)))) && \
+    !(defined(BRAHMA_MPI_IMPL_OPENMPI) &&                                  \
+      (BRAHMA_MPI_VERSION >= 400106 && BRAHMA_MPI_VERSION < 400200))
 int brahma::MPIDFTracer::MPI_Type_get_attr(int type, int type_keyval,
                                            void* attribute_val, int* flag) {
   BRAHMA_MAP_OR_FAIL(MPI_Type_get_attr);
@@ -14522,13 +14708,15 @@ int brahma::MPIDFTracer::MPI_Type_get_attr(int type, int type_keyval,
   return ret;
 }
 #endif
-#if ((defined(BRAHMA_MPI_IMPL_CRAYMPICH) &&                               \
-      ((BRAHMA_MPI_VERSION >= 800108 && BRAHMA_MPI_VERSION < 800200) ||   \
-       (BRAHMA_MPI_VERSION >= 900001 && BRAHMA_MPI_VERSION < 900100))) || \
-     (defined(BRAHMA_MPI_IMPL_MPICH) &&                                   \
-      (BRAHMA_MPI_VERSION >= 300403 && BRAHMA_MPI_VERSION < 300500)) ||   \
-     (defined(BRAHMA_MPI_IMPL_OPENMPI) &&                                 \
-      (BRAHMA_MPI_VERSION >= 500006 && BRAHMA_MPI_VERSION < 500100)))
+#if (((defined(BRAHMA_MPI_IMPL_CRAYMPICH) &&                               \
+       ((BRAHMA_MPI_VERSION >= 800108 && BRAHMA_MPI_VERSION < 800200) ||   \
+        (BRAHMA_MPI_VERSION >= 900001 && BRAHMA_MPI_VERSION < 900100))) || \
+      (defined(BRAHMA_MPI_IMPL_MPICH) &&                                   \
+       (BRAHMA_MPI_VERSION >= 300403 && BRAHMA_MPI_VERSION < 300500)) ||   \
+      (defined(BRAHMA_MPI_IMPL_OPENMPI) &&                                 \
+       (BRAHMA_MPI_VERSION >= 500006 && BRAHMA_MPI_VERSION < 500100)))) || \
+    (defined(BRAHMA_MPI_IMPL_OPENMPI) &&                                   \
+     (BRAHMA_MPI_VERSION >= 400106 && BRAHMA_MPI_VERSION < 400200))
 int brahma::MPIDFTracer::MPI_Type_get_contents(
     MPI_Datatype mtype, int max_integers, int max_addresses, int max_datatypes,
     int array_of_integers[], MPI_Aint array_of_addresses[],
@@ -14547,12 +14735,14 @@ int brahma::MPIDFTracer::MPI_Type_get_contents(
   return ret;
 }
 #endif
-#if ((defined(BRAHMA_MPI_IMPL_CRAYMPICH) &&                             \
-      (BRAHMA_MPI_VERSION >= 900100 && BRAHMA_MPI_VERSION < 900200)) || \
-     (defined(BRAHMA_MPI_IMPL_MPICH) &&                                 \
-      (BRAHMA_MPI_VERSION >= 400203 && BRAHMA_MPI_VERSION < 400300)) || \
-     (defined(BRAHMA_MPI_IMPL_OPENMPI) &&                               \
-      (BRAHMA_MPI_VERSION >= 400106 && BRAHMA_MPI_VERSION < 400200)))
+#if (((defined(BRAHMA_MPI_IMPL_CRAYMPICH) &&                               \
+       (BRAHMA_MPI_VERSION >= 900100 && BRAHMA_MPI_VERSION < 900200)) ||   \
+      (defined(BRAHMA_MPI_IMPL_MPICH) &&                                   \
+       (BRAHMA_MPI_VERSION >= 400203 && BRAHMA_MPI_VERSION < 400300)) ||   \
+      (defined(BRAHMA_MPI_IMPL_OPENMPI) &&                                 \
+       (BRAHMA_MPI_VERSION >= 400106 && BRAHMA_MPI_VERSION < 400200)))) && \
+    !(defined(BRAHMA_MPI_IMPL_OPENMPI) &&                                  \
+      (BRAHMA_MPI_VERSION >= 400106 && BRAHMA_MPI_VERSION < 400200))
 int brahma::MPIDFTracer::MPI_Type_get_contents(int mtype, int max_integers,
                                                int max_addresses,
                                                int max_datatypes,
@@ -14621,13 +14811,15 @@ int brahma::MPIDFTracer::MPI_Type_get_contents_c(
   return ret;
 }
 #endif
-#if ((defined(BRAHMA_MPI_IMPL_CRAYMPICH) &&                               \
-      ((BRAHMA_MPI_VERSION >= 800108 && BRAHMA_MPI_VERSION < 800200) ||   \
-       (BRAHMA_MPI_VERSION >= 900001 && BRAHMA_MPI_VERSION < 900100))) || \
-     (defined(BRAHMA_MPI_IMPL_MPICH) &&                                   \
-      (BRAHMA_MPI_VERSION >= 300403 && BRAHMA_MPI_VERSION < 300500)) ||   \
-     (defined(BRAHMA_MPI_IMPL_OPENMPI) &&                                 \
-      (BRAHMA_MPI_VERSION >= 500006 && BRAHMA_MPI_VERSION < 500100)))
+#if (((defined(BRAHMA_MPI_IMPL_CRAYMPICH) &&                               \
+       ((BRAHMA_MPI_VERSION >= 800108 && BRAHMA_MPI_VERSION < 800200) ||   \
+        (BRAHMA_MPI_VERSION >= 900001 && BRAHMA_MPI_VERSION < 900100))) || \
+      (defined(BRAHMA_MPI_IMPL_MPICH) &&                                   \
+       (BRAHMA_MPI_VERSION >= 300403 && BRAHMA_MPI_VERSION < 300500)) ||   \
+      (defined(BRAHMA_MPI_IMPL_OPENMPI) &&                                 \
+       (BRAHMA_MPI_VERSION >= 500006 && BRAHMA_MPI_VERSION < 500100)))) || \
+    (defined(BRAHMA_MPI_IMPL_OPENMPI) &&                                   \
+     (BRAHMA_MPI_VERSION >= 400106 && BRAHMA_MPI_VERSION < 400200))
 int brahma::MPIDFTracer::MPI_Type_get_envelope(MPI_Datatype type,
                                                int* num_integers,
                                                int* num_addresses,
@@ -14643,12 +14835,14 @@ int brahma::MPIDFTracer::MPI_Type_get_envelope(MPI_Datatype type,
   return ret;
 }
 #endif
-#if ((defined(BRAHMA_MPI_IMPL_CRAYMPICH) &&                             \
-      (BRAHMA_MPI_VERSION >= 900100 && BRAHMA_MPI_VERSION < 900200)) || \
-     (defined(BRAHMA_MPI_IMPL_MPICH) &&                                 \
-      (BRAHMA_MPI_VERSION >= 400203 && BRAHMA_MPI_VERSION < 400300)) || \
-     (defined(BRAHMA_MPI_IMPL_OPENMPI) &&                               \
-      (BRAHMA_MPI_VERSION >= 400106 && BRAHMA_MPI_VERSION < 400200)))
+#if (((defined(BRAHMA_MPI_IMPL_CRAYMPICH) &&                               \
+       (BRAHMA_MPI_VERSION >= 900100 && BRAHMA_MPI_VERSION < 900200)) ||   \
+      (defined(BRAHMA_MPI_IMPL_MPICH) &&                                   \
+       (BRAHMA_MPI_VERSION >= 400203 && BRAHMA_MPI_VERSION < 400300)) ||   \
+      (defined(BRAHMA_MPI_IMPL_OPENMPI) &&                                 \
+       (BRAHMA_MPI_VERSION >= 400106 && BRAHMA_MPI_VERSION < 400200)))) && \
+    !(defined(BRAHMA_MPI_IMPL_OPENMPI) &&                                  \
+      (BRAHMA_MPI_VERSION >= 400106 && BRAHMA_MPI_VERSION < 400200))
 int brahma::MPIDFTracer::MPI_Type_get_envelope(int type, int* num_integers,
                                                int* num_addresses,
                                                int* num_datatypes,
@@ -14697,13 +14891,15 @@ int brahma::MPIDFTracer::MPI_Type_get_envelope_c(
   return ret;
 }
 #endif
-#if ((defined(BRAHMA_MPI_IMPL_CRAYMPICH) &&                               \
-      ((BRAHMA_MPI_VERSION >= 800108 && BRAHMA_MPI_VERSION < 800200) ||   \
-       (BRAHMA_MPI_VERSION >= 900001 && BRAHMA_MPI_VERSION < 900100))) || \
-     (defined(BRAHMA_MPI_IMPL_MPICH) &&                                   \
-      (BRAHMA_MPI_VERSION >= 300403 && BRAHMA_MPI_VERSION < 300500)) ||   \
-     (defined(BRAHMA_MPI_IMPL_OPENMPI) &&                                 \
-      (BRAHMA_MPI_VERSION >= 500006 && BRAHMA_MPI_VERSION < 500100)))
+#if (((defined(BRAHMA_MPI_IMPL_CRAYMPICH) &&                               \
+       ((BRAHMA_MPI_VERSION >= 800108 && BRAHMA_MPI_VERSION < 800200) ||   \
+        (BRAHMA_MPI_VERSION >= 900001 && BRAHMA_MPI_VERSION < 900100))) || \
+      (defined(BRAHMA_MPI_IMPL_MPICH) &&                                   \
+       (BRAHMA_MPI_VERSION >= 300403 && BRAHMA_MPI_VERSION < 300500)) ||   \
+      (defined(BRAHMA_MPI_IMPL_OPENMPI) &&                                 \
+       (BRAHMA_MPI_VERSION >= 500006 && BRAHMA_MPI_VERSION < 500100)))) || \
+    (defined(BRAHMA_MPI_IMPL_OPENMPI) &&                                   \
+     (BRAHMA_MPI_VERSION >= 400106 && BRAHMA_MPI_VERSION < 400200))
 int brahma::MPIDFTracer::MPI_Type_get_extent(MPI_Datatype type, MPI_Aint* lb,
                                              MPI_Aint* extent) {
   BRAHMA_MAP_OR_FAIL(MPI_Type_get_extent);
@@ -14715,12 +14911,14 @@ int brahma::MPIDFTracer::MPI_Type_get_extent(MPI_Datatype type, MPI_Aint* lb,
   return ret;
 }
 #endif
-#if ((defined(BRAHMA_MPI_IMPL_CRAYMPICH) &&                             \
-      (BRAHMA_MPI_VERSION >= 900100 && BRAHMA_MPI_VERSION < 900200)) || \
-     (defined(BRAHMA_MPI_IMPL_MPICH) &&                                 \
-      (BRAHMA_MPI_VERSION >= 400203 && BRAHMA_MPI_VERSION < 400300)) || \
-     (defined(BRAHMA_MPI_IMPL_OPENMPI) &&                               \
-      (BRAHMA_MPI_VERSION >= 400106 && BRAHMA_MPI_VERSION < 400200)))
+#if (((defined(BRAHMA_MPI_IMPL_CRAYMPICH) &&                               \
+       (BRAHMA_MPI_VERSION >= 900100 && BRAHMA_MPI_VERSION < 900200)) ||   \
+      (defined(BRAHMA_MPI_IMPL_MPICH) &&                                   \
+       (BRAHMA_MPI_VERSION >= 400203 && BRAHMA_MPI_VERSION < 400300)) ||   \
+      (defined(BRAHMA_MPI_IMPL_OPENMPI) &&                                 \
+       (BRAHMA_MPI_VERSION >= 400106 && BRAHMA_MPI_VERSION < 400200)))) && \
+    !(defined(BRAHMA_MPI_IMPL_OPENMPI) &&                                  \
+      (BRAHMA_MPI_VERSION >= 400106 && BRAHMA_MPI_VERSION < 400200))
 int brahma::MPIDFTracer::MPI_Type_get_extent(int type, MPI_Aint* lb,
                                              MPI_Aint* extent) {
   BRAHMA_MAP_OR_FAIL(MPI_Type_get_extent);
@@ -14761,13 +14959,15 @@ int brahma::MPIDFTracer::MPI_Type_get_extent_c(int datatype, MPI_Count* lb,
   return ret;
 }
 #endif
-#if ((defined(BRAHMA_MPI_IMPL_CRAYMPICH) &&                               \
-      ((BRAHMA_MPI_VERSION >= 800108 && BRAHMA_MPI_VERSION < 800200) ||   \
-       (BRAHMA_MPI_VERSION >= 900001 && BRAHMA_MPI_VERSION < 900100))) || \
-     (defined(BRAHMA_MPI_IMPL_MPICH) &&                                   \
-      (BRAHMA_MPI_VERSION >= 300403 && BRAHMA_MPI_VERSION < 300500)) ||   \
-     (defined(BRAHMA_MPI_IMPL_OPENMPI) &&                                 \
-      (BRAHMA_MPI_VERSION >= 500006 && BRAHMA_MPI_VERSION < 500100)))
+#if (((defined(BRAHMA_MPI_IMPL_CRAYMPICH) &&                               \
+       ((BRAHMA_MPI_VERSION >= 800108 && BRAHMA_MPI_VERSION < 800200) ||   \
+        (BRAHMA_MPI_VERSION >= 900001 && BRAHMA_MPI_VERSION < 900100))) || \
+      (defined(BRAHMA_MPI_IMPL_MPICH) &&                                   \
+       (BRAHMA_MPI_VERSION >= 300403 && BRAHMA_MPI_VERSION < 300500)) ||   \
+      (defined(BRAHMA_MPI_IMPL_OPENMPI) &&                                 \
+       (BRAHMA_MPI_VERSION >= 500006 && BRAHMA_MPI_VERSION < 500100)))) || \
+    (defined(BRAHMA_MPI_IMPL_OPENMPI) &&                                   \
+     (BRAHMA_MPI_VERSION >= 400106 && BRAHMA_MPI_VERSION < 400200))
 int brahma::MPIDFTracer::MPI_Type_get_extent_x(MPI_Datatype type, MPI_Count* lb,
                                                MPI_Count* extent) {
   BRAHMA_MAP_OR_FAIL(MPI_Type_get_extent_x);
@@ -14779,12 +14979,14 @@ int brahma::MPIDFTracer::MPI_Type_get_extent_x(MPI_Datatype type, MPI_Count* lb,
   return ret;
 }
 #endif
-#if ((defined(BRAHMA_MPI_IMPL_CRAYMPICH) &&                             \
-      (BRAHMA_MPI_VERSION >= 900100 && BRAHMA_MPI_VERSION < 900200)) || \
-     (defined(BRAHMA_MPI_IMPL_MPICH) &&                                 \
-      (BRAHMA_MPI_VERSION >= 400203 && BRAHMA_MPI_VERSION < 400300)) || \
-     (defined(BRAHMA_MPI_IMPL_OPENMPI) &&                               \
-      (BRAHMA_MPI_VERSION >= 400106 && BRAHMA_MPI_VERSION < 400200)))
+#if (((defined(BRAHMA_MPI_IMPL_CRAYMPICH) &&                               \
+       (BRAHMA_MPI_VERSION >= 900100 && BRAHMA_MPI_VERSION < 900200)) ||   \
+      (defined(BRAHMA_MPI_IMPL_MPICH) &&                                   \
+       (BRAHMA_MPI_VERSION >= 400203 && BRAHMA_MPI_VERSION < 400300)) ||   \
+      (defined(BRAHMA_MPI_IMPL_OPENMPI) &&                                 \
+       (BRAHMA_MPI_VERSION >= 400106 && BRAHMA_MPI_VERSION < 400200)))) && \
+    !(defined(BRAHMA_MPI_IMPL_OPENMPI) &&                                  \
+      (BRAHMA_MPI_VERSION >= 400106 && BRAHMA_MPI_VERSION < 400200))
 int brahma::MPIDFTracer::MPI_Type_get_extent_x(int type, MPI_Count* lb,
                                                MPI_Count* extent) {
   BRAHMA_MAP_OR_FAIL(MPI_Type_get_extent_x);
@@ -14796,13 +14998,15 @@ int brahma::MPIDFTracer::MPI_Type_get_extent_x(int type, MPI_Count* lb,
   return ret;
 }
 #endif
-#if ((defined(BRAHMA_MPI_IMPL_CRAYMPICH) &&                               \
-      ((BRAHMA_MPI_VERSION >= 800108 && BRAHMA_MPI_VERSION < 800200) ||   \
-       (BRAHMA_MPI_VERSION >= 900001 && BRAHMA_MPI_VERSION < 900100))) || \
-     (defined(BRAHMA_MPI_IMPL_MPICH) &&                                   \
-      (BRAHMA_MPI_VERSION >= 300403 && BRAHMA_MPI_VERSION < 300500)) ||   \
-     (defined(BRAHMA_MPI_IMPL_OPENMPI) &&                                 \
-      (BRAHMA_MPI_VERSION >= 500006 && BRAHMA_MPI_VERSION < 500100)))
+#if (((defined(BRAHMA_MPI_IMPL_CRAYMPICH) &&                               \
+       ((BRAHMA_MPI_VERSION >= 800108 && BRAHMA_MPI_VERSION < 800200) ||   \
+        (BRAHMA_MPI_VERSION >= 900001 && BRAHMA_MPI_VERSION < 900100))) || \
+      (defined(BRAHMA_MPI_IMPL_MPICH) &&                                   \
+       (BRAHMA_MPI_VERSION >= 300403 && BRAHMA_MPI_VERSION < 300500)) ||   \
+      (defined(BRAHMA_MPI_IMPL_OPENMPI) &&                                 \
+       (BRAHMA_MPI_VERSION >= 500006 && BRAHMA_MPI_VERSION < 500100)))) || \
+    (defined(BRAHMA_MPI_IMPL_OPENMPI) &&                                   \
+     (BRAHMA_MPI_VERSION >= 400106 && BRAHMA_MPI_VERSION < 400200))
 int brahma::MPIDFTracer::MPI_Type_get_name(MPI_Datatype type, char* type_name,
                                            int* resultlen) {
   BRAHMA_MAP_OR_FAIL(MPI_Type_get_name);
@@ -14814,12 +15018,14 @@ int brahma::MPIDFTracer::MPI_Type_get_name(MPI_Datatype type, char* type_name,
   return ret;
 }
 #endif
-#if ((defined(BRAHMA_MPI_IMPL_CRAYMPICH) &&                             \
-      (BRAHMA_MPI_VERSION >= 900100 && BRAHMA_MPI_VERSION < 900200)) || \
-     (defined(BRAHMA_MPI_IMPL_MPICH) &&                                 \
-      (BRAHMA_MPI_VERSION >= 400203 && BRAHMA_MPI_VERSION < 400300)) || \
-     (defined(BRAHMA_MPI_IMPL_OPENMPI) &&                               \
-      (BRAHMA_MPI_VERSION >= 400106 && BRAHMA_MPI_VERSION < 400200)))
+#if (((defined(BRAHMA_MPI_IMPL_CRAYMPICH) &&                               \
+       (BRAHMA_MPI_VERSION >= 900100 && BRAHMA_MPI_VERSION < 900200)) ||   \
+      (defined(BRAHMA_MPI_IMPL_MPICH) &&                                   \
+       (BRAHMA_MPI_VERSION >= 400203 && BRAHMA_MPI_VERSION < 400300)) ||   \
+      (defined(BRAHMA_MPI_IMPL_OPENMPI) &&                                 \
+       (BRAHMA_MPI_VERSION >= 400106 && BRAHMA_MPI_VERSION < 400200)))) && \
+    !(defined(BRAHMA_MPI_IMPL_OPENMPI) &&                                  \
+      (BRAHMA_MPI_VERSION >= 400106 && BRAHMA_MPI_VERSION < 400200))
 int brahma::MPIDFTracer::MPI_Type_get_name(int type, char* type_name,
                                            int* resultlen) {
   BRAHMA_MAP_OR_FAIL(MPI_Type_get_name);
@@ -14831,13 +15037,15 @@ int brahma::MPIDFTracer::MPI_Type_get_name(int type, char* type_name,
   return ret;
 }
 #endif
-#if ((defined(BRAHMA_MPI_IMPL_CRAYMPICH) &&                               \
-      ((BRAHMA_MPI_VERSION >= 800108 && BRAHMA_MPI_VERSION < 800200) ||   \
-       (BRAHMA_MPI_VERSION >= 900001 && BRAHMA_MPI_VERSION < 900100))) || \
-     (defined(BRAHMA_MPI_IMPL_MPICH) &&                                   \
-      (BRAHMA_MPI_VERSION >= 300403 && BRAHMA_MPI_VERSION < 300500)) ||   \
-     (defined(BRAHMA_MPI_IMPL_OPENMPI) &&                                 \
-      (BRAHMA_MPI_VERSION >= 500006 && BRAHMA_MPI_VERSION < 500100)))
+#if (((defined(BRAHMA_MPI_IMPL_CRAYMPICH) &&                               \
+       ((BRAHMA_MPI_VERSION >= 800108 && BRAHMA_MPI_VERSION < 800200) ||   \
+        (BRAHMA_MPI_VERSION >= 900001 && BRAHMA_MPI_VERSION < 900100))) || \
+      (defined(BRAHMA_MPI_IMPL_MPICH) &&                                   \
+       (BRAHMA_MPI_VERSION >= 300403 && BRAHMA_MPI_VERSION < 300500)) ||   \
+      (defined(BRAHMA_MPI_IMPL_OPENMPI) &&                                 \
+       (BRAHMA_MPI_VERSION >= 500006 && BRAHMA_MPI_VERSION < 500100)))) || \
+    (defined(BRAHMA_MPI_IMPL_OPENMPI) &&                                   \
+     (BRAHMA_MPI_VERSION >= 400106 && BRAHMA_MPI_VERSION < 400200))
 int brahma::MPIDFTracer::MPI_Type_get_true_extent(MPI_Datatype datatype,
                                                   MPI_Aint* true_lb,
                                                   MPI_Aint* true_extent) {
@@ -14850,12 +15058,14 @@ int brahma::MPIDFTracer::MPI_Type_get_true_extent(MPI_Datatype datatype,
   return ret;
 }
 #endif
-#if ((defined(BRAHMA_MPI_IMPL_CRAYMPICH) &&                             \
-      (BRAHMA_MPI_VERSION >= 900100 && BRAHMA_MPI_VERSION < 900200)) || \
-     (defined(BRAHMA_MPI_IMPL_MPICH) &&                                 \
-      (BRAHMA_MPI_VERSION >= 400203 && BRAHMA_MPI_VERSION < 400300)) || \
-     (defined(BRAHMA_MPI_IMPL_OPENMPI) &&                               \
-      (BRAHMA_MPI_VERSION >= 400106 && BRAHMA_MPI_VERSION < 400200)))
+#if (((defined(BRAHMA_MPI_IMPL_CRAYMPICH) &&                               \
+       (BRAHMA_MPI_VERSION >= 900100 && BRAHMA_MPI_VERSION < 900200)) ||   \
+      (defined(BRAHMA_MPI_IMPL_MPICH) &&                                   \
+       (BRAHMA_MPI_VERSION >= 400203 && BRAHMA_MPI_VERSION < 400300)) ||   \
+      (defined(BRAHMA_MPI_IMPL_OPENMPI) &&                                 \
+       (BRAHMA_MPI_VERSION >= 400106 && BRAHMA_MPI_VERSION < 400200)))) && \
+    !(defined(BRAHMA_MPI_IMPL_OPENMPI) &&                                  \
+      (BRAHMA_MPI_VERSION >= 400106 && BRAHMA_MPI_VERSION < 400200))
 int brahma::MPIDFTracer::MPI_Type_get_true_extent(int datatype,
                                                   MPI_Aint* true_lb,
                                                   MPI_Aint* true_extent) {
@@ -14898,13 +15108,15 @@ int brahma::MPIDFTracer::MPI_Type_get_true_extent_c(int datatype,
   return ret;
 }
 #endif
-#if ((defined(BRAHMA_MPI_IMPL_CRAYMPICH) &&                               \
-      ((BRAHMA_MPI_VERSION >= 800108 && BRAHMA_MPI_VERSION < 800200) ||   \
-       (BRAHMA_MPI_VERSION >= 900001 && BRAHMA_MPI_VERSION < 900100))) || \
-     (defined(BRAHMA_MPI_IMPL_MPICH) &&                                   \
-      (BRAHMA_MPI_VERSION >= 300403 && BRAHMA_MPI_VERSION < 300500)) ||   \
-     (defined(BRAHMA_MPI_IMPL_OPENMPI) &&                                 \
-      (BRAHMA_MPI_VERSION >= 500006 && BRAHMA_MPI_VERSION < 500100)))
+#if (((defined(BRAHMA_MPI_IMPL_CRAYMPICH) &&                               \
+       ((BRAHMA_MPI_VERSION >= 800108 && BRAHMA_MPI_VERSION < 800200) ||   \
+        (BRAHMA_MPI_VERSION >= 900001 && BRAHMA_MPI_VERSION < 900100))) || \
+      (defined(BRAHMA_MPI_IMPL_MPICH) &&                                   \
+       (BRAHMA_MPI_VERSION >= 300403 && BRAHMA_MPI_VERSION < 300500)) ||   \
+      (defined(BRAHMA_MPI_IMPL_OPENMPI) &&                                 \
+       (BRAHMA_MPI_VERSION >= 500006 && BRAHMA_MPI_VERSION < 500100)))) || \
+    (defined(BRAHMA_MPI_IMPL_OPENMPI) &&                                   \
+     (BRAHMA_MPI_VERSION >= 400106 && BRAHMA_MPI_VERSION < 400200))
 int brahma::MPIDFTracer::MPI_Type_get_true_extent_x(MPI_Datatype datatype,
                                                     MPI_Count* true_lb,
                                                     MPI_Count* true_extent) {
@@ -14917,12 +15129,14 @@ int brahma::MPIDFTracer::MPI_Type_get_true_extent_x(MPI_Datatype datatype,
   return ret;
 }
 #endif
-#if ((defined(BRAHMA_MPI_IMPL_CRAYMPICH) &&                             \
-      (BRAHMA_MPI_VERSION >= 900100 && BRAHMA_MPI_VERSION < 900200)) || \
-     (defined(BRAHMA_MPI_IMPL_MPICH) &&                                 \
-      (BRAHMA_MPI_VERSION >= 400203 && BRAHMA_MPI_VERSION < 400300)) || \
-     (defined(BRAHMA_MPI_IMPL_OPENMPI) &&                               \
-      (BRAHMA_MPI_VERSION >= 400106 && BRAHMA_MPI_VERSION < 400200)))
+#if (((defined(BRAHMA_MPI_IMPL_CRAYMPICH) &&                               \
+       (BRAHMA_MPI_VERSION >= 900100 && BRAHMA_MPI_VERSION < 900200)) ||   \
+      (defined(BRAHMA_MPI_IMPL_MPICH) &&                                   \
+       (BRAHMA_MPI_VERSION >= 400203 && BRAHMA_MPI_VERSION < 400300)) ||   \
+      (defined(BRAHMA_MPI_IMPL_OPENMPI) &&                                 \
+       (BRAHMA_MPI_VERSION >= 400106 && BRAHMA_MPI_VERSION < 400200)))) && \
+    !(defined(BRAHMA_MPI_IMPL_OPENMPI) &&                                  \
+      (BRAHMA_MPI_VERSION >= 400106 && BRAHMA_MPI_VERSION < 400200))
 int brahma::MPIDFTracer::MPI_Type_get_true_extent_x(int datatype,
                                                     MPI_Count* true_lb,
                                                     MPI_Count* true_extent) {
@@ -14970,10 +15184,12 @@ int brahma::MPIDFTracer::MPI_Type_hindexed(int count,
   return ret;
 }
 #endif
-#if ((defined(BRAHMA_MPI_IMPL_CRAYMPICH) &&                             \
-      (BRAHMA_MPI_VERSION >= 900001 && BRAHMA_MPI_VERSION < 900100)) || \
-     (defined(BRAHMA_MPI_IMPL_OPENMPI) &&                               \
-      (BRAHMA_MPI_VERSION >= 500006 && BRAHMA_MPI_VERSION < 500100)))
+#if (((defined(BRAHMA_MPI_IMPL_CRAYMPICH) &&                               \
+       (BRAHMA_MPI_VERSION >= 900001 && BRAHMA_MPI_VERSION < 900100)) ||   \
+      (defined(BRAHMA_MPI_IMPL_OPENMPI) &&                                 \
+       (BRAHMA_MPI_VERSION >= 500006 && BRAHMA_MPI_VERSION < 500100)))) || \
+    (defined(BRAHMA_MPI_IMPL_OPENMPI) &&                                   \
+     (BRAHMA_MPI_VERSION >= 400106 && BRAHMA_MPI_VERSION < 400200))
 int brahma::MPIDFTracer::MPI_Type_hindexed(int count,
                                            int array_of_blocklengths[],
                                            MPI_Aint array_of_displacements[],
@@ -14990,12 +15206,14 @@ int brahma::MPIDFTracer::MPI_Type_hindexed(int count,
   return ret;
 }
 #endif
-#if ((defined(BRAHMA_MPI_IMPL_CRAYMPICH) &&                             \
-      (BRAHMA_MPI_VERSION >= 900100 && BRAHMA_MPI_VERSION < 900200)) || \
-     (defined(BRAHMA_MPI_IMPL_MPICH) &&                                 \
-      (BRAHMA_MPI_VERSION >= 400203 && BRAHMA_MPI_VERSION < 400300)) || \
-     (defined(BRAHMA_MPI_IMPL_OPENMPI) &&                               \
-      (BRAHMA_MPI_VERSION >= 400106 && BRAHMA_MPI_VERSION < 400200)))
+#if (((defined(BRAHMA_MPI_IMPL_CRAYMPICH) &&                               \
+       (BRAHMA_MPI_VERSION >= 900100 && BRAHMA_MPI_VERSION < 900200)) ||   \
+      (defined(BRAHMA_MPI_IMPL_MPICH) &&                                   \
+       (BRAHMA_MPI_VERSION >= 400203 && BRAHMA_MPI_VERSION < 400300)) ||   \
+      (defined(BRAHMA_MPI_IMPL_OPENMPI) &&                                 \
+       (BRAHMA_MPI_VERSION >= 400106 && BRAHMA_MPI_VERSION < 400200)))) && \
+    !(defined(BRAHMA_MPI_IMPL_OPENMPI) &&                                  \
+      (BRAHMA_MPI_VERSION >= 400106 && BRAHMA_MPI_VERSION < 400200))
 int brahma::MPIDFTracer::MPI_Type_hindexed(int count,
                                            int array_of_blocklengths[],
                                            MPI_Aint array_of_displacements[],
@@ -15011,13 +15229,15 @@ int brahma::MPIDFTracer::MPI_Type_hindexed(int count,
   return ret;
 }
 #endif
-#if ((defined(BRAHMA_MPI_IMPL_CRAYMPICH) &&                               \
-      ((BRAHMA_MPI_VERSION >= 800108 && BRAHMA_MPI_VERSION < 800200) ||   \
-       (BRAHMA_MPI_VERSION >= 900001 && BRAHMA_MPI_VERSION < 900100))) || \
-     (defined(BRAHMA_MPI_IMPL_MPICH) &&                                   \
-      (BRAHMA_MPI_VERSION >= 300403 && BRAHMA_MPI_VERSION < 300500)) ||   \
-     (defined(BRAHMA_MPI_IMPL_OPENMPI) &&                                 \
-      (BRAHMA_MPI_VERSION >= 500006 && BRAHMA_MPI_VERSION < 500100)))
+#if (((defined(BRAHMA_MPI_IMPL_CRAYMPICH) &&                               \
+       ((BRAHMA_MPI_VERSION >= 800108 && BRAHMA_MPI_VERSION < 800200) ||   \
+        (BRAHMA_MPI_VERSION >= 900001 && BRAHMA_MPI_VERSION < 900100))) || \
+      (defined(BRAHMA_MPI_IMPL_MPICH) &&                                   \
+       (BRAHMA_MPI_VERSION >= 300403 && BRAHMA_MPI_VERSION < 300500)) ||   \
+      (defined(BRAHMA_MPI_IMPL_OPENMPI) &&                                 \
+       (BRAHMA_MPI_VERSION >= 500006 && BRAHMA_MPI_VERSION < 500100)))) || \
+    (defined(BRAHMA_MPI_IMPL_OPENMPI) &&                                   \
+     (BRAHMA_MPI_VERSION >= 400106 && BRAHMA_MPI_VERSION < 400200))
 int brahma::MPIDFTracer::MPI_Type_hvector(int count, int blocklength,
                                           MPI_Aint stride, MPI_Datatype oldtype,
                                           MPI_Datatype* newtype) {
@@ -15034,12 +15254,14 @@ int brahma::MPIDFTracer::MPI_Type_hvector(int count, int blocklength,
   return ret;
 }
 #endif
-#if ((defined(BRAHMA_MPI_IMPL_CRAYMPICH) &&                             \
-      (BRAHMA_MPI_VERSION >= 900100 && BRAHMA_MPI_VERSION < 900200)) || \
-     (defined(BRAHMA_MPI_IMPL_MPICH) &&                                 \
-      (BRAHMA_MPI_VERSION >= 400203 && BRAHMA_MPI_VERSION < 400300)) || \
-     (defined(BRAHMA_MPI_IMPL_OPENMPI) &&                               \
-      (BRAHMA_MPI_VERSION >= 400106 && BRAHMA_MPI_VERSION < 400200)))
+#if (((defined(BRAHMA_MPI_IMPL_CRAYMPICH) &&                               \
+       (BRAHMA_MPI_VERSION >= 900100 && BRAHMA_MPI_VERSION < 900200)) ||   \
+      (defined(BRAHMA_MPI_IMPL_MPICH) &&                                   \
+       (BRAHMA_MPI_VERSION >= 400203 && BRAHMA_MPI_VERSION < 400300)) ||   \
+      (defined(BRAHMA_MPI_IMPL_OPENMPI) &&                                 \
+       (BRAHMA_MPI_VERSION >= 400106 && BRAHMA_MPI_VERSION < 400200)))) && \
+    !(defined(BRAHMA_MPI_IMPL_OPENMPI) &&                                  \
+      (BRAHMA_MPI_VERSION >= 400106 && BRAHMA_MPI_VERSION < 400200))
 int brahma::MPIDFTracer::MPI_Type_hvector(int count, int blocklength,
                                           MPI_Aint stride, int oldtype,
                                           int* newtype) {
@@ -15074,10 +15296,12 @@ int brahma::MPIDFTracer::MPI_Type_indexed(int count,
   return ret;
 }
 #endif
-#if ((defined(BRAHMA_MPI_IMPL_CRAYMPICH) &&                             \
-      (BRAHMA_MPI_VERSION >= 900001 && BRAHMA_MPI_VERSION < 900100)) || \
-     (defined(BRAHMA_MPI_IMPL_OPENMPI) &&                               \
-      (BRAHMA_MPI_VERSION >= 500006 && BRAHMA_MPI_VERSION < 500100)))
+#if (((defined(BRAHMA_MPI_IMPL_CRAYMPICH) &&                               \
+       (BRAHMA_MPI_VERSION >= 900001 && BRAHMA_MPI_VERSION < 900100)) ||   \
+      (defined(BRAHMA_MPI_IMPL_OPENMPI) &&                                 \
+       (BRAHMA_MPI_VERSION >= 500006 && BRAHMA_MPI_VERSION < 500100)))) || \
+    (defined(BRAHMA_MPI_IMPL_OPENMPI) &&                                   \
+     (BRAHMA_MPI_VERSION >= 400106 && BRAHMA_MPI_VERSION < 400200))
 int brahma::MPIDFTracer::MPI_Type_indexed(int count,
                                           const int array_of_blocklengths[],
                                           const int array_of_displacements[],
@@ -15094,12 +15318,14 @@ int brahma::MPIDFTracer::MPI_Type_indexed(int count,
   return ret;
 }
 #endif
-#if ((defined(BRAHMA_MPI_IMPL_CRAYMPICH) &&                             \
-      (BRAHMA_MPI_VERSION >= 900100 && BRAHMA_MPI_VERSION < 900200)) || \
-     (defined(BRAHMA_MPI_IMPL_MPICH) &&                                 \
-      (BRAHMA_MPI_VERSION >= 400203 && BRAHMA_MPI_VERSION < 400300)) || \
-     (defined(BRAHMA_MPI_IMPL_OPENMPI) &&                               \
-      (BRAHMA_MPI_VERSION >= 400106 && BRAHMA_MPI_VERSION < 400200)))
+#if (((defined(BRAHMA_MPI_IMPL_CRAYMPICH) &&                               \
+       (BRAHMA_MPI_VERSION >= 900100 && BRAHMA_MPI_VERSION < 900200)) ||   \
+      (defined(BRAHMA_MPI_IMPL_MPICH) &&                                   \
+       (BRAHMA_MPI_VERSION >= 400203 && BRAHMA_MPI_VERSION < 400300)) ||   \
+      (defined(BRAHMA_MPI_IMPL_OPENMPI) &&                                 \
+       (BRAHMA_MPI_VERSION >= 400106 && BRAHMA_MPI_VERSION < 400200)))) && \
+    !(defined(BRAHMA_MPI_IMPL_OPENMPI) &&                                  \
+      (BRAHMA_MPI_VERSION >= 400106 && BRAHMA_MPI_VERSION < 400200))
 int brahma::MPIDFTracer::MPI_Type_indexed(int count,
                                           const int array_of_blocklengths[],
                                           const int array_of_displacements[],
@@ -15150,13 +15376,15 @@ int brahma::MPIDFTracer::MPI_Type_indexed_c(
   return ret;
 }
 #endif
-#if ((defined(BRAHMA_MPI_IMPL_CRAYMPICH) &&                               \
-      ((BRAHMA_MPI_VERSION >= 800108 && BRAHMA_MPI_VERSION < 800200) ||   \
-       (BRAHMA_MPI_VERSION >= 900001 && BRAHMA_MPI_VERSION < 900100))) || \
-     (defined(BRAHMA_MPI_IMPL_MPICH) &&                                   \
-      (BRAHMA_MPI_VERSION >= 300403 && BRAHMA_MPI_VERSION < 300500)) ||   \
-     (defined(BRAHMA_MPI_IMPL_OPENMPI) &&                                 \
-      (BRAHMA_MPI_VERSION >= 500006 && BRAHMA_MPI_VERSION < 500100)))
+#if (((defined(BRAHMA_MPI_IMPL_CRAYMPICH) &&                               \
+       ((BRAHMA_MPI_VERSION >= 800108 && BRAHMA_MPI_VERSION < 800200) ||   \
+        (BRAHMA_MPI_VERSION >= 900001 && BRAHMA_MPI_VERSION < 900100))) || \
+      (defined(BRAHMA_MPI_IMPL_MPICH) &&                                   \
+       (BRAHMA_MPI_VERSION >= 300403 && BRAHMA_MPI_VERSION < 300500)) ||   \
+      (defined(BRAHMA_MPI_IMPL_OPENMPI) &&                                 \
+       (BRAHMA_MPI_VERSION >= 500006 && BRAHMA_MPI_VERSION < 500100)))) || \
+    (defined(BRAHMA_MPI_IMPL_OPENMPI) &&                                   \
+     (BRAHMA_MPI_VERSION >= 400106 && BRAHMA_MPI_VERSION < 400200))
 int brahma::MPIDFTracer::MPI_Type_lb(MPI_Datatype type, MPI_Aint* lb) {
   BRAHMA_MAP_OR_FAIL(MPI_Type_lb);
   DFT_LOGGER_START_ALWAYS();
@@ -15167,12 +15395,14 @@ int brahma::MPIDFTracer::MPI_Type_lb(MPI_Datatype type, MPI_Aint* lb) {
   return ret;
 }
 #endif
-#if ((defined(BRAHMA_MPI_IMPL_CRAYMPICH) &&                             \
-      (BRAHMA_MPI_VERSION >= 900100 && BRAHMA_MPI_VERSION < 900200)) || \
-     (defined(BRAHMA_MPI_IMPL_MPICH) &&                                 \
-      (BRAHMA_MPI_VERSION >= 400203 && BRAHMA_MPI_VERSION < 400300)) || \
-     (defined(BRAHMA_MPI_IMPL_OPENMPI) &&                               \
-      (BRAHMA_MPI_VERSION >= 400106 && BRAHMA_MPI_VERSION < 400200)))
+#if (((defined(BRAHMA_MPI_IMPL_CRAYMPICH) &&                               \
+       (BRAHMA_MPI_VERSION >= 900100 && BRAHMA_MPI_VERSION < 900200)) ||   \
+      (defined(BRAHMA_MPI_IMPL_MPICH) &&                                   \
+       (BRAHMA_MPI_VERSION >= 400203 && BRAHMA_MPI_VERSION < 400300)) ||   \
+      (defined(BRAHMA_MPI_IMPL_OPENMPI) &&                                 \
+       (BRAHMA_MPI_VERSION >= 400106 && BRAHMA_MPI_VERSION < 400200)))) && \
+    !(defined(BRAHMA_MPI_IMPL_OPENMPI) &&                                  \
+      (BRAHMA_MPI_VERSION >= 400106 && BRAHMA_MPI_VERSION < 400200))
 int brahma::MPIDFTracer::MPI_Type_lb(int type, MPI_Aint* lb) {
   BRAHMA_MAP_OR_FAIL(MPI_Type_lb);
   DFT_LOGGER_START_ALWAYS();
@@ -15183,13 +15413,15 @@ int brahma::MPIDFTracer::MPI_Type_lb(int type, MPI_Aint* lb) {
   return ret;
 }
 #endif
-#if ((defined(BRAHMA_MPI_IMPL_CRAYMPICH) &&                               \
-      ((BRAHMA_MPI_VERSION >= 800108 && BRAHMA_MPI_VERSION < 800200) ||   \
-       (BRAHMA_MPI_VERSION >= 900001 && BRAHMA_MPI_VERSION < 900100))) || \
-     (defined(BRAHMA_MPI_IMPL_MPICH) &&                                   \
-      (BRAHMA_MPI_VERSION >= 300403 && BRAHMA_MPI_VERSION < 300500)) ||   \
-     (defined(BRAHMA_MPI_IMPL_OPENMPI) &&                                 \
-      (BRAHMA_MPI_VERSION >= 500006 && BRAHMA_MPI_VERSION < 500100)))
+#if (((defined(BRAHMA_MPI_IMPL_CRAYMPICH) &&                               \
+       ((BRAHMA_MPI_VERSION >= 800108 && BRAHMA_MPI_VERSION < 800200) ||   \
+        (BRAHMA_MPI_VERSION >= 900001 && BRAHMA_MPI_VERSION < 900100))) || \
+      (defined(BRAHMA_MPI_IMPL_MPICH) &&                                   \
+       (BRAHMA_MPI_VERSION >= 300403 && BRAHMA_MPI_VERSION < 300500)) ||   \
+      (defined(BRAHMA_MPI_IMPL_OPENMPI) &&                                 \
+       (BRAHMA_MPI_VERSION >= 500006 && BRAHMA_MPI_VERSION < 500100)))) || \
+    (defined(BRAHMA_MPI_IMPL_OPENMPI) &&                                   \
+     (BRAHMA_MPI_VERSION >= 400106 && BRAHMA_MPI_VERSION < 400200))
 int brahma::MPIDFTracer::MPI_Type_match_size(int typeclass, int size,
                                              MPI_Datatype* type) {
   BRAHMA_MAP_OR_FAIL(MPI_Type_match_size);
@@ -15202,12 +15434,14 @@ int brahma::MPIDFTracer::MPI_Type_match_size(int typeclass, int size,
   return ret;
 }
 #endif
-#if ((defined(BRAHMA_MPI_IMPL_CRAYMPICH) &&                             \
-      (BRAHMA_MPI_VERSION >= 900100 && BRAHMA_MPI_VERSION < 900200)) || \
-     (defined(BRAHMA_MPI_IMPL_MPICH) &&                                 \
-      (BRAHMA_MPI_VERSION >= 400203 && BRAHMA_MPI_VERSION < 400300)) || \
-     (defined(BRAHMA_MPI_IMPL_OPENMPI) &&                               \
-      (BRAHMA_MPI_VERSION >= 400106 && BRAHMA_MPI_VERSION < 400200)))
+#if (((defined(BRAHMA_MPI_IMPL_CRAYMPICH) &&                               \
+       (BRAHMA_MPI_VERSION >= 900100 && BRAHMA_MPI_VERSION < 900200)) ||   \
+      (defined(BRAHMA_MPI_IMPL_MPICH) &&                                   \
+       (BRAHMA_MPI_VERSION >= 400203 && BRAHMA_MPI_VERSION < 400300)) ||   \
+      (defined(BRAHMA_MPI_IMPL_OPENMPI) &&                                 \
+       (BRAHMA_MPI_VERSION >= 400106 && BRAHMA_MPI_VERSION < 400200)))) && \
+    !(defined(BRAHMA_MPI_IMPL_OPENMPI) &&                                  \
+      (BRAHMA_MPI_VERSION >= 400106 && BRAHMA_MPI_VERSION < 400200))
 int brahma::MPIDFTracer::MPI_Type_match_size(int typeclass, int size,
                                              int* type) {
   BRAHMA_MAP_OR_FAIL(MPI_Type_match_size);
@@ -15220,13 +15454,15 @@ int brahma::MPIDFTracer::MPI_Type_match_size(int typeclass, int size,
   return ret;
 }
 #endif
-#if ((defined(BRAHMA_MPI_IMPL_CRAYMPICH) &&                               \
-      ((BRAHMA_MPI_VERSION >= 800108 && BRAHMA_MPI_VERSION < 800200) ||   \
-       (BRAHMA_MPI_VERSION >= 900001 && BRAHMA_MPI_VERSION < 900100))) || \
-     (defined(BRAHMA_MPI_IMPL_MPICH) &&                                   \
-      (BRAHMA_MPI_VERSION >= 300403 && BRAHMA_MPI_VERSION < 300500)) ||   \
-     (defined(BRAHMA_MPI_IMPL_OPENMPI) &&                                 \
-      (BRAHMA_MPI_VERSION >= 500006 && BRAHMA_MPI_VERSION < 500100)))
+#if (((defined(BRAHMA_MPI_IMPL_CRAYMPICH) &&                               \
+       ((BRAHMA_MPI_VERSION >= 800108 && BRAHMA_MPI_VERSION < 800200) ||   \
+        (BRAHMA_MPI_VERSION >= 900001 && BRAHMA_MPI_VERSION < 900100))) || \
+      (defined(BRAHMA_MPI_IMPL_MPICH) &&                                   \
+       (BRAHMA_MPI_VERSION >= 300403 && BRAHMA_MPI_VERSION < 300500)) ||   \
+      (defined(BRAHMA_MPI_IMPL_OPENMPI) &&                                 \
+       (BRAHMA_MPI_VERSION >= 500006 && BRAHMA_MPI_VERSION < 500100)))) || \
+    (defined(BRAHMA_MPI_IMPL_OPENMPI) &&                                   \
+     (BRAHMA_MPI_VERSION >= 400106 && BRAHMA_MPI_VERSION < 400200))
 int brahma::MPIDFTracer::MPI_Type_set_attr(MPI_Datatype type, int type_keyval,
                                            void* attr_val) {
   BRAHMA_MAP_OR_FAIL(MPI_Type_set_attr);
@@ -15239,12 +15475,14 @@ int brahma::MPIDFTracer::MPI_Type_set_attr(MPI_Datatype type, int type_keyval,
   return ret;
 }
 #endif
-#if ((defined(BRAHMA_MPI_IMPL_CRAYMPICH) &&                             \
-      (BRAHMA_MPI_VERSION >= 900100 && BRAHMA_MPI_VERSION < 900200)) || \
-     (defined(BRAHMA_MPI_IMPL_MPICH) &&                                 \
-      (BRAHMA_MPI_VERSION >= 400203 && BRAHMA_MPI_VERSION < 400300)) || \
-     (defined(BRAHMA_MPI_IMPL_OPENMPI) &&                               \
-      (BRAHMA_MPI_VERSION >= 400106 && BRAHMA_MPI_VERSION < 400200)))
+#if (((defined(BRAHMA_MPI_IMPL_CRAYMPICH) &&                               \
+       (BRAHMA_MPI_VERSION >= 900100 && BRAHMA_MPI_VERSION < 900200)) ||   \
+      (defined(BRAHMA_MPI_IMPL_MPICH) &&                                   \
+       (BRAHMA_MPI_VERSION >= 400203 && BRAHMA_MPI_VERSION < 400300)) ||   \
+      (defined(BRAHMA_MPI_IMPL_OPENMPI) &&                                 \
+       (BRAHMA_MPI_VERSION >= 400106 && BRAHMA_MPI_VERSION < 400200)))) && \
+    !(defined(BRAHMA_MPI_IMPL_OPENMPI) &&                                  \
+      (BRAHMA_MPI_VERSION >= 400106 && BRAHMA_MPI_VERSION < 400200))
 int brahma::MPIDFTracer::MPI_Type_set_attr(int type, int type_keyval,
                                            void* attr_val) {
   BRAHMA_MAP_OR_FAIL(MPI_Type_set_attr);
@@ -15257,13 +15495,15 @@ int brahma::MPIDFTracer::MPI_Type_set_attr(int type, int type_keyval,
   return ret;
 }
 #endif
-#if ((defined(BRAHMA_MPI_IMPL_CRAYMPICH) &&                               \
-      ((BRAHMA_MPI_VERSION >= 800108 && BRAHMA_MPI_VERSION < 800200) ||   \
-       (BRAHMA_MPI_VERSION >= 900001 && BRAHMA_MPI_VERSION < 900100))) || \
-     (defined(BRAHMA_MPI_IMPL_MPICH) &&                                   \
-      (BRAHMA_MPI_VERSION >= 300403 && BRAHMA_MPI_VERSION < 300500)) ||   \
-     (defined(BRAHMA_MPI_IMPL_OPENMPI) &&                                 \
-      (BRAHMA_MPI_VERSION >= 500006 && BRAHMA_MPI_VERSION < 500100)))
+#if (((defined(BRAHMA_MPI_IMPL_CRAYMPICH) &&                               \
+       ((BRAHMA_MPI_VERSION >= 800108 && BRAHMA_MPI_VERSION < 800200) ||   \
+        (BRAHMA_MPI_VERSION >= 900001 && BRAHMA_MPI_VERSION < 900100))) || \
+      (defined(BRAHMA_MPI_IMPL_MPICH) &&                                   \
+       (BRAHMA_MPI_VERSION >= 300403 && BRAHMA_MPI_VERSION < 300500)) ||   \
+      (defined(BRAHMA_MPI_IMPL_OPENMPI) &&                                 \
+       (BRAHMA_MPI_VERSION >= 500006 && BRAHMA_MPI_VERSION < 500100)))) || \
+    (defined(BRAHMA_MPI_IMPL_OPENMPI) &&                                   \
+     (BRAHMA_MPI_VERSION >= 400106 && BRAHMA_MPI_VERSION < 400200))
 int brahma::MPIDFTracer::MPI_Type_set_name(MPI_Datatype type,
                                            const char* type_name) {
   BRAHMA_MAP_OR_FAIL(MPI_Type_set_name);
@@ -15275,12 +15515,14 @@ int brahma::MPIDFTracer::MPI_Type_set_name(MPI_Datatype type,
   return ret;
 }
 #endif
-#if ((defined(BRAHMA_MPI_IMPL_CRAYMPICH) &&                             \
-      (BRAHMA_MPI_VERSION >= 900100 && BRAHMA_MPI_VERSION < 900200)) || \
-     (defined(BRAHMA_MPI_IMPL_MPICH) &&                                 \
-      (BRAHMA_MPI_VERSION >= 400203 && BRAHMA_MPI_VERSION < 400300)) || \
-     (defined(BRAHMA_MPI_IMPL_OPENMPI) &&                               \
-      (BRAHMA_MPI_VERSION >= 400106 && BRAHMA_MPI_VERSION < 400200)))
+#if (((defined(BRAHMA_MPI_IMPL_CRAYMPICH) &&                               \
+       (BRAHMA_MPI_VERSION >= 900100 && BRAHMA_MPI_VERSION < 900200)) ||   \
+      (defined(BRAHMA_MPI_IMPL_MPICH) &&                                   \
+       (BRAHMA_MPI_VERSION >= 400203 && BRAHMA_MPI_VERSION < 400300)) ||   \
+      (defined(BRAHMA_MPI_IMPL_OPENMPI) &&                                 \
+       (BRAHMA_MPI_VERSION >= 400106 && BRAHMA_MPI_VERSION < 400200)))) && \
+    !(defined(BRAHMA_MPI_IMPL_OPENMPI) &&                                  \
+      (BRAHMA_MPI_VERSION >= 400106 && BRAHMA_MPI_VERSION < 400200))
 int brahma::MPIDFTracer::MPI_Type_set_name(int type, const char* type_name) {
   BRAHMA_MAP_OR_FAIL(MPI_Type_set_name);
   DFT_LOGGER_START_ALWAYS();
@@ -15291,13 +15533,15 @@ int brahma::MPIDFTracer::MPI_Type_set_name(int type, const char* type_name) {
   return ret;
 }
 #endif
-#if ((defined(BRAHMA_MPI_IMPL_CRAYMPICH) &&                               \
-      ((BRAHMA_MPI_VERSION >= 800108 && BRAHMA_MPI_VERSION < 800200) ||   \
-       (BRAHMA_MPI_VERSION >= 900001 && BRAHMA_MPI_VERSION < 900100))) || \
-     (defined(BRAHMA_MPI_IMPL_MPICH) &&                                   \
-      (BRAHMA_MPI_VERSION >= 300403 && BRAHMA_MPI_VERSION < 300500)) ||   \
-     (defined(BRAHMA_MPI_IMPL_OPENMPI) &&                                 \
-      (BRAHMA_MPI_VERSION >= 500006 && BRAHMA_MPI_VERSION < 500100)))
+#if (((defined(BRAHMA_MPI_IMPL_CRAYMPICH) &&                               \
+       ((BRAHMA_MPI_VERSION >= 800108 && BRAHMA_MPI_VERSION < 800200) ||   \
+        (BRAHMA_MPI_VERSION >= 900001 && BRAHMA_MPI_VERSION < 900100))) || \
+      (defined(BRAHMA_MPI_IMPL_MPICH) &&                                   \
+       (BRAHMA_MPI_VERSION >= 300403 && BRAHMA_MPI_VERSION < 300500)) ||   \
+      (defined(BRAHMA_MPI_IMPL_OPENMPI) &&                                 \
+       (BRAHMA_MPI_VERSION >= 500006 && BRAHMA_MPI_VERSION < 500100)))) || \
+    (defined(BRAHMA_MPI_IMPL_OPENMPI) &&                                   \
+     (BRAHMA_MPI_VERSION >= 400106 && BRAHMA_MPI_VERSION < 400200))
 int brahma::MPIDFTracer::MPI_Type_size(MPI_Datatype type, int* size) {
   BRAHMA_MAP_OR_FAIL(MPI_Type_size);
   DFT_LOGGER_START_ALWAYS();
@@ -15308,12 +15552,14 @@ int brahma::MPIDFTracer::MPI_Type_size(MPI_Datatype type, int* size) {
   return ret;
 }
 #endif
-#if ((defined(BRAHMA_MPI_IMPL_CRAYMPICH) &&                             \
-      (BRAHMA_MPI_VERSION >= 900100 && BRAHMA_MPI_VERSION < 900200)) || \
-     (defined(BRAHMA_MPI_IMPL_MPICH) &&                                 \
-      (BRAHMA_MPI_VERSION >= 400203 && BRAHMA_MPI_VERSION < 400300)) || \
-     (defined(BRAHMA_MPI_IMPL_OPENMPI) &&                               \
-      (BRAHMA_MPI_VERSION >= 400106 && BRAHMA_MPI_VERSION < 400200)))
+#if (((defined(BRAHMA_MPI_IMPL_CRAYMPICH) &&                               \
+       (BRAHMA_MPI_VERSION >= 900100 && BRAHMA_MPI_VERSION < 900200)) ||   \
+      (defined(BRAHMA_MPI_IMPL_MPICH) &&                                   \
+       (BRAHMA_MPI_VERSION >= 400203 && BRAHMA_MPI_VERSION < 400300)) ||   \
+      (defined(BRAHMA_MPI_IMPL_OPENMPI) &&                                 \
+       (BRAHMA_MPI_VERSION >= 400106 && BRAHMA_MPI_VERSION < 400200)))) && \
+    !(defined(BRAHMA_MPI_IMPL_OPENMPI) &&                                  \
+      (BRAHMA_MPI_VERSION >= 400106 && BRAHMA_MPI_VERSION < 400200))
 int brahma::MPIDFTracer::MPI_Type_size(int type, int* size) {
   BRAHMA_MAP_OR_FAIL(MPI_Type_size);
   DFT_LOGGER_START_ALWAYS();
@@ -15351,13 +15597,15 @@ int brahma::MPIDFTracer::MPI_Type_size_c(int datatype, MPI_Count* size) {
   return ret;
 }
 #endif
-#if ((defined(BRAHMA_MPI_IMPL_CRAYMPICH) &&                               \
-      ((BRAHMA_MPI_VERSION >= 800108 && BRAHMA_MPI_VERSION < 800200) ||   \
-       (BRAHMA_MPI_VERSION >= 900001 && BRAHMA_MPI_VERSION < 900100))) || \
-     (defined(BRAHMA_MPI_IMPL_MPICH) &&                                   \
-      (BRAHMA_MPI_VERSION >= 300403 && BRAHMA_MPI_VERSION < 300500)) ||   \
-     (defined(BRAHMA_MPI_IMPL_OPENMPI) &&                                 \
-      (BRAHMA_MPI_VERSION >= 500006 && BRAHMA_MPI_VERSION < 500100)))
+#if (((defined(BRAHMA_MPI_IMPL_CRAYMPICH) &&                               \
+       ((BRAHMA_MPI_VERSION >= 800108 && BRAHMA_MPI_VERSION < 800200) ||   \
+        (BRAHMA_MPI_VERSION >= 900001 && BRAHMA_MPI_VERSION < 900100))) || \
+      (defined(BRAHMA_MPI_IMPL_MPICH) &&                                   \
+       (BRAHMA_MPI_VERSION >= 300403 && BRAHMA_MPI_VERSION < 300500)) ||   \
+      (defined(BRAHMA_MPI_IMPL_OPENMPI) &&                                 \
+       (BRAHMA_MPI_VERSION >= 500006 && BRAHMA_MPI_VERSION < 500100)))) || \
+    (defined(BRAHMA_MPI_IMPL_OPENMPI) &&                                   \
+     (BRAHMA_MPI_VERSION >= 400106 && BRAHMA_MPI_VERSION < 400200))
 int brahma::MPIDFTracer::MPI_Type_size_x(MPI_Datatype type, MPI_Count* size) {
   BRAHMA_MAP_OR_FAIL(MPI_Type_size_x);
   DFT_LOGGER_START_ALWAYS();
@@ -15368,12 +15616,14 @@ int brahma::MPIDFTracer::MPI_Type_size_x(MPI_Datatype type, MPI_Count* size) {
   return ret;
 }
 #endif
-#if ((defined(BRAHMA_MPI_IMPL_CRAYMPICH) &&                             \
-      (BRAHMA_MPI_VERSION >= 900100 && BRAHMA_MPI_VERSION < 900200)) || \
-     (defined(BRAHMA_MPI_IMPL_MPICH) &&                                 \
-      (BRAHMA_MPI_VERSION >= 400203 && BRAHMA_MPI_VERSION < 400300)) || \
-     (defined(BRAHMA_MPI_IMPL_OPENMPI) &&                               \
-      (BRAHMA_MPI_VERSION >= 400106 && BRAHMA_MPI_VERSION < 400200)))
+#if (((defined(BRAHMA_MPI_IMPL_CRAYMPICH) &&                               \
+       (BRAHMA_MPI_VERSION >= 900100 && BRAHMA_MPI_VERSION < 900200)) ||   \
+      (defined(BRAHMA_MPI_IMPL_MPICH) &&                                   \
+       (BRAHMA_MPI_VERSION >= 400203 && BRAHMA_MPI_VERSION < 400300)) ||   \
+      (defined(BRAHMA_MPI_IMPL_OPENMPI) &&                                 \
+       (BRAHMA_MPI_VERSION >= 400106 && BRAHMA_MPI_VERSION < 400200)))) && \
+    !(defined(BRAHMA_MPI_IMPL_OPENMPI) &&                                  \
+      (BRAHMA_MPI_VERSION >= 400106 && BRAHMA_MPI_VERSION < 400200))
 int brahma::MPIDFTracer::MPI_Type_size_x(int type, MPI_Count* size) {
   BRAHMA_MAP_OR_FAIL(MPI_Type_size_x);
   DFT_LOGGER_START_ALWAYS();
@@ -15401,10 +15651,12 @@ int brahma::MPIDFTracer::MPI_Type_struct(int count, int* array_of_blocklengths,
   return ret;
 }
 #endif
-#if ((defined(BRAHMA_MPI_IMPL_CRAYMPICH) &&                             \
-      (BRAHMA_MPI_VERSION >= 900001 && BRAHMA_MPI_VERSION < 900100)) || \
-     (defined(BRAHMA_MPI_IMPL_OPENMPI) &&                               \
-      (BRAHMA_MPI_VERSION >= 500006 && BRAHMA_MPI_VERSION < 500100)))
+#if (((defined(BRAHMA_MPI_IMPL_CRAYMPICH) &&                               \
+       (BRAHMA_MPI_VERSION >= 900001 && BRAHMA_MPI_VERSION < 900100)) ||   \
+      (defined(BRAHMA_MPI_IMPL_OPENMPI) &&                                 \
+       (BRAHMA_MPI_VERSION >= 500006 && BRAHMA_MPI_VERSION < 500100)))) || \
+    (defined(BRAHMA_MPI_IMPL_OPENMPI) &&                                   \
+     (BRAHMA_MPI_VERSION >= 400106 && BRAHMA_MPI_VERSION < 400200))
 int brahma::MPIDFTracer::MPI_Type_struct(int count, int array_of_blocklengths[],
                                          MPI_Aint array_of_displacements[],
                                          MPI_Datatype array_of_types[],
@@ -15420,12 +15672,14 @@ int brahma::MPIDFTracer::MPI_Type_struct(int count, int array_of_blocklengths[],
   return ret;
 }
 #endif
-#if ((defined(BRAHMA_MPI_IMPL_CRAYMPICH) &&                             \
-      (BRAHMA_MPI_VERSION >= 900100 && BRAHMA_MPI_VERSION < 900200)) || \
-     (defined(BRAHMA_MPI_IMPL_MPICH) &&                                 \
-      (BRAHMA_MPI_VERSION >= 400203 && BRAHMA_MPI_VERSION < 400300)) || \
-     (defined(BRAHMA_MPI_IMPL_OPENMPI) &&                               \
-      (BRAHMA_MPI_VERSION >= 400106 && BRAHMA_MPI_VERSION < 400200)))
+#if (((defined(BRAHMA_MPI_IMPL_CRAYMPICH) &&                               \
+       (BRAHMA_MPI_VERSION >= 900100 && BRAHMA_MPI_VERSION < 900200)) ||   \
+      (defined(BRAHMA_MPI_IMPL_MPICH) &&                                   \
+       (BRAHMA_MPI_VERSION >= 400203 && BRAHMA_MPI_VERSION < 400300)) ||   \
+      (defined(BRAHMA_MPI_IMPL_OPENMPI) &&                                 \
+       (BRAHMA_MPI_VERSION >= 400106 && BRAHMA_MPI_VERSION < 400200)))) && \
+    !(defined(BRAHMA_MPI_IMPL_OPENMPI) &&                                  \
+      (BRAHMA_MPI_VERSION >= 400106 && BRAHMA_MPI_VERSION < 400200))
 int brahma::MPIDFTracer::MPI_Type_struct(int count, int array_of_blocklengths[],
                                          MPI_Aint array_of_displacements[],
                                          int array_of_types[], int* newtype) {
@@ -15440,13 +15694,15 @@ int brahma::MPIDFTracer::MPI_Type_struct(int count, int array_of_blocklengths[],
   return ret;
 }
 #endif
-#if ((defined(BRAHMA_MPI_IMPL_CRAYMPICH) &&                               \
-      ((BRAHMA_MPI_VERSION >= 800108 && BRAHMA_MPI_VERSION < 800200) ||   \
-       (BRAHMA_MPI_VERSION >= 900001 && BRAHMA_MPI_VERSION < 900100))) || \
-     (defined(BRAHMA_MPI_IMPL_MPICH) &&                                   \
-      (BRAHMA_MPI_VERSION >= 300403 && BRAHMA_MPI_VERSION < 300500)) ||   \
-     (defined(BRAHMA_MPI_IMPL_OPENMPI) &&                                 \
-      (BRAHMA_MPI_VERSION >= 500006 && BRAHMA_MPI_VERSION < 500100)))
+#if (((defined(BRAHMA_MPI_IMPL_CRAYMPICH) &&                               \
+       ((BRAHMA_MPI_VERSION >= 800108 && BRAHMA_MPI_VERSION < 800200) ||   \
+        (BRAHMA_MPI_VERSION >= 900001 && BRAHMA_MPI_VERSION < 900100))) || \
+      (defined(BRAHMA_MPI_IMPL_MPICH) &&                                   \
+       (BRAHMA_MPI_VERSION >= 300403 && BRAHMA_MPI_VERSION < 300500)) ||   \
+      (defined(BRAHMA_MPI_IMPL_OPENMPI) &&                                 \
+       (BRAHMA_MPI_VERSION >= 500006 && BRAHMA_MPI_VERSION < 500100)))) || \
+    (defined(BRAHMA_MPI_IMPL_OPENMPI) &&                                   \
+     (BRAHMA_MPI_VERSION >= 400106 && BRAHMA_MPI_VERSION < 400200))
 int brahma::MPIDFTracer::MPI_Type_ub(MPI_Datatype mtype, MPI_Aint* ub) {
   BRAHMA_MAP_OR_FAIL(MPI_Type_ub);
   DFT_LOGGER_START_ALWAYS();
@@ -15457,12 +15713,14 @@ int brahma::MPIDFTracer::MPI_Type_ub(MPI_Datatype mtype, MPI_Aint* ub) {
   return ret;
 }
 #endif
-#if ((defined(BRAHMA_MPI_IMPL_CRAYMPICH) &&                             \
-      (BRAHMA_MPI_VERSION >= 900100 && BRAHMA_MPI_VERSION < 900200)) || \
-     (defined(BRAHMA_MPI_IMPL_MPICH) &&                                 \
-      (BRAHMA_MPI_VERSION >= 400203 && BRAHMA_MPI_VERSION < 400300)) || \
-     (defined(BRAHMA_MPI_IMPL_OPENMPI) &&                               \
-      (BRAHMA_MPI_VERSION >= 400106 && BRAHMA_MPI_VERSION < 400200)))
+#if (((defined(BRAHMA_MPI_IMPL_CRAYMPICH) &&                               \
+       (BRAHMA_MPI_VERSION >= 900100 && BRAHMA_MPI_VERSION < 900200)) ||   \
+      (defined(BRAHMA_MPI_IMPL_MPICH) &&                                   \
+       (BRAHMA_MPI_VERSION >= 400203 && BRAHMA_MPI_VERSION < 400300)) ||   \
+      (defined(BRAHMA_MPI_IMPL_OPENMPI) &&                                 \
+       (BRAHMA_MPI_VERSION >= 400106 && BRAHMA_MPI_VERSION < 400200)))) && \
+    !(defined(BRAHMA_MPI_IMPL_OPENMPI) &&                                  \
+      (BRAHMA_MPI_VERSION >= 400106 && BRAHMA_MPI_VERSION < 400200))
 int brahma::MPIDFTracer::MPI_Type_ub(int mtype, MPI_Aint* ub) {
   BRAHMA_MAP_OR_FAIL(MPI_Type_ub);
   DFT_LOGGER_START_ALWAYS();
@@ -15473,13 +15731,15 @@ int brahma::MPIDFTracer::MPI_Type_ub(int mtype, MPI_Aint* ub) {
   return ret;
 }
 #endif
-#if ((defined(BRAHMA_MPI_IMPL_CRAYMPICH) &&                               \
-      ((BRAHMA_MPI_VERSION >= 800108 && BRAHMA_MPI_VERSION < 800200) ||   \
-       (BRAHMA_MPI_VERSION >= 900001 && BRAHMA_MPI_VERSION < 900100))) || \
-     (defined(BRAHMA_MPI_IMPL_MPICH) &&                                   \
-      (BRAHMA_MPI_VERSION >= 300403 && BRAHMA_MPI_VERSION < 300500)) ||   \
-     (defined(BRAHMA_MPI_IMPL_OPENMPI) &&                                 \
-      (BRAHMA_MPI_VERSION >= 500006 && BRAHMA_MPI_VERSION < 500100)))
+#if (((defined(BRAHMA_MPI_IMPL_CRAYMPICH) &&                               \
+       ((BRAHMA_MPI_VERSION >= 800108 && BRAHMA_MPI_VERSION < 800200) ||   \
+        (BRAHMA_MPI_VERSION >= 900001 && BRAHMA_MPI_VERSION < 900100))) || \
+      (defined(BRAHMA_MPI_IMPL_MPICH) &&                                   \
+       (BRAHMA_MPI_VERSION >= 300403 && BRAHMA_MPI_VERSION < 300500)) ||   \
+      (defined(BRAHMA_MPI_IMPL_OPENMPI) &&                                 \
+       (BRAHMA_MPI_VERSION >= 500006 && BRAHMA_MPI_VERSION < 500100)))) || \
+    (defined(BRAHMA_MPI_IMPL_OPENMPI) &&                                   \
+     (BRAHMA_MPI_VERSION >= 400106 && BRAHMA_MPI_VERSION < 400200))
 int brahma::MPIDFTracer::MPI_Type_vector(int count, int blocklength, int stride,
                                          MPI_Datatype oldtype,
                                          MPI_Datatype* newtype) {
@@ -15496,12 +15756,14 @@ int brahma::MPIDFTracer::MPI_Type_vector(int count, int blocklength, int stride,
   return ret;
 }
 #endif
-#if ((defined(BRAHMA_MPI_IMPL_CRAYMPICH) &&                             \
-      (BRAHMA_MPI_VERSION >= 900100 && BRAHMA_MPI_VERSION < 900200)) || \
-     (defined(BRAHMA_MPI_IMPL_MPICH) &&                                 \
-      (BRAHMA_MPI_VERSION >= 400203 && BRAHMA_MPI_VERSION < 400300)) || \
-     (defined(BRAHMA_MPI_IMPL_OPENMPI) &&                               \
-      (BRAHMA_MPI_VERSION >= 400106 && BRAHMA_MPI_VERSION < 400200)))
+#if (((defined(BRAHMA_MPI_IMPL_CRAYMPICH) &&                               \
+       (BRAHMA_MPI_VERSION >= 900100 && BRAHMA_MPI_VERSION < 900200)) ||   \
+      (defined(BRAHMA_MPI_IMPL_MPICH) &&                                   \
+       (BRAHMA_MPI_VERSION >= 400203 && BRAHMA_MPI_VERSION < 400300)) ||   \
+      (defined(BRAHMA_MPI_IMPL_OPENMPI) &&                                 \
+       (BRAHMA_MPI_VERSION >= 400106 && BRAHMA_MPI_VERSION < 400200)))) && \
+    !(defined(BRAHMA_MPI_IMPL_OPENMPI) &&                                  \
+      (BRAHMA_MPI_VERSION >= 400106 && BRAHMA_MPI_VERSION < 400200))
 int brahma::MPIDFTracer::MPI_Type_vector(int count, int blocklength, int stride,
                                          int oldtype, int* newtype) {
   BRAHMA_MAP_OR_FAIL(MPI_Type_vector);
@@ -15558,13 +15820,15 @@ int brahma::MPIDFTracer::MPI_Type_vector_c(MPI_Count count,
   return ret;
 }
 #endif
-#if ((defined(BRAHMA_MPI_IMPL_CRAYMPICH) &&                               \
-      ((BRAHMA_MPI_VERSION >= 800108 && BRAHMA_MPI_VERSION < 800200) ||   \
-       (BRAHMA_MPI_VERSION >= 900001 && BRAHMA_MPI_VERSION < 900100))) || \
-     (defined(BRAHMA_MPI_IMPL_MPICH) &&                                   \
-      (BRAHMA_MPI_VERSION >= 300403 && BRAHMA_MPI_VERSION < 300500)) ||   \
-     (defined(BRAHMA_MPI_IMPL_OPENMPI) &&                                 \
-      (BRAHMA_MPI_VERSION >= 500006 && BRAHMA_MPI_VERSION < 500100)))
+#if (((defined(BRAHMA_MPI_IMPL_CRAYMPICH) &&                               \
+       ((BRAHMA_MPI_VERSION >= 800108 && BRAHMA_MPI_VERSION < 800200) ||   \
+        (BRAHMA_MPI_VERSION >= 900001 && BRAHMA_MPI_VERSION < 900100))) || \
+      (defined(BRAHMA_MPI_IMPL_MPICH) &&                                   \
+       (BRAHMA_MPI_VERSION >= 300403 && BRAHMA_MPI_VERSION < 300500)) ||   \
+      (defined(BRAHMA_MPI_IMPL_OPENMPI) &&                                 \
+       (BRAHMA_MPI_VERSION >= 500006 && BRAHMA_MPI_VERSION < 500100)))) || \
+    (defined(BRAHMA_MPI_IMPL_OPENMPI) &&                                   \
+     (BRAHMA_MPI_VERSION >= 400106 && BRAHMA_MPI_VERSION < 400200))
 int brahma::MPIDFTracer::MPI_Unpack(const void* inbuf, int insize,
                                     int* position, void* outbuf, int outcount,
                                     MPI_Datatype datatype, MPI_Comm comm) {
@@ -15581,12 +15845,14 @@ int brahma::MPIDFTracer::MPI_Unpack(const void* inbuf, int insize,
   return ret;
 }
 #endif
-#if ((defined(BRAHMA_MPI_IMPL_CRAYMPICH) &&                             \
-      (BRAHMA_MPI_VERSION >= 900100 && BRAHMA_MPI_VERSION < 900200)) || \
-     (defined(BRAHMA_MPI_IMPL_MPICH) &&                                 \
-      (BRAHMA_MPI_VERSION >= 400203 && BRAHMA_MPI_VERSION < 400300)) || \
-     (defined(BRAHMA_MPI_IMPL_OPENMPI) &&                               \
-      (BRAHMA_MPI_VERSION >= 400106 && BRAHMA_MPI_VERSION < 400200)))
+#if (((defined(BRAHMA_MPI_IMPL_CRAYMPICH) &&                               \
+       (BRAHMA_MPI_VERSION >= 900100 && BRAHMA_MPI_VERSION < 900200)) ||   \
+      (defined(BRAHMA_MPI_IMPL_MPICH) &&                                   \
+       (BRAHMA_MPI_VERSION >= 400203 && BRAHMA_MPI_VERSION < 400300)) ||   \
+      (defined(BRAHMA_MPI_IMPL_OPENMPI) &&                                 \
+       (BRAHMA_MPI_VERSION >= 400106 && BRAHMA_MPI_VERSION < 400200)))) && \
+    !(defined(BRAHMA_MPI_IMPL_OPENMPI) &&                                  \
+      (BRAHMA_MPI_VERSION >= 400106 && BRAHMA_MPI_VERSION < 400200))
 int brahma::MPIDFTracer::MPI_Unpack(const void* inbuf, int insize,
                                     int* position, void* outbuf, int outcount,
                                     int datatype, int comm) {
@@ -15643,13 +15909,15 @@ int brahma::MPIDFTracer::MPI_Unpack_c(const void* inbuf, MPI_Count insize,
   return ret;
 }
 #endif
-#if ((defined(BRAHMA_MPI_IMPL_CRAYMPICH) &&                               \
-      ((BRAHMA_MPI_VERSION >= 800108 && BRAHMA_MPI_VERSION < 800200) ||   \
-       (BRAHMA_MPI_VERSION >= 900001 && BRAHMA_MPI_VERSION < 900100))) || \
-     (defined(BRAHMA_MPI_IMPL_MPICH) &&                                   \
-      (BRAHMA_MPI_VERSION >= 300403 && BRAHMA_MPI_VERSION < 300500)) ||   \
-     (defined(BRAHMA_MPI_IMPL_OPENMPI) &&                                 \
-      (BRAHMA_MPI_VERSION >= 500006 && BRAHMA_MPI_VERSION < 500100)))
+#if (((defined(BRAHMA_MPI_IMPL_CRAYMPICH) &&                               \
+       ((BRAHMA_MPI_VERSION >= 800108 && BRAHMA_MPI_VERSION < 800200) ||   \
+        (BRAHMA_MPI_VERSION >= 900001 && BRAHMA_MPI_VERSION < 900100))) || \
+      (defined(BRAHMA_MPI_IMPL_MPICH) &&                                   \
+       (BRAHMA_MPI_VERSION >= 300403 && BRAHMA_MPI_VERSION < 300500)) ||   \
+      (defined(BRAHMA_MPI_IMPL_OPENMPI) &&                                 \
+       (BRAHMA_MPI_VERSION >= 500006 && BRAHMA_MPI_VERSION < 500100)))) || \
+    (defined(BRAHMA_MPI_IMPL_OPENMPI) &&                                   \
+     (BRAHMA_MPI_VERSION >= 400106 && BRAHMA_MPI_VERSION < 400200))
 int brahma::MPIDFTracer::MPI_Unpack_external(const char datarep[],
                                              const void* inbuf, MPI_Aint insize,
                                              MPI_Aint* position, void* outbuf,
@@ -15667,12 +15935,14 @@ int brahma::MPIDFTracer::MPI_Unpack_external(const char datarep[],
   return ret;
 }
 #endif
-#if ((defined(BRAHMA_MPI_IMPL_CRAYMPICH) &&                             \
-      (BRAHMA_MPI_VERSION >= 900100 && BRAHMA_MPI_VERSION < 900200)) || \
-     (defined(BRAHMA_MPI_IMPL_MPICH) &&                                 \
-      (BRAHMA_MPI_VERSION >= 400203 && BRAHMA_MPI_VERSION < 400300)) || \
-     (defined(BRAHMA_MPI_IMPL_OPENMPI) &&                               \
-      (BRAHMA_MPI_VERSION >= 400106 && BRAHMA_MPI_VERSION < 400200)))
+#if (((defined(BRAHMA_MPI_IMPL_CRAYMPICH) &&                               \
+       (BRAHMA_MPI_VERSION >= 900100 && BRAHMA_MPI_VERSION < 900200)) ||   \
+      (defined(BRAHMA_MPI_IMPL_MPICH) &&                                   \
+       (BRAHMA_MPI_VERSION >= 400203 && BRAHMA_MPI_VERSION < 400300)) ||   \
+      (defined(BRAHMA_MPI_IMPL_OPENMPI) &&                                 \
+       (BRAHMA_MPI_VERSION >= 400106 && BRAHMA_MPI_VERSION < 400200)))) && \
+    !(defined(BRAHMA_MPI_IMPL_OPENMPI) &&                                  \
+      (BRAHMA_MPI_VERSION >= 400106 && BRAHMA_MPI_VERSION < 400200))
 int brahma::MPIDFTracer::MPI_Unpack_external(const char datarep[],
                                              const void* inbuf, MPI_Aint insize,
                                              MPI_Aint* position, void* outbuf,
@@ -15728,13 +15998,15 @@ int brahma::MPIDFTracer::MPI_Unpack_external_c(
   return ret;
 }
 #endif
-#if ((defined(BRAHMA_MPI_IMPL_CRAYMPICH) &&                               \
-      ((BRAHMA_MPI_VERSION >= 800108 && BRAHMA_MPI_VERSION < 800200) ||   \
-       (BRAHMA_MPI_VERSION >= 900001 && BRAHMA_MPI_VERSION < 900100))) || \
-     (defined(BRAHMA_MPI_IMPL_MPICH) &&                                   \
-      (BRAHMA_MPI_VERSION >= 300403 && BRAHMA_MPI_VERSION < 300500)) ||   \
-     (defined(BRAHMA_MPI_IMPL_OPENMPI) &&                                 \
-      (BRAHMA_MPI_VERSION >= 500006 && BRAHMA_MPI_VERSION < 500100)))
+#if (((defined(BRAHMA_MPI_IMPL_CRAYMPICH) &&                               \
+       ((BRAHMA_MPI_VERSION >= 800108 && BRAHMA_MPI_VERSION < 800200) ||   \
+        (BRAHMA_MPI_VERSION >= 900001 && BRAHMA_MPI_VERSION < 900100))) || \
+      (defined(BRAHMA_MPI_IMPL_MPICH) &&                                   \
+       (BRAHMA_MPI_VERSION >= 300403 && BRAHMA_MPI_VERSION < 300500)) ||   \
+      (defined(BRAHMA_MPI_IMPL_OPENMPI) &&                                 \
+       (BRAHMA_MPI_VERSION >= 500006 && BRAHMA_MPI_VERSION < 500100)))) || \
+    (defined(BRAHMA_MPI_IMPL_OPENMPI) &&                                   \
+     (BRAHMA_MPI_VERSION >= 400106 && BRAHMA_MPI_VERSION < 400200))
 int brahma::MPIDFTracer::MPI_Unpublish_name(const char* service_name,
                                             MPI_Info info,
                                             const char* port_name) {
@@ -15747,12 +16019,14 @@ int brahma::MPIDFTracer::MPI_Unpublish_name(const char* service_name,
   return ret;
 }
 #endif
-#if ((defined(BRAHMA_MPI_IMPL_CRAYMPICH) &&                             \
-      (BRAHMA_MPI_VERSION >= 900100 && BRAHMA_MPI_VERSION < 900200)) || \
-     (defined(BRAHMA_MPI_IMPL_MPICH) &&                                 \
-      (BRAHMA_MPI_VERSION >= 400203 && BRAHMA_MPI_VERSION < 400300)) || \
-     (defined(BRAHMA_MPI_IMPL_OPENMPI) &&                               \
-      (BRAHMA_MPI_VERSION >= 400106 && BRAHMA_MPI_VERSION < 400200)))
+#if (((defined(BRAHMA_MPI_IMPL_CRAYMPICH) &&                               \
+       (BRAHMA_MPI_VERSION >= 900100 && BRAHMA_MPI_VERSION < 900200)) ||   \
+      (defined(BRAHMA_MPI_IMPL_MPICH) &&                                   \
+       (BRAHMA_MPI_VERSION >= 400203 && BRAHMA_MPI_VERSION < 400300)) ||   \
+      (defined(BRAHMA_MPI_IMPL_OPENMPI) &&                                 \
+       (BRAHMA_MPI_VERSION >= 400106 && BRAHMA_MPI_VERSION < 400200)))) && \
+    !(defined(BRAHMA_MPI_IMPL_OPENMPI) &&                                  \
+      (BRAHMA_MPI_VERSION >= 400106 && BRAHMA_MPI_VERSION < 400200))
 int brahma::MPIDFTracer::MPI_Unpublish_name(const char* service_name, int info,
                                             const char* port_name) {
   BRAHMA_MAP_OR_FAIL(MPI_Unpublish_name);
@@ -15764,13 +16038,15 @@ int brahma::MPIDFTracer::MPI_Unpublish_name(const char* service_name, int info,
   return ret;
 }
 #endif
-#if ((defined(BRAHMA_MPI_IMPL_CRAYMPICH) &&                               \
-      ((BRAHMA_MPI_VERSION >= 800108 && BRAHMA_MPI_VERSION < 800200) ||   \
-       (BRAHMA_MPI_VERSION >= 900001 && BRAHMA_MPI_VERSION < 900100))) || \
-     (defined(BRAHMA_MPI_IMPL_MPICH) &&                                   \
-      (BRAHMA_MPI_VERSION >= 300403 && BRAHMA_MPI_VERSION < 300500)) ||   \
-     (defined(BRAHMA_MPI_IMPL_OPENMPI) &&                                 \
-      (BRAHMA_MPI_VERSION >= 500006 && BRAHMA_MPI_VERSION < 500100)))
+#if (((defined(BRAHMA_MPI_IMPL_CRAYMPICH) &&                               \
+       ((BRAHMA_MPI_VERSION >= 800108 && BRAHMA_MPI_VERSION < 800200) ||   \
+        (BRAHMA_MPI_VERSION >= 900001 && BRAHMA_MPI_VERSION < 900100))) || \
+      (defined(BRAHMA_MPI_IMPL_MPICH) &&                                   \
+       (BRAHMA_MPI_VERSION >= 300403 && BRAHMA_MPI_VERSION < 300500)) ||   \
+      (defined(BRAHMA_MPI_IMPL_OPENMPI) &&                                 \
+       (BRAHMA_MPI_VERSION >= 500006 && BRAHMA_MPI_VERSION < 500100)))) || \
+    (defined(BRAHMA_MPI_IMPL_OPENMPI) &&                                   \
+     (BRAHMA_MPI_VERSION >= 400106 && BRAHMA_MPI_VERSION < 400200))
 int brahma::MPIDFTracer::MPI_Wait(MPI_Request* request, MPI_Status* status) {
   BRAHMA_MAP_OR_FAIL(MPI_Wait);
   DFT_LOGGER_START_ALWAYS();
@@ -15780,12 +16056,14 @@ int brahma::MPIDFTracer::MPI_Wait(MPI_Request* request, MPI_Status* status) {
   return ret;
 }
 #endif
-#if ((defined(BRAHMA_MPI_IMPL_CRAYMPICH) &&                             \
-      (BRAHMA_MPI_VERSION >= 900100 && BRAHMA_MPI_VERSION < 900200)) || \
-     (defined(BRAHMA_MPI_IMPL_MPICH) &&                                 \
-      (BRAHMA_MPI_VERSION >= 400203 && BRAHMA_MPI_VERSION < 400300)) || \
-     (defined(BRAHMA_MPI_IMPL_OPENMPI) &&                               \
-      (BRAHMA_MPI_VERSION >= 400106 && BRAHMA_MPI_VERSION < 400200)))
+#if (((defined(BRAHMA_MPI_IMPL_CRAYMPICH) &&                               \
+       (BRAHMA_MPI_VERSION >= 900100 && BRAHMA_MPI_VERSION < 900200)) ||   \
+      (defined(BRAHMA_MPI_IMPL_MPICH) &&                                   \
+       (BRAHMA_MPI_VERSION >= 400203 && BRAHMA_MPI_VERSION < 400300)) ||   \
+      (defined(BRAHMA_MPI_IMPL_OPENMPI) &&                                 \
+       (BRAHMA_MPI_VERSION >= 400106 && BRAHMA_MPI_VERSION < 400200)))) && \
+    !(defined(BRAHMA_MPI_IMPL_OPENMPI) &&                                  \
+      (BRAHMA_MPI_VERSION >= 400106 && BRAHMA_MPI_VERSION < 400200))
 int brahma::MPIDFTracer::MPI_Wait(int* request, MPI_Status* status) {
   BRAHMA_MAP_OR_FAIL(MPI_Wait);
   DFT_LOGGER_START_ALWAYS();
@@ -15795,10 +16073,12 @@ int brahma::MPIDFTracer::MPI_Wait(int* request, MPI_Status* status) {
   return ret;
 }
 #endif
-#if ((defined(BRAHMA_MPI_IMPL_CRAYMPICH) &&                             \
-      (BRAHMA_MPI_VERSION >= 900001 && BRAHMA_MPI_VERSION < 900100)) || \
-     (defined(BRAHMA_MPI_IMPL_OPENMPI) &&                               \
-      (BRAHMA_MPI_VERSION >= 500006 && BRAHMA_MPI_VERSION < 500100)))
+#if (((defined(BRAHMA_MPI_IMPL_CRAYMPICH) &&                               \
+       (BRAHMA_MPI_VERSION >= 900001 && BRAHMA_MPI_VERSION < 900100)) ||   \
+      (defined(BRAHMA_MPI_IMPL_OPENMPI) &&                                 \
+       (BRAHMA_MPI_VERSION >= 500006 && BRAHMA_MPI_VERSION < 500100)))) || \
+    (defined(BRAHMA_MPI_IMPL_OPENMPI) &&                                   \
+     (BRAHMA_MPI_VERSION >= 400106 && BRAHMA_MPI_VERSION < 400200))
 int brahma::MPIDFTracer::MPI_Waitall(int count, MPI_Request array_of_requests[],
                                      MPI_Status* array_of_statuses) {
   BRAHMA_MAP_OR_FAIL(MPI_Waitall);
@@ -15823,12 +16103,14 @@ int brahma::MPIDFTracer::MPI_Waitall(int count, MPI_Request array_of_requests[],
   return ret;
 }
 #endif
-#if ((defined(BRAHMA_MPI_IMPL_CRAYMPICH) &&                             \
-      (BRAHMA_MPI_VERSION >= 900100 && BRAHMA_MPI_VERSION < 900200)) || \
-     (defined(BRAHMA_MPI_IMPL_MPICH) &&                                 \
-      (BRAHMA_MPI_VERSION >= 400203 && BRAHMA_MPI_VERSION < 400300)) || \
-     (defined(BRAHMA_MPI_IMPL_OPENMPI) &&                               \
-      (BRAHMA_MPI_VERSION >= 400106 && BRAHMA_MPI_VERSION < 400200)))
+#if (((defined(BRAHMA_MPI_IMPL_CRAYMPICH) &&                               \
+       (BRAHMA_MPI_VERSION >= 900100 && BRAHMA_MPI_VERSION < 900200)) ||   \
+      (defined(BRAHMA_MPI_IMPL_MPICH) &&                                   \
+       (BRAHMA_MPI_VERSION >= 400203 && BRAHMA_MPI_VERSION < 400300)) ||   \
+      (defined(BRAHMA_MPI_IMPL_OPENMPI) &&                                 \
+       (BRAHMA_MPI_VERSION >= 400106 && BRAHMA_MPI_VERSION < 400200)))) && \
+    !(defined(BRAHMA_MPI_IMPL_OPENMPI) &&                                  \
+      (BRAHMA_MPI_VERSION >= 400106 && BRAHMA_MPI_VERSION < 400200))
 int brahma::MPIDFTracer::MPI_Waitall(int count, int array_of_requests[],
                                      MPI_Status* array_of_statuses) {
   BRAHMA_MAP_OR_FAIL(MPI_Waitall);
@@ -15840,13 +16122,15 @@ int brahma::MPIDFTracer::MPI_Waitall(int count, int array_of_requests[],
   return ret;
 }
 #endif
-#if ((defined(BRAHMA_MPI_IMPL_CRAYMPICH) &&                               \
-      ((BRAHMA_MPI_VERSION >= 800108 && BRAHMA_MPI_VERSION < 800200) ||   \
-       (BRAHMA_MPI_VERSION >= 900001 && BRAHMA_MPI_VERSION < 900100))) || \
-     (defined(BRAHMA_MPI_IMPL_MPICH) &&                                   \
-      (BRAHMA_MPI_VERSION >= 300403 && BRAHMA_MPI_VERSION < 300500)) ||   \
-     (defined(BRAHMA_MPI_IMPL_OPENMPI) &&                                 \
-      (BRAHMA_MPI_VERSION >= 500006 && BRAHMA_MPI_VERSION < 500100)))
+#if (((defined(BRAHMA_MPI_IMPL_CRAYMPICH) &&                               \
+       ((BRAHMA_MPI_VERSION >= 800108 && BRAHMA_MPI_VERSION < 800200) ||   \
+        (BRAHMA_MPI_VERSION >= 900001 && BRAHMA_MPI_VERSION < 900100))) || \
+      (defined(BRAHMA_MPI_IMPL_MPICH) &&                                   \
+       (BRAHMA_MPI_VERSION >= 300403 && BRAHMA_MPI_VERSION < 300500)) ||   \
+      (defined(BRAHMA_MPI_IMPL_OPENMPI) &&                                 \
+       (BRAHMA_MPI_VERSION >= 500006 && BRAHMA_MPI_VERSION < 500100)))) || \
+    (defined(BRAHMA_MPI_IMPL_OPENMPI) &&                                   \
+     (BRAHMA_MPI_VERSION >= 400106 && BRAHMA_MPI_VERSION < 400200))
 int brahma::MPIDFTracer::MPI_Waitany(int count, MPI_Request array_of_requests[],
                                      int* index, MPI_Status* status) {
   BRAHMA_MAP_OR_FAIL(MPI_Waitany);
@@ -15858,12 +16142,14 @@ int brahma::MPIDFTracer::MPI_Waitany(int count, MPI_Request array_of_requests[],
   return ret;
 }
 #endif
-#if ((defined(BRAHMA_MPI_IMPL_CRAYMPICH) &&                             \
-      (BRAHMA_MPI_VERSION >= 900100 && BRAHMA_MPI_VERSION < 900200)) || \
-     (defined(BRAHMA_MPI_IMPL_MPICH) &&                                 \
-      (BRAHMA_MPI_VERSION >= 400203 && BRAHMA_MPI_VERSION < 400300)) || \
-     (defined(BRAHMA_MPI_IMPL_OPENMPI) &&                               \
-      (BRAHMA_MPI_VERSION >= 400106 && BRAHMA_MPI_VERSION < 400200)))
+#if (((defined(BRAHMA_MPI_IMPL_CRAYMPICH) &&                               \
+       (BRAHMA_MPI_VERSION >= 900100 && BRAHMA_MPI_VERSION < 900200)) ||   \
+      (defined(BRAHMA_MPI_IMPL_MPICH) &&                                   \
+       (BRAHMA_MPI_VERSION >= 400203 && BRAHMA_MPI_VERSION < 400300)) ||   \
+      (defined(BRAHMA_MPI_IMPL_OPENMPI) &&                                 \
+       (BRAHMA_MPI_VERSION >= 400106 && BRAHMA_MPI_VERSION < 400200)))) && \
+    !(defined(BRAHMA_MPI_IMPL_OPENMPI) &&                                  \
+      (BRAHMA_MPI_VERSION >= 400106 && BRAHMA_MPI_VERSION < 400200))
 int brahma::MPIDFTracer::MPI_Waitany(int count, int array_of_requests[],
                                      int* index, MPI_Status* status) {
   BRAHMA_MAP_OR_FAIL(MPI_Waitany);
@@ -15891,8 +16177,10 @@ int brahma::MPIDFTracer::MPI_Waitsome(int incount,
   return ret;
 }
 #endif
-#if (defined(BRAHMA_MPI_IMPL_OPENMPI) && \
-     (BRAHMA_MPI_VERSION >= 300403 && BRAHMA_MPI_VERSION < 300500))
+#if ((defined(BRAHMA_MPI_IMPL_OPENMPI) &&                                \
+      (BRAHMA_MPI_VERSION >= 300403 && BRAHMA_MPI_VERSION < 300500))) || \
+    (defined(BRAHMA_MPI_IMPL_OPENMPI) &&                                 \
+     (BRAHMA_MPI_VERSION >= 400106 && BRAHMA_MPI_VERSION < 400200))
 int brahma::MPIDFTracer::MPI_Waitsome(int incount,
                                       MPI_Request array_of_requests[],
                                       int* outcount, int array_of_indices[],
@@ -15924,8 +16212,10 @@ int brahma::MPIDFTracer::MPI_Waitsome(int incount, int array_of_requests[],
   return ret;
 }
 #endif
-#if (defined(BRAHMA_MPI_IMPL_OPENMPI) && \
-     (BRAHMA_MPI_VERSION >= 400106 && BRAHMA_MPI_VERSION < 400200))
+#if ((defined(BRAHMA_MPI_IMPL_OPENMPI) &&                                \
+      (BRAHMA_MPI_VERSION >= 400106 && BRAHMA_MPI_VERSION < 400200))) && \
+    !(defined(BRAHMA_MPI_IMPL_OPENMPI) &&                                \
+      (BRAHMA_MPI_VERSION >= 400106 && BRAHMA_MPI_VERSION < 400200))
 int brahma::MPIDFTracer::MPI_Waitsome(int incount, int array_of_requests[],
                                       int* outcount, int array_of_indices[],
                                       MPI_Status array_of_statuses[]) {
@@ -15939,29 +16229,15 @@ int brahma::MPIDFTracer::MPI_Waitsome(int incount, int array_of_requests[],
   return ret;
 }
 #endif
-#if ((defined(BRAHMA_MPI_IMPL_CRAYMPICH) &&                             \
-      (BRAHMA_MPI_VERSION >= 900100 && BRAHMA_MPI_VERSION < 900200)) || \
-     (defined(BRAHMA_MPI_IMPL_MPICH) &&                                 \
-      (BRAHMA_MPI_VERSION >= 400203 && BRAHMA_MPI_VERSION < 400300)) || \
-     (defined(BRAHMA_MPI_IMPL_OPENMPI) &&                               \
-      (BRAHMA_MPI_VERSION >= 400106 && BRAHMA_MPI_VERSION < 400200)))
-MPI_Win brahma::MPIDFTracer::MPI_Win(int win) {
-  BRAHMA_MAP_OR_FAIL(MPI_Win);
-  DFT_LOGGER_START_ALWAYS();
-  DFT_LOGGER_UPDATE_TYPE(win, MetadataType::MT_VALUE);
-  MPI_Win ret = __real_MPI_Win(win);
-  DFT_LOGGER_UPDATE_TYPE(ret, MetadataType::MT_VALUE);
-  DFT_LOGGER_END();
-  return ret;
-}
-#endif
-#if ((defined(BRAHMA_MPI_IMPL_CRAYMPICH) &&                               \
-      ((BRAHMA_MPI_VERSION >= 800108 && BRAHMA_MPI_VERSION < 800200) ||   \
-       (BRAHMA_MPI_VERSION >= 900001 && BRAHMA_MPI_VERSION < 900100))) || \
-     (defined(BRAHMA_MPI_IMPL_MPICH) &&                                   \
-      (BRAHMA_MPI_VERSION >= 300403 && BRAHMA_MPI_VERSION < 300500)) ||   \
-     (defined(BRAHMA_MPI_IMPL_OPENMPI) &&                                 \
-      (BRAHMA_MPI_VERSION >= 500006 && BRAHMA_MPI_VERSION < 500100)))
+#if (((defined(BRAHMA_MPI_IMPL_CRAYMPICH) &&                               \
+       ((BRAHMA_MPI_VERSION >= 800108 && BRAHMA_MPI_VERSION < 800200) ||   \
+        (BRAHMA_MPI_VERSION >= 900001 && BRAHMA_MPI_VERSION < 900100))) || \
+      (defined(BRAHMA_MPI_IMPL_MPICH) &&                                   \
+       (BRAHMA_MPI_VERSION >= 300403 && BRAHMA_MPI_VERSION < 300500)) ||   \
+      (defined(BRAHMA_MPI_IMPL_OPENMPI) &&                                 \
+       (BRAHMA_MPI_VERSION >= 500006 && BRAHMA_MPI_VERSION < 500100)))) || \
+    (defined(BRAHMA_MPI_IMPL_OPENMPI) &&                                   \
+     (BRAHMA_MPI_VERSION >= 400106 && BRAHMA_MPI_VERSION < 400200))
 int brahma::MPIDFTracer::MPI_Win_allocate(MPI_Aint size, int disp_unit,
                                           MPI_Info info, MPI_Comm comm,
                                           void* baseptr, MPI_Win* win) {
@@ -15977,12 +16253,14 @@ int brahma::MPIDFTracer::MPI_Win_allocate(MPI_Aint size, int disp_unit,
   return ret;
 }
 #endif
-#if ((defined(BRAHMA_MPI_IMPL_CRAYMPICH) &&                             \
-      (BRAHMA_MPI_VERSION >= 900100 && BRAHMA_MPI_VERSION < 900200)) || \
-     (defined(BRAHMA_MPI_IMPL_MPICH) &&                                 \
-      (BRAHMA_MPI_VERSION >= 400203 && BRAHMA_MPI_VERSION < 400300)) || \
-     (defined(BRAHMA_MPI_IMPL_OPENMPI) &&                               \
-      (BRAHMA_MPI_VERSION >= 400106 && BRAHMA_MPI_VERSION < 400200)))
+#if (((defined(BRAHMA_MPI_IMPL_CRAYMPICH) &&                               \
+       (BRAHMA_MPI_VERSION >= 900100 && BRAHMA_MPI_VERSION < 900200)) ||   \
+      (defined(BRAHMA_MPI_IMPL_MPICH) &&                                   \
+       (BRAHMA_MPI_VERSION >= 400203 && BRAHMA_MPI_VERSION < 400300)) ||   \
+      (defined(BRAHMA_MPI_IMPL_OPENMPI) &&                                 \
+       (BRAHMA_MPI_VERSION >= 400106 && BRAHMA_MPI_VERSION < 400200)))) && \
+    !(defined(BRAHMA_MPI_IMPL_OPENMPI) &&                                  \
+      (BRAHMA_MPI_VERSION >= 400106 && BRAHMA_MPI_VERSION < 400200))
 int brahma::MPIDFTracer::MPI_Win_allocate(MPI_Aint size, int disp_unit,
                                           int info, int comm, void* baseptr,
                                           MPI_Win* win) {
@@ -16036,13 +16314,15 @@ int brahma::MPIDFTracer::MPI_Win_allocate_c(MPI_Aint size, MPI_Aint disp_unit,
   return ret;
 }
 #endif
-#if ((defined(BRAHMA_MPI_IMPL_CRAYMPICH) &&                               \
-      ((BRAHMA_MPI_VERSION >= 800108 && BRAHMA_MPI_VERSION < 800200) ||   \
-       (BRAHMA_MPI_VERSION >= 900001 && BRAHMA_MPI_VERSION < 900100))) || \
-     (defined(BRAHMA_MPI_IMPL_MPICH) &&                                   \
-      (BRAHMA_MPI_VERSION >= 300403 && BRAHMA_MPI_VERSION < 300500)) ||   \
-     (defined(BRAHMA_MPI_IMPL_OPENMPI) &&                                 \
-      (BRAHMA_MPI_VERSION >= 500006 && BRAHMA_MPI_VERSION < 500100)))
+#if (((defined(BRAHMA_MPI_IMPL_CRAYMPICH) &&                               \
+       ((BRAHMA_MPI_VERSION >= 800108 && BRAHMA_MPI_VERSION < 800200) ||   \
+        (BRAHMA_MPI_VERSION >= 900001 && BRAHMA_MPI_VERSION < 900100))) || \
+      (defined(BRAHMA_MPI_IMPL_MPICH) &&                                   \
+       (BRAHMA_MPI_VERSION >= 300403 && BRAHMA_MPI_VERSION < 300500)) ||   \
+      (defined(BRAHMA_MPI_IMPL_OPENMPI) &&                                 \
+       (BRAHMA_MPI_VERSION >= 500006 && BRAHMA_MPI_VERSION < 500100)))) || \
+    (defined(BRAHMA_MPI_IMPL_OPENMPI) &&                                   \
+     (BRAHMA_MPI_VERSION >= 400106 && BRAHMA_MPI_VERSION < 400200))
 int brahma::MPIDFTracer::MPI_Win_allocate_shared(MPI_Aint size, int disp_unit,
                                                  MPI_Info info, MPI_Comm comm,
                                                  void* baseptr, MPI_Win* win) {
@@ -16059,12 +16339,14 @@ int brahma::MPIDFTracer::MPI_Win_allocate_shared(MPI_Aint size, int disp_unit,
   return ret;
 }
 #endif
-#if ((defined(BRAHMA_MPI_IMPL_CRAYMPICH) &&                             \
-      (BRAHMA_MPI_VERSION >= 900100 && BRAHMA_MPI_VERSION < 900200)) || \
-     (defined(BRAHMA_MPI_IMPL_MPICH) &&                                 \
-      (BRAHMA_MPI_VERSION >= 400203 && BRAHMA_MPI_VERSION < 400300)) || \
-     (defined(BRAHMA_MPI_IMPL_OPENMPI) &&                               \
-      (BRAHMA_MPI_VERSION >= 400106 && BRAHMA_MPI_VERSION < 400200)))
+#if (((defined(BRAHMA_MPI_IMPL_CRAYMPICH) &&                               \
+       (BRAHMA_MPI_VERSION >= 900100 && BRAHMA_MPI_VERSION < 900200)) ||   \
+      (defined(BRAHMA_MPI_IMPL_MPICH) &&                                   \
+       (BRAHMA_MPI_VERSION >= 400203 && BRAHMA_MPI_VERSION < 400300)) ||   \
+      (defined(BRAHMA_MPI_IMPL_OPENMPI) &&                                 \
+       (BRAHMA_MPI_VERSION >= 400106 && BRAHMA_MPI_VERSION < 400200)))) && \
+    !(defined(BRAHMA_MPI_IMPL_OPENMPI) &&                                  \
+      (BRAHMA_MPI_VERSION >= 400106 && BRAHMA_MPI_VERSION < 400200))
 int brahma::MPIDFTracer::MPI_Win_allocate_shared(MPI_Aint size, int disp_unit,
                                                  int info, int comm,
                                                  void* baseptr, MPI_Win* win) {
@@ -16182,13 +16464,15 @@ int brahma::MPIDFTracer::MPI_Win_complete(MPI_Win win) {
   return ret;
 }
 #endif
-#if ((defined(BRAHMA_MPI_IMPL_CRAYMPICH) &&                               \
-      ((BRAHMA_MPI_VERSION >= 800108 && BRAHMA_MPI_VERSION < 800200) ||   \
-       (BRAHMA_MPI_VERSION >= 900001 && BRAHMA_MPI_VERSION < 900100))) || \
-     (defined(BRAHMA_MPI_IMPL_MPICH) &&                                   \
-      (BRAHMA_MPI_VERSION >= 300403 && BRAHMA_MPI_VERSION < 300500)) ||   \
-     (defined(BRAHMA_MPI_IMPL_OPENMPI) &&                                 \
-      (BRAHMA_MPI_VERSION >= 500006 && BRAHMA_MPI_VERSION < 500100)))
+#if (((defined(BRAHMA_MPI_IMPL_CRAYMPICH) &&                               \
+       ((BRAHMA_MPI_VERSION >= 800108 && BRAHMA_MPI_VERSION < 800200) ||   \
+        (BRAHMA_MPI_VERSION >= 900001 && BRAHMA_MPI_VERSION < 900100))) || \
+      (defined(BRAHMA_MPI_IMPL_MPICH) &&                                   \
+       (BRAHMA_MPI_VERSION >= 300403 && BRAHMA_MPI_VERSION < 300500)) ||   \
+      (defined(BRAHMA_MPI_IMPL_OPENMPI) &&                                 \
+       (BRAHMA_MPI_VERSION >= 500006 && BRAHMA_MPI_VERSION < 500100)))) || \
+    (defined(BRAHMA_MPI_IMPL_OPENMPI) &&                                   \
+     (BRAHMA_MPI_VERSION >= 400106 && BRAHMA_MPI_VERSION < 400200))
 int brahma::MPIDFTracer::MPI_Win_create(void* base, MPI_Aint size,
                                         int disp_unit, MPI_Info info,
                                         MPI_Comm comm, MPI_Win* win) {
@@ -16204,12 +16488,14 @@ int brahma::MPIDFTracer::MPI_Win_create(void* base, MPI_Aint size,
   return ret;
 }
 #endif
-#if ((defined(BRAHMA_MPI_IMPL_CRAYMPICH) &&                             \
-      (BRAHMA_MPI_VERSION >= 900100 && BRAHMA_MPI_VERSION < 900200)) || \
-     (defined(BRAHMA_MPI_IMPL_MPICH) &&                                 \
-      (BRAHMA_MPI_VERSION >= 400203 && BRAHMA_MPI_VERSION < 400300)) || \
-     (defined(BRAHMA_MPI_IMPL_OPENMPI) &&                               \
-      (BRAHMA_MPI_VERSION >= 400106 && BRAHMA_MPI_VERSION < 400200)))
+#if (((defined(BRAHMA_MPI_IMPL_CRAYMPICH) &&                               \
+       (BRAHMA_MPI_VERSION >= 900100 && BRAHMA_MPI_VERSION < 900200)) ||   \
+      (defined(BRAHMA_MPI_IMPL_MPICH) &&                                   \
+       (BRAHMA_MPI_VERSION >= 400203 && BRAHMA_MPI_VERSION < 400300)) ||   \
+      (defined(BRAHMA_MPI_IMPL_OPENMPI) &&                                 \
+       (BRAHMA_MPI_VERSION >= 400106 && BRAHMA_MPI_VERSION < 400200)))) && \
+    !(defined(BRAHMA_MPI_IMPL_OPENMPI) &&                                  \
+      (BRAHMA_MPI_VERSION >= 400106 && BRAHMA_MPI_VERSION < 400200))
 int brahma::MPIDFTracer::MPI_Win_create(void* base, MPI_Aint size,
                                         int disp_unit, int info, int comm,
                                         MPI_Win* win) {
@@ -16261,13 +16547,15 @@ int brahma::MPIDFTracer::MPI_Win_create_c(void* base, MPI_Aint size,
   return ret;
 }
 #endif
-#if ((defined(BRAHMA_MPI_IMPL_CRAYMPICH) &&                               \
-      ((BRAHMA_MPI_VERSION >= 800108 && BRAHMA_MPI_VERSION < 800200) ||   \
-       (BRAHMA_MPI_VERSION >= 900001 && BRAHMA_MPI_VERSION < 900100))) || \
-     (defined(BRAHMA_MPI_IMPL_MPICH) &&                                   \
-      (BRAHMA_MPI_VERSION >= 300403 && BRAHMA_MPI_VERSION < 300500)) ||   \
-     (defined(BRAHMA_MPI_IMPL_OPENMPI) &&                                 \
-      (BRAHMA_MPI_VERSION >= 500006 && BRAHMA_MPI_VERSION < 500100)))
+#if (((defined(BRAHMA_MPI_IMPL_CRAYMPICH) &&                               \
+       ((BRAHMA_MPI_VERSION >= 800108 && BRAHMA_MPI_VERSION < 800200) ||   \
+        (BRAHMA_MPI_VERSION >= 900001 && BRAHMA_MPI_VERSION < 900100))) || \
+      (defined(BRAHMA_MPI_IMPL_MPICH) &&                                   \
+       (BRAHMA_MPI_VERSION >= 300403 && BRAHMA_MPI_VERSION < 300500)) ||   \
+      (defined(BRAHMA_MPI_IMPL_OPENMPI) &&                                 \
+       (BRAHMA_MPI_VERSION >= 500006 && BRAHMA_MPI_VERSION < 500100)))) || \
+    (defined(BRAHMA_MPI_IMPL_OPENMPI) &&                                   \
+     (BRAHMA_MPI_VERSION >= 400106 && BRAHMA_MPI_VERSION < 400200))
 int brahma::MPIDFTracer::MPI_Win_create_dynamic(MPI_Info info, MPI_Comm comm,
                                                 MPI_Win* win) {
   BRAHMA_MAP_OR_FAIL(MPI_Win_create_dynamic);
@@ -16280,12 +16568,14 @@ int brahma::MPIDFTracer::MPI_Win_create_dynamic(MPI_Info info, MPI_Comm comm,
   return ret;
 }
 #endif
-#if ((defined(BRAHMA_MPI_IMPL_CRAYMPICH) &&                             \
-      (BRAHMA_MPI_VERSION >= 900100 && BRAHMA_MPI_VERSION < 900200)) || \
-     (defined(BRAHMA_MPI_IMPL_MPICH) &&                                 \
-      (BRAHMA_MPI_VERSION >= 400203 && BRAHMA_MPI_VERSION < 400300)) || \
-     (defined(BRAHMA_MPI_IMPL_OPENMPI) &&                               \
-      (BRAHMA_MPI_VERSION >= 400106 && BRAHMA_MPI_VERSION < 400200)))
+#if (((defined(BRAHMA_MPI_IMPL_CRAYMPICH) &&                               \
+       (BRAHMA_MPI_VERSION >= 900100 && BRAHMA_MPI_VERSION < 900200)) ||   \
+      (defined(BRAHMA_MPI_IMPL_MPICH) &&                                   \
+       (BRAHMA_MPI_VERSION >= 400203 && BRAHMA_MPI_VERSION < 400300)) ||   \
+      (defined(BRAHMA_MPI_IMPL_OPENMPI) &&                                 \
+       (BRAHMA_MPI_VERSION >= 400106 && BRAHMA_MPI_VERSION < 400200)))) && \
+    !(defined(BRAHMA_MPI_IMPL_OPENMPI) &&                                  \
+      (BRAHMA_MPI_VERSION >= 400106 && BRAHMA_MPI_VERSION < 400200))
 int brahma::MPIDFTracer::MPI_Win_create_dynamic(int info, int comm,
                                                 MPI_Win* win) {
   BRAHMA_MAP_OR_FAIL(MPI_Win_create_dynamic);
@@ -16298,13 +16588,15 @@ int brahma::MPIDFTracer::MPI_Win_create_dynamic(int info, int comm,
   return ret;
 }
 #endif
-#if ((defined(BRAHMA_MPI_IMPL_CRAYMPICH) &&                               \
-      ((BRAHMA_MPI_VERSION >= 800108 && BRAHMA_MPI_VERSION < 800200) ||   \
-       (BRAHMA_MPI_VERSION >= 900001 && BRAHMA_MPI_VERSION < 900100))) || \
-     (defined(BRAHMA_MPI_IMPL_MPICH) &&                                   \
-      (BRAHMA_MPI_VERSION >= 300403 && BRAHMA_MPI_VERSION < 300500)) ||   \
-     (defined(BRAHMA_MPI_IMPL_OPENMPI) &&                                 \
-      (BRAHMA_MPI_VERSION >= 500006 && BRAHMA_MPI_VERSION < 500100)))
+#if (((defined(BRAHMA_MPI_IMPL_CRAYMPICH) &&                               \
+       ((BRAHMA_MPI_VERSION >= 800108 && BRAHMA_MPI_VERSION < 800200) ||   \
+        (BRAHMA_MPI_VERSION >= 900001 && BRAHMA_MPI_VERSION < 900100))) || \
+      (defined(BRAHMA_MPI_IMPL_MPICH) &&                                   \
+       (BRAHMA_MPI_VERSION >= 300403 && BRAHMA_MPI_VERSION < 300500)) ||   \
+      (defined(BRAHMA_MPI_IMPL_OPENMPI) &&                                 \
+       (BRAHMA_MPI_VERSION >= 500006 && BRAHMA_MPI_VERSION < 500100)))) || \
+    (defined(BRAHMA_MPI_IMPL_OPENMPI) &&                                   \
+     (BRAHMA_MPI_VERSION >= 400106 && BRAHMA_MPI_VERSION < 400200))
 int brahma::MPIDFTracer::MPI_Win_create_errhandler(
     MPI_Win_errhandler_function* function, MPI_Errhandler* errhandler) {
   BRAHMA_MAP_OR_FAIL(MPI_Win_create_errhandler);
@@ -16315,12 +16607,14 @@ int brahma::MPIDFTracer::MPI_Win_create_errhandler(
   return ret;
 }
 #endif
-#if ((defined(BRAHMA_MPI_IMPL_CRAYMPICH) &&                             \
-      (BRAHMA_MPI_VERSION >= 900100 && BRAHMA_MPI_VERSION < 900200)) || \
-     (defined(BRAHMA_MPI_IMPL_MPICH) &&                                 \
-      (BRAHMA_MPI_VERSION >= 400203 && BRAHMA_MPI_VERSION < 400300)) || \
-     (defined(BRAHMA_MPI_IMPL_OPENMPI) &&                               \
-      (BRAHMA_MPI_VERSION >= 400106 && BRAHMA_MPI_VERSION < 400200)))
+#if (((defined(BRAHMA_MPI_IMPL_CRAYMPICH) &&                               \
+       (BRAHMA_MPI_VERSION >= 900100 && BRAHMA_MPI_VERSION < 900200)) ||   \
+      (defined(BRAHMA_MPI_IMPL_MPICH) &&                                   \
+       (BRAHMA_MPI_VERSION >= 400203 && BRAHMA_MPI_VERSION < 400300)) ||   \
+      (defined(BRAHMA_MPI_IMPL_OPENMPI) &&                                 \
+       (BRAHMA_MPI_VERSION >= 400106 && BRAHMA_MPI_VERSION < 400200)))) && \
+    !(defined(BRAHMA_MPI_IMPL_OPENMPI) &&                                  \
+      (BRAHMA_MPI_VERSION >= 400106 && BRAHMA_MPI_VERSION < 400200))
 int brahma::MPIDFTracer::MPI_Win_create_errhandler(
     MPI_Win_errhandler_function* function, int* errhandler) {
   BRAHMA_MAP_OR_FAIL(MPI_Win_create_errhandler);
@@ -16392,13 +16686,15 @@ int brahma::MPIDFTracer::MPI_Win_detach(MPI_Win win, const void* base) {
   return ret;
 }
 #endif
-#if ((defined(BRAHMA_MPI_IMPL_CRAYMPICH) &&                               \
-      ((BRAHMA_MPI_VERSION >= 800108 && BRAHMA_MPI_VERSION < 800200) ||   \
-       (BRAHMA_MPI_VERSION >= 900001 && BRAHMA_MPI_VERSION < 900100))) || \
-     (defined(BRAHMA_MPI_IMPL_MPICH) &&                                   \
-      (BRAHMA_MPI_VERSION >= 300403 && BRAHMA_MPI_VERSION < 300500)) ||   \
-     (defined(BRAHMA_MPI_IMPL_OPENMPI) &&                                 \
-      (BRAHMA_MPI_VERSION >= 500006 && BRAHMA_MPI_VERSION < 500100)))
+#if (((defined(BRAHMA_MPI_IMPL_CRAYMPICH) &&                               \
+       ((BRAHMA_MPI_VERSION >= 800108 && BRAHMA_MPI_VERSION < 800200) ||   \
+        (BRAHMA_MPI_VERSION >= 900001 && BRAHMA_MPI_VERSION < 900100))) || \
+      (defined(BRAHMA_MPI_IMPL_MPICH) &&                                   \
+       (BRAHMA_MPI_VERSION >= 300403 && BRAHMA_MPI_VERSION < 300500)) ||   \
+      (defined(BRAHMA_MPI_IMPL_OPENMPI) &&                                 \
+       (BRAHMA_MPI_VERSION >= 500006 && BRAHMA_MPI_VERSION < 500100)))) || \
+    (defined(BRAHMA_MPI_IMPL_OPENMPI) &&                                   \
+     (BRAHMA_MPI_VERSION >= 400106 && BRAHMA_MPI_VERSION < 400200))
 int brahma::MPIDFTracer::MPI_Win_fence(int assert, MPI_Win win) {
   BRAHMA_MAP_OR_FAIL(MPI_Win_fence);
   DFT_LOGGER_START_ALWAYS();
@@ -16410,12 +16706,14 @@ int brahma::MPIDFTracer::MPI_Win_fence(int assert, MPI_Win win) {
   return ret;
 }
 #endif
-#if ((defined(BRAHMA_MPI_IMPL_CRAYMPICH) &&                             \
-      (BRAHMA_MPI_VERSION >= 900100 && BRAHMA_MPI_VERSION < 900200)) || \
-     (defined(BRAHMA_MPI_IMPL_MPICH) &&                                 \
-      (BRAHMA_MPI_VERSION >= 400203 && BRAHMA_MPI_VERSION < 400300)) || \
-     (defined(BRAHMA_MPI_IMPL_OPENMPI) &&                               \
-      (BRAHMA_MPI_VERSION >= 400106 && BRAHMA_MPI_VERSION < 400200)))
+#if (((defined(BRAHMA_MPI_IMPL_CRAYMPICH) &&                               \
+       (BRAHMA_MPI_VERSION >= 900100 && BRAHMA_MPI_VERSION < 900200)) ||   \
+      (defined(BRAHMA_MPI_IMPL_MPICH) &&                                   \
+       (BRAHMA_MPI_VERSION >= 400203 && BRAHMA_MPI_VERSION < 400300)) ||   \
+      (defined(BRAHMA_MPI_IMPL_OPENMPI) &&                                 \
+       (BRAHMA_MPI_VERSION >= 400106 && BRAHMA_MPI_VERSION < 400200)))) && \
+    !(defined(BRAHMA_MPI_IMPL_OPENMPI) &&                                  \
+      (BRAHMA_MPI_VERSION >= 400106 && BRAHMA_MPI_VERSION < 400200))
 int brahma::MPIDFTracer::MPI_Win_fence(int assert, int win) {
   BRAHMA_MAP_OR_FAIL(MPI_Win_fence);
   DFT_LOGGER_START_ALWAYS();
@@ -16427,13 +16725,15 @@ int brahma::MPIDFTracer::MPI_Win_fence(int assert, int win) {
   return ret;
 }
 #endif
-#if ((defined(BRAHMA_MPI_IMPL_CRAYMPICH) &&                               \
-      ((BRAHMA_MPI_VERSION >= 800108 && BRAHMA_MPI_VERSION < 800200) ||   \
-       (BRAHMA_MPI_VERSION >= 900001 && BRAHMA_MPI_VERSION < 900100))) || \
-     (defined(BRAHMA_MPI_IMPL_MPICH) &&                                   \
-      (BRAHMA_MPI_VERSION >= 300403 && BRAHMA_MPI_VERSION < 300500)) ||   \
-     (defined(BRAHMA_MPI_IMPL_OPENMPI) &&                                 \
-      (BRAHMA_MPI_VERSION >= 500006 && BRAHMA_MPI_VERSION < 500100)))
+#if (((defined(BRAHMA_MPI_IMPL_CRAYMPICH) &&                               \
+       ((BRAHMA_MPI_VERSION >= 800108 && BRAHMA_MPI_VERSION < 800200) ||   \
+        (BRAHMA_MPI_VERSION >= 900001 && BRAHMA_MPI_VERSION < 900100))) || \
+      (defined(BRAHMA_MPI_IMPL_MPICH) &&                                   \
+       (BRAHMA_MPI_VERSION >= 300403 && BRAHMA_MPI_VERSION < 300500)) ||   \
+      (defined(BRAHMA_MPI_IMPL_OPENMPI) &&                                 \
+       (BRAHMA_MPI_VERSION >= 500006 && BRAHMA_MPI_VERSION < 500100)))) || \
+    (defined(BRAHMA_MPI_IMPL_OPENMPI) &&                                   \
+     (BRAHMA_MPI_VERSION >= 400106 && BRAHMA_MPI_VERSION < 400200))
 int brahma::MPIDFTracer::MPI_Win_flush(int rank, MPI_Win win) {
   BRAHMA_MAP_OR_FAIL(MPI_Win_flush);
   DFT_LOGGER_START_ALWAYS();
@@ -16445,12 +16745,14 @@ int brahma::MPIDFTracer::MPI_Win_flush(int rank, MPI_Win win) {
   return ret;
 }
 #endif
-#if ((defined(BRAHMA_MPI_IMPL_CRAYMPICH) &&                             \
-      (BRAHMA_MPI_VERSION >= 900100 && BRAHMA_MPI_VERSION < 900200)) || \
-     (defined(BRAHMA_MPI_IMPL_MPICH) &&                                 \
-      (BRAHMA_MPI_VERSION >= 400203 && BRAHMA_MPI_VERSION < 400300)) || \
-     (defined(BRAHMA_MPI_IMPL_OPENMPI) &&                               \
-      (BRAHMA_MPI_VERSION >= 400106 && BRAHMA_MPI_VERSION < 400200)))
+#if (((defined(BRAHMA_MPI_IMPL_CRAYMPICH) &&                               \
+       (BRAHMA_MPI_VERSION >= 900100 && BRAHMA_MPI_VERSION < 900200)) ||   \
+      (defined(BRAHMA_MPI_IMPL_MPICH) &&                                   \
+       (BRAHMA_MPI_VERSION >= 400203 && BRAHMA_MPI_VERSION < 400300)) ||   \
+      (defined(BRAHMA_MPI_IMPL_OPENMPI) &&                                 \
+       (BRAHMA_MPI_VERSION >= 400106 && BRAHMA_MPI_VERSION < 400200)))) && \
+    !(defined(BRAHMA_MPI_IMPL_OPENMPI) &&                                  \
+      (BRAHMA_MPI_VERSION >= 400106 && BRAHMA_MPI_VERSION < 400200))
 int brahma::MPIDFTracer::MPI_Win_flush(int rank, int win) {
   BRAHMA_MAP_OR_FAIL(MPI_Win_flush);
   DFT_LOGGER_START_ALWAYS();
@@ -16462,13 +16764,15 @@ int brahma::MPIDFTracer::MPI_Win_flush(int rank, int win) {
   return ret;
 }
 #endif
-#if ((defined(BRAHMA_MPI_IMPL_CRAYMPICH) &&                               \
-      ((BRAHMA_MPI_VERSION >= 800108 && BRAHMA_MPI_VERSION < 800200) ||   \
-       (BRAHMA_MPI_VERSION >= 900001 && BRAHMA_MPI_VERSION < 900100))) || \
-     (defined(BRAHMA_MPI_IMPL_MPICH) &&                                   \
-      (BRAHMA_MPI_VERSION >= 300403 && BRAHMA_MPI_VERSION < 300500)) ||   \
-     (defined(BRAHMA_MPI_IMPL_OPENMPI) &&                                 \
-      (BRAHMA_MPI_VERSION >= 500006 && BRAHMA_MPI_VERSION < 500100)))
+#if (((defined(BRAHMA_MPI_IMPL_CRAYMPICH) &&                               \
+       ((BRAHMA_MPI_VERSION >= 800108 && BRAHMA_MPI_VERSION < 800200) ||   \
+        (BRAHMA_MPI_VERSION >= 900001 && BRAHMA_MPI_VERSION < 900100))) || \
+      (defined(BRAHMA_MPI_IMPL_MPICH) &&                                   \
+       (BRAHMA_MPI_VERSION >= 300403 && BRAHMA_MPI_VERSION < 300500)) ||   \
+      (defined(BRAHMA_MPI_IMPL_OPENMPI) &&                                 \
+       (BRAHMA_MPI_VERSION >= 500006 && BRAHMA_MPI_VERSION < 500100)))) || \
+    (defined(BRAHMA_MPI_IMPL_OPENMPI) &&                                   \
+     (BRAHMA_MPI_VERSION >= 400106 && BRAHMA_MPI_VERSION < 400200))
 int brahma::MPIDFTracer::MPI_Win_flush_all(MPI_Win win) {
   BRAHMA_MAP_OR_FAIL(MPI_Win_flush_all);
   DFT_LOGGER_START_ALWAYS();
@@ -16479,12 +16783,14 @@ int brahma::MPIDFTracer::MPI_Win_flush_all(MPI_Win win) {
   return ret;
 }
 #endif
-#if ((defined(BRAHMA_MPI_IMPL_CRAYMPICH) &&                             \
-      (BRAHMA_MPI_VERSION >= 900100 && BRAHMA_MPI_VERSION < 900200)) || \
-     (defined(BRAHMA_MPI_IMPL_MPICH) &&                                 \
-      (BRAHMA_MPI_VERSION >= 400203 && BRAHMA_MPI_VERSION < 400300)) || \
-     (defined(BRAHMA_MPI_IMPL_OPENMPI) &&                               \
-      (BRAHMA_MPI_VERSION >= 400106 && BRAHMA_MPI_VERSION < 400200)))
+#if (((defined(BRAHMA_MPI_IMPL_CRAYMPICH) &&                               \
+       (BRAHMA_MPI_VERSION >= 900100 && BRAHMA_MPI_VERSION < 900200)) ||   \
+      (defined(BRAHMA_MPI_IMPL_MPICH) &&                                   \
+       (BRAHMA_MPI_VERSION >= 400203 && BRAHMA_MPI_VERSION < 400300)) ||   \
+      (defined(BRAHMA_MPI_IMPL_OPENMPI) &&                                 \
+       (BRAHMA_MPI_VERSION >= 400106 && BRAHMA_MPI_VERSION < 400200)))) && \
+    !(defined(BRAHMA_MPI_IMPL_OPENMPI) &&                                  \
+      (BRAHMA_MPI_VERSION >= 400106 && BRAHMA_MPI_VERSION < 400200))
 int brahma::MPIDFTracer::MPI_Win_flush_all(int win) {
   BRAHMA_MAP_OR_FAIL(MPI_Win_flush_all);
   DFT_LOGGER_START_ALWAYS();
@@ -16495,13 +16801,15 @@ int brahma::MPIDFTracer::MPI_Win_flush_all(int win) {
   return ret;
 }
 #endif
-#if ((defined(BRAHMA_MPI_IMPL_CRAYMPICH) &&                               \
-      ((BRAHMA_MPI_VERSION >= 800108 && BRAHMA_MPI_VERSION < 800200) ||   \
-       (BRAHMA_MPI_VERSION >= 900001 && BRAHMA_MPI_VERSION < 900100))) || \
-     (defined(BRAHMA_MPI_IMPL_MPICH) &&                                   \
-      (BRAHMA_MPI_VERSION >= 300403 && BRAHMA_MPI_VERSION < 300500)) ||   \
-     (defined(BRAHMA_MPI_IMPL_OPENMPI) &&                                 \
-      (BRAHMA_MPI_VERSION >= 500006 && BRAHMA_MPI_VERSION < 500100)))
+#if (((defined(BRAHMA_MPI_IMPL_CRAYMPICH) &&                               \
+       ((BRAHMA_MPI_VERSION >= 800108 && BRAHMA_MPI_VERSION < 800200) ||   \
+        (BRAHMA_MPI_VERSION >= 900001 && BRAHMA_MPI_VERSION < 900100))) || \
+      (defined(BRAHMA_MPI_IMPL_MPICH) &&                                   \
+       (BRAHMA_MPI_VERSION >= 300403 && BRAHMA_MPI_VERSION < 300500)) ||   \
+      (defined(BRAHMA_MPI_IMPL_OPENMPI) &&                                 \
+       (BRAHMA_MPI_VERSION >= 500006 && BRAHMA_MPI_VERSION < 500100)))) || \
+    (defined(BRAHMA_MPI_IMPL_OPENMPI) &&                                   \
+     (BRAHMA_MPI_VERSION >= 400106 && BRAHMA_MPI_VERSION < 400200))
 int brahma::MPIDFTracer::MPI_Win_flush_local(int rank, MPI_Win win) {
   BRAHMA_MAP_OR_FAIL(MPI_Win_flush_local);
   DFT_LOGGER_START_ALWAYS();
@@ -16513,12 +16821,14 @@ int brahma::MPIDFTracer::MPI_Win_flush_local(int rank, MPI_Win win) {
   return ret;
 }
 #endif
-#if ((defined(BRAHMA_MPI_IMPL_CRAYMPICH) &&                             \
-      (BRAHMA_MPI_VERSION >= 900100 && BRAHMA_MPI_VERSION < 900200)) || \
-     (defined(BRAHMA_MPI_IMPL_MPICH) &&                                 \
-      (BRAHMA_MPI_VERSION >= 400203 && BRAHMA_MPI_VERSION < 400300)) || \
-     (defined(BRAHMA_MPI_IMPL_OPENMPI) &&                               \
-      (BRAHMA_MPI_VERSION >= 400106 && BRAHMA_MPI_VERSION < 400200)))
+#if (((defined(BRAHMA_MPI_IMPL_CRAYMPICH) &&                               \
+       (BRAHMA_MPI_VERSION >= 900100 && BRAHMA_MPI_VERSION < 900200)) ||   \
+      (defined(BRAHMA_MPI_IMPL_MPICH) &&                                   \
+       (BRAHMA_MPI_VERSION >= 400203 && BRAHMA_MPI_VERSION < 400300)) ||   \
+      (defined(BRAHMA_MPI_IMPL_OPENMPI) &&                                 \
+       (BRAHMA_MPI_VERSION >= 400106 && BRAHMA_MPI_VERSION < 400200)))) && \
+    !(defined(BRAHMA_MPI_IMPL_OPENMPI) &&                                  \
+      (BRAHMA_MPI_VERSION >= 400106 && BRAHMA_MPI_VERSION < 400200))
 int brahma::MPIDFTracer::MPI_Win_flush_local(int rank, int win) {
   BRAHMA_MAP_OR_FAIL(MPI_Win_flush_local);
   DFT_LOGGER_START_ALWAYS();
@@ -16530,13 +16840,15 @@ int brahma::MPIDFTracer::MPI_Win_flush_local(int rank, int win) {
   return ret;
 }
 #endif
-#if ((defined(BRAHMA_MPI_IMPL_CRAYMPICH) &&                               \
-      ((BRAHMA_MPI_VERSION >= 800108 && BRAHMA_MPI_VERSION < 800200) ||   \
-       (BRAHMA_MPI_VERSION >= 900001 && BRAHMA_MPI_VERSION < 900100))) || \
-     (defined(BRAHMA_MPI_IMPL_MPICH) &&                                   \
-      (BRAHMA_MPI_VERSION >= 300403 && BRAHMA_MPI_VERSION < 300500)) ||   \
-     (defined(BRAHMA_MPI_IMPL_OPENMPI) &&                                 \
-      (BRAHMA_MPI_VERSION >= 500006 && BRAHMA_MPI_VERSION < 500100)))
+#if (((defined(BRAHMA_MPI_IMPL_CRAYMPICH) &&                               \
+       ((BRAHMA_MPI_VERSION >= 800108 && BRAHMA_MPI_VERSION < 800200) ||   \
+        (BRAHMA_MPI_VERSION >= 900001 && BRAHMA_MPI_VERSION < 900100))) || \
+      (defined(BRAHMA_MPI_IMPL_MPICH) &&                                   \
+       (BRAHMA_MPI_VERSION >= 300403 && BRAHMA_MPI_VERSION < 300500)) ||   \
+      (defined(BRAHMA_MPI_IMPL_OPENMPI) &&                                 \
+       (BRAHMA_MPI_VERSION >= 500006 && BRAHMA_MPI_VERSION < 500100)))) || \
+    (defined(BRAHMA_MPI_IMPL_OPENMPI) &&                                   \
+     (BRAHMA_MPI_VERSION >= 400106 && BRAHMA_MPI_VERSION < 400200))
 int brahma::MPIDFTracer::MPI_Win_flush_local_all(MPI_Win win) {
   BRAHMA_MAP_OR_FAIL(MPI_Win_flush_local_all);
   DFT_LOGGER_START_ALWAYS();
@@ -16547,12 +16859,14 @@ int brahma::MPIDFTracer::MPI_Win_flush_local_all(MPI_Win win) {
   return ret;
 }
 #endif
-#if ((defined(BRAHMA_MPI_IMPL_CRAYMPICH) &&                             \
-      (BRAHMA_MPI_VERSION >= 900100 && BRAHMA_MPI_VERSION < 900200)) || \
-     (defined(BRAHMA_MPI_IMPL_MPICH) &&                                 \
-      (BRAHMA_MPI_VERSION >= 400203 && BRAHMA_MPI_VERSION < 400300)) || \
-     (defined(BRAHMA_MPI_IMPL_OPENMPI) &&                               \
-      (BRAHMA_MPI_VERSION >= 400106 && BRAHMA_MPI_VERSION < 400200)))
+#if (((defined(BRAHMA_MPI_IMPL_CRAYMPICH) &&                               \
+       (BRAHMA_MPI_VERSION >= 900100 && BRAHMA_MPI_VERSION < 900200)) ||   \
+      (defined(BRAHMA_MPI_IMPL_MPICH) &&                                   \
+       (BRAHMA_MPI_VERSION >= 400203 && BRAHMA_MPI_VERSION < 400300)) ||   \
+      (defined(BRAHMA_MPI_IMPL_OPENMPI) &&                                 \
+       (BRAHMA_MPI_VERSION >= 400106 && BRAHMA_MPI_VERSION < 400200)))) && \
+    !(defined(BRAHMA_MPI_IMPL_OPENMPI) &&                                  \
+      (BRAHMA_MPI_VERSION >= 400106 && BRAHMA_MPI_VERSION < 400200))
 int brahma::MPIDFTracer::MPI_Win_flush_local_all(int win) {
   BRAHMA_MAP_OR_FAIL(MPI_Win_flush_local_all);
   DFT_LOGGER_START_ALWAYS();
@@ -16563,13 +16877,15 @@ int brahma::MPIDFTracer::MPI_Win_flush_local_all(int win) {
   return ret;
 }
 #endif
-#if ((defined(BRAHMA_MPI_IMPL_CRAYMPICH) &&                               \
-      ((BRAHMA_MPI_VERSION >= 800108 && BRAHMA_MPI_VERSION < 800200) ||   \
-       (BRAHMA_MPI_VERSION >= 900001 && BRAHMA_MPI_VERSION < 900100))) || \
-     (defined(BRAHMA_MPI_IMPL_MPICH) &&                                   \
-      (BRAHMA_MPI_VERSION >= 300403 && BRAHMA_MPI_VERSION < 300500)) ||   \
-     (defined(BRAHMA_MPI_IMPL_OPENMPI) &&                                 \
-      (BRAHMA_MPI_VERSION >= 500006 && BRAHMA_MPI_VERSION < 500100)))
+#if (((defined(BRAHMA_MPI_IMPL_CRAYMPICH) &&                               \
+       ((BRAHMA_MPI_VERSION >= 800108 && BRAHMA_MPI_VERSION < 800200) ||   \
+        (BRAHMA_MPI_VERSION >= 900001 && BRAHMA_MPI_VERSION < 900100))) || \
+      (defined(BRAHMA_MPI_IMPL_MPICH) &&                                   \
+       (BRAHMA_MPI_VERSION >= 300403 && BRAHMA_MPI_VERSION < 300500)) ||   \
+      (defined(BRAHMA_MPI_IMPL_OPENMPI) &&                                 \
+       (BRAHMA_MPI_VERSION >= 500006 && BRAHMA_MPI_VERSION < 500100)))) || \
+    (defined(BRAHMA_MPI_IMPL_OPENMPI) &&                                   \
+     (BRAHMA_MPI_VERSION >= 400106 && BRAHMA_MPI_VERSION < 400200))
 int brahma::MPIDFTracer::MPI_Win_free(MPI_Win* win) {
   BRAHMA_MAP_OR_FAIL(MPI_Win_free);
   DFT_LOGGER_START_ALWAYS();
@@ -16579,12 +16895,14 @@ int brahma::MPIDFTracer::MPI_Win_free(MPI_Win* win) {
   return ret;
 }
 #endif
-#if ((defined(BRAHMA_MPI_IMPL_CRAYMPICH) &&                             \
-      (BRAHMA_MPI_VERSION >= 900100 && BRAHMA_MPI_VERSION < 900200)) || \
-     (defined(BRAHMA_MPI_IMPL_MPICH) &&                                 \
-      (BRAHMA_MPI_VERSION >= 400203 && BRAHMA_MPI_VERSION < 400300)) || \
-     (defined(BRAHMA_MPI_IMPL_OPENMPI) &&                               \
-      (BRAHMA_MPI_VERSION >= 400106 && BRAHMA_MPI_VERSION < 400200)))
+#if (((defined(BRAHMA_MPI_IMPL_CRAYMPICH) &&                               \
+       (BRAHMA_MPI_VERSION >= 900100 && BRAHMA_MPI_VERSION < 900200)) ||   \
+      (defined(BRAHMA_MPI_IMPL_MPICH) &&                                   \
+       (BRAHMA_MPI_VERSION >= 400203 && BRAHMA_MPI_VERSION < 400300)) ||   \
+      (defined(BRAHMA_MPI_IMPL_OPENMPI) &&                                 \
+       (BRAHMA_MPI_VERSION >= 400106 && BRAHMA_MPI_VERSION < 400200)))) && \
+    !(defined(BRAHMA_MPI_IMPL_OPENMPI) &&                                  \
+      (BRAHMA_MPI_VERSION >= 400106 && BRAHMA_MPI_VERSION < 400200))
 int brahma::MPIDFTracer::MPI_Win_free(int* win) {
   BRAHMA_MAP_OR_FAIL(MPI_Win_free);
   DFT_LOGGER_START_ALWAYS();
@@ -16612,13 +16930,15 @@ int brahma::MPIDFTracer::MPI_Win_free_keyval(int* win_keyval) {
   return ret;
 }
 #endif
-#if ((defined(BRAHMA_MPI_IMPL_CRAYMPICH) &&                               \
-      ((BRAHMA_MPI_VERSION >= 800108 && BRAHMA_MPI_VERSION < 800200) ||   \
-       (BRAHMA_MPI_VERSION >= 900001 && BRAHMA_MPI_VERSION < 900100))) || \
-     (defined(BRAHMA_MPI_IMPL_MPICH) &&                                   \
-      (BRAHMA_MPI_VERSION >= 300403 && BRAHMA_MPI_VERSION < 300500)) ||   \
-     (defined(BRAHMA_MPI_IMPL_OPENMPI) &&                                 \
-      (BRAHMA_MPI_VERSION >= 500006 && BRAHMA_MPI_VERSION < 500100)))
+#if (((defined(BRAHMA_MPI_IMPL_CRAYMPICH) &&                               \
+       ((BRAHMA_MPI_VERSION >= 800108 && BRAHMA_MPI_VERSION < 800200) ||   \
+        (BRAHMA_MPI_VERSION >= 900001 && BRAHMA_MPI_VERSION < 900100))) || \
+      (defined(BRAHMA_MPI_IMPL_MPICH) &&                                   \
+       (BRAHMA_MPI_VERSION >= 300403 && BRAHMA_MPI_VERSION < 300500)) ||   \
+      (defined(BRAHMA_MPI_IMPL_OPENMPI) &&                                 \
+       (BRAHMA_MPI_VERSION >= 500006 && BRAHMA_MPI_VERSION < 500100)))) || \
+    (defined(BRAHMA_MPI_IMPL_OPENMPI) &&                                   \
+     (BRAHMA_MPI_VERSION >= 400106 && BRAHMA_MPI_VERSION < 400200))
 int brahma::MPIDFTracer::MPI_Win_get_attr(MPI_Win win, int win_keyval,
                                           void* attribute_val, int* flag) {
   BRAHMA_MAP_OR_FAIL(MPI_Win_get_attr);
@@ -16631,12 +16951,14 @@ int brahma::MPIDFTracer::MPI_Win_get_attr(MPI_Win win, int win_keyval,
   return ret;
 }
 #endif
-#if ((defined(BRAHMA_MPI_IMPL_CRAYMPICH) &&                             \
-      (BRAHMA_MPI_VERSION >= 900100 && BRAHMA_MPI_VERSION < 900200)) || \
-     (defined(BRAHMA_MPI_IMPL_MPICH) &&                                 \
-      (BRAHMA_MPI_VERSION >= 400203 && BRAHMA_MPI_VERSION < 400300)) || \
-     (defined(BRAHMA_MPI_IMPL_OPENMPI) &&                               \
-      (BRAHMA_MPI_VERSION >= 400106 && BRAHMA_MPI_VERSION < 400200)))
+#if (((defined(BRAHMA_MPI_IMPL_CRAYMPICH) &&                               \
+       (BRAHMA_MPI_VERSION >= 900100 && BRAHMA_MPI_VERSION < 900200)) ||   \
+      (defined(BRAHMA_MPI_IMPL_MPICH) &&                                   \
+       (BRAHMA_MPI_VERSION >= 400203 && BRAHMA_MPI_VERSION < 400300)) ||   \
+      (defined(BRAHMA_MPI_IMPL_OPENMPI) &&                                 \
+       (BRAHMA_MPI_VERSION >= 400106 && BRAHMA_MPI_VERSION < 400200)))) && \
+    !(defined(BRAHMA_MPI_IMPL_OPENMPI) &&                                  \
+      (BRAHMA_MPI_VERSION >= 400106 && BRAHMA_MPI_VERSION < 400200))
 int brahma::MPIDFTracer::MPI_Win_get_attr(int win, int win_keyval,
                                           void* attribute_val, int* flag) {
   BRAHMA_MAP_OR_FAIL(MPI_Win_get_attr);
@@ -16649,13 +16971,15 @@ int brahma::MPIDFTracer::MPI_Win_get_attr(int win, int win_keyval,
   return ret;
 }
 #endif
-#if ((defined(BRAHMA_MPI_IMPL_CRAYMPICH) &&                               \
-      ((BRAHMA_MPI_VERSION >= 800108 && BRAHMA_MPI_VERSION < 800200) ||   \
-       (BRAHMA_MPI_VERSION >= 900001 && BRAHMA_MPI_VERSION < 900100))) || \
-     (defined(BRAHMA_MPI_IMPL_MPICH) &&                                   \
-      (BRAHMA_MPI_VERSION >= 300403 && BRAHMA_MPI_VERSION < 300500)) ||   \
-     (defined(BRAHMA_MPI_IMPL_OPENMPI) &&                                 \
-      (BRAHMA_MPI_VERSION >= 500006 && BRAHMA_MPI_VERSION < 500100)))
+#if (((defined(BRAHMA_MPI_IMPL_CRAYMPICH) &&                               \
+       ((BRAHMA_MPI_VERSION >= 800108 && BRAHMA_MPI_VERSION < 800200) ||   \
+        (BRAHMA_MPI_VERSION >= 900001 && BRAHMA_MPI_VERSION < 900100))) || \
+      (defined(BRAHMA_MPI_IMPL_MPICH) &&                                   \
+       (BRAHMA_MPI_VERSION >= 300403 && BRAHMA_MPI_VERSION < 300500)) ||   \
+      (defined(BRAHMA_MPI_IMPL_OPENMPI) &&                                 \
+       (BRAHMA_MPI_VERSION >= 500006 && BRAHMA_MPI_VERSION < 500100)))) || \
+    (defined(BRAHMA_MPI_IMPL_OPENMPI) &&                                   \
+     (BRAHMA_MPI_VERSION >= 400106 && BRAHMA_MPI_VERSION < 400200))
 int brahma::MPIDFTracer::MPI_Win_get_errhandler(MPI_Win win,
                                                 MPI_Errhandler* errhandler) {
   BRAHMA_MAP_OR_FAIL(MPI_Win_get_errhandler);
@@ -16667,12 +16991,14 @@ int brahma::MPIDFTracer::MPI_Win_get_errhandler(MPI_Win win,
   return ret;
 }
 #endif
-#if ((defined(BRAHMA_MPI_IMPL_CRAYMPICH) &&                             \
-      (BRAHMA_MPI_VERSION >= 900100 && BRAHMA_MPI_VERSION < 900200)) || \
-     (defined(BRAHMA_MPI_IMPL_MPICH) &&                                 \
-      (BRAHMA_MPI_VERSION >= 400203 && BRAHMA_MPI_VERSION < 400300)) || \
-     (defined(BRAHMA_MPI_IMPL_OPENMPI) &&                               \
-      (BRAHMA_MPI_VERSION >= 400106 && BRAHMA_MPI_VERSION < 400200)))
+#if (((defined(BRAHMA_MPI_IMPL_CRAYMPICH) &&                               \
+       (BRAHMA_MPI_VERSION >= 900100 && BRAHMA_MPI_VERSION < 900200)) ||   \
+      (defined(BRAHMA_MPI_IMPL_MPICH) &&                                   \
+       (BRAHMA_MPI_VERSION >= 400203 && BRAHMA_MPI_VERSION < 400300)) ||   \
+      (defined(BRAHMA_MPI_IMPL_OPENMPI) &&                                 \
+       (BRAHMA_MPI_VERSION >= 400106 && BRAHMA_MPI_VERSION < 400200)))) && \
+    !(defined(BRAHMA_MPI_IMPL_OPENMPI) &&                                  \
+      (BRAHMA_MPI_VERSION >= 400106 && BRAHMA_MPI_VERSION < 400200))
 int brahma::MPIDFTracer::MPI_Win_get_errhandler(int win, int* errhandler) {
   BRAHMA_MAP_OR_FAIL(MPI_Win_get_errhandler);
   DFT_LOGGER_START_ALWAYS();
@@ -16683,13 +17009,15 @@ int brahma::MPIDFTracer::MPI_Win_get_errhandler(int win, int* errhandler) {
   return ret;
 }
 #endif
-#if ((defined(BRAHMA_MPI_IMPL_CRAYMPICH) &&                               \
-      ((BRAHMA_MPI_VERSION >= 800108 && BRAHMA_MPI_VERSION < 800200) ||   \
-       (BRAHMA_MPI_VERSION >= 900001 && BRAHMA_MPI_VERSION < 900100))) || \
-     (defined(BRAHMA_MPI_IMPL_MPICH) &&                                   \
-      (BRAHMA_MPI_VERSION >= 300403 && BRAHMA_MPI_VERSION < 300500)) ||   \
-     (defined(BRAHMA_MPI_IMPL_OPENMPI) &&                                 \
-      (BRAHMA_MPI_VERSION >= 500006 && BRAHMA_MPI_VERSION < 500100)))
+#if (((defined(BRAHMA_MPI_IMPL_CRAYMPICH) &&                               \
+       ((BRAHMA_MPI_VERSION >= 800108 && BRAHMA_MPI_VERSION < 800200) ||   \
+        (BRAHMA_MPI_VERSION >= 900001 && BRAHMA_MPI_VERSION < 900100))) || \
+      (defined(BRAHMA_MPI_IMPL_MPICH) &&                                   \
+       (BRAHMA_MPI_VERSION >= 300403 && BRAHMA_MPI_VERSION < 300500)) ||   \
+      (defined(BRAHMA_MPI_IMPL_OPENMPI) &&                                 \
+       (BRAHMA_MPI_VERSION >= 500006 && BRAHMA_MPI_VERSION < 500100)))) || \
+    (defined(BRAHMA_MPI_IMPL_OPENMPI) &&                                   \
+     (BRAHMA_MPI_VERSION >= 400106 && BRAHMA_MPI_VERSION < 400200))
 int brahma::MPIDFTracer::MPI_Win_get_group(MPI_Win win, MPI_Group* group) {
   BRAHMA_MAP_OR_FAIL(MPI_Win_get_group);
   DFT_LOGGER_START_ALWAYS();
@@ -16700,12 +17028,14 @@ int brahma::MPIDFTracer::MPI_Win_get_group(MPI_Win win, MPI_Group* group) {
   return ret;
 }
 #endif
-#if ((defined(BRAHMA_MPI_IMPL_CRAYMPICH) &&                             \
-      (BRAHMA_MPI_VERSION >= 900100 && BRAHMA_MPI_VERSION < 900200)) || \
-     (defined(BRAHMA_MPI_IMPL_MPICH) &&                                 \
-      (BRAHMA_MPI_VERSION >= 400203 && BRAHMA_MPI_VERSION < 400300)) || \
-     (defined(BRAHMA_MPI_IMPL_OPENMPI) &&                               \
-      (BRAHMA_MPI_VERSION >= 400106 && BRAHMA_MPI_VERSION < 400200)))
+#if (((defined(BRAHMA_MPI_IMPL_CRAYMPICH) &&                               \
+       (BRAHMA_MPI_VERSION >= 900100 && BRAHMA_MPI_VERSION < 900200)) ||   \
+      (defined(BRAHMA_MPI_IMPL_MPICH) &&                                   \
+       (BRAHMA_MPI_VERSION >= 400203 && BRAHMA_MPI_VERSION < 400300)) ||   \
+      (defined(BRAHMA_MPI_IMPL_OPENMPI) &&                                 \
+       (BRAHMA_MPI_VERSION >= 400106 && BRAHMA_MPI_VERSION < 400200)))) && \
+    !(defined(BRAHMA_MPI_IMPL_OPENMPI) &&                                  \
+      (BRAHMA_MPI_VERSION >= 400106 && BRAHMA_MPI_VERSION < 400200))
 int brahma::MPIDFTracer::MPI_Win_get_group(int win, int* group) {
   BRAHMA_MAP_OR_FAIL(MPI_Win_get_group);
   DFT_LOGGER_START_ALWAYS();
@@ -16716,13 +17046,15 @@ int brahma::MPIDFTracer::MPI_Win_get_group(int win, int* group) {
   return ret;
 }
 #endif
-#if ((defined(BRAHMA_MPI_IMPL_CRAYMPICH) &&                               \
-      ((BRAHMA_MPI_VERSION >= 800108 && BRAHMA_MPI_VERSION < 800200) ||   \
-       (BRAHMA_MPI_VERSION >= 900001 && BRAHMA_MPI_VERSION < 900100))) || \
-     (defined(BRAHMA_MPI_IMPL_MPICH) &&                                   \
-      (BRAHMA_MPI_VERSION >= 300403 && BRAHMA_MPI_VERSION < 300500)) ||   \
-     (defined(BRAHMA_MPI_IMPL_OPENMPI) &&                                 \
-      (BRAHMA_MPI_VERSION >= 500006 && BRAHMA_MPI_VERSION < 500100)))
+#if (((defined(BRAHMA_MPI_IMPL_CRAYMPICH) &&                               \
+       ((BRAHMA_MPI_VERSION >= 800108 && BRAHMA_MPI_VERSION < 800200) ||   \
+        (BRAHMA_MPI_VERSION >= 900001 && BRAHMA_MPI_VERSION < 900100))) || \
+      (defined(BRAHMA_MPI_IMPL_MPICH) &&                                   \
+       (BRAHMA_MPI_VERSION >= 300403 && BRAHMA_MPI_VERSION < 300500)) ||   \
+      (defined(BRAHMA_MPI_IMPL_OPENMPI) &&                                 \
+       (BRAHMA_MPI_VERSION >= 500006 && BRAHMA_MPI_VERSION < 500100)))) || \
+    (defined(BRAHMA_MPI_IMPL_OPENMPI) &&                                   \
+     (BRAHMA_MPI_VERSION >= 400106 && BRAHMA_MPI_VERSION < 400200))
 int brahma::MPIDFTracer::MPI_Win_get_info(MPI_Win win, MPI_Info* info_used) {
   BRAHMA_MAP_OR_FAIL(MPI_Win_get_info);
   DFT_LOGGER_START_ALWAYS();
@@ -16733,12 +17065,14 @@ int brahma::MPIDFTracer::MPI_Win_get_info(MPI_Win win, MPI_Info* info_used) {
   return ret;
 }
 #endif
-#if ((defined(BRAHMA_MPI_IMPL_CRAYMPICH) &&                             \
-      (BRAHMA_MPI_VERSION >= 900100 && BRAHMA_MPI_VERSION < 900200)) || \
-     (defined(BRAHMA_MPI_IMPL_MPICH) &&                                 \
-      (BRAHMA_MPI_VERSION >= 400203 && BRAHMA_MPI_VERSION < 400300)) || \
-     (defined(BRAHMA_MPI_IMPL_OPENMPI) &&                               \
-      (BRAHMA_MPI_VERSION >= 400106 && BRAHMA_MPI_VERSION < 400200)))
+#if (((defined(BRAHMA_MPI_IMPL_CRAYMPICH) &&                               \
+       (BRAHMA_MPI_VERSION >= 900100 && BRAHMA_MPI_VERSION < 900200)) ||   \
+      (defined(BRAHMA_MPI_IMPL_MPICH) &&                                   \
+       (BRAHMA_MPI_VERSION >= 400203 && BRAHMA_MPI_VERSION < 400300)) ||   \
+      (defined(BRAHMA_MPI_IMPL_OPENMPI) &&                                 \
+       (BRAHMA_MPI_VERSION >= 400106 && BRAHMA_MPI_VERSION < 400200)))) && \
+    !(defined(BRAHMA_MPI_IMPL_OPENMPI) &&                                  \
+      (BRAHMA_MPI_VERSION >= 400106 && BRAHMA_MPI_VERSION < 400200))
 int brahma::MPIDFTracer::MPI_Win_get_info(int win, int* info_used) {
   BRAHMA_MAP_OR_FAIL(MPI_Win_get_info);
   DFT_LOGGER_START_ALWAYS();
@@ -16749,13 +17083,15 @@ int brahma::MPIDFTracer::MPI_Win_get_info(int win, int* info_used) {
   return ret;
 }
 #endif
-#if ((defined(BRAHMA_MPI_IMPL_CRAYMPICH) &&                               \
-      ((BRAHMA_MPI_VERSION >= 800108 && BRAHMA_MPI_VERSION < 800200) ||   \
-       (BRAHMA_MPI_VERSION >= 900001 && BRAHMA_MPI_VERSION < 900100))) || \
-     (defined(BRAHMA_MPI_IMPL_MPICH) &&                                   \
-      (BRAHMA_MPI_VERSION >= 300403 && BRAHMA_MPI_VERSION < 300500)) ||   \
-     (defined(BRAHMA_MPI_IMPL_OPENMPI) &&                                 \
-      (BRAHMA_MPI_VERSION >= 500006 && BRAHMA_MPI_VERSION < 500100)))
+#if (((defined(BRAHMA_MPI_IMPL_CRAYMPICH) &&                               \
+       ((BRAHMA_MPI_VERSION >= 800108 && BRAHMA_MPI_VERSION < 800200) ||   \
+        (BRAHMA_MPI_VERSION >= 900001 && BRAHMA_MPI_VERSION < 900100))) || \
+      (defined(BRAHMA_MPI_IMPL_MPICH) &&                                   \
+       (BRAHMA_MPI_VERSION >= 300403 && BRAHMA_MPI_VERSION < 300500)) ||   \
+      (defined(BRAHMA_MPI_IMPL_OPENMPI) &&                                 \
+       (BRAHMA_MPI_VERSION >= 500006 && BRAHMA_MPI_VERSION < 500100)))) || \
+    (defined(BRAHMA_MPI_IMPL_OPENMPI) &&                                   \
+     (BRAHMA_MPI_VERSION >= 400106 && BRAHMA_MPI_VERSION < 400200))
 int brahma::MPIDFTracer::MPI_Win_get_name(MPI_Win win, char* win_name,
                                           int* resultlen) {
   BRAHMA_MAP_OR_FAIL(MPI_Win_get_name);
@@ -16767,12 +17103,14 @@ int brahma::MPIDFTracer::MPI_Win_get_name(MPI_Win win, char* win_name,
   return ret;
 }
 #endif
-#if ((defined(BRAHMA_MPI_IMPL_CRAYMPICH) &&                             \
-      (BRAHMA_MPI_VERSION >= 900100 && BRAHMA_MPI_VERSION < 900200)) || \
-     (defined(BRAHMA_MPI_IMPL_MPICH) &&                                 \
-      (BRAHMA_MPI_VERSION >= 400203 && BRAHMA_MPI_VERSION < 400300)) || \
-     (defined(BRAHMA_MPI_IMPL_OPENMPI) &&                               \
-      (BRAHMA_MPI_VERSION >= 400106 && BRAHMA_MPI_VERSION < 400200)))
+#if (((defined(BRAHMA_MPI_IMPL_CRAYMPICH) &&                               \
+       (BRAHMA_MPI_VERSION >= 900100 && BRAHMA_MPI_VERSION < 900200)) ||   \
+      (defined(BRAHMA_MPI_IMPL_MPICH) &&                                   \
+       (BRAHMA_MPI_VERSION >= 400203 && BRAHMA_MPI_VERSION < 400300)) ||   \
+      (defined(BRAHMA_MPI_IMPL_OPENMPI) &&                                 \
+       (BRAHMA_MPI_VERSION >= 400106 && BRAHMA_MPI_VERSION < 400200)))) && \
+    !(defined(BRAHMA_MPI_IMPL_OPENMPI) &&                                  \
+      (BRAHMA_MPI_VERSION >= 400106 && BRAHMA_MPI_VERSION < 400200))
 int brahma::MPIDFTracer::MPI_Win_get_name(int win, char* win_name,
                                           int* resultlen) {
   BRAHMA_MAP_OR_FAIL(MPI_Win_get_name);
@@ -16784,13 +17122,15 @@ int brahma::MPIDFTracer::MPI_Win_get_name(int win, char* win_name,
   return ret;
 }
 #endif
-#if ((defined(BRAHMA_MPI_IMPL_CRAYMPICH) &&                               \
-      ((BRAHMA_MPI_VERSION >= 800108 && BRAHMA_MPI_VERSION < 800200) ||   \
-       (BRAHMA_MPI_VERSION >= 900001 && BRAHMA_MPI_VERSION < 900100))) || \
-     (defined(BRAHMA_MPI_IMPL_MPICH) &&                                   \
-      (BRAHMA_MPI_VERSION >= 300403 && BRAHMA_MPI_VERSION < 300500)) ||   \
-     (defined(BRAHMA_MPI_IMPL_OPENMPI) &&                                 \
-      (BRAHMA_MPI_VERSION >= 500006 && BRAHMA_MPI_VERSION < 500100)))
+#if (((defined(BRAHMA_MPI_IMPL_CRAYMPICH) &&                               \
+       ((BRAHMA_MPI_VERSION >= 800108 && BRAHMA_MPI_VERSION < 800200) ||   \
+        (BRAHMA_MPI_VERSION >= 900001 && BRAHMA_MPI_VERSION < 900100))) || \
+      (defined(BRAHMA_MPI_IMPL_MPICH) &&                                   \
+       (BRAHMA_MPI_VERSION >= 300403 && BRAHMA_MPI_VERSION < 300500)) ||   \
+      (defined(BRAHMA_MPI_IMPL_OPENMPI) &&                                 \
+       (BRAHMA_MPI_VERSION >= 500006 && BRAHMA_MPI_VERSION < 500100)))) || \
+    (defined(BRAHMA_MPI_IMPL_OPENMPI) &&                                   \
+     (BRAHMA_MPI_VERSION >= 400106 && BRAHMA_MPI_VERSION < 400200))
 int brahma::MPIDFTracer::MPI_Win_lock(int lock_type, int rank, int assert,
                                       MPI_Win win) {
   BRAHMA_MAP_OR_FAIL(MPI_Win_lock);
@@ -16805,12 +17145,14 @@ int brahma::MPIDFTracer::MPI_Win_lock(int lock_type, int rank, int assert,
   return ret;
 }
 #endif
-#if ((defined(BRAHMA_MPI_IMPL_CRAYMPICH) &&                             \
-      (BRAHMA_MPI_VERSION >= 900100 && BRAHMA_MPI_VERSION < 900200)) || \
-     (defined(BRAHMA_MPI_IMPL_MPICH) &&                                 \
-      (BRAHMA_MPI_VERSION >= 400203 && BRAHMA_MPI_VERSION < 400300)) || \
-     (defined(BRAHMA_MPI_IMPL_OPENMPI) &&                               \
-      (BRAHMA_MPI_VERSION >= 400106 && BRAHMA_MPI_VERSION < 400200)))
+#if (((defined(BRAHMA_MPI_IMPL_CRAYMPICH) &&                               \
+       (BRAHMA_MPI_VERSION >= 900100 && BRAHMA_MPI_VERSION < 900200)) ||   \
+      (defined(BRAHMA_MPI_IMPL_MPICH) &&                                   \
+       (BRAHMA_MPI_VERSION >= 400203 && BRAHMA_MPI_VERSION < 400300)) ||   \
+      (defined(BRAHMA_MPI_IMPL_OPENMPI) &&                                 \
+       (BRAHMA_MPI_VERSION >= 400106 && BRAHMA_MPI_VERSION < 400200)))) && \
+    !(defined(BRAHMA_MPI_IMPL_OPENMPI) &&                                  \
+      (BRAHMA_MPI_VERSION >= 400106 && BRAHMA_MPI_VERSION < 400200))
 int brahma::MPIDFTracer::MPI_Win_lock(int lock_type, int rank, int assert,
                                       int win) {
   BRAHMA_MAP_OR_FAIL(MPI_Win_lock);
@@ -16825,13 +17167,15 @@ int brahma::MPIDFTracer::MPI_Win_lock(int lock_type, int rank, int assert,
   return ret;
 }
 #endif
-#if ((defined(BRAHMA_MPI_IMPL_CRAYMPICH) &&                               \
-      ((BRAHMA_MPI_VERSION >= 800108 && BRAHMA_MPI_VERSION < 800200) ||   \
-       (BRAHMA_MPI_VERSION >= 900001 && BRAHMA_MPI_VERSION < 900100))) || \
-     (defined(BRAHMA_MPI_IMPL_MPICH) &&                                   \
-      (BRAHMA_MPI_VERSION >= 300403 && BRAHMA_MPI_VERSION < 300500)) ||   \
-     (defined(BRAHMA_MPI_IMPL_OPENMPI) &&                                 \
-      (BRAHMA_MPI_VERSION >= 500006 && BRAHMA_MPI_VERSION < 500100)))
+#if (((defined(BRAHMA_MPI_IMPL_CRAYMPICH) &&                               \
+       ((BRAHMA_MPI_VERSION >= 800108 && BRAHMA_MPI_VERSION < 800200) ||   \
+        (BRAHMA_MPI_VERSION >= 900001 && BRAHMA_MPI_VERSION < 900100))) || \
+      (defined(BRAHMA_MPI_IMPL_MPICH) &&                                   \
+       (BRAHMA_MPI_VERSION >= 300403 && BRAHMA_MPI_VERSION < 300500)) ||   \
+      (defined(BRAHMA_MPI_IMPL_OPENMPI) &&                                 \
+       (BRAHMA_MPI_VERSION >= 500006 && BRAHMA_MPI_VERSION < 500100)))) || \
+    (defined(BRAHMA_MPI_IMPL_OPENMPI) &&                                   \
+     (BRAHMA_MPI_VERSION >= 400106 && BRAHMA_MPI_VERSION < 400200))
 int brahma::MPIDFTracer::MPI_Win_lock_all(int assert, MPI_Win win) {
   BRAHMA_MAP_OR_FAIL(MPI_Win_lock_all);
   DFT_LOGGER_START_ALWAYS();
@@ -16843,12 +17187,14 @@ int brahma::MPIDFTracer::MPI_Win_lock_all(int assert, MPI_Win win) {
   return ret;
 }
 #endif
-#if ((defined(BRAHMA_MPI_IMPL_CRAYMPICH) &&                             \
-      (BRAHMA_MPI_VERSION >= 900100 && BRAHMA_MPI_VERSION < 900200)) || \
-     (defined(BRAHMA_MPI_IMPL_MPICH) &&                                 \
-      (BRAHMA_MPI_VERSION >= 400203 && BRAHMA_MPI_VERSION < 400300)) || \
-     (defined(BRAHMA_MPI_IMPL_OPENMPI) &&                               \
-      (BRAHMA_MPI_VERSION >= 400106 && BRAHMA_MPI_VERSION < 400200)))
+#if (((defined(BRAHMA_MPI_IMPL_CRAYMPICH) &&                               \
+       (BRAHMA_MPI_VERSION >= 900100 && BRAHMA_MPI_VERSION < 900200)) ||   \
+      (defined(BRAHMA_MPI_IMPL_MPICH) &&                                   \
+       (BRAHMA_MPI_VERSION >= 400203 && BRAHMA_MPI_VERSION < 400300)) ||   \
+      (defined(BRAHMA_MPI_IMPL_OPENMPI) &&                                 \
+       (BRAHMA_MPI_VERSION >= 400106 && BRAHMA_MPI_VERSION < 400200)))) && \
+    !(defined(BRAHMA_MPI_IMPL_OPENMPI) &&                                  \
+      (BRAHMA_MPI_VERSION >= 400106 && BRAHMA_MPI_VERSION < 400200))
 int brahma::MPIDFTracer::MPI_Win_lock_all(int assert, int win) {
   BRAHMA_MAP_OR_FAIL(MPI_Win_lock_all);
   DFT_LOGGER_START_ALWAYS();
@@ -16860,13 +17206,15 @@ int brahma::MPIDFTracer::MPI_Win_lock_all(int assert, int win) {
   return ret;
 }
 #endif
-#if ((defined(BRAHMA_MPI_IMPL_CRAYMPICH) &&                               \
-      ((BRAHMA_MPI_VERSION >= 800108 && BRAHMA_MPI_VERSION < 800200) ||   \
-       (BRAHMA_MPI_VERSION >= 900001 && BRAHMA_MPI_VERSION < 900100))) || \
-     (defined(BRAHMA_MPI_IMPL_MPICH) &&                                   \
-      (BRAHMA_MPI_VERSION >= 300403 && BRAHMA_MPI_VERSION < 300500)) ||   \
-     (defined(BRAHMA_MPI_IMPL_OPENMPI) &&                                 \
-      (BRAHMA_MPI_VERSION >= 500006 && BRAHMA_MPI_VERSION < 500100)))
+#if (((defined(BRAHMA_MPI_IMPL_CRAYMPICH) &&                               \
+       ((BRAHMA_MPI_VERSION >= 800108 && BRAHMA_MPI_VERSION < 800200) ||   \
+        (BRAHMA_MPI_VERSION >= 900001 && BRAHMA_MPI_VERSION < 900100))) || \
+      (defined(BRAHMA_MPI_IMPL_MPICH) &&                                   \
+       (BRAHMA_MPI_VERSION >= 300403 && BRAHMA_MPI_VERSION < 300500)) ||   \
+      (defined(BRAHMA_MPI_IMPL_OPENMPI) &&                                 \
+       (BRAHMA_MPI_VERSION >= 500006 && BRAHMA_MPI_VERSION < 500100)))) || \
+    (defined(BRAHMA_MPI_IMPL_OPENMPI) &&                                   \
+     (BRAHMA_MPI_VERSION >= 400106 && BRAHMA_MPI_VERSION < 400200))
 int brahma::MPIDFTracer::MPI_Win_post(MPI_Group group, int assert,
                                       MPI_Win win) {
   BRAHMA_MAP_OR_FAIL(MPI_Win_post);
@@ -16880,12 +17228,14 @@ int brahma::MPIDFTracer::MPI_Win_post(MPI_Group group, int assert,
   return ret;
 }
 #endif
-#if ((defined(BRAHMA_MPI_IMPL_CRAYMPICH) &&                             \
-      (BRAHMA_MPI_VERSION >= 900100 && BRAHMA_MPI_VERSION < 900200)) || \
-     (defined(BRAHMA_MPI_IMPL_MPICH) &&                                 \
-      (BRAHMA_MPI_VERSION >= 400203 && BRAHMA_MPI_VERSION < 400300)) || \
-     (defined(BRAHMA_MPI_IMPL_OPENMPI) &&                               \
-      (BRAHMA_MPI_VERSION >= 400106 && BRAHMA_MPI_VERSION < 400200)))
+#if (((defined(BRAHMA_MPI_IMPL_CRAYMPICH) &&                               \
+       (BRAHMA_MPI_VERSION >= 900100 && BRAHMA_MPI_VERSION < 900200)) ||   \
+      (defined(BRAHMA_MPI_IMPL_MPICH) &&                                   \
+       (BRAHMA_MPI_VERSION >= 400203 && BRAHMA_MPI_VERSION < 400300)) ||   \
+      (defined(BRAHMA_MPI_IMPL_OPENMPI) &&                                 \
+       (BRAHMA_MPI_VERSION >= 400106 && BRAHMA_MPI_VERSION < 400200)))) && \
+    !(defined(BRAHMA_MPI_IMPL_OPENMPI) &&                                  \
+      (BRAHMA_MPI_VERSION >= 400106 && BRAHMA_MPI_VERSION < 400200))
 int brahma::MPIDFTracer::MPI_Win_post(int group, int assert, int win) {
   BRAHMA_MAP_OR_FAIL(MPI_Win_post);
   DFT_LOGGER_START_ALWAYS();
@@ -16898,13 +17248,15 @@ int brahma::MPIDFTracer::MPI_Win_post(int group, int assert, int win) {
   return ret;
 }
 #endif
-#if ((defined(BRAHMA_MPI_IMPL_CRAYMPICH) &&                               \
-      ((BRAHMA_MPI_VERSION >= 800108 && BRAHMA_MPI_VERSION < 800200) ||   \
-       (BRAHMA_MPI_VERSION >= 900001 && BRAHMA_MPI_VERSION < 900100))) || \
-     (defined(BRAHMA_MPI_IMPL_MPICH) &&                                   \
-      (BRAHMA_MPI_VERSION >= 300403 && BRAHMA_MPI_VERSION < 300500)) ||   \
-     (defined(BRAHMA_MPI_IMPL_OPENMPI) &&                                 \
-      (BRAHMA_MPI_VERSION >= 500006 && BRAHMA_MPI_VERSION < 500100)))
+#if (((defined(BRAHMA_MPI_IMPL_CRAYMPICH) &&                               \
+       ((BRAHMA_MPI_VERSION >= 800108 && BRAHMA_MPI_VERSION < 800200) ||   \
+        (BRAHMA_MPI_VERSION >= 900001 && BRAHMA_MPI_VERSION < 900100))) || \
+      (defined(BRAHMA_MPI_IMPL_MPICH) &&                                   \
+       (BRAHMA_MPI_VERSION >= 300403 && BRAHMA_MPI_VERSION < 300500)) ||   \
+      (defined(BRAHMA_MPI_IMPL_OPENMPI) &&                                 \
+       (BRAHMA_MPI_VERSION >= 500006 && BRAHMA_MPI_VERSION < 500100)))) || \
+    (defined(BRAHMA_MPI_IMPL_OPENMPI) &&                                   \
+     (BRAHMA_MPI_VERSION >= 400106 && BRAHMA_MPI_VERSION < 400200))
 int brahma::MPIDFTracer::MPI_Win_set_attr(MPI_Win win, int win_keyval,
                                           void* attribute_val) {
   BRAHMA_MAP_OR_FAIL(MPI_Win_set_attr);
@@ -16917,12 +17269,14 @@ int brahma::MPIDFTracer::MPI_Win_set_attr(MPI_Win win, int win_keyval,
   return ret;
 }
 #endif
-#if ((defined(BRAHMA_MPI_IMPL_CRAYMPICH) &&                             \
-      (BRAHMA_MPI_VERSION >= 900100 && BRAHMA_MPI_VERSION < 900200)) || \
-     (defined(BRAHMA_MPI_IMPL_MPICH) &&                                 \
-      (BRAHMA_MPI_VERSION >= 400203 && BRAHMA_MPI_VERSION < 400300)) || \
-     (defined(BRAHMA_MPI_IMPL_OPENMPI) &&                               \
-      (BRAHMA_MPI_VERSION >= 400106 && BRAHMA_MPI_VERSION < 400200)))
+#if (((defined(BRAHMA_MPI_IMPL_CRAYMPICH) &&                               \
+       (BRAHMA_MPI_VERSION >= 900100 && BRAHMA_MPI_VERSION < 900200)) ||   \
+      (defined(BRAHMA_MPI_IMPL_MPICH) &&                                   \
+       (BRAHMA_MPI_VERSION >= 400203 && BRAHMA_MPI_VERSION < 400300)) ||   \
+      (defined(BRAHMA_MPI_IMPL_OPENMPI) &&                                 \
+       (BRAHMA_MPI_VERSION >= 400106 && BRAHMA_MPI_VERSION < 400200)))) && \
+    !(defined(BRAHMA_MPI_IMPL_OPENMPI) &&                                  \
+      (BRAHMA_MPI_VERSION >= 400106 && BRAHMA_MPI_VERSION < 400200))
 int brahma::MPIDFTracer::MPI_Win_set_attr(int win, int win_keyval,
                                           void* attribute_val) {
   BRAHMA_MAP_OR_FAIL(MPI_Win_set_attr);
@@ -16935,13 +17289,15 @@ int brahma::MPIDFTracer::MPI_Win_set_attr(int win, int win_keyval,
   return ret;
 }
 #endif
-#if ((defined(BRAHMA_MPI_IMPL_CRAYMPICH) &&                               \
-      ((BRAHMA_MPI_VERSION >= 800108 && BRAHMA_MPI_VERSION < 800200) ||   \
-       (BRAHMA_MPI_VERSION >= 900001 && BRAHMA_MPI_VERSION < 900100))) || \
-     (defined(BRAHMA_MPI_IMPL_MPICH) &&                                   \
-      (BRAHMA_MPI_VERSION >= 300403 && BRAHMA_MPI_VERSION < 300500)) ||   \
-     (defined(BRAHMA_MPI_IMPL_OPENMPI) &&                                 \
-      (BRAHMA_MPI_VERSION >= 500006 && BRAHMA_MPI_VERSION < 500100)))
+#if (((defined(BRAHMA_MPI_IMPL_CRAYMPICH) &&                               \
+       ((BRAHMA_MPI_VERSION >= 800108 && BRAHMA_MPI_VERSION < 800200) ||   \
+        (BRAHMA_MPI_VERSION >= 900001 && BRAHMA_MPI_VERSION < 900100))) || \
+      (defined(BRAHMA_MPI_IMPL_MPICH) &&                                   \
+       (BRAHMA_MPI_VERSION >= 300403 && BRAHMA_MPI_VERSION < 300500)) ||   \
+      (defined(BRAHMA_MPI_IMPL_OPENMPI) &&                                 \
+       (BRAHMA_MPI_VERSION >= 500006 && BRAHMA_MPI_VERSION < 500100)))) || \
+    (defined(BRAHMA_MPI_IMPL_OPENMPI) &&                                   \
+     (BRAHMA_MPI_VERSION >= 400106 && BRAHMA_MPI_VERSION < 400200))
 int brahma::MPIDFTracer::MPI_Win_set_errhandler(MPI_Win win,
                                                 MPI_Errhandler errhandler) {
   BRAHMA_MAP_OR_FAIL(MPI_Win_set_errhandler);
@@ -16954,12 +17310,14 @@ int brahma::MPIDFTracer::MPI_Win_set_errhandler(MPI_Win win,
   return ret;
 }
 #endif
-#if ((defined(BRAHMA_MPI_IMPL_CRAYMPICH) &&                             \
-      (BRAHMA_MPI_VERSION >= 900100 && BRAHMA_MPI_VERSION < 900200)) || \
-     (defined(BRAHMA_MPI_IMPL_MPICH) &&                                 \
-      (BRAHMA_MPI_VERSION >= 400203 && BRAHMA_MPI_VERSION < 400300)) || \
-     (defined(BRAHMA_MPI_IMPL_OPENMPI) &&                               \
-      (BRAHMA_MPI_VERSION >= 400106 && BRAHMA_MPI_VERSION < 400200)))
+#if (((defined(BRAHMA_MPI_IMPL_CRAYMPICH) &&                               \
+       (BRAHMA_MPI_VERSION >= 900100 && BRAHMA_MPI_VERSION < 900200)) ||   \
+      (defined(BRAHMA_MPI_IMPL_MPICH) &&                                   \
+       (BRAHMA_MPI_VERSION >= 400203 && BRAHMA_MPI_VERSION < 400300)) ||   \
+      (defined(BRAHMA_MPI_IMPL_OPENMPI) &&                                 \
+       (BRAHMA_MPI_VERSION >= 400106 && BRAHMA_MPI_VERSION < 400200)))) && \
+    !(defined(BRAHMA_MPI_IMPL_OPENMPI) &&                                  \
+      (BRAHMA_MPI_VERSION >= 400106 && BRAHMA_MPI_VERSION < 400200))
 int brahma::MPIDFTracer::MPI_Win_set_errhandler(int win, int errhandler) {
   BRAHMA_MAP_OR_FAIL(MPI_Win_set_errhandler);
   DFT_LOGGER_START_ALWAYS();
@@ -16971,13 +17329,15 @@ int brahma::MPIDFTracer::MPI_Win_set_errhandler(int win, int errhandler) {
   return ret;
 }
 #endif
-#if ((defined(BRAHMA_MPI_IMPL_CRAYMPICH) &&                               \
-      ((BRAHMA_MPI_VERSION >= 800108 && BRAHMA_MPI_VERSION < 800200) ||   \
-       (BRAHMA_MPI_VERSION >= 900001 && BRAHMA_MPI_VERSION < 900100))) || \
-     (defined(BRAHMA_MPI_IMPL_MPICH) &&                                   \
-      (BRAHMA_MPI_VERSION >= 300403 && BRAHMA_MPI_VERSION < 300500)) ||   \
-     (defined(BRAHMA_MPI_IMPL_OPENMPI) &&                                 \
-      (BRAHMA_MPI_VERSION >= 500006 && BRAHMA_MPI_VERSION < 500100)))
+#if (((defined(BRAHMA_MPI_IMPL_CRAYMPICH) &&                               \
+       ((BRAHMA_MPI_VERSION >= 800108 && BRAHMA_MPI_VERSION < 800200) ||   \
+        (BRAHMA_MPI_VERSION >= 900001 && BRAHMA_MPI_VERSION < 900100))) || \
+      (defined(BRAHMA_MPI_IMPL_MPICH) &&                                   \
+       (BRAHMA_MPI_VERSION >= 300403 && BRAHMA_MPI_VERSION < 300500)) ||   \
+      (defined(BRAHMA_MPI_IMPL_OPENMPI) &&                                 \
+       (BRAHMA_MPI_VERSION >= 500006 && BRAHMA_MPI_VERSION < 500100)))) || \
+    (defined(BRAHMA_MPI_IMPL_OPENMPI) &&                                   \
+     (BRAHMA_MPI_VERSION >= 400106 && BRAHMA_MPI_VERSION < 400200))
 int brahma::MPIDFTracer::MPI_Win_set_info(MPI_Win win, MPI_Info info) {
   BRAHMA_MAP_OR_FAIL(MPI_Win_set_info);
   DFT_LOGGER_START_ALWAYS();
@@ -16989,12 +17349,14 @@ int brahma::MPIDFTracer::MPI_Win_set_info(MPI_Win win, MPI_Info info) {
   return ret;
 }
 #endif
-#if ((defined(BRAHMA_MPI_IMPL_CRAYMPICH) &&                             \
-      (BRAHMA_MPI_VERSION >= 900100 && BRAHMA_MPI_VERSION < 900200)) || \
-     (defined(BRAHMA_MPI_IMPL_MPICH) &&                                 \
-      (BRAHMA_MPI_VERSION >= 400203 && BRAHMA_MPI_VERSION < 400300)) || \
-     (defined(BRAHMA_MPI_IMPL_OPENMPI) &&                               \
-      (BRAHMA_MPI_VERSION >= 400106 && BRAHMA_MPI_VERSION < 400200)))
+#if (((defined(BRAHMA_MPI_IMPL_CRAYMPICH) &&                               \
+       (BRAHMA_MPI_VERSION >= 900100 && BRAHMA_MPI_VERSION < 900200)) ||   \
+      (defined(BRAHMA_MPI_IMPL_MPICH) &&                                   \
+       (BRAHMA_MPI_VERSION >= 400203 && BRAHMA_MPI_VERSION < 400300)) ||   \
+      (defined(BRAHMA_MPI_IMPL_OPENMPI) &&                                 \
+       (BRAHMA_MPI_VERSION >= 400106 && BRAHMA_MPI_VERSION < 400200)))) && \
+    !(defined(BRAHMA_MPI_IMPL_OPENMPI) &&                                  \
+      (BRAHMA_MPI_VERSION >= 400106 && BRAHMA_MPI_VERSION < 400200))
 int brahma::MPIDFTracer::MPI_Win_set_info(int win, int info) {
   BRAHMA_MAP_OR_FAIL(MPI_Win_set_info);
   DFT_LOGGER_START_ALWAYS();
@@ -17006,13 +17368,15 @@ int brahma::MPIDFTracer::MPI_Win_set_info(int win, int info) {
   return ret;
 }
 #endif
-#if ((defined(BRAHMA_MPI_IMPL_CRAYMPICH) &&                               \
-      ((BRAHMA_MPI_VERSION >= 800108 && BRAHMA_MPI_VERSION < 800200) ||   \
-       (BRAHMA_MPI_VERSION >= 900001 && BRAHMA_MPI_VERSION < 900100))) || \
-     (defined(BRAHMA_MPI_IMPL_MPICH) &&                                   \
-      (BRAHMA_MPI_VERSION >= 300403 && BRAHMA_MPI_VERSION < 300500)) ||   \
-     (defined(BRAHMA_MPI_IMPL_OPENMPI) &&                                 \
-      (BRAHMA_MPI_VERSION >= 500006 && BRAHMA_MPI_VERSION < 500100)))
+#if (((defined(BRAHMA_MPI_IMPL_CRAYMPICH) &&                               \
+       ((BRAHMA_MPI_VERSION >= 800108 && BRAHMA_MPI_VERSION < 800200) ||   \
+        (BRAHMA_MPI_VERSION >= 900001 && BRAHMA_MPI_VERSION < 900100))) || \
+      (defined(BRAHMA_MPI_IMPL_MPICH) &&                                   \
+       (BRAHMA_MPI_VERSION >= 300403 && BRAHMA_MPI_VERSION < 300500)) ||   \
+      (defined(BRAHMA_MPI_IMPL_OPENMPI) &&                                 \
+       (BRAHMA_MPI_VERSION >= 500006 && BRAHMA_MPI_VERSION < 500100)))) || \
+    (defined(BRAHMA_MPI_IMPL_OPENMPI) &&                                   \
+     (BRAHMA_MPI_VERSION >= 400106 && BRAHMA_MPI_VERSION < 400200))
 int brahma::MPIDFTracer::MPI_Win_set_name(MPI_Win win, const char* win_name) {
   BRAHMA_MAP_OR_FAIL(MPI_Win_set_name);
   DFT_LOGGER_START_ALWAYS();
@@ -17023,12 +17387,14 @@ int brahma::MPIDFTracer::MPI_Win_set_name(MPI_Win win, const char* win_name) {
   return ret;
 }
 #endif
-#if ((defined(BRAHMA_MPI_IMPL_CRAYMPICH) &&                             \
-      (BRAHMA_MPI_VERSION >= 900100 && BRAHMA_MPI_VERSION < 900200)) || \
-     (defined(BRAHMA_MPI_IMPL_MPICH) &&                                 \
-      (BRAHMA_MPI_VERSION >= 400203 && BRAHMA_MPI_VERSION < 400300)) || \
-     (defined(BRAHMA_MPI_IMPL_OPENMPI) &&                               \
-      (BRAHMA_MPI_VERSION >= 400106 && BRAHMA_MPI_VERSION < 400200)))
+#if (((defined(BRAHMA_MPI_IMPL_CRAYMPICH) &&                               \
+       (BRAHMA_MPI_VERSION >= 900100 && BRAHMA_MPI_VERSION < 900200)) ||   \
+      (defined(BRAHMA_MPI_IMPL_MPICH) &&                                   \
+       (BRAHMA_MPI_VERSION >= 400203 && BRAHMA_MPI_VERSION < 400300)) ||   \
+      (defined(BRAHMA_MPI_IMPL_OPENMPI) &&                                 \
+       (BRAHMA_MPI_VERSION >= 400106 && BRAHMA_MPI_VERSION < 400200)))) && \
+    !(defined(BRAHMA_MPI_IMPL_OPENMPI) &&                                  \
+      (BRAHMA_MPI_VERSION >= 400106 && BRAHMA_MPI_VERSION < 400200))
 int brahma::MPIDFTracer::MPI_Win_set_name(int win, const char* win_name) {
   BRAHMA_MAP_OR_FAIL(MPI_Win_set_name);
   DFT_LOGGER_START_ALWAYS();
@@ -17039,13 +17405,15 @@ int brahma::MPIDFTracer::MPI_Win_set_name(int win, const char* win_name) {
   return ret;
 }
 #endif
-#if ((defined(BRAHMA_MPI_IMPL_CRAYMPICH) &&                               \
-      ((BRAHMA_MPI_VERSION >= 800108 && BRAHMA_MPI_VERSION < 800200) ||   \
-       (BRAHMA_MPI_VERSION >= 900001 && BRAHMA_MPI_VERSION < 900100))) || \
-     (defined(BRAHMA_MPI_IMPL_MPICH) &&                                   \
-      (BRAHMA_MPI_VERSION >= 300403 && BRAHMA_MPI_VERSION < 300500)) ||   \
-     (defined(BRAHMA_MPI_IMPL_OPENMPI) &&                                 \
-      (BRAHMA_MPI_VERSION >= 500006 && BRAHMA_MPI_VERSION < 500100)))
+#if (((defined(BRAHMA_MPI_IMPL_CRAYMPICH) &&                               \
+       ((BRAHMA_MPI_VERSION >= 800108 && BRAHMA_MPI_VERSION < 800200) ||   \
+        (BRAHMA_MPI_VERSION >= 900001 && BRAHMA_MPI_VERSION < 900100))) || \
+      (defined(BRAHMA_MPI_IMPL_MPICH) &&                                   \
+       (BRAHMA_MPI_VERSION >= 300403 && BRAHMA_MPI_VERSION < 300500)) ||   \
+      (defined(BRAHMA_MPI_IMPL_OPENMPI) &&                                 \
+       (BRAHMA_MPI_VERSION >= 500006 && BRAHMA_MPI_VERSION < 500100)))) || \
+    (defined(BRAHMA_MPI_IMPL_OPENMPI) &&                                   \
+     (BRAHMA_MPI_VERSION >= 400106 && BRAHMA_MPI_VERSION < 400200))
 int brahma::MPIDFTracer::MPI_Win_shared_query(MPI_Win win, int rank,
                                               MPI_Aint* size, int* disp_unit,
                                               void* baseptr) {
@@ -17059,12 +17427,14 @@ int brahma::MPIDFTracer::MPI_Win_shared_query(MPI_Win win, int rank,
   return ret;
 }
 #endif
-#if ((defined(BRAHMA_MPI_IMPL_CRAYMPICH) &&                             \
-      (BRAHMA_MPI_VERSION >= 900100 && BRAHMA_MPI_VERSION < 900200)) || \
-     (defined(BRAHMA_MPI_IMPL_MPICH) &&                                 \
-      (BRAHMA_MPI_VERSION >= 400203 && BRAHMA_MPI_VERSION < 400300)) || \
-     (defined(BRAHMA_MPI_IMPL_OPENMPI) &&                               \
-      (BRAHMA_MPI_VERSION >= 400106 && BRAHMA_MPI_VERSION < 400200)))
+#if (((defined(BRAHMA_MPI_IMPL_CRAYMPICH) &&                               \
+       (BRAHMA_MPI_VERSION >= 900100 && BRAHMA_MPI_VERSION < 900200)) ||   \
+      (defined(BRAHMA_MPI_IMPL_MPICH) &&                                   \
+       (BRAHMA_MPI_VERSION >= 400203 && BRAHMA_MPI_VERSION < 400300)) ||   \
+      (defined(BRAHMA_MPI_IMPL_OPENMPI) &&                                 \
+       (BRAHMA_MPI_VERSION >= 400106 && BRAHMA_MPI_VERSION < 400200)))) && \
+    !(defined(BRAHMA_MPI_IMPL_OPENMPI) &&                                  \
+      (BRAHMA_MPI_VERSION >= 400106 && BRAHMA_MPI_VERSION < 400200))
 int brahma::MPIDFTracer::MPI_Win_shared_query(int win, int rank, MPI_Aint* size,
                                               int* disp_unit, void* baseptr) {
   BRAHMA_MAP_OR_FAIL(MPI_Win_shared_query);
@@ -17111,13 +17481,15 @@ int brahma::MPIDFTracer::MPI_Win_shared_query_c(int win, int rank,
   return ret;
 }
 #endif
-#if ((defined(BRAHMA_MPI_IMPL_CRAYMPICH) &&                               \
-      ((BRAHMA_MPI_VERSION >= 800108 && BRAHMA_MPI_VERSION < 800200) ||   \
-       (BRAHMA_MPI_VERSION >= 900001 && BRAHMA_MPI_VERSION < 900100))) || \
-     (defined(BRAHMA_MPI_IMPL_MPICH) &&                                   \
-      (BRAHMA_MPI_VERSION >= 300403 && BRAHMA_MPI_VERSION < 300500)) ||   \
-     (defined(BRAHMA_MPI_IMPL_OPENMPI) &&                                 \
-      (BRAHMA_MPI_VERSION >= 500006 && BRAHMA_MPI_VERSION < 500100)))
+#if (((defined(BRAHMA_MPI_IMPL_CRAYMPICH) &&                               \
+       ((BRAHMA_MPI_VERSION >= 800108 && BRAHMA_MPI_VERSION < 800200) ||   \
+        (BRAHMA_MPI_VERSION >= 900001 && BRAHMA_MPI_VERSION < 900100))) || \
+      (defined(BRAHMA_MPI_IMPL_MPICH) &&                                   \
+       (BRAHMA_MPI_VERSION >= 300403 && BRAHMA_MPI_VERSION < 300500)) ||   \
+      (defined(BRAHMA_MPI_IMPL_OPENMPI) &&                                 \
+       (BRAHMA_MPI_VERSION >= 500006 && BRAHMA_MPI_VERSION < 500100)))) || \
+    (defined(BRAHMA_MPI_IMPL_OPENMPI) &&                                   \
+     (BRAHMA_MPI_VERSION >= 400106 && BRAHMA_MPI_VERSION < 400200))
 int brahma::MPIDFTracer::MPI_Win_start(MPI_Group group, int assert,
                                        MPI_Win win) {
   BRAHMA_MAP_OR_FAIL(MPI_Win_start);
@@ -17131,12 +17503,14 @@ int brahma::MPIDFTracer::MPI_Win_start(MPI_Group group, int assert,
   return ret;
 }
 #endif
-#if ((defined(BRAHMA_MPI_IMPL_CRAYMPICH) &&                             \
-      (BRAHMA_MPI_VERSION >= 900100 && BRAHMA_MPI_VERSION < 900200)) || \
-     (defined(BRAHMA_MPI_IMPL_MPICH) &&                                 \
-      (BRAHMA_MPI_VERSION >= 400203 && BRAHMA_MPI_VERSION < 400300)) || \
-     (defined(BRAHMA_MPI_IMPL_OPENMPI) &&                               \
-      (BRAHMA_MPI_VERSION >= 400106 && BRAHMA_MPI_VERSION < 400200)))
+#if (((defined(BRAHMA_MPI_IMPL_CRAYMPICH) &&                               \
+       (BRAHMA_MPI_VERSION >= 900100 && BRAHMA_MPI_VERSION < 900200)) ||   \
+      (defined(BRAHMA_MPI_IMPL_MPICH) &&                                   \
+       (BRAHMA_MPI_VERSION >= 400203 && BRAHMA_MPI_VERSION < 400300)) ||   \
+      (defined(BRAHMA_MPI_IMPL_OPENMPI) &&                                 \
+       (BRAHMA_MPI_VERSION >= 400106 && BRAHMA_MPI_VERSION < 400200)))) && \
+    !(defined(BRAHMA_MPI_IMPL_OPENMPI) &&                                  \
+      (BRAHMA_MPI_VERSION >= 400106 && BRAHMA_MPI_VERSION < 400200))
 int brahma::MPIDFTracer::MPI_Win_start(int group, int assert, int win) {
   BRAHMA_MAP_OR_FAIL(MPI_Win_start);
   DFT_LOGGER_START_ALWAYS();
@@ -17149,13 +17523,15 @@ int brahma::MPIDFTracer::MPI_Win_start(int group, int assert, int win) {
   return ret;
 }
 #endif
-#if ((defined(BRAHMA_MPI_IMPL_CRAYMPICH) &&                               \
-      ((BRAHMA_MPI_VERSION >= 800108 && BRAHMA_MPI_VERSION < 800200) ||   \
-       (BRAHMA_MPI_VERSION >= 900001 && BRAHMA_MPI_VERSION < 900100))) || \
-     (defined(BRAHMA_MPI_IMPL_MPICH) &&                                   \
-      (BRAHMA_MPI_VERSION >= 300403 && BRAHMA_MPI_VERSION < 300500)) ||   \
-     (defined(BRAHMA_MPI_IMPL_OPENMPI) &&                                 \
-      (BRAHMA_MPI_VERSION >= 500006 && BRAHMA_MPI_VERSION < 500100)))
+#if (((defined(BRAHMA_MPI_IMPL_CRAYMPICH) &&                               \
+       ((BRAHMA_MPI_VERSION >= 800108 && BRAHMA_MPI_VERSION < 800200) ||   \
+        (BRAHMA_MPI_VERSION >= 900001 && BRAHMA_MPI_VERSION < 900100))) || \
+      (defined(BRAHMA_MPI_IMPL_MPICH) &&                                   \
+       (BRAHMA_MPI_VERSION >= 300403 && BRAHMA_MPI_VERSION < 300500)) ||   \
+      (defined(BRAHMA_MPI_IMPL_OPENMPI) &&                                 \
+       (BRAHMA_MPI_VERSION >= 500006 && BRAHMA_MPI_VERSION < 500100)))) || \
+    (defined(BRAHMA_MPI_IMPL_OPENMPI) &&                                   \
+     (BRAHMA_MPI_VERSION >= 400106 && BRAHMA_MPI_VERSION < 400200))
 int brahma::MPIDFTracer::MPI_Win_sync(MPI_Win win) {
   BRAHMA_MAP_OR_FAIL(MPI_Win_sync);
   DFT_LOGGER_START_ALWAYS();
@@ -17166,12 +17542,14 @@ int brahma::MPIDFTracer::MPI_Win_sync(MPI_Win win) {
   return ret;
 }
 #endif
-#if ((defined(BRAHMA_MPI_IMPL_CRAYMPICH) &&                             \
-      (BRAHMA_MPI_VERSION >= 900100 && BRAHMA_MPI_VERSION < 900200)) || \
-     (defined(BRAHMA_MPI_IMPL_MPICH) &&                                 \
-      (BRAHMA_MPI_VERSION >= 400203 && BRAHMA_MPI_VERSION < 400300)) || \
-     (defined(BRAHMA_MPI_IMPL_OPENMPI) &&                               \
-      (BRAHMA_MPI_VERSION >= 400106 && BRAHMA_MPI_VERSION < 400200)))
+#if (((defined(BRAHMA_MPI_IMPL_CRAYMPICH) &&                               \
+       (BRAHMA_MPI_VERSION >= 900100 && BRAHMA_MPI_VERSION < 900200)) ||   \
+      (defined(BRAHMA_MPI_IMPL_MPICH) &&                                   \
+       (BRAHMA_MPI_VERSION >= 400203 && BRAHMA_MPI_VERSION < 400300)) ||   \
+      (defined(BRAHMA_MPI_IMPL_OPENMPI) &&                                 \
+       (BRAHMA_MPI_VERSION >= 400106 && BRAHMA_MPI_VERSION < 400200)))) && \
+    !(defined(BRAHMA_MPI_IMPL_OPENMPI) &&                                  \
+      (BRAHMA_MPI_VERSION >= 400106 && BRAHMA_MPI_VERSION < 400200))
 int brahma::MPIDFTracer::MPI_Win_sync(int win) {
   BRAHMA_MAP_OR_FAIL(MPI_Win_sync);
   DFT_LOGGER_START_ALWAYS();
@@ -17182,13 +17560,15 @@ int brahma::MPIDFTracer::MPI_Win_sync(int win) {
   return ret;
 }
 #endif
-#if ((defined(BRAHMA_MPI_IMPL_CRAYMPICH) &&                               \
-      ((BRAHMA_MPI_VERSION >= 800108 && BRAHMA_MPI_VERSION < 800200) ||   \
-       (BRAHMA_MPI_VERSION >= 900001 && BRAHMA_MPI_VERSION < 900100))) || \
-     (defined(BRAHMA_MPI_IMPL_MPICH) &&                                   \
-      (BRAHMA_MPI_VERSION >= 300403 && BRAHMA_MPI_VERSION < 300500)) ||   \
-     (defined(BRAHMA_MPI_IMPL_OPENMPI) &&                                 \
-      (BRAHMA_MPI_VERSION >= 500006 && BRAHMA_MPI_VERSION < 500100)))
+#if (((defined(BRAHMA_MPI_IMPL_CRAYMPICH) &&                               \
+       ((BRAHMA_MPI_VERSION >= 800108 && BRAHMA_MPI_VERSION < 800200) ||   \
+        (BRAHMA_MPI_VERSION >= 900001 && BRAHMA_MPI_VERSION < 900100))) || \
+      (defined(BRAHMA_MPI_IMPL_MPICH) &&                                   \
+       (BRAHMA_MPI_VERSION >= 300403 && BRAHMA_MPI_VERSION < 300500)) ||   \
+      (defined(BRAHMA_MPI_IMPL_OPENMPI) &&                                 \
+       (BRAHMA_MPI_VERSION >= 500006 && BRAHMA_MPI_VERSION < 500100)))) || \
+    (defined(BRAHMA_MPI_IMPL_OPENMPI) &&                                   \
+     (BRAHMA_MPI_VERSION >= 400106 && BRAHMA_MPI_VERSION < 400200))
 int brahma::MPIDFTracer::MPI_Win_test(MPI_Win win, int* flag) {
   BRAHMA_MAP_OR_FAIL(MPI_Win_test);
   DFT_LOGGER_START_ALWAYS();
@@ -17199,12 +17579,14 @@ int brahma::MPIDFTracer::MPI_Win_test(MPI_Win win, int* flag) {
   return ret;
 }
 #endif
-#if ((defined(BRAHMA_MPI_IMPL_CRAYMPICH) &&                             \
-      (BRAHMA_MPI_VERSION >= 900100 && BRAHMA_MPI_VERSION < 900200)) || \
-     (defined(BRAHMA_MPI_IMPL_MPICH) &&                                 \
-      (BRAHMA_MPI_VERSION >= 400203 && BRAHMA_MPI_VERSION < 400300)) || \
-     (defined(BRAHMA_MPI_IMPL_OPENMPI) &&                               \
-      (BRAHMA_MPI_VERSION >= 400106 && BRAHMA_MPI_VERSION < 400200)))
+#if (((defined(BRAHMA_MPI_IMPL_CRAYMPICH) &&                               \
+       (BRAHMA_MPI_VERSION >= 900100 && BRAHMA_MPI_VERSION < 900200)) ||   \
+      (defined(BRAHMA_MPI_IMPL_MPICH) &&                                   \
+       (BRAHMA_MPI_VERSION >= 400203 && BRAHMA_MPI_VERSION < 400300)) ||   \
+      (defined(BRAHMA_MPI_IMPL_OPENMPI) &&                                 \
+       (BRAHMA_MPI_VERSION >= 400106 && BRAHMA_MPI_VERSION < 400200)))) && \
+    !(defined(BRAHMA_MPI_IMPL_OPENMPI) &&                                  \
+      (BRAHMA_MPI_VERSION >= 400106 && BRAHMA_MPI_VERSION < 400200))
 int brahma::MPIDFTracer::MPI_Win_test(int win, int* flag) {
   BRAHMA_MAP_OR_FAIL(MPI_Win_test);
   DFT_LOGGER_START_ALWAYS();
@@ -17215,13 +17597,15 @@ int brahma::MPIDFTracer::MPI_Win_test(int win, int* flag) {
   return ret;
 }
 #endif
-#if ((defined(BRAHMA_MPI_IMPL_CRAYMPICH) &&                               \
-      ((BRAHMA_MPI_VERSION >= 800108 && BRAHMA_MPI_VERSION < 800200) ||   \
-       (BRAHMA_MPI_VERSION >= 900001 && BRAHMA_MPI_VERSION < 900100))) || \
-     (defined(BRAHMA_MPI_IMPL_MPICH) &&                                   \
-      (BRAHMA_MPI_VERSION >= 300403 && BRAHMA_MPI_VERSION < 300500)) ||   \
-     (defined(BRAHMA_MPI_IMPL_OPENMPI) &&                                 \
-      (BRAHMA_MPI_VERSION >= 500006 && BRAHMA_MPI_VERSION < 500100)))
+#if (((defined(BRAHMA_MPI_IMPL_CRAYMPICH) &&                               \
+       ((BRAHMA_MPI_VERSION >= 800108 && BRAHMA_MPI_VERSION < 800200) ||   \
+        (BRAHMA_MPI_VERSION >= 900001 && BRAHMA_MPI_VERSION < 900100))) || \
+      (defined(BRAHMA_MPI_IMPL_MPICH) &&                                   \
+       (BRAHMA_MPI_VERSION >= 300403 && BRAHMA_MPI_VERSION < 300500)) ||   \
+      (defined(BRAHMA_MPI_IMPL_OPENMPI) &&                                 \
+       (BRAHMA_MPI_VERSION >= 500006 && BRAHMA_MPI_VERSION < 500100)))) || \
+    (defined(BRAHMA_MPI_IMPL_OPENMPI) &&                                   \
+     (BRAHMA_MPI_VERSION >= 400106 && BRAHMA_MPI_VERSION < 400200))
 int brahma::MPIDFTracer::MPI_Win_unlock(int rank, MPI_Win win) {
   BRAHMA_MAP_OR_FAIL(MPI_Win_unlock);
   DFT_LOGGER_START_ALWAYS();
@@ -17233,12 +17617,14 @@ int brahma::MPIDFTracer::MPI_Win_unlock(int rank, MPI_Win win) {
   return ret;
 }
 #endif
-#if ((defined(BRAHMA_MPI_IMPL_CRAYMPICH) &&                             \
-      (BRAHMA_MPI_VERSION >= 900100 && BRAHMA_MPI_VERSION < 900200)) || \
-     (defined(BRAHMA_MPI_IMPL_MPICH) &&                                 \
-      (BRAHMA_MPI_VERSION >= 400203 && BRAHMA_MPI_VERSION < 400300)) || \
-     (defined(BRAHMA_MPI_IMPL_OPENMPI) &&                               \
-      (BRAHMA_MPI_VERSION >= 400106 && BRAHMA_MPI_VERSION < 400200)))
+#if (((defined(BRAHMA_MPI_IMPL_CRAYMPICH) &&                               \
+       (BRAHMA_MPI_VERSION >= 900100 && BRAHMA_MPI_VERSION < 900200)) ||   \
+      (defined(BRAHMA_MPI_IMPL_MPICH) &&                                   \
+       (BRAHMA_MPI_VERSION >= 400203 && BRAHMA_MPI_VERSION < 400300)) ||   \
+      (defined(BRAHMA_MPI_IMPL_OPENMPI) &&                                 \
+       (BRAHMA_MPI_VERSION >= 400106 && BRAHMA_MPI_VERSION < 400200)))) && \
+    !(defined(BRAHMA_MPI_IMPL_OPENMPI) &&                                  \
+      (BRAHMA_MPI_VERSION >= 400106 && BRAHMA_MPI_VERSION < 400200))
 int brahma::MPIDFTracer::MPI_Win_unlock(int rank, int win) {
   BRAHMA_MAP_OR_FAIL(MPI_Win_unlock);
   DFT_LOGGER_START_ALWAYS();
@@ -17250,13 +17636,15 @@ int brahma::MPIDFTracer::MPI_Win_unlock(int rank, int win) {
   return ret;
 }
 #endif
-#if ((defined(BRAHMA_MPI_IMPL_CRAYMPICH) &&                               \
-      ((BRAHMA_MPI_VERSION >= 800108 && BRAHMA_MPI_VERSION < 800200) ||   \
-       (BRAHMA_MPI_VERSION >= 900001 && BRAHMA_MPI_VERSION < 900100))) || \
-     (defined(BRAHMA_MPI_IMPL_MPICH) &&                                   \
-      (BRAHMA_MPI_VERSION >= 300403 && BRAHMA_MPI_VERSION < 300500)) ||   \
-     (defined(BRAHMA_MPI_IMPL_OPENMPI) &&                                 \
-      (BRAHMA_MPI_VERSION >= 500006 && BRAHMA_MPI_VERSION < 500100)))
+#if (((defined(BRAHMA_MPI_IMPL_CRAYMPICH) &&                               \
+       ((BRAHMA_MPI_VERSION >= 800108 && BRAHMA_MPI_VERSION < 800200) ||   \
+        (BRAHMA_MPI_VERSION >= 900001 && BRAHMA_MPI_VERSION < 900100))) || \
+      (defined(BRAHMA_MPI_IMPL_MPICH) &&                                   \
+       (BRAHMA_MPI_VERSION >= 300403 && BRAHMA_MPI_VERSION < 300500)) ||   \
+      (defined(BRAHMA_MPI_IMPL_OPENMPI) &&                                 \
+       (BRAHMA_MPI_VERSION >= 500006 && BRAHMA_MPI_VERSION < 500100)))) || \
+    (defined(BRAHMA_MPI_IMPL_OPENMPI) &&                                   \
+     (BRAHMA_MPI_VERSION >= 400106 && BRAHMA_MPI_VERSION < 400200))
 int brahma::MPIDFTracer::MPI_Win_unlock_all(MPI_Win win) {
   BRAHMA_MAP_OR_FAIL(MPI_Win_unlock_all);
   DFT_LOGGER_START_ALWAYS();
@@ -17267,12 +17655,14 @@ int brahma::MPIDFTracer::MPI_Win_unlock_all(MPI_Win win) {
   return ret;
 }
 #endif
-#if ((defined(BRAHMA_MPI_IMPL_CRAYMPICH) &&                             \
-      (BRAHMA_MPI_VERSION >= 900100 && BRAHMA_MPI_VERSION < 900200)) || \
-     (defined(BRAHMA_MPI_IMPL_MPICH) &&                                 \
-      (BRAHMA_MPI_VERSION >= 400203 && BRAHMA_MPI_VERSION < 400300)) || \
-     (defined(BRAHMA_MPI_IMPL_OPENMPI) &&                               \
-      (BRAHMA_MPI_VERSION >= 400106 && BRAHMA_MPI_VERSION < 400200)))
+#if (((defined(BRAHMA_MPI_IMPL_CRAYMPICH) &&                               \
+       (BRAHMA_MPI_VERSION >= 900100 && BRAHMA_MPI_VERSION < 900200)) ||   \
+      (defined(BRAHMA_MPI_IMPL_MPICH) &&                                   \
+       (BRAHMA_MPI_VERSION >= 400203 && BRAHMA_MPI_VERSION < 400300)) ||   \
+      (defined(BRAHMA_MPI_IMPL_OPENMPI) &&                                 \
+       (BRAHMA_MPI_VERSION >= 400106 && BRAHMA_MPI_VERSION < 400200)))) && \
+    !(defined(BRAHMA_MPI_IMPL_OPENMPI) &&                                  \
+      (BRAHMA_MPI_VERSION >= 400106 && BRAHMA_MPI_VERSION < 400200))
 int brahma::MPIDFTracer::MPI_Win_unlock_all(int win) {
   BRAHMA_MAP_OR_FAIL(MPI_Win_unlock_all);
   DFT_LOGGER_START_ALWAYS();
@@ -17283,13 +17673,15 @@ int brahma::MPIDFTracer::MPI_Win_unlock_all(int win) {
   return ret;
 }
 #endif
-#if ((defined(BRAHMA_MPI_IMPL_CRAYMPICH) &&                               \
-      ((BRAHMA_MPI_VERSION >= 800108 && BRAHMA_MPI_VERSION < 800200) ||   \
-       (BRAHMA_MPI_VERSION >= 900001 && BRAHMA_MPI_VERSION < 900100))) || \
-     (defined(BRAHMA_MPI_IMPL_MPICH) &&                                   \
-      (BRAHMA_MPI_VERSION >= 300403 && BRAHMA_MPI_VERSION < 300500)) ||   \
-     (defined(BRAHMA_MPI_IMPL_OPENMPI) &&                                 \
-      (BRAHMA_MPI_VERSION >= 500006 && BRAHMA_MPI_VERSION < 500100)))
+#if (((defined(BRAHMA_MPI_IMPL_CRAYMPICH) &&                               \
+       ((BRAHMA_MPI_VERSION >= 800108 && BRAHMA_MPI_VERSION < 800200) ||   \
+        (BRAHMA_MPI_VERSION >= 900001 && BRAHMA_MPI_VERSION < 900100))) || \
+      (defined(BRAHMA_MPI_IMPL_MPICH) &&                                   \
+       (BRAHMA_MPI_VERSION >= 300403 && BRAHMA_MPI_VERSION < 300500)) ||   \
+      (defined(BRAHMA_MPI_IMPL_OPENMPI) &&                                 \
+       (BRAHMA_MPI_VERSION >= 500006 && BRAHMA_MPI_VERSION < 500100)))) || \
+    (defined(BRAHMA_MPI_IMPL_OPENMPI) &&                                   \
+     (BRAHMA_MPI_VERSION >= 400106 && BRAHMA_MPI_VERSION < 400200))
 int brahma::MPIDFTracer::MPI_Win_wait(MPI_Win win) {
   BRAHMA_MAP_OR_FAIL(MPI_Win_wait);
   DFT_LOGGER_START_ALWAYS();
@@ -17300,12 +17692,14 @@ int brahma::MPIDFTracer::MPI_Win_wait(MPI_Win win) {
   return ret;
 }
 #endif
-#if ((defined(BRAHMA_MPI_IMPL_CRAYMPICH) &&                             \
-      (BRAHMA_MPI_VERSION >= 900100 && BRAHMA_MPI_VERSION < 900200)) || \
-     (defined(BRAHMA_MPI_IMPL_MPICH) &&                                 \
-      (BRAHMA_MPI_VERSION >= 400203 && BRAHMA_MPI_VERSION < 400300)) || \
-     (defined(BRAHMA_MPI_IMPL_OPENMPI) &&                               \
-      (BRAHMA_MPI_VERSION >= 400106 && BRAHMA_MPI_VERSION < 400200)))
+#if (((defined(BRAHMA_MPI_IMPL_CRAYMPICH) &&                               \
+       (BRAHMA_MPI_VERSION >= 900100 && BRAHMA_MPI_VERSION < 900200)) ||   \
+      (defined(BRAHMA_MPI_IMPL_MPICH) &&                                   \
+       (BRAHMA_MPI_VERSION >= 400203 && BRAHMA_MPI_VERSION < 400300)) ||   \
+      (defined(BRAHMA_MPI_IMPL_OPENMPI) &&                                 \
+       (BRAHMA_MPI_VERSION >= 400106 && BRAHMA_MPI_VERSION < 400200)))) && \
+    !(defined(BRAHMA_MPI_IMPL_OPENMPI) &&                                  \
+      (BRAHMA_MPI_VERSION >= 400106 && BRAHMA_MPI_VERSION < 400200))
 int brahma::MPIDFTracer::MPI_Win_wait(int win) {
   BRAHMA_MAP_OR_FAIL(MPI_Win_wait);
   DFT_LOGGER_START_ALWAYS();

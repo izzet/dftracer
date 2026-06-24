@@ -82,6 +82,7 @@ pydftracer.egg-info
 /dist/
 /output/
 .eggs/
+.hdf5-ci-cache
 
 # Python checkpoints
 /examples/.ipynb_checkpoints/

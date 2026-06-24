@@ -12,6 +12,9 @@ if(DFTRACER_ENABLE_MPI)
   find_package(MPI QUIET COMPONENTS C)
   if(MPI_FOUND OR TARGET MPI::MPI_C)
     set(_dftracer_enable_brahma_mpi ON)
+    # Capture exact library paths to forward to brahma so it uses the same MPI.
+    set(_dftracer_dep_mpi_c_include_dirs "${MPI_C_INCLUDE_DIRS}")
+    set(_dftracer_dep_mpi_c_libraries    "${MPI_C_LIBRARIES}")
 
     # Resolve MPI implementation: honour user override, then run C probe.
     if(DFTRACER_MPI_IMPL)
@@ -34,7 +37,16 @@ if(DFTRACER_ENABLE_MPI)
         if(_dep_mpi_detect_out MATCHES "IMPL=([A-Z]+)")
           set(_dftracer_dep_mpi_impl "${CMAKE_MATCH_1}")
         endif()
-        message(STATUS "[${PROJECT_NAME}] dependency: MPI C probe: impl=${_dftracer_dep_mpi_impl}")
+        # Parse library version and compute BRAHMA_MPI_VERSION = major*100000 + minor*100 + patch.
+        # Brahma uses this numeric version to decide which GOTCHA MPI bindings to generate.
+        # Without forwarding it, brahma falls back to the MPI *standard* version (e.g. 3.1 → 300100)
+        # which is outside its supported OpenMPI range [400106, 400200), causing no MPI interception.
+        set(_dftracer_dep_brahma_mpi_version "")
+        if(_dep_mpi_detect_out MATCHES "VERSION=([0-9]+)\\.([0-9]+)\\.([0-9]+)")
+          math(EXPR _dftracer_dep_brahma_mpi_version
+               "${CMAKE_MATCH_1} * 100000 + ${CMAKE_MATCH_2} * 100 + ${CMAKE_MATCH_3}")
+        endif()
+        message(STATUS "[${PROJECT_NAME}] dependency: MPI C probe: impl=${_dftracer_dep_mpi_impl} brahma_version=${_dftracer_dep_brahma_mpi_version}")
       else()
         message(WARNING "[${PROJECT_NAME}] dependency: MPI C probe did not run; brahma will auto-detect impl independently")
       endif()
@@ -50,11 +62,16 @@ if(_dftracer_enable_brahma_mpi)
   endif()
   string(APPEND BRAHMA_CONFIGURE_ARGS "-DBRAHMA_BUILD_WITH_MPI=ON")
 
-  # Forward detected/overridden MPI implementation to brahma so it uses
-  # the same impl without re-running its own detection independently.
+  # Forward detected/overridden MPI implementation and numeric version to brahma.
+  # BRAHMA_MPI_VERSION must be the library version (e.g. 400106 for OpenMPI 4.1.6),
+  # not the MPI standard version (3.1 → 300100) that brahma would compute on its own.
   if(_dftracer_dep_mpi_impl AND NOT "${_dftracer_dep_mpi_impl}" STREQUAL "UNKNOWN")
     string(APPEND BRAHMA_CONFIGURE_ARGS ";-DBRAHMA_MPI_IMPL=${_dftracer_dep_mpi_impl}")
     message(STATUS "[${PROJECT_NAME}] Forwarding BRAHMA_MPI_IMPL=${_dftracer_dep_mpi_impl} to brahma")
+  endif()
+  if(_dftracer_dep_brahma_mpi_version)
+    string(APPEND BRAHMA_CONFIGURE_ARGS ";-DBRAHMA_MPI_VERSION=${_dftracer_dep_brahma_mpi_version}")
+    message(STATUS "[${PROJECT_NAME}] Forwarding BRAHMA_MPI_VERSION=${_dftracer_dep_brahma_mpi_version} to brahma")
   endif()
 else()
   if(NOT "${BRAHMA_CONFIGURE_ARGS}" STREQUAL "")
@@ -69,6 +86,45 @@ if(DFTRACER_ENABLE_HDF5)
   endif()
 
   string(APPEND BRAHMA_CONFIGURE_ARGS "-DBRAHMA_BUILD_WITH_HDF5=ON")
+
+  # Spack's HDF5 config package can report its library as the local CMake
+  # target "hdf5-shared".  That target cannot be carried across Brahma's
+  # ExternalProject boundary and is otherwise emitted as the invalid linker
+  # flag -lhdf5-shared.  Use CMake's FindHDF5 module in both projects so the
+  # selected Spack installation is represented by concrete library paths.
+  set(HDF5_PREFER_PARALLEL TRUE)
+  set(HDF5_NO_FIND_PACKAGE_CONFIG_FILE TRUE)
+  string(APPEND BRAHMA_CONFIGURE_ARGS
+    ";-DHDF5_PREFER_PARALLEL=TRUE;-DHDF5_NO_FIND_PACKAGE_CONFIG_FILE=TRUE")
+
+  # Forward HDF5_ROOT so brahma's find_package(HDF5) resolves to the same install
+  if(DEFINED HDF5_ROOT AND NOT "${HDF5_ROOT}" STREQUAL "")
+    string(APPEND BRAHMA_CONFIGURE_ARGS ";-DHDF5_ROOT=${HDF5_ROOT}")
+  endif()
+
+  # Forward CMAKE_PREFIX_PATH in case HDF5 was found via a prefix path
+  if(DEFINED CMAKE_PREFIX_PATH AND NOT "${CMAKE_PREFIX_PATH}" STREQUAL "")
+    string(APPEND BRAHMA_CONFIGURE_ARGS ";-DCMAKE_PREFIX_PATH=${CMAKE_PREFIX_PATH}")
+  endif()
+
+  # Detect HDF5 version here and forward BRAHMA_HDF5_VERSION = major*100000 + minor*100 + patch.
+  # Without this, brahma runs its own find_package(HDF5) which may pick a different install
+  # or compute the wrong version, enabling the wrong set of intercepted functions.
+  find_package(HDF5 REQUIRED COMPONENTS C)
+  # Capture exact library paths to forward to brahma so it uses the same HDF5.
+  set(_dftracer_dep_hdf5_include_dirs "${HDF5_INCLUDE_DIRS}")
+  set(_dftracer_dep_hdf5_libraries    "${HDF5_LIBRARIES}")
+  set(_dftracer_dep_hdf5_version_str  "${HDF5_VERSION}")
+  set(_dftracer_dep_hdf5_version "")
+  if(HDF5_VERSION MATCHES "^([0-9]+)\\.([0-9]+)\\.([0-9]+)")
+    math(EXPR _dftracer_dep_hdf5_version
+         "${CMAKE_MATCH_1} * 100000 + ${CMAKE_MATCH_2} * 100 + ${CMAKE_MATCH_3}")
+  endif()
+  if(_dftracer_dep_hdf5_version)
+    string(APPEND BRAHMA_CONFIGURE_ARGS ";-DBRAHMA_HDF5_VERSION=${_dftracer_dep_hdf5_version}")
+    message(STATUS "[${PROJECT_NAME}] dependency: HDF5 version=${HDF5_VERSION} brahma_version=${_dftracer_dep_hdf5_version}")
+    message(STATUS "[${PROJECT_NAME}] Forwarding BRAHMA_HDF5_VERSION=${_dftracer_dep_hdf5_version} to brahma")
+  endif()
 endif()
 
 if(DFTRACER_GENERATE_INTERFACES)
@@ -90,8 +146,62 @@ if(DFTRACER_GENERATE_INTERFACES)
   endif()
 endif()
 
-# TODO: pin to a tagged release once the next brahma release is published.
-dftracer_install_external_project(brahma 4.1.0 "BRAHMA" https://github.com/hariharan-devarajan/brahma.git v1.0.8 ${CMAKE_INSTALL_PREFIX} "${BRAHMA_CONFIGURE_ARGS}")
+# Build the CMAKE_CACHE_ARGS list that passes the exact MPI and HDF5 library
+# paths found above to brahma, so brahma skips its own find_package calls and
+# uses the same installations without any risk of mismatch.
+# CMAKE_CACHE_ARGS (not CMAKE_ARGS) is used here because these variables can be
+# semicolon-separated CMake lists, which CMAKE_ARGS would split into extra args.
+set(_brahma_cmake_cache_args "")
+if(_dftracer_dep_mpi_c_include_dirs)
+  list(APPEND _brahma_cmake_cache_args
+    "-DBRAHMA_MPI_C_INCLUDE_DIRS:STRING=${_dftracer_dep_mpi_c_include_dirs}")
+endif()
+if(_dftracer_dep_mpi_c_libraries)
+  list(APPEND _brahma_cmake_cache_args
+    "-DBRAHMA_MPI_C_LIBRARIES:STRING=${_dftracer_dep_mpi_c_libraries}")
+endif()
+if(_dftracer_dep_hdf5_include_dirs)
+  list(APPEND _brahma_cmake_cache_args
+    "-DBRAHMA_HDF5_INCLUDE_DIRS:STRING=${_dftracer_dep_hdf5_include_dirs}")
+endif()
+if(_dftracer_dep_hdf5_libraries)
+  list(APPEND _brahma_cmake_cache_args
+    "-DBRAHMA_HDF5_LIBRARIES:STRING=${_dftracer_dep_hdf5_libraries}")
+endif()
+if(_dftracer_dep_hdf5_version_str)
+  list(APPEND _brahma_cmake_cache_args
+    "-DBRAHMA_HDF5_VERSION_STRING:STRING=${_dftracer_dep_hdf5_version_str}")
+endif()
+
+find_package(brahma 4.1.2 QUIET)
+if(brahma_FOUND)
+  message(STATUS "[${PROJECT_NAME}] found brahma already installed")
+else()
+  ExternalProject_Add(
+    brahma
+    PREFIX ${CMAKE_BINARY_DIR}
+    GIT_REPOSITORY https://github.com/hariharan-devarajan/brahma.git
+    GIT_TAG v1.0.10
+    TIMEOUT 10
+    PATCH_COMMAND ${CMAKE_COMMAND}
+      -DSOURCE_DIR=<SOURCE_DIR>
+      -P "${CMAKE_CURRENT_SOURCE_DIR}/../cmake/patches/brahma_version_override.cmake"
+    CMAKE_ARGS
+      "-DCMAKE_INSTALL_PREFIX=${CMAKE_INSTALL_PREFIX}"
+      "-DCMAKE_C_COMPILER=${CMAKE_C_COMPILER}"
+      "-DCMAKE_CXX_COMPILER=${CMAKE_CXX_COMPILER}"
+      ${BRAHMA_CONFIGURE_ARGS}
+    CMAKE_CACHE_ARGS
+      ${_brahma_cmake_cache_args}
+    BUILD_COMMAND ${CMAKE_COMMAND} --build <BINARY_DIR> --parallel
+    INSTALL_COMMAND ${CMAKE_COMMAND} --build <BINARY_DIR> --target install --parallel
+    LOG_DOWNLOAD ON
+  )
+  include_directories(${CMAKE_INSTALL_PREFIX}/include)
+  link_directories(${CMAKE_INSTALL_PREFIX}/lib)
+  link_directories(${CMAKE_INSTALL_PREFIX}/lib64)
+  include_directories(${CMAKE_BINARY_DIR}/src/brahma/include)
+endif()
 if(TARGET brahma AND TARGET cpp-logger)
   add_dependencies(brahma cpp-logger)
 endif()

@@ -414,6 +414,8 @@ def find_virtual_methods(
             for method in cls.get_children():
                 if method.kind != cix.CursorKind.CXX_METHOD or not method.is_virtual_method():
                     continue
+                if spec.mpi_interface and method.spelling.endswith(("_f2c", "_c2f")):
+                    continue
 
                 args_decl: List[str] = []
                 arg_types_raw: List[str] = []
