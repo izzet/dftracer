@@ -14,31 +14,6 @@ std::shared_ptr<brahma::MPIIODFTracer> brahma::MPIIODFTracer::instance =
     nullptr;
 bool brahma::MPIIODFTracer::stop_trace = false;
 
-#if (defined(BRAHMA_MPI_IMPL_MPICH) && \
-     (BRAHMA_MPI_VERSION >= 300403 && BRAHMA_MPI_VERSION < 300500))
-MPI_Fint brahma::MPIIODFTracer::MPI_File_c2f(MPI_File file) {
-  BRAHMA_MAP_OR_FAIL(MPI_File_c2f);
-  DFT_LOGGER_START_ALWAYS();
-  DFT_LOGGER_UPDATE_TYPE(file, MetadataType::MT_VALUE);
-  MPI_Fint ret = __real_MPI_File_c2f(file);
-  DFT_LOGGER_UPDATE_TYPE(ret, MetadataType::MT_VALUE);
-  DFT_LOGGER_END();
-  return ret;
-}
-#endif
-#if (defined(BRAHMA_MPI_IMPL_OPENMPI) &&                               \
-     ((BRAHMA_MPI_VERSION >= 400106 && BRAHMA_MPI_VERSION < 400200) || \
-      (BRAHMA_MPI_VERSION >= 500006 && BRAHMA_MPI_VERSION < 500100)))
-int brahma::MPIIODFTracer::MPI_File_c2f(MPI_File file) {
-  BRAHMA_MAP_OR_FAIL(MPI_File_c2f);
-  DFT_LOGGER_START_ALWAYS();
-  DFT_LOGGER_UPDATE_TYPE(file, MetadataType::MT_VALUE);
-  int ret = __real_MPI_File_c2f(file);
-  DFT_LOGGER_UPDATE_TYPE(ret, MetadataType::MT_VALUE);
-  DFT_LOGGER_END();
-  return ret;
-}
-#endif
 #if ((defined(BRAHMA_MPI_IMPL_CRAYMPICH) &&                               \
       ((BRAHMA_MPI_VERSION >= 800108 && BRAHMA_MPI_VERSION < 800200) ||   \
        (BRAHMA_MPI_VERSION >= 900001 && BRAHMA_MPI_VERSION < 900100))) || \
@@ -112,31 +87,6 @@ int brahma::MPIIODFTracer::MPI_File_delete(const char* filename,
   DFT_LOGGER_START_ALWAYS();
   DFT_LOGGER_UPDATE_TYPE(info, MetadataType::MT_VALUE);
   int ret = __real_MPI_File_delete(filename, info);
-  DFT_LOGGER_UPDATE_TYPE(ret, MetadataType::MT_VALUE);
-  DFT_LOGGER_END();
-  return ret;
-}
-#endif
-#if (defined(BRAHMA_MPI_IMPL_MPICH) && \
-     (BRAHMA_MPI_VERSION >= 300403 && BRAHMA_MPI_VERSION < 300500))
-MPI_File brahma::MPIIODFTracer::MPI_File_f2c(MPI_Fint file) {
-  BRAHMA_MAP_OR_FAIL(MPI_File_f2c);
-  DFT_LOGGER_START_ALWAYS();
-  DFT_LOGGER_UPDATE_TYPE(file, MetadataType::MT_VALUE);
-  MPI_File ret = __real_MPI_File_f2c(file);
-  DFT_LOGGER_UPDATE_TYPE(ret, MetadataType::MT_VALUE);
-  DFT_LOGGER_END();
-  return ret;
-}
-#endif
-#if (defined(BRAHMA_MPI_IMPL_OPENMPI) &&                               \
-     ((BRAHMA_MPI_VERSION >= 400106 && BRAHMA_MPI_VERSION < 400200) || \
-      (BRAHMA_MPI_VERSION >= 500006 && BRAHMA_MPI_VERSION < 500100)))
-MPI_File brahma::MPIIODFTracer::MPI_File_f2c(int file) {
-  BRAHMA_MAP_OR_FAIL(MPI_File_f2c);
-  DFT_LOGGER_START_ALWAYS();
-  DFT_LOGGER_UPDATE_TYPE(file, MetadataType::MT_VALUE);
-  MPI_File ret = __real_MPI_File_f2c(file);
   DFT_LOGGER_UPDATE_TYPE(ret, MetadataType::MT_VALUE);
   DFT_LOGGER_END();
   return ret;

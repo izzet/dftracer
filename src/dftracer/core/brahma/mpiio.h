@@ -40,15 +40,6 @@ class MPIIODFTracer : public MPIIO {
 
   void finalize() { stop_trace = true; }
 
-#if (defined(BRAHMA_MPI_IMPL_MPICH) && \
-     (BRAHMA_MPI_VERSION >= 300403 && BRAHMA_MPI_VERSION < 300500))
-  MPI_Fint MPI_File_c2f(MPI_File file) override;
-#endif
-#if (defined(BRAHMA_MPI_IMPL_OPENMPI) &&                               \
-     ((BRAHMA_MPI_VERSION >= 400106 && BRAHMA_MPI_VERSION < 400200) || \
-      (BRAHMA_MPI_VERSION >= 500006 && BRAHMA_MPI_VERSION < 500100)))
-  int MPI_File_c2f(MPI_File file) override;
-#endif
 #if ((defined(BRAHMA_MPI_IMPL_CRAYMPICH) &&                               \
       ((BRAHMA_MPI_VERSION >= 800108 && BRAHMA_MPI_VERSION < 800200) ||   \
        (BRAHMA_MPI_VERSION >= 900001 && BRAHMA_MPI_VERSION < 900100))) || \
@@ -93,15 +84,6 @@ class MPIIODFTracer : public MPIIO {
       ((BRAHMA_MPI_VERSION >= 400106 && BRAHMA_MPI_VERSION < 400200) ||   \
        (BRAHMA_MPI_VERSION >= 500006 && BRAHMA_MPI_VERSION < 500100))))
   int MPI_File_delete(const char* filename, MPI_Info info) override;
-#endif
-#if (defined(BRAHMA_MPI_IMPL_MPICH) && \
-     (BRAHMA_MPI_VERSION >= 300403 && BRAHMA_MPI_VERSION < 300500))
-  MPI_File MPI_File_f2c(MPI_Fint file) override;
-#endif
-#if (defined(BRAHMA_MPI_IMPL_OPENMPI) &&                               \
-     ((BRAHMA_MPI_VERSION >= 400106 && BRAHMA_MPI_VERSION < 400200) || \
-      (BRAHMA_MPI_VERSION >= 500006 && BRAHMA_MPI_VERSION < 500100)))
-  MPI_File MPI_File_f2c(int file) override;
 #endif
 #if ((defined(BRAHMA_MPI_IMPL_CRAYMPICH) &&                               \
       ((BRAHMA_MPI_VERSION >= 800108 && BRAHMA_MPI_VERSION < 800200) ||   \

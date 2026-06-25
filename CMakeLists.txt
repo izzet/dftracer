@@ -353,6 +353,27 @@ else()
                 find_package(HDF5 QUIET COMPONENTS C)
         endif()
 
+        if(HDF5_FOUND)
+                # Collect HDF5 library directories for RPATH and LD_LIBRARY_PATH.
+                # FindHDF5 does not always set HDF5_LIBRARY_DIRS, so derive the
+                # dirs from the actual library file paths as a fallback.
+                set(_hdf5_lib_dirs "")
+                foreach(_hdf5_lib IN LISTS HDF5_C_LIBRARIES HDF5_LIBRARIES)
+                        if(EXISTS "${_hdf5_lib}" AND NOT IS_DIRECTORY "${_hdf5_lib}")
+                                get_filename_component(_hdf5_lib_dir "${_hdf5_lib}" DIRECTORY)
+                                list(APPEND _hdf5_lib_dirs "${_hdf5_lib_dir}")
+                        endif()
+                endforeach()
+                if(DEFINED HDF5_LIBRARY_DIRS)
+                        list(APPEND _hdf5_lib_dirs ${HDF5_LIBRARY_DIRS})
+                endif()
+                if(_hdf5_lib_dirs)
+                        list(REMOVE_DUPLICATES _hdf5_lib_dirs)
+                        list(APPEND DEPENDENCY_LIBRARY_DIRS ${_hdf5_lib_dirs})
+                        message(STATUS "[DFTRACER] HDF5 library dirs added to RPATH: ${_hdf5_lib_dirs}")
+                endif()
+        endif()
+
         # Brahma can export an interface dependency on MPI::MPI_C.
         # Preload MPI targets before loading brahma package config.
         # Policy: DFTRACER_ENABLE_MPI=ON requires MPI for dftracer,
@@ -725,12 +746,27 @@ else()
         if(DEFINED DFTRACER_MPI_IMPL_COMPILE_DEF)
                 target_compile_definitions(${PROJECT_NAME}_core PUBLIC ${DFTRACER_MPI_IMPL_COMPILE_DEF})
         endif()
+        if(DFTRACER_HDF5_ENABLE)
+                # HDF5 1.12+ defines H5Oopen_async, H5Dopen_async, etc. as variadic macros
+                # (guarded by #ifndef H5X_MODULE) that prepend __FILE__/__func__/__LINE__.
+                # These conflict with brahma's virtual function declarations of the same names.
+                # Defining the module guards suppresses the macro redefinitions so brahma's
+                # installed header compiles correctly when included by dftracer's sources.
+                foreach(_hdf5_mod A D F G L M O R T)
+                        target_compile_definitions(${PROJECT_NAME}_core PUBLIC H5${_hdf5_mod}_MODULE)
+                endforeach()
+        endif()
         target_link_libraries(${PROJECT_NAME}_core ${DEPENDENCY_LIB})
         add_library(${PROJECT_NAME}_core_dbg SHARED)
         add_library(dftracer::dftracer_core_dbg ALIAS ${PROJECT_NAME}_core_dbg)
         set_target_properties(${PROJECT_NAME}_core_dbg PROPERTIES LINKER_LANGUAGE CXX)
         if(DEFINED DFTRACER_MPI_IMPL_COMPILE_DEF)
                 target_compile_definitions(${PROJECT_NAME}_core_dbg PUBLIC ${DFTRACER_MPI_IMPL_COMPILE_DEF})
+        endif()
+        if(DFTRACER_HDF5_ENABLE)
+                foreach(_hdf5_mod A D F G L M O R T)
+                        target_compile_definitions(${PROJECT_NAME}_core_dbg PUBLIC H5${_hdf5_mod}_MODULE)
+                endforeach()
         endif()
         target_link_libraries(${PROJECT_NAME}_core_dbg ${DEPENDENCY_LIB})
         add_library(${PROJECT_NAME}_preload SHARED)

@@ -619,6 +619,8 @@ if(DFTRACER_HDF5_ENABLE)
         set(_dftracer_mpi_hdf5_test_launcher ${_dftracer_mpi_test_launcher})
         set(_dftracer_mpi_hdf5_test_flags ${_dftracer_mpi_test_flags})
 
+        if(HDF5_IS_PARALLEL)
+        # test_c_hdf5_mpi uses H5Pset_fapl_mpio which requires parallel HDF5
         add_executable(test_c_hdf5_mpi c/test_hdf5_mpi.c)
         target_compile_options(test_c_hdf5_mpi PRIVATE ${DFTRACER_FUNCTION_FLAGS})
         target_link_libraries(test_c_hdf5_mpi ${PROJECT_NAME}_core_dbg ${MPI_CXX_LIBRARIES})
@@ -673,7 +675,7 @@ if(DFTRACER_HDF5_ENABLE)
         df_add_test(check_file_exists_${test_name} ${BASH_PROGRAM} ${CMAKE_CURRENT_SOURCE_DIR}/check_file_at_least.sh ${CMAKE_CURRENT_BINARY_DIR}/${test_name}* 12)
         set_tests_properties(check_file_exists_${test_name} PROPERTIES DEPENDS ${test_name})
 
-        if(HDF5_IS_PARALLEL)
+        # Parallel HDF5-specific tests (H5Pset_fapl_mpio etc.)
             # Build Parallel HDF5-specific test executables
             add_executable(test_c_hdf5_parallel c/test_hdf5_parallel.c)
             target_compile_options(test_c_hdf5_parallel PRIVATE ${DFTRACER_FUNCTION_FLAGS})
