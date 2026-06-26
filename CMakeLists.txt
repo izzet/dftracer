@@ -83,6 +83,12 @@ endif()
 # This sets where to look for dependent libraries
 set(CMAKE_PREFIX_PATH ${CMAKE_PREFIX_PATH} ${CMAKE_BINARY_DIR} ${CMAKE_INSTALL_PREFIX})
 
+# Add ROCM_PATH to CMAKE_PREFIX_PATH so find_package(rocprofiler-sdk) works
+# when a rocm module is loaded (sets ROCM_PATH) but not CMAKE_PREFIX_PATH.
+if(DEFINED ENV{ROCM_PATH} AND NOT "$ENV{ROCM_PATH}" STREQUAL "")
+        list(PREPEND CMAKE_PREFIX_PATH "$ENV{ROCM_PATH}")
+endif()
+
 # This sets where to look for dependent library's cmake files
 list(APPEND CMAKE_MODULE_PATH ${CMAKE_CURRENT_SOURCE_DIR}/cmake/modules)
 list(APPEND CMAKE_MODULE_PATH ${CMAKE_BINARY_DIR}/${DFTRACER_LIBDIR}/cmake)
@@ -591,13 +597,18 @@ else()
 
         find_package(rocprofiler-sdk QUIET)
 
+        # rocprofiler-sdk exists starting from ROCm 6.2.0.  For older ROCm
+        # (5.x – 6.1.x) the package simply won't be found; that's expected.
         if(rocprofiler-sdk_FOUND AND(DFTRACER_ENABLE_HIP_TRACING OR DFTRACER_ENABLE_DYNAMIC_DETECTION))
                 set(DFTRACER_HIP_TRACING_ENABLE 1)
                 message(STATUS "[DFTRACER] found rocprofiler-sdk at ${rocprofiler-sdk_INCLUDE_DIR}")
                 set(DFTRACER_ROCPROFILER_VERSION_FOUND FALSE)
-                set(_dftracer_rocprofiler_pkg_version "${rocprofiler-sdk_VERSION}")
-                dftracer_set_rocprofiler_version_from_string("${_dftracer_rocprofiler_pkg_version}")
 
+                # 1) Try the version string exposed by find_package (populated from
+                #    the config-version file; works for all ROCm >= 6.2).
+                dftracer_set_rocprofiler_version_from_string("${rocprofiler-sdk_VERSION}")
+
+                # 2) Fall back to parsing the installed version.h header directly.
                 if(NOT DFTRACER_ROCPROFILER_VERSION_FOUND)
                         if(DEFINED rocprofiler-sdk_INCLUDE_DIR AND NOT "${rocprofiler-sdk_INCLUDE_DIR}" STREQUAL "")
                                 dftracer_set_rocprofiler_version_from_header("${rocprofiler-sdk_INCLUDE_DIR}")
@@ -615,6 +626,7 @@ else()
                         endif()
                 endif()
 
+                # 3) Last resort: query the imported target's include directories.
                 if(NOT DFTRACER_ROCPROFILER_VERSION_FOUND AND TARGET rocprofiler-sdk::rocprofiler-sdk)
                         get_target_property(_dftracer_rocprofiler_target_include_dirs rocprofiler-sdk::rocprofiler-sdk INTERFACE_INCLUDE_DIRECTORIES)
                         if(_dftracer_rocprofiler_target_include_dirs)
@@ -627,11 +639,30 @@ else()
                         endif()
                 endif()
 
+                # 4) If ROCM_PATH is set, try its include directory as a final fallback
+                #    (handles installations where the cmake config omits include-dir vars).
+                if(NOT DFTRACER_ROCPROFILER_VERSION_FOUND AND DEFINED ENV{ROCM_PATH}
+                   AND NOT "$ENV{ROCM_PATH}" STREQUAL "")
+                        dftracer_set_rocprofiler_version_from_header("$ENV{ROCM_PATH}/include")
+                endif()
+
                 message(STATUS "[DFTRACER] rocprofiler-sdk version: ${DFTRACER_ROCPROFILER_VERSION_MAJOR}.${DFTRACER_ROCPROFILER_VERSION_MINOR}.${DFTRACER_ROCPROFILER_VERSION_PATCH}")
                 set(HIP_TRACING_LIBRARIES rocprofiler-sdk::rocprofiler-sdk)
                 set(DEPENDENCY_LIB ${DEPENDENCY_LIB} ${HIP_TRACING_LIBRARIES})
         else()
-                message(STATUS "-- [DFTRACER] rocprofiler-sdk is not found.")
+                if(DFTRACER_ENABLE_HIP_TRACING OR DFTRACER_ENABLE_DYNAMIC_DETECTION)
+                        # Only warn when the user explicitly requested HIP tracing but
+                        # rocprofiler-sdk wasn't found.  ROCm < 6.2 doesn't ship it.
+                        if(DEFINED ENV{ROCM_PATH} AND NOT "$ENV{ROCM_PATH}" STREQUAL "")
+                                message(WARNING "[DFTRACER] rocprofiler-sdk not found under ROCM_PATH=$ENV{ROCM_PATH}. "
+                                        "HIP tracing requires ROCm >= 6.2.0.")
+                        else()
+                                message(WARNING "[DFTRACER] rocprofiler-sdk not found. "
+                                        "Set ROCM_PATH or load a rocm >= 6.2.0 module to enable HIP tracing.")
+                        endif()
+                else()
+                        message(STATUS "-- [DFTRACER] rocprofiler-sdk is not found.")
+                endif()
         endif()
 
         find_package(ZLIB REQUIRED)
