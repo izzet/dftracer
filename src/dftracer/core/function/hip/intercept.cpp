@@ -18,13 +18,23 @@
 
 #define MAX_EVENT_NAME_LENGTH 15
 
+// Compute the numeric API version we are compiling against.
+// ROCPROFILER_VERSION_MAJOR/MINOR/PATCH exist in all supported SDK versions:
+//   0.4.0 (ROCm 6.2) through 1.x.x (ROCm 7.x).
 #if defined(ROCPROFILER_VERSION_MAJOR) && \
     defined(ROCPROFILER_VERSION_MINOR) && defined(ROCPROFILER_VERSION_PATCH)
 #define DFTRACER_ROCPROFILER_API_VERSION                                     \
   DFTRACER_GET_VERSION(ROCPROFILER_VERSION_MAJOR, ROCPROFILER_VERSION_MINOR, \
                        ROCPROFILER_VERSION_PATCH)
 #else
+// Fallback: use the version baked into the dftracer config header at cmake
+// time.
 #define DFTRACER_ROCPROFILER_API_VERSION DFTRACER_ROCPROFILER_VERSION
+#endif
+
+// SDK 1.0.0+ (ROCm 7.0+) ships the KFD event tracing header.
+#if DFTRACER_ROCPROFILER_API_VERSION >= DFTRACER_GET_VERSION(1, 0, 0)
+#include <rocprofiler-sdk/kfd/kfd_id.h>
 #endif
 
 namespace conf {
@@ -63,29 +73,19 @@ namespace dftracer {
 TimeResolution HIPFunction::transform_time(rocprofiler_timestamp_t end_time,
                                            rocprofiler_timestamp_t start_time) {
   // Convert from nanoseconds to microseconds
-  // Convert to float and use floor
   return std::floor(end_time / 1000.0) - std::floor(start_time / 1000.0);
 }
 
 TimeResolution HIPFunction::transform_timestamp(
     rocprofiler_timestamp_t timestamp) {
-  // Timestamp refers to number of nanoseconds since last system restart
   if (time_diff == 0) {
-    // I removed the if statement and tested that the time_diff remains the same
-    // across all calls max variation = 1 microsecond
-    // This means that rocprofiler_get_timestamp is consistent across calls ->
-    // is in sync with logger->get_time()
     rocprofiler_timestamp_t roctime;
     rocprofiler_get_timestamp(&roctime);
     time_diff = logger->get_time() - std::floor(roctime / 1000.0);
   }
-  // roctime and get_time point to the current time - we are transforming the
-  // timestamp from the rocm timeline to the dftracer timeline
-  TimeResolution start_time = std::floor(timestamp / 1000.0) + time_diff;
-  // Convert to absolute timestamp
-  // System restart time
-  return start_time;
+  return std::floor(timestamp / 1000.0) + time_diff;
 }
+
 void HIPFunction::tool_code_object_callback(
     rocprofiler_callback_tracing_record_t record,
     rocprofiler_user_data_t* user_data, void* callback_data) {
@@ -94,8 +94,6 @@ void HIPFunction::tool_code_object_callback(
   if (record.kind == ROCPROFILER_CALLBACK_TRACING_CODE_OBJECT &&
       record.operation == ROCPROFILER_CODE_OBJECT_LOAD) {
     if (record.phase == ROCPROFILER_CALLBACK_PHASE_UNLOAD) {
-      // flush the buffer to ensure that any lookups for the client kernel names
-      // for the code object are completed
       auto flush_status = rocprofiler_flush_buffer(function->client_buffer);
       if (flush_status != ROCPROFILER_STATUS_ERROR_BUFFER_BUSY)
         DFTRACER_LOG_ERROR(
@@ -117,11 +115,7 @@ void HIPFunction::tool_code_object_callback(
   (void)callback_data;
 }
 
-// This is the callback that is called with multiple recorded tracing events
-// The events are inside the headers, all the different APIS funnel to the same
-// buffer, due to the definition in the tool_init function Each record
-// corresponds to a specific API call - Disable APIS in tool_init, do
-// not edit this to disable APIS
+// Dispatch callback: all registered buffer tracing kinds funnel here.
 void HIPFunction::tool_tracing_callback(rocprofiler_context_id_t context,
                                         rocprofiler_buffer_id_t buffer_id,
                                         rocprofiler_record_header_t** headers,
@@ -133,10 +127,7 @@ void HIPFunction::tool_tracing_callback(rocprofiler_context_id_t context,
   assert(user_data != nullptr);
   assert(drop_count == 0 && "drop count should be zero for lossless policy");
 
-  if (num_headers == 0)
-    return;  // No headers to process, just return
-  else if (headers == nullptr)
-    return;  // No headers to process, just return
+  if (num_headers == 0 || headers == nullptr) return;
 
   for (size_t i = 0; i < num_headers; ++i) {
     auto* header = headers[i];
@@ -146,12 +137,10 @@ void HIPFunction::tool_tracing_callback(rocprofiler_context_id_t context,
       const char* _name = nullptr;
       auto _kind = static_cast<rocprofiler_buffer_tracing_kind_t>(header->kind);
       rocprofiler_query_buffer_tracing_kind_name(_kind, &_name, nullptr);
-
-      if (_name) {
-        kind_name = std::string{_name};
-      }
+      if (_name) kind_name = std::string{_name};
     }
 
+    // ── HSA core / extension APIs ─────────────────────────────────────────
     if (header->category == ROCPROFILER_BUFFER_CATEGORY_TRACING &&
         (header->kind == ROCPROFILER_BUFFER_TRACING_HSA_CORE_API ||
          header->kind == ROCPROFILER_BUFFER_TRACING_HSA_AMD_EXT_API ||
@@ -160,7 +149,6 @@ void HIPFunction::tool_tracing_callback(rocprofiler_context_id_t context,
       auto* record = static_cast<rocprofiler_buffer_tracing_hsa_api_record_t*>(
           header->payload);
 
-      // Create metadata for HSA API calls
       auto metadata = new Metadata();
       metadata->insert_or_assign("context", context.handle);
       metadata->insert_or_assign("buffer_id", buffer_id.handle);
@@ -172,7 +160,6 @@ void HIPFunction::tool_tracing_callback(rocprofiler_context_id_t context,
 
       std::string event_name =
           std::string(client_name_info[record->kind][record->operation]);
-
       function->logger->enter_event();
       function->logger->log(
           event_name.c_str(), kind_name.c_str(),
@@ -182,12 +169,12 @@ void HIPFunction::tool_tracing_callback(rocprofiler_context_id_t context,
           metadata);
       function->logger->exit_event();
 
+      // ── HIP runtime API ───────────────────────────────────────────────────
     } else if (header->category == ROCPROFILER_BUFFER_CATEGORY_TRACING &&
                header->kind == ROCPROFILER_BUFFER_TRACING_HIP_RUNTIME_API) {
       auto* record = static_cast<rocprofiler_buffer_tracing_hip_api_record_t*>(
           header->payload);
 
-      // Create metadata for HIP API calls
       auto metadata = new Metadata();
       metadata->insert_or_assign("context", context.handle);
       metadata->insert_or_assign("buffer_id", buffer_id.handle);
@@ -208,27 +195,22 @@ void HIPFunction::tool_tracing_callback(rocprofiler_context_id_t context,
           metadata);
       function->logger->exit_event();
 
+      // ── Kernel dispatch ───────────────────────────────────────────────────
     } else if (header->category == ROCPROFILER_BUFFER_CATEGORY_TRACING &&
                header->kind == ROCPROFILER_BUFFER_TRACING_KERNEL_DISPATCH) {
       auto* record =
           static_cast<rocprofiler_buffer_tracing_kernel_dispatch_record_t*>(
               header->payload);
 
-      // Create metadata for kernel dispatch
       auto metadata = new Metadata();
       metadata->insert_or_assign("tid", record->thread_id);
       metadata->insert_or_assign("correlation_id",
                                  record->correlation_id.external.value);
-      // Instead of long names
       std::string event_name = std::string(
           function->client_kernels.at(record->dispatch_info.kernel_id)
               .kernel_name);
-
-      // Resize to max length
-      if (event_name.length() > MAX_EVENT_NAME_LENGTH) {
+      if (event_name.length() > MAX_EVENT_NAME_LENGTH)
         event_name = event_name.substr(0, MAX_EVENT_NAME_LENGTH);
-      }
-      // Prepend with string of kernel_id
       event_name = std::to_string(record->dispatch_info.kernel_id) + event_name;
       function->logger->enter_event();
       function->logger->log(
@@ -239,13 +221,13 @@ void HIPFunction::tool_tracing_callback(rocprofiler_context_id_t context,
           metadata);
       function->logger->exit_event();
 
+      // ── Memory copy ───────────────────────────────────────────────────────
     } else if (header->category == ROCPROFILER_BUFFER_CATEGORY_TRACING &&
                header->kind == ROCPROFILER_BUFFER_TRACING_MEMORY_COPY) {
       auto* record =
           static_cast<rocprofiler_buffer_tracing_memory_copy_record_t*>(
               header->payload);
 
-      // Create metadata for memory copy
       auto metadata = new Metadata();
       metadata->insert_or_assign("context", context.handle);
       metadata->insert_or_assign("buffer_id", buffer_id.handle);
@@ -268,20 +250,67 @@ void HIPFunction::tool_tracing_callback(rocprofiler_context_id_t context,
           metadata);
       function->logger->exit_event();
 
+      // ── Scratch memory ────────────────────────────────────────────────────
+    } else if (header->category == ROCPROFILER_BUFFER_CATEGORY_TRACING &&
+               header->kind == ROCPROFILER_BUFFER_TRACING_SCRATCH_MEMORY) {
+      auto* record =
+          static_cast<rocprofiler_buffer_tracing_scratch_memory_record_t*>(
+              header->payload);
+
+      auto metadata = new Metadata();
+      metadata->insert_or_assign("context", context.handle);
+      metadata->insert_or_assign("buffer_id", buffer_id.handle);
+      metadata->insert_or_assign("extern_cid",
+                                 record->correlation_id.external.value);
+      metadata->insert_or_assign("kind", record->kind);
+      metadata->insert_or_assign("operation", record->operation);
+      metadata->insert_or_assign("agent_id", record->agent_id.handle);
+      metadata->insert_or_assign("queue_id", record->queue_id.handle);
+      metadata->insert_or_assign("flags", record->flags);
+      metadata->insert_or_assign("tid", record->thread_id);
+      std::string event_name =
+          std::string(client_name_info.at(record->kind, record->operation));
+      function->logger->enter_event();
+      function->logger->log(
+          event_name.c_str(), kind_name.c_str(),
+          function->transform_timestamp(record->start_timestamp),
+          function->transform_time(record->end_timestamp,
+                                   record->start_timestamp),
+          metadata);
+      function->logger->exit_event();
+
+      // ── Page migration
+      // ────────────────────────────────────────────────────────
+      //
+      // SDK 0.4.0–0.5.0 (ROCm 6.2–6.3): one enum
+      // ROCPROFILER_BUFFER_TRACING_PAGE_MIGRATION,
+      //   record union with PAGE_MIGRATE / PAGE_FAULT / QUEUE_SUSPEND /
+      //   UNMAP_FROM_GPU ops.
+      //
+      // SDK 0.6.0       (ROCm 6.4): same enum, but struct redesigned to use
+      // args union,
+      //   renamed ops (split MIGRATE→START/END, FAULT→START/END,
+      //   SUSPEND→EVICTION/RESTORE), single timestamp (not start/end).
+      //
+      // SDK 1.0.0+      (ROCm 7.0+): ROCPROFILER_BUFFER_TRACING_PAGE_MIGRATION
+      // removed;
+      //   replaced by per-kind KFD event enums and dedicated record structs.
+
+#if DFTRACER_ROCPROFILER_API_VERSION < DFTRACER_GET_VERSION(1, 0, 0)
+      // ── SDK 0.4.0–0.6.x: unified PAGE_MIGRATION kind ─────────────────────
     } else if (header->category == ROCPROFILER_BUFFER_CATEGORY_TRACING &&
                header->kind == ROCPROFILER_BUFFER_TRACING_PAGE_MIGRATION) {
       auto* record =
           static_cast<rocprofiler_buffer_tracing_page_migration_record_t*>(
               header->payload);
 
-      // Create metadata for page migration
       auto metadata = new Metadata();
       metadata->insert_or_assign("kind", record->kind);
       metadata->insert_or_assign("operation", record->operation);
 
-      // Add operation-specific details to metadata
-      switch (record->operation) {
 #if DFTRACER_ROCPROFILER_API_VERSION >= DFTRACER_GET_VERSION(0, 6, 0)
+      // SDK 0.6.0: redesigned args union, renamed ops, single timestamp.
+      switch (record->operation) {
         case ROCPROFILER_PAGE_MIGRATION_PAGE_MIGRATE_START: {
           metadata->insert_or_assign(
               "start_addr", record->args.page_migrate_start.start_addr);
@@ -368,7 +397,22 @@ void HIPFunction::tool_tracing_callback(rocprofiler_context_id_t context,
               record->args.dropped_event.dropped_events_count);
           break;
         }
+        default:
+          delete metadata;
+          continue;
+      }
+
+      std::string event_name =
+          std::string(client_name_info.at(record->kind, record->operation));
+      function->logger->enter_event();
+      function->logger->log(event_name.c_str(), kind_name.c_str(),
+                            function->transform_timestamp(record->timestamp), 0,
+                            metadata);
+      function->logger->exit_event();
+
 #else
+      // SDK 0.4.0–0.5.0: original union layout, start/end timestamps.
+      switch (record->operation) {
         case ROCPROFILER_PAGE_MIGRATION_PAGE_MIGRATE: {
           metadata->insert_or_assign("node_id", record->page_fault.node_id);
           metadata->insert_or_assign("address", record->page_fault.address);
@@ -402,58 +446,140 @@ void HIPFunction::tool_tracing_callback(rocprofiler_context_id_t context,
           metadata->insert_or_assign("trigger", record->unmap_from_gpu.trigger);
           break;
         }
-#endif
         default:
-          // DFTRACER_LOG_ERROR("unexpected page migration operation: ")
-          continue;  // Skip this record if operation is unknown
+          delete metadata;
+          continue;
       }
 
-      // Note: page migration uses record->pid instead of getpid()
       std::string event_name =
           std::string(client_name_info.at(record->kind, record->operation));
       function->logger->enter_event();
-#if DFTRACER_ROCPROFILER_API_VERSION >= DFTRACER_GET_VERSION(0, 6, 0)
+      function->logger->log(
+          event_name.c_str(), kind_name.c_str(),
+          function->transform_timestamp(record->start_timestamp),
+          function->transform_time(record->end_timestamp,
+                                   record->start_timestamp),
+          metadata);
+      function->logger->exit_event();
+#endif  // SDK < 1.0.0 inner split
+
+#else  // DFTRACER_ROCPROFILER_API_VERSION >= 1.0.0
+      // ── SDK 1.0.0+ (ROCm 7.0+): per-kind KFD event records ──────────────
+
+    } else if (header->category == ROCPROFILER_BUFFER_CATEGORY_TRACING &&
+               header->kind ==
+                   ROCPROFILER_BUFFER_TRACING_KFD_EVENT_PAGE_MIGRATE) {
+      auto* record = static_cast<
+          rocprofiler_buffer_tracing_kfd_event_page_migrate_record_t*>(
+          header->payload);
+
+      auto metadata = new Metadata();
+      metadata->insert_or_assign("operation", record->operation);
+      metadata->insert_or_assign("pid", record->pid);
+      metadata->insert_or_assign("start_address", record->start_address.handle);
+      metadata->insert_or_assign("end_address", record->end_address.handle);
+      metadata->insert_or_assign("src_agent", record->src_agent.handle);
+      metadata->insert_or_assign("dst_agent", record->dst_agent.handle);
+      metadata->insert_or_assign("prefetch_agent",
+                                 record->prefetch_agent.handle);
+      metadata->insert_or_assign("preferred_agent",
+                                 record->preferred_agent.handle);
+      metadata->insert_or_assign("error_code", record->error_code);
+
+      std::string event_name =
+          std::string(client_name_info.at(record->kind, record->operation));
+      function->logger->enter_event();
       function->logger->log(event_name.c_str(), kind_name.c_str(),
                             function->transform_timestamp(record->timestamp), 0,
                             metadata);
-#else
-      function->logger->log(
-          event_name.c_str(), kind_name.c_str(),
-          function->transform_timestamp(record->start_timestamp),
-          function->transform_time(record->end_timestamp,
-                                   record->start_timestamp),
-          metadata);
-#endif
       function->logger->exit_event();
 
     } else if (header->category == ROCPROFILER_BUFFER_CATEGORY_TRACING &&
-               header->kind == ROCPROFILER_BUFFER_TRACING_SCRATCH_MEMORY) {
-      auto* record =
-          static_cast<rocprofiler_buffer_tracing_scratch_memory_record_t*>(
-              header->payload);
+               header->kind ==
+                   ROCPROFILER_BUFFER_TRACING_KFD_EVENT_PAGE_FAULT) {
+      auto* record = static_cast<
+          rocprofiler_buffer_tracing_kfd_event_page_fault_record_t*>(
+          header->payload);
 
-      // Create metadata for scratch memory
       auto metadata = new Metadata();
-      metadata->insert_or_assign("context", context.handle);
-      metadata->insert_or_assign("buffer_id", buffer_id.handle);
-      metadata->insert_or_assign("extern_cid",
-                                 record->correlation_id.external.value);
-      metadata->insert_or_assign("kind", record->kind);
       metadata->insert_or_assign("operation", record->operation);
+      metadata->insert_or_assign("pid", record->pid);
       metadata->insert_or_assign("agent_id", record->agent_id.handle);
-      metadata->insert_or_assign("queue_id", record->queue_id.handle);
-      metadata->insert_or_assign("flags", record->flags);
-      metadata->insert_or_assign("tid", record->thread_id);
+      metadata->insert_or_assign("address", record->address.handle);
+
       std::string event_name =
           std::string(client_name_info.at(record->kind, record->operation));
       function->logger->enter_event();
-      function->logger->log(
-          event_name.c_str(), kind_name.c_str(),
-          function->transform_timestamp(record->start_timestamp),
-          function->transform_time(record->end_timestamp,
-                                   record->start_timestamp),
-          metadata);
+      function->logger->log(event_name.c_str(), kind_name.c_str(),
+                            function->transform_timestamp(record->timestamp), 0,
+                            metadata);
       function->logger->exit_event();
+
+    } else if (header->category == ROCPROFILER_BUFFER_CATEGORY_TRACING &&
+               header->kind == ROCPROFILER_BUFFER_TRACING_KFD_EVENT_QUEUE) {
+      auto* record =
+          static_cast<rocprofiler_buffer_tracing_kfd_event_queue_record_t*>(
+              header->payload);
+
+      auto metadata = new Metadata();
+      metadata->insert_or_assign("operation", record->operation);
+      metadata->insert_or_assign("pid", record->pid);
+      metadata->insert_or_assign("agent_id", record->agent_id.handle);
+
+      std::string event_name =
+          std::string(client_name_info.at(record->kind, record->operation));
+      function->logger->enter_event();
+      function->logger->log(event_name.c_str(), kind_name.c_str(),
+                            function->transform_timestamp(record->timestamp), 0,
+                            metadata);
+      function->logger->exit_event();
+
+    } else if (header->category == ROCPROFILER_BUFFER_CATEGORY_TRACING &&
+               header->kind ==
+                   ROCPROFILER_BUFFER_TRACING_KFD_EVENT_UNMAP_FROM_GPU) {
+      auto* record = static_cast<
+          rocprofiler_buffer_tracing_kfd_event_unmap_from_gpu_record_t*>(
+          header->payload);
+
+      auto metadata = new Metadata();
+      metadata->insert_or_assign("operation", record->operation);
+      metadata->insert_or_assign("pid", record->pid);
+      metadata->insert_or_assign("agent_id", record->agent_id.handle);
+      metadata->insert_or_assign("start_address", record->start_address.handle);
+      metadata->insert_or_assign("end_address", record->end_address.handle);
+
+      std::string event_name =
+          std::string(client_name_info.at(record->kind, record->operation));
+      function->logger->enter_event();
+      function->logger->log(event_name.c_str(), kind_name.c_str(),
+                            function->transform_timestamp(record->timestamp), 0,
+                            metadata);
+      function->logger->exit_event();
+
+    } else if (header->category == ROCPROFILER_BUFFER_CATEGORY_TRACING &&
+               header->kind ==
+                   ROCPROFILER_BUFFER_TRACING_KFD_EVENT_DROPPED_EVENTS) {
+      auto* record = static_cast<
+          rocprofiler_buffer_tracing_kfd_event_dropped_events_record_t*>(
+          header->payload);
+
+      auto metadata = new Metadata();
+      metadata->insert_or_assign("operation", record->operation);
+      metadata->insert_or_assign("pid", record->pid);
+      metadata->insert_or_assign("dropped_events_count", record->count);
+
+      std::string event_name =
+          std::string(client_name_info.at(record->kind, record->operation));
+      function->logger->enter_event();
+      function->logger->log(event_name.c_str(), kind_name.c_str(),
+                            function->transform_timestamp(record->timestamp), 0,
+                            metadata);
+      function->logger->exit_event();
+
+#endif  // page migration version split
+
+// ── RCCL API (added in SDK 0.5.0 / ROCm 6.3) ────────────────────────────
+#if DFTRACER_ROCPROFILER_API_VERSION >= DFTRACER_GET_VERSION(0, 5, 0)
     } else if (header->kind == ROCPROFILER_BUFFER_TRACING_RCCL_API) {
       auto* record = static_cast<rocprofiler_buffer_tracing_rccl_api_record_t*>(
           header->payload);
@@ -474,8 +600,10 @@ void HIPFunction::tool_tracing_callback(rocprofiler_context_id_t context,
                                    record->start_timestamp),
           metadata);
       function->logger->exit_event();
+#endif  // SDK >= 0.5.0
+
     } else {
-      continue;  // Skip this record if category or kind is unknown
+      continue;
     }
   }
 }
@@ -493,11 +621,7 @@ void HIPFunction::thread_postcreate(rocprofiler_runtime_library_t lib,
                      static_cast<unsigned int>(lib));
 }
 
-// Tool initialization
-// Attach callbacks to rocprofiler APIS
-// callbacks are populated in buffer and processeed in tool_tracing_callback
-// Disable APIS by commenting out the corresponding lines
-// TODO: Enable/Disable specific APIs using ENV variables
+// Register all buffer tracing services and start the context.
 int HIPFunction::tool_init(rocprofiler_client_finalize_t fini_func,
                            void* tool_data) {
   DFTRACER_LOG_DEBUG("HIP Intercept class initialized");
@@ -520,6 +644,7 @@ int HIPFunction::tool_init(rocprofiler_client_finalize_t fini_func,
       function->client_ctx, ROCPROFILER_CALLBACK_TRACING_CODE_OBJECT,
       code_object_ops.data(), code_object_ops.size(), tool_code_object_callback,
       nullptr);
+
   constexpr auto buffer_size_bytes = 4096;
   constexpr auto buffer_watermark_bytes =
       buffer_size_bytes - (buffer_size_bytes / 8);
@@ -529,14 +654,6 @@ int HIPFunction::tool_init(rocprofiler_client_finalize_t fini_func,
                             ROCPROFILER_BUFFER_POLICY_LOSSLESS,
                             dftracer::HIPFunction::tool_tracing_callback,
                             tool_data, &function->client_buffer);
-
-  // Disabled HSA APIs
-  // for (auto itr : {ROCPROFILER_BUFFER_TRACING_HSA_CORE_API,
-  //                  ROCPROFILER_BUFFER_TRACING_HSA_AMD_EXT_API}) {
-  //   rocprofiler_configure_buffer_tracing_service(function->client_ctx, itr,
-  //   nullptr, 0,
-  //                                                function->client_buffer);
-  // }
 
   rocprofiler_configure_buffer_tracing_service(
       function->client_ctx, ROCPROFILER_BUFFER_TRACING_HIP_RUNTIME_API, nullptr,
@@ -551,31 +668,41 @@ int HIPFunction::tool_init(rocprofiler_client_finalize_t fini_func,
       function->client_buffer);
 
   rocprofiler_configure_buffer_tracing_service(
-      function->client_ctx, ROCPROFILER_BUFFER_TRACING_PAGE_MIGRATION, nullptr,
-      0, function->client_buffer);
-
-  rocprofiler_configure_buffer_tracing_service(
       function->client_ctx, ROCPROFILER_BUFFER_TRACING_SCRATCH_MEMORY, nullptr,
       0, function->client_buffer);
 
-  // RCCL tracing
+  // Page migration service registration differs by SDK version.
+#if DFTRACER_ROCPROFILER_API_VERSION < DFTRACER_GET_VERSION(1, 0, 0)
+  // SDK 0.4.0–0.6.x: single PAGE_MIGRATION kind covers all sub-events.
+  rocprofiler_configure_buffer_tracing_service(
+      function->client_ctx, ROCPROFILER_BUFFER_TRACING_PAGE_MIGRATION, nullptr,
+      0, function->client_buffer);
+#else
+  // SDK 1.0.0+ (ROCm 7.0+): each KFD event kind is registered separately.
+  for (auto kfd_kind : {ROCPROFILER_BUFFER_TRACING_KFD_EVENT_PAGE_MIGRATE,
+                        ROCPROFILER_BUFFER_TRACING_KFD_EVENT_PAGE_FAULT,
+                        ROCPROFILER_BUFFER_TRACING_KFD_EVENT_QUEUE,
+                        ROCPROFILER_BUFFER_TRACING_KFD_EVENT_UNMAP_FROM_GPU,
+                        ROCPROFILER_BUFFER_TRACING_KFD_EVENT_DROPPED_EVENTS}) {
+    rocprofiler_configure_buffer_tracing_service(
+        function->client_ctx, kfd_kind, nullptr, 0, function->client_buffer);
+  }
+#endif
+
+  // RCCL tracing was added in SDK 0.5.0 (ROCm 6.3).
+#if DFTRACER_ROCPROFILER_API_VERSION >= DFTRACER_GET_VERSION(0, 5, 0)
   rocprofiler_configure_buffer_tracing_service(
       function->client_ctx, ROCPROFILER_BUFFER_TRACING_RCCL_API, nullptr, 0,
       function->client_buffer);
+#endif
 
   auto client_thread = rocprofiler_callback_thread_t{};
   rocprofiler_create_callback_thread(&client_thread);
-
   rocprofiler_assign_callback_thread(function->client_buffer, client_thread);
 
   int valid_ctx = 0;
   rocprofiler_context_is_valid(function->client_ctx, &valid_ctx);
-
   if (valid_ctx == 0) {
-    // notify rocprofiler that initialization failed
-    // and all the contexts, buffers, etc. created
-    // should be ignored
-    //   throw std::runtime_error("HIP Intercept initialization failed");
     DFTRACER_LOG_DEBUG("HIP Intercept initialization failed");
     return -1;
   }
