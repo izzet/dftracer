@@ -4,6 +4,7 @@
 #include <dftracer/core/common/dftracer_main.h>
 #include <dftracer/core/finstrument/functions.h>
 #include <dftracer/core/function/hip/intercept.h>
+#include <pthread.h>
 
 template <>
 std::shared_ptr<dftracer::DFTracerCore>
@@ -176,6 +177,14 @@ bool dftracer::DFTracerCore::finalize() {
 
 void dftracer::DFTracerCore::reinitialize() {
   DFTRACER_LOG_DEBUG("DFTracerCore::reinitialize");
+  // Guard against double-reinit: the pthread_atfork child handler and brahma's
+  // fork() hook both call reinitialize(). The first call updates process_id to
+  // the child's pid; the second call sees it already matches and returns early.
+  if (df_getpid() == this->process_id) {
+    DFTRACER_LOG_DEBUG("DFTracerCore::reinitialize already done for pid %d",
+                       this->process_id);
+    return;
+  }
   is_initialized = false;
   if (this->log_file_prefix.empty()) {
     const char* log_file_env = getenv("DFTRACER_LOG_FILE");
@@ -402,6 +411,18 @@ void dftracer::DFTracerCore::initialize(bool _bind, const char* _log_file,
         "_process_id:%d\n",
         this->bind, this->log_file.c_str(), this->data_dirs.c_str(),
         this->process_id);
+    // Register a child-after-fork handler so that forked workers (e.g. Python
+    // multiprocessing with start method "fork") re-open their own log file
+    // instead of using the inherited FILE* whose internal mutex state is
+    // inconsistent in the child and causes flockfile/fflush to crash on exit.
+    static std::once_flag atfork_once;
+    std::call_once(atfork_once, []() {
+      pthread_atfork(nullptr, nullptr, []() {
+        auto core = dftracer::Singleton<dftracer::DFTracerCore>::get_instance(
+            ProfilerStage::PROFILER_OTHER, ProfileType::PROFILER_ANY);
+        if (core != nullptr) core->reinitialize();
+      });
+    });
     is_initialized = true;
   }
 }

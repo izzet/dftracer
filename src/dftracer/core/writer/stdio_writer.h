@@ -2,6 +2,7 @@
 #include <dftracer/core/common/logging.h>
 #include <dftracer/core/common/singleton.h>
 #include <dftracer/core/utils/configuration_manager.h>
+#include <unistd.h>
 
 #include <cstdio>
 #include <cstring>
@@ -12,6 +13,14 @@ class STDIOWriter {
  public:
   STDIOWriter() : max_size_(0), fh_(nullptr) {}
   void initialize(const char* filename) {
+    if (fh_ != nullptr) {
+      // Re-invoked after fork: close the inherited fd via the raw syscall to
+      // avoid fflush/flockfile on a FILE* whose internal mutex state was copied
+      // from the parent and may be inconsistent in this child process.
+      int fd = fileno(fh_);
+      fh_ = nullptr;
+      if (fd >= 0) ::close(fd);
+    }
     filename_ = (filename != nullptr) ? filename : "";
     auto conf =
         dftracer::Singleton<dftracer::ConfigurationManager>::get_instance();
