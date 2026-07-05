@@ -418,6 +418,12 @@ void dftracer::DFTracerCore::initialize(bool _bind, const char* _log_file,
     static std::once_flag atfork_once;
     std::call_once(atfork_once, []() {
       pthread_atfork(nullptr, nullptr, []() {
+        // This child has not called MPI_Init itself: forbid MPI calls from
+        // tracing code until (if ever) it does, since MPI runtimes may fork
+        // helper processes (e.g. singleton MPI_Init) that share MPI's
+        // shared-memory transport state with the parent, and touching MPI
+        // here would corrupt that shared state. See dftracer_mpi_fork_guard.
+        dftracer_mpi_fork_guard().store(true);
         auto core = dftracer::Singleton<dftracer::DFTracerCore>::get_instance(
             ProfilerStage::PROFILER_OTHER, ProfileType::PROFILER_ANY);
         if (core != nullptr) core->reinitialize();

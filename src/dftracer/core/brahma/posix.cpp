@@ -693,7 +693,10 @@ int brahma::POSIXDFTracer::fork() {
   BRAHMA_MAP_OR_FAIL(fork);
   int ret = __real_fork();
   if (ret == 0) {
-    // zero comes for forked childs
+    // zero comes for forked childs. This child has not called MPI_Init
+    // itself, so tracing code must not touch MPI here (see
+    // dftracer_mpi_fork_guard) until/unless it does.
+    dftracer_mpi_fork_guard().store(true);
     auto main = dftracer::Singleton<dftracer::DFTracerCore>::get_instance(
         ProfilerStage::PROFILER_INIT, ProfileType::PROFILER_PRELOAD);
     main->reinitialize();

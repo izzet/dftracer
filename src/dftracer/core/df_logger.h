@@ -42,6 +42,18 @@
 
 typedef std::chrono::high_resolution_clock chrono;
 
+// A process that has just been fork()'d (e.g. MPI runtimes spawning a
+// helper daemon for singleton MPI_Init, before it execs a new image) must
+// not touch MPI: the child shares MPI's memory-mapped/shared-memory
+// transport state with the parent, and calling into MPI there (without this
+// process ever having called MPI_Init itself) corrupts that shared state and
+// can crash the parent later. Set by the post-fork child handlers and
+// cleared once this process legitimately calls MPI_Init/MPI_Init_thread.
+inline std::atomic<bool>& dftracer_mpi_fork_guard() {
+  static std::atomic<bool> in_forked_child_without_mpi_init{false};
+  return in_forked_child_without_mpi_init;
+}
+
 class DFTLogger {
  private:
   std::shared_ptr<dftracer::ConfigurationManager> config;
@@ -273,16 +285,24 @@ class DFTLogger {
 
   inline void handle_mpi(ThreadID tid) {
 #if defined(DFTRACER_MPI_ENABLE) && defined(BRAHMA_ENABLE_MPI)
-    if (!mpi_event) {
+    if (!mpi_event && !dftracer_mpi_fork_guard().load()) {
       int initialized;
+      int finalized;
       int status = MPI_SUCCESS;
+      int finalized_status = MPI_SUCCESS;
 #if defined(BRAHMA_MPI_IMPL_CRAYMPICH) || defined(BRAHMA_MPI_IMPL_MPICH) || \
     defined(BRAHMA_MPI_IMPL_OPENMPI)
       status = PMPI_Initialized(&initialized);
+      finalized_status = PMPI_Finalized(&finalized);
 #else
       status = MPI_Initialized(&initialized);
+      finalized_status = MPI_Finalized(&finalized);
 #endif
-      if (status == MPI_SUCCESS && initialized == true) {
+      // MPI_Initialized stays true forever after MPI_Init, even once
+      // MPI_Finalize has run, so it alone cannot tell us whether it is
+      // still safe to call MPI_Comm_rank.
+      if (status == MPI_SUCCESS && initialized == true &&
+          finalized_status == MPI_SUCCESS && finalized == false) {
         int rank = 0;
 #if defined(BRAHMA_MPI_IMPL_CRAYMPICH) || defined(BRAHMA_MPI_IMPL_MPICH) || \
     defined(BRAHMA_MPI_IMPL_OPENMPI)

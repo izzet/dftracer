@@ -111,6 +111,8 @@ jobs:
         timeout-minutes: 5
         shell: bash
         run: |
+          apt-get update && apt-get install -y --no-install-recommends gdb || true
+
           source /home/spack/spack/share/spack/setup-env.sh
           spack load ${{ matrix.hdf5_pkg }} ${{ matrix.mpi_pkg }}
           HDF5_DIR=$(spack location -i ${{ matrix.hdf5_pkg }})
@@ -145,8 +147,22 @@ jobs:
           export LD_PRELOAD="${PRELOAD_LIB}"
           export LD_LIBRARY_PATH="${HDF5_DIR}/lib:${HDF5_DIR}/lib64:${LD_LIBRARY_PATH:-}"
 
-          echo "Running test_c_hdf5_mpi with dftracer preload..."
-          "${TEST_BIN}" "${VERIFY_DATA_DIR}"
+          echo "Running test_c_hdf5_mpi with dftracer preload (under gdb to capture a backtrace on crash)..."
+          ulimit -c unlimited
+          if command -v gdb >/dev/null 2>&1; then
+            gdb -q -batch \
+              -ex run \
+              -ex "thread apply all bt full" \
+              -ex "quit" \
+              --args "${TEST_BIN}" "${VERIFY_DATA_DIR}" 2>&1 | tee "${VERIFY_TRACE_DIR}/gdb.log"
+            GDB_STATUS=${PIPESTATUS[0]}
+            if grep -q "SIGSEGV\|Program terminated" "${VERIFY_TRACE_DIR}/gdb.log"; then
+              echo "ERROR: test_c_hdf5_mpi crashed, see backtrace above"
+              exit 1
+            fi
+          else
+            "${TEST_BIN}" "${VERIFY_DATA_DIR}"
+          fi
           unset LD_PRELOAD DFTRACER_INIT DFTRACER_ENABLE DFTRACER_DATA_DIR
 
           echo "Searching for trace files in: ${VERIFY_TRACE_DIR}"
