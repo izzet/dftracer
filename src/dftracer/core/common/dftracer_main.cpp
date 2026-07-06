@@ -190,26 +190,32 @@ void dftracer::DFTracerCore::reinitialize() {
   is_initialized = false;
   if (this->log_file_prefix.empty()) {
     const char* log_file_env = getenv("DFTRACER_LOG_FILE");
-    if (log_file_env != nullptr) {
+    if (log_file_env != nullptr && log_file_env[0] != '\0') {
       this->log_file_prefix = std::string(log_file_env);
+    } else if (!conf->log_file.empty()) {
+      this->log_file_prefix = conf->log_file;
     } else {
       DFTRACER_LOG_ERROR(DFTRACER_UNDEFINED_LOG_FILE_MSG);
       throw std::runtime_error(DFTRACER_UNDEFINED_LOG_FILE_CODE);
     }
   }
   conf->log_file = this->log_file_prefix;
-  setenv("DFTRACER_LOG_FILE", this->log_file_prefix.c_str(), 1);
+  if (!this->log_file_prefix.empty())
+    setenv("DFTRACER_LOG_FILE", this->log_file_prefix.c_str(), 1);
   if (this->data_dirs.empty()) {
     const char* data_dirs_env = getenv("DFTRACER_DATA_DIR");
-    if (data_dirs_env != nullptr) {
+    if (data_dirs_env != nullptr && data_dirs_env[0] != '\0') {
       this->data_dirs = std::string(data_dirs_env);
+    } else if (!conf->data_dirs.empty()) {
+      this->data_dirs = conf->data_dirs;
     } else {
       DFTRACER_LOG_ERROR(DFTRACER_UNDEFINED_DATA_DIR_MSG);
       throw std::runtime_error(DFTRACER_UNDEFINED_DATA_DIR_CODE);
     }
   }
   conf->data_dirs = this->data_dirs;
-  setenv("DFTRACER_DATA_DIR", this->data_dirs.c_str(), 1);
+  if (!this->data_dirs.empty())
+    setenv("DFTRACER_DATA_DIR", this->data_dirs.c_str(), 1);
 
   this->process_id = df_getpid();
   DFTRACER_LOG_INFO(
@@ -315,10 +321,25 @@ void dftracer::DFTracerCore::initialize(bool _bind, const char* _log_file,
         if (conf->compression) {
           extension += ".gz";
         }
-        size_t ext_pos = this->log_file.find_last_of(".");
-        if (ext_pos != std::string::npos) {
-          this->log_file = this->log_file.substr(0, ext_pos);
-          this->log_file = this->log_file.substr(0, ext_pos);
+        // Strip the extension from the basename only. Handles compound
+        // .pfw[.gz] and skips a parent-dir '.' or a dotfile, which would empty
+        // the base.
+        size_t sep_pos = this->log_file.find_last_of("/\\");
+        size_t base_start = (sep_pos == std::string::npos) ? 0 : sep_pos + 1;
+        std::string basename = this->log_file.substr(base_start);
+        size_t strip = std::string::npos;
+        if (basename.size() > 7 &&
+            basename.compare(basename.size() - 7, 7, ".pfw.gz") == 0) {
+          strip = basename.size() - 7;
+        } else if (basename.size() > 4 &&
+                   basename.compare(basename.size() - 4, 4, ".pfw") == 0) {
+          strip = basename.size() - 4;
+        } else {
+          size_t dot = basename.find_last_of(".");
+          if (dot != std::string::npos && dot != 0) strip = dot;
+        }
+        if (strip != std::string::npos) {
+          this->log_file = this->log_file.substr(0, base_start + strip);
         }
         this->log_file_prefix = this->log_file;
         this->log_file += "-" + std::string(log_file_hash) + "-" +
@@ -417,8 +438,10 @@ void dftracer::DFTracerCore::initialize(bool _bind, const char* _log_file,
       }
 #endif
     }
-    setenv("DFTRACER_LOG_FILE", this->log_file_prefix.c_str(), 1);
-    setenv("DFTRACER_DATA_DIR", this->data_dirs.c_str(), 1);
+    if (!this->log_file_prefix.empty())
+      setenv("DFTRACER_LOG_FILE", this->log_file_prefix.c_str(), 1);
+    if (!this->data_dirs.empty())
+      setenv("DFTRACER_DATA_DIR", this->data_dirs.c_str(), 1);
     DFTRACER_LOG_INFO(
         "DFTracerCore::initialize _bind:%d _log_file:%s _data_dirs:%s "
         "_process_id:%d\n",
