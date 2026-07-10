@@ -424,7 +424,7 @@ else()
                 endif()
         endif()
 
-        find_package(brahma 4.0.1 REQUIRED)
+        find_package(brahma 5.0.0 REQUIRED)
 
         if(${brahma_FOUND})
                 message(STATUS "[BRAHMA] found brahma at ${BRAHMA_INCLUDE_DIRS}")

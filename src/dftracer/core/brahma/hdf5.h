@@ -47,7 +47,8 @@ class HDF5DFTracer : public HDF5 {
   herr_t H5Aclose(hid_t attr_id) override;
 #endif
 #if (BRAHMA_HDF5_VERSION >= 101405 && BRAHMA_HDF5_VERSION < 101500)
-  herr_t H5Aclose_async(hid_t attr_id, hid_t es_id) override;
+  herr_t H5Aclose_async(const char* app_file, const char* app_func,
+                        unsigned app_line, hid_t attr_id, hid_t es_id) override;
 #endif
 #if ((BRAHMA_HDF5_VERSION >= 100823 && BRAHMA_HDF5_VERSION < 100900) || \
      (BRAHMA_HDF5_VERSION >= 101005 && BRAHMA_HDF5_VERSION < 101100) || \
@@ -64,9 +65,10 @@ class HDF5DFTracer : public HDF5 {
                    hid_t space_id, hid_t acpl_id, hid_t aapl_id) override;
 #endif
 #if (BRAHMA_HDF5_VERSION >= 101405 && BRAHMA_HDF5_VERSION < 101500)
-  hid_t H5Acreate_async(hid_t loc_id, const char* attr_name, hid_t type_id,
-                        hid_t space_id, hid_t acpl_id, hid_t aapl_id,
-                        hid_t es_id) override;
+  hid_t H5Acreate_async(const char* app_file, const char* app_func,
+                        unsigned app_line, hid_t loc_id, const char* attr_name,
+                        hid_t type_id, hid_t space_id, hid_t acpl_id,
+                        hid_t aapl_id, hid_t es_id) override;
 #endif
 #if ((BRAHMA_HDF5_VERSION >= 100823 && BRAHMA_HDF5_VERSION < 100900) || \
      (BRAHMA_HDF5_VERSION >= 101005 && BRAHMA_HDF5_VERSION < 101100) || \
@@ -77,10 +79,12 @@ class HDF5DFTracer : public HDF5 {
                           hid_t acpl_id, hid_t aapl_id, hid_t lapl_id) override;
 #endif
 #if (BRAHMA_HDF5_VERSION >= 101405 && BRAHMA_HDF5_VERSION < 101500)
-  hid_t H5Acreate_by_name_async(hid_t loc_id, const char* obj_name,
-                                const char* attr_name, hid_t type_id,
-                                hid_t space_id, hid_t acpl_id, hid_t aapl_id,
-                                hid_t lapl_id, hid_t es_id) override;
+  hid_t H5Acreate_by_name_async(const char* app_file, const char* app_func,
+                                unsigned app_line, hid_t loc_id,
+                                const char* obj_name, const char* attr_name,
+                                hid_t type_id, hid_t space_id, hid_t acpl_id,
+                                hid_t aapl_id, hid_t lapl_id,
+                                hid_t es_id) override;
 #endif
 #if ((BRAHMA_HDF5_VERSION >= 100823 && BRAHMA_HDF5_VERSION < 100900) || \
      (BRAHMA_HDF5_VERSION >= 101005 && BRAHMA_HDF5_VERSION < 101100) || \
@@ -110,8 +114,9 @@ class HDF5DFTracer : public HDF5 {
   htri_t H5Aexists(hid_t obj_id, const char* attr_name) override;
 #endif
 #if (BRAHMA_HDF5_VERSION >= 101405 && BRAHMA_HDF5_VERSION < 101500)
-  herr_t H5Aexists_async(hid_t obj_id, const char* attr_name, hbool_t* exists,
-                         hid_t es_id) override;
+  herr_t H5Aexists_async(const char* app_file, const char* app_func,
+                         unsigned app_line, hid_t obj_id, const char* attr_name,
+                         hbool_t* exists, hid_t es_id) override;
 #endif
 #if ((BRAHMA_HDF5_VERSION >= 100823 && BRAHMA_HDF5_VERSION < 100900) || \
      (BRAHMA_HDF5_VERSION >= 101005 && BRAHMA_HDF5_VERSION < 101100) || \
@@ -121,9 +126,11 @@ class HDF5DFTracer : public HDF5 {
                            const char* attr_name, hid_t lapl_id) override;
 #endif
 #if (BRAHMA_HDF5_VERSION >= 101405 && BRAHMA_HDF5_VERSION < 101500)
-  herr_t H5Aexists_by_name_async(hid_t loc_id, const char* obj_name,
-                                 const char* attr_name, hbool_t* exists,
-                                 hid_t lapl_id, hid_t es_id) override;
+  herr_t H5Aexists_by_name_async(const char* app_file, const char* app_func,
+                                 unsigned app_line, hid_t loc_id,
+                                 const char* obj_name, const char* attr_name,
+                                 hbool_t* exists, hid_t lapl_id,
+                                 hid_t es_id) override;
 #endif
 #if ((BRAHMA_HDF5_VERSION >= 100823 && BRAHMA_HDF5_VERSION < 100900) || \
      (BRAHMA_HDF5_VERSION >= 101005 && BRAHMA_HDF5_VERSION < 101100) || \
@@ -223,8 +230,9 @@ class HDF5DFTracer : public HDF5 {
   hid_t H5Aopen(hid_t obj_id, const char* attr_name, hid_t aapl_id) override;
 #endif
 #if (BRAHMA_HDF5_VERSION >= 101405 && BRAHMA_HDF5_VERSION < 101500)
-  hid_t H5Aopen_async(hid_t obj_id, const char* attr_name, hid_t aapl_id,
-                      hid_t es_id) override;
+  hid_t H5Aopen_async(const char* app_file, const char* app_func,
+                      unsigned app_line, hid_t obj_id, const char* attr_name,
+                      hid_t aapl_id, hid_t es_id) override;
 #endif
 #if ((BRAHMA_HDF5_VERSION >= 100823 && BRAHMA_HDF5_VERSION < 100900) || \
      (BRAHMA_HDF5_VERSION >= 101005 && BRAHMA_HDF5_VERSION < 101100) || \
@@ -235,10 +243,11 @@ class HDF5DFTracer : public HDF5 {
                        hid_t lapl_id) override;
 #endif
 #if (BRAHMA_HDF5_VERSION >= 101405 && BRAHMA_HDF5_VERSION < 101500)
-  hid_t H5Aopen_by_idx_async(hid_t loc_id, const char* obj_name,
-                             H5_index_t idx_type, H5_iter_order_t order,
-                             hsize_t n, hid_t aapl_id, hid_t lapl_id,
-                             hid_t es_id) override;
+  hid_t H5Aopen_by_idx_async(const char* app_file, const char* app_func,
+                             unsigned app_line, hid_t loc_id,
+                             const char* obj_name, H5_index_t idx_type,
+                             H5_iter_order_t order, hsize_t n, hid_t aapl_id,
+                             hid_t lapl_id, hid_t es_id) override;
 #endif
 #if ((BRAHMA_HDF5_VERSION >= 100823 && BRAHMA_HDF5_VERSION < 100900) || \
      (BRAHMA_HDF5_VERSION >= 101005 && BRAHMA_HDF5_VERSION < 101100) || \
@@ -249,9 +258,11 @@ class HDF5DFTracer : public HDF5 {
                         hid_t lapl_id) override;
 #endif
 #if (BRAHMA_HDF5_VERSION >= 101405 && BRAHMA_HDF5_VERSION < 101500)
-  hid_t H5Aopen_by_name_async(hid_t loc_id, const char* obj_name,
-                              const char* attr_name, hid_t aapl_id,
-                              hid_t lapl_id, hid_t es_id) override;
+  hid_t H5Aopen_by_name_async(const char* app_file, const char* app_func,
+                              unsigned app_line, hid_t loc_id,
+                              const char* obj_name, const char* attr_name,
+                              hid_t aapl_id, hid_t lapl_id,
+                              hid_t es_id) override;
 #endif
 #if ((BRAHMA_HDF5_VERSION >= 100823 && BRAHMA_HDF5_VERSION < 100900) || \
      (BRAHMA_HDF5_VERSION >= 101005 && BRAHMA_HDF5_VERSION < 101100) || \
@@ -272,8 +283,9 @@ class HDF5DFTracer : public HDF5 {
   herr_t H5Aread(hid_t attr_id, hid_t type_id, void* buf) override;
 #endif
 #if (BRAHMA_HDF5_VERSION >= 101405 && BRAHMA_HDF5_VERSION < 101500)
-  herr_t H5Aread_async(hid_t attr_id, hid_t dtype_id, void* buf,
-                       hid_t es_id) override;
+  herr_t H5Aread_async(const char* app_file, const char* app_func,
+                       unsigned app_line, hid_t attr_id, hid_t dtype_id,
+                       void* buf, hid_t es_id) override;
 #endif
 #if ((BRAHMA_HDF5_VERSION >= 100823 && BRAHMA_HDF5_VERSION < 100900) || \
      (BRAHMA_HDF5_VERSION >= 101005 && BRAHMA_HDF5_VERSION < 101100) || \
@@ -283,7 +295,8 @@ class HDF5DFTracer : public HDF5 {
                    const char* new_name) override;
 #endif
 #if (BRAHMA_HDF5_VERSION >= 101405 && BRAHMA_HDF5_VERSION < 101500)
-  herr_t H5Arename_async(hid_t loc_id, const char* old_name,
+  herr_t H5Arename_async(const char* app_file, const char* app_func,
+                         unsigned app_line, hid_t loc_id, const char* old_name,
                          const char* new_name, hid_t es_id) override;
 #endif
 #if ((BRAHMA_HDF5_VERSION >= 100823 && BRAHMA_HDF5_VERSION < 100900) || \
@@ -295,7 +308,9 @@ class HDF5DFTracer : public HDF5 {
                            hid_t lapl_id) override;
 #endif
 #if (BRAHMA_HDF5_VERSION >= 101405 && BRAHMA_HDF5_VERSION < 101500)
-  herr_t H5Arename_by_name_async(hid_t loc_id, const char* obj_name,
+  herr_t H5Arename_by_name_async(const char* app_file, const char* app_func,
+                                 unsigned app_line, hid_t loc_id,
+                                 const char* obj_name,
                                  const char* old_attr_name,
                                  const char* new_attr_name, hid_t lapl_id,
                                  hid_t es_id) override;
@@ -307,8 +322,9 @@ class HDF5DFTracer : public HDF5 {
   herr_t H5Awrite(hid_t attr_id, hid_t type_id, const void* buf) override;
 #endif
 #if (BRAHMA_HDF5_VERSION >= 101405 && BRAHMA_HDF5_VERSION < 101500)
-  herr_t H5Awrite_async(hid_t attr_id, hid_t type_id, const void* buf,
-                        hid_t es_id) override;
+  herr_t H5Awrite_async(const char* app_file, const char* app_func,
+                        unsigned app_line, hid_t attr_id, hid_t type_id,
+                        const void* buf, hid_t es_id) override;
 #endif
 #if ((BRAHMA_HDF5_VERSION >= 101011 && BRAHMA_HDF5_VERSION < 101100) || \
      (BRAHMA_HDF5_VERSION >= 101203 && BRAHMA_HDF5_VERSION < 101300) || \
@@ -323,7 +339,8 @@ class HDF5DFTracer : public HDF5 {
   herr_t H5Dclose(hid_t dset_id) override;
 #endif
 #if (BRAHMA_HDF5_VERSION >= 101405 && BRAHMA_HDF5_VERSION < 101500)
-  herr_t H5Dclose_async(hid_t dset_id, hid_t es_id) override;
+  herr_t H5Dclose_async(const char* app_file, const char* app_func,
+                        unsigned app_line, hid_t dset_id, hid_t es_id) override;
 #endif
 #if ((BRAHMA_HDF5_VERSION >= 100823 && BRAHMA_HDF5_VERSION < 100900) || \
      (BRAHMA_HDF5_VERSION >= 101005 && BRAHMA_HDF5_VERSION < 101100) || \
@@ -348,9 +365,10 @@ class HDF5DFTracer : public HDF5 {
                        hid_t dcpl_id, hid_t dapl_id) override;
 #endif
 #if (BRAHMA_HDF5_VERSION >= 101405 && BRAHMA_HDF5_VERSION < 101500)
-  hid_t H5Dcreate_async(hid_t loc_id, const char* name, hid_t type_id,
-                        hid_t space_id, hid_t lcpl_id, hid_t dcpl_id,
-                        hid_t dapl_id, hid_t es_id) override;
+  hid_t H5Dcreate_async(const char* app_file, const char* app_func,
+                        unsigned app_line, hid_t loc_id, const char* name,
+                        hid_t type_id, hid_t space_id, hid_t lcpl_id,
+                        hid_t dcpl_id, hid_t dapl_id, hid_t es_id) override;
 #endif
 #if ((BRAHMA_HDF5_VERSION >= 100823 && BRAHMA_HDF5_VERSION < 100900) || \
      (BRAHMA_HDF5_VERSION >= 101005 && BRAHMA_HDF5_VERSION < 101100) || \
@@ -447,7 +465,9 @@ class HDF5DFTracer : public HDF5 {
   hid_t H5Dget_space(hid_t dset_id) override;
 #endif
 #if (BRAHMA_HDF5_VERSION >= 101405 && BRAHMA_HDF5_VERSION < 101500)
-  hid_t H5Dget_space_async(hid_t dset_id, hid_t es_id) override;
+  hid_t H5Dget_space_async(const char* app_file, const char* app_func,
+                           unsigned app_line, hid_t dset_id,
+                           hid_t es_id) override;
 #endif
 #if ((BRAHMA_HDF5_VERSION >= 100823 && BRAHMA_HDF5_VERSION < 100900) || \
      (BRAHMA_HDF5_VERSION >= 101005 && BRAHMA_HDF5_VERSION < 101100) || \
@@ -488,8 +508,9 @@ class HDF5DFTracer : public HDF5 {
   hid_t H5Dopen2(hid_t loc_id, const char* name, hid_t dapl_id) override;
 #endif
 #if (BRAHMA_HDF5_VERSION >= 101405 && BRAHMA_HDF5_VERSION < 101500)
-  hid_t H5Dopen_async(hid_t loc_id, const char* name, hid_t dapl_id,
-                      hid_t es_id) override;
+  hid_t H5Dopen_async(const char* app_file, const char* app_func,
+                      unsigned app_line, hid_t loc_id, const char* name,
+                      hid_t dapl_id, hid_t es_id) override;
 #endif
 #if ((BRAHMA_HDF5_VERSION >= 100823 && BRAHMA_HDF5_VERSION < 100900) || \
      (BRAHMA_HDF5_VERSION >= 101005 && BRAHMA_HDF5_VERSION < 101100) || \
@@ -499,9 +520,10 @@ class HDF5DFTracer : public HDF5 {
                  hid_t file_space_id, hid_t dxpl_id, void* buf) override;
 #endif
 #if (BRAHMA_HDF5_VERSION >= 101405 && BRAHMA_HDF5_VERSION < 101500)
-  herr_t H5Dread_async(hid_t dset_id, hid_t mem_type_id, hid_t mem_space_id,
-                       hid_t file_space_id, hid_t dxpl_id, void* buf,
-                       hid_t es_id) override;
+  herr_t H5Dread_async(const char* app_file, const char* app_func,
+                       unsigned app_line, hid_t dset_id, hid_t mem_type_id,
+                       hid_t mem_space_id, hid_t file_space_id, hid_t dxpl_id,
+                       void* buf, hid_t es_id) override;
 #endif
 #if ((BRAHMA_HDF5_VERSION >= 101005 && BRAHMA_HDF5_VERSION < 101100) || \
      (BRAHMA_HDF5_VERSION >= 101203 && BRAHMA_HDF5_VERSION < 101300) || \
@@ -515,9 +537,11 @@ class HDF5DFTracer : public HDF5 {
                        hid_t dxpl_id, void* buf[]) override;
 #endif
 #if (BRAHMA_HDF5_VERSION >= 101405 && BRAHMA_HDF5_VERSION < 101500)
-  herr_t H5Dread_multi_async(size_t count, hid_t dset_id[], hid_t mem_type_id[],
-                             hid_t mem_space_id[], hid_t file_space_id[],
-                             hid_t dxpl_id, void* buf[], hid_t es_id) override;
+  herr_t H5Dread_multi_async(const char* app_file, const char* app_func,
+                             unsigned app_line, size_t count, hid_t dset_id[],
+                             hid_t mem_type_id[], hid_t mem_space_id[],
+                             hid_t file_space_id[], hid_t dxpl_id, void* buf[],
+                             hid_t es_id) override;
 #endif
 #if ((BRAHMA_HDF5_VERSION >= 101005 && BRAHMA_HDF5_VERSION < 101100) || \
      (BRAHMA_HDF5_VERSION >= 101203 && BRAHMA_HDF5_VERSION < 101300) || \
@@ -538,8 +562,9 @@ class HDF5DFTracer : public HDF5 {
   herr_t H5Dset_extent(hid_t dset_id, const hsize_t size[]) override;
 #endif
 #if (BRAHMA_HDF5_VERSION >= 101405 && BRAHMA_HDF5_VERSION < 101500)
-  herr_t H5Dset_extent_async(hid_t dset_id, const hsize_t size[],
-                             hid_t es_id) override;
+  herr_t H5Dset_extent_async(const char* app_file, const char* app_func,
+                             unsigned app_line, hid_t dset_id,
+                             const hsize_t size[], hid_t es_id) override;
 #endif
 #if ((BRAHMA_HDF5_VERSION >= 100823 && BRAHMA_HDF5_VERSION < 100900) || \
      (BRAHMA_HDF5_VERSION >= 101005 && BRAHMA_HDF5_VERSION < 101100) || \
@@ -563,9 +588,10 @@ class HDF5DFTracer : public HDF5 {
                   hid_t file_space_id, hid_t dxpl_id, const void* buf) override;
 #endif
 #if (BRAHMA_HDF5_VERSION >= 101405 && BRAHMA_HDF5_VERSION < 101500)
-  herr_t H5Dwrite_async(hid_t dset_id, hid_t mem_type_id, hid_t mem_space_id,
-                        hid_t file_space_id, hid_t dxpl_id, const void* buf,
-                        hid_t es_id) override;
+  herr_t H5Dwrite_async(const char* app_file, const char* app_func,
+                        unsigned app_line, hid_t dset_id, hid_t mem_type_id,
+                        hid_t mem_space_id, hid_t file_space_id, hid_t dxpl_id,
+                        const void* buf, hid_t es_id) override;
 #endif
 #if ((BRAHMA_HDF5_VERSION >= 101005 && BRAHMA_HDF5_VERSION < 101100) || \
      (BRAHMA_HDF5_VERSION >= 101203 && BRAHMA_HDF5_VERSION < 101300) || \
@@ -580,7 +606,8 @@ class HDF5DFTracer : public HDF5 {
                         hid_t dxpl_id, const void* buf[]) override;
 #endif
 #if (BRAHMA_HDF5_VERSION >= 101405 && BRAHMA_HDF5_VERSION < 101500)
-  herr_t H5Dwrite_multi_async(size_t count, hid_t dset_id[],
+  herr_t H5Dwrite_multi_async(const char* app_file, const char* app_func,
+                              unsigned app_line, size_t count, hid_t dset_id[],
                               hid_t mem_type_id[], hid_t mem_space_id[],
                               hid_t file_space_id[], hid_t dxpl_id,
                               const void* buf[], hid_t es_id) override;
@@ -1103,7 +1130,8 @@ class HDF5DFTracer : public HDF5 {
   herr_t H5Fclose(hid_t file_id) override;
 #endif
 #if (BRAHMA_HDF5_VERSION >= 101405 && BRAHMA_HDF5_VERSION < 101500)
-  herr_t H5Fclose_async(hid_t file_id, hid_t es_id) override;
+  herr_t H5Fclose_async(const char* app_file, const char* app_func,
+                        unsigned app_line, hid_t file_id, hid_t es_id) override;
 #endif
 #if ((BRAHMA_HDF5_VERSION >= 100823 && BRAHMA_HDF5_VERSION < 100900) || \
      (BRAHMA_HDF5_VERSION >= 101005 && BRAHMA_HDF5_VERSION < 101100) || \
@@ -1113,8 +1141,10 @@ class HDF5DFTracer : public HDF5 {
                   hid_t fapl_id) override;
 #endif
 #if (BRAHMA_HDF5_VERSION >= 101405 && BRAHMA_HDF5_VERSION < 101500)
-  hid_t H5Fcreate_async(const char* filename, unsigned int flags, hid_t fcpl_id,
-                        hid_t fapl_id, hid_t es_id) override;
+  hid_t H5Fcreate_async(const char* app_file, const char* app_func,
+                        unsigned app_line, const char* filename,
+                        unsigned int flags, hid_t fcpl_id, hid_t fapl_id,
+                        hid_t es_id) override;
 #endif
 #if ((BRAHMA_HDF5_VERSION >= 101203 && BRAHMA_HDF5_VERSION < 101300) || \
      (BRAHMA_HDF5_VERSION >= 101405 && BRAHMA_HDF5_VERSION < 101500))
@@ -1127,7 +1157,8 @@ class HDF5DFTracer : public HDF5 {
   herr_t H5Fflush(hid_t object_id, H5F_scope_t scope) override;
 #endif
 #if (BRAHMA_HDF5_VERSION >= 101405 && BRAHMA_HDF5_VERSION < 101500)
-  herr_t H5Fflush_async(hid_t object_id, H5F_scope_t scope,
+  herr_t H5Fflush_async(const char* app_file, const char* app_func,
+                        unsigned app_line, hid_t object_id, H5F_scope_t scope,
                         hid_t es_id) override;
 #endif
 #if ((BRAHMA_HDF5_VERSION >= 101005 && BRAHMA_HDF5_VERSION < 101100) || \
@@ -1313,8 +1344,10 @@ class HDF5DFTracer : public HDF5 {
                 hid_t fapl_id) override;
 #endif
 #if (BRAHMA_HDF5_VERSION >= 101405 && BRAHMA_HDF5_VERSION < 101500)
-  hid_t H5Fopen_async(const char* filename, unsigned int flags,
-                      hid_t access_plist, hid_t es_id) override;
+  hid_t H5Fopen_async(const char* app_file, const char* app_func,
+                      unsigned app_line, const char* filename,
+                      unsigned int flags, hid_t access_plist,
+                      hid_t es_id) override;
 #endif
 #if ((BRAHMA_HDF5_VERSION >= 100823 && BRAHMA_HDF5_VERSION < 100900) || \
      (BRAHMA_HDF5_VERSION >= 101005 && BRAHMA_HDF5_VERSION < 101100) || \
@@ -1323,7 +1356,8 @@ class HDF5DFTracer : public HDF5 {
   hid_t H5Freopen(hid_t file_id) override;
 #endif
 #if (BRAHMA_HDF5_VERSION >= 101405 && BRAHMA_HDF5_VERSION < 101500)
-  hid_t H5Freopen_async(hid_t file_id, hid_t es_id) override;
+  hid_t H5Freopen_async(const char* app_file, const char* app_func,
+                        unsigned app_line, hid_t file_id, hid_t es_id) override;
 #endif
 #if ((BRAHMA_HDF5_VERSION >= 100823 && BRAHMA_HDF5_VERSION < 100900) || \
      (BRAHMA_HDF5_VERSION >= 101005 && BRAHMA_HDF5_VERSION < 101100) || \
@@ -1396,7 +1430,9 @@ class HDF5DFTracer : public HDF5 {
   herr_t H5Gclose(hid_t group_id) override;
 #endif
 #if (BRAHMA_HDF5_VERSION >= 101405 && BRAHMA_HDF5_VERSION < 101500)
-  herr_t H5Gclose_async(hid_t group_id, hid_t es_id) override;
+  herr_t H5Gclose_async(const char* app_file, const char* app_func,
+                        unsigned app_line, hid_t group_id,
+                        hid_t es_id) override;
 #endif
 #if ((BRAHMA_HDF5_VERSION >= 100823 && BRAHMA_HDF5_VERSION < 100900) || \
      (BRAHMA_HDF5_VERSION >= 101005 && BRAHMA_HDF5_VERSION < 101100) || \
@@ -1418,8 +1454,10 @@ class HDF5DFTracer : public HDF5 {
   hid_t H5Gcreate_anon(hid_t loc_id, hid_t gcpl_id, hid_t gapl_id) override;
 #endif
 #if (BRAHMA_HDF5_VERSION >= 101405 && BRAHMA_HDF5_VERSION < 101500)
-  hid_t H5Gcreate_async(hid_t loc_id, const char* name, hid_t lcpl_id,
-                        hid_t gcpl_id, hid_t gapl_id, hid_t es_id) override;
+  hid_t H5Gcreate_async(const char* app_file, const char* app_func,
+                        unsigned app_line, hid_t loc_id, const char* name,
+                        hid_t lcpl_id, hid_t gcpl_id, hid_t gapl_id,
+                        hid_t es_id) override;
 #endif
 #if ((BRAHMA_HDF5_VERSION >= 100823 && BRAHMA_HDF5_VERSION < 100900) || \
      (BRAHMA_HDF5_VERSION >= 101005 && BRAHMA_HDF5_VERSION < 101100) || \
@@ -1447,7 +1485,8 @@ class HDF5DFTracer : public HDF5 {
   herr_t H5Gget_info(hid_t loc_id, H5G_info_t* ginfo) override;
 #endif
 #if (BRAHMA_HDF5_VERSION >= 101405 && BRAHMA_HDF5_VERSION < 101500)
-  herr_t H5Gget_info_async(hid_t loc_id, H5G_info_t* ginfo,
+  herr_t H5Gget_info_async(const char* app_file, const char* app_func,
+                           unsigned app_line, hid_t loc_id, H5G_info_t* ginfo,
                            hid_t es_id) override;
 #endif
 #if ((BRAHMA_HDF5_VERSION >= 100823 && BRAHMA_HDF5_VERSION < 100900) || \
@@ -1460,9 +1499,11 @@ class HDF5DFTracer : public HDF5 {
                             hid_t lapl_id) override;
 #endif
 #if (BRAHMA_HDF5_VERSION >= 101405 && BRAHMA_HDF5_VERSION < 101500)
-  herr_t H5Gget_info_by_idx_async(hid_t loc_id, const char* group_name,
-                                  H5_index_t idx_type, H5_iter_order_t order,
-                                  hsize_t n, H5G_info_t* ginfo, hid_t lapl_id,
+  herr_t H5Gget_info_by_idx_async(const char* app_file, const char* app_func,
+                                  unsigned app_line, hid_t loc_id,
+                                  const char* group_name, H5_index_t idx_type,
+                                  H5_iter_order_t order, hsize_t n,
+                                  H5G_info_t* ginfo, hid_t lapl_id,
                                   hid_t es_id) override;
 #endif
 #if ((BRAHMA_HDF5_VERSION >= 100823 && BRAHMA_HDF5_VERSION < 100900) || \
@@ -1473,9 +1514,10 @@ class HDF5DFTracer : public HDF5 {
                              hid_t lapl_id) override;
 #endif
 #if (BRAHMA_HDF5_VERSION >= 101405 && BRAHMA_HDF5_VERSION < 101500)
-  herr_t H5Gget_info_by_name_async(hid_t loc_id, const char* name,
-                                   H5G_info_t* ginfo, hid_t lapl_id,
-                                   hid_t es_id) override;
+  herr_t H5Gget_info_by_name_async(const char* app_file, const char* app_func,
+                                   unsigned app_line, hid_t loc_id,
+                                   const char* name, H5G_info_t* ginfo,
+                                   hid_t lapl_id, hid_t es_id) override;
 #endif
 #if ((BRAHMA_HDF5_VERSION >= 100823 && BRAHMA_HDF5_VERSION < 100900) || \
      (BRAHMA_HDF5_VERSION >= 101005 && BRAHMA_HDF5_VERSION < 101100) || \
@@ -1558,8 +1600,9 @@ class HDF5DFTracer : public HDF5 {
   hid_t H5Gopen2(hid_t loc_id, const char* name, hid_t gapl_id) override;
 #endif
 #if (BRAHMA_HDF5_VERSION >= 101405 && BRAHMA_HDF5_VERSION < 101500)
-  hid_t H5Gopen_async(hid_t loc_id, const char* name, hid_t gapl_id,
-                      hid_t es_id) override;
+  hid_t H5Gopen_async(const char* app_file, const char* app_func,
+                      unsigned app_line, hid_t loc_id, const char* name,
+                      hid_t gapl_id, hid_t es_id) override;
 #endif
 #if ((BRAHMA_HDF5_VERSION >= 100823 && BRAHMA_HDF5_VERSION < 100900) || \
      (BRAHMA_HDF5_VERSION >= 101005 && BRAHMA_HDF5_VERSION < 101100) || \
@@ -1729,10 +1772,11 @@ class HDF5DFTracer : public HDF5 {
                         hid_t lapl_id) override;
 #endif
 #if (BRAHMA_HDF5_VERSION >= 101405 && BRAHMA_HDF5_VERSION < 101500)
-  herr_t H5Lcreate_hard_async(hid_t cur_loc_id, const char* cur_name,
-                              hid_t new_loc_id, const char* new_name,
-                              hid_t lcpl_id, hid_t lapl_id,
-                              hid_t es_id) override;
+  herr_t H5Lcreate_hard_async(const char* app_file, const char* app_func,
+                              unsigned app_line, hid_t cur_loc_id,
+                              const char* cur_name, hid_t new_loc_id,
+                              const char* new_name, hid_t lcpl_id,
+                              hid_t lapl_id, hid_t es_id) override;
 #endif
 #if ((BRAHMA_HDF5_VERSION >= 100823 && BRAHMA_HDF5_VERSION < 100900) || \
      (BRAHMA_HDF5_VERSION >= 101005 && BRAHMA_HDF5_VERSION < 101100) || \
@@ -1743,9 +1787,11 @@ class HDF5DFTracer : public HDF5 {
                         hid_t lapl_id) override;
 #endif
 #if (BRAHMA_HDF5_VERSION >= 101405 && BRAHMA_HDF5_VERSION < 101500)
-  herr_t H5Lcreate_soft_async(const char* link_target, hid_t link_loc_id,
-                              const char* link_name, hid_t lcpl_id,
-                              hid_t lapl_id, hid_t es_id) override;
+  herr_t H5Lcreate_soft_async(const char* app_file, const char* app_func,
+                              unsigned app_line, const char* link_target,
+                              hid_t link_loc_id, const char* link_name,
+                              hid_t lcpl_id, hid_t lapl_id,
+                              hid_t es_id) override;
 #endif
 #if ((BRAHMA_HDF5_VERSION >= 100823 && BRAHMA_HDF5_VERSION < 100900) || \
      (BRAHMA_HDF5_VERSION >= 101005 && BRAHMA_HDF5_VERSION < 101100) || \
@@ -1762,8 +1808,9 @@ class HDF5DFTracer : public HDF5 {
   herr_t H5Ldelete(hid_t loc_id, const char* name, hid_t lapl_id) override;
 #endif
 #if (BRAHMA_HDF5_VERSION >= 101405 && BRAHMA_HDF5_VERSION < 101500)
-  herr_t H5Ldelete_async(hid_t loc_id, const char* name, hid_t lapl_id,
-                         hid_t es_id) override;
+  herr_t H5Ldelete_async(const char* app_file, const char* app_func,
+                         unsigned app_line, hid_t loc_id, const char* name,
+                         hid_t lapl_id, hid_t es_id) override;
 #endif
 #if ((BRAHMA_HDF5_VERSION >= 100823 && BRAHMA_HDF5_VERSION < 100900) || \
      (BRAHMA_HDF5_VERSION >= 101005 && BRAHMA_HDF5_VERSION < 101100) || \
@@ -1774,9 +1821,11 @@ class HDF5DFTracer : public HDF5 {
                           hid_t lapl_id) override;
 #endif
 #if (BRAHMA_HDF5_VERSION >= 101405 && BRAHMA_HDF5_VERSION < 101500)
-  herr_t H5Ldelete_by_idx_async(hid_t loc_id, const char* group_name,
-                                H5_index_t idx_type, H5_iter_order_t order,
-                                hsize_t n, hid_t lapl_id, hid_t es_id) override;
+  herr_t H5Ldelete_by_idx_async(const char* app_file, const char* app_func,
+                                unsigned app_line, hid_t loc_id,
+                                const char* group_name, H5_index_t idx_type,
+                                H5_iter_order_t order, hsize_t n, hid_t lapl_id,
+                                hid_t es_id) override;
 #endif
 #if ((BRAHMA_HDF5_VERSION >= 100823 && BRAHMA_HDF5_VERSION < 100900) || \
      (BRAHMA_HDF5_VERSION >= 101005 && BRAHMA_HDF5_VERSION < 101100) || \
@@ -1785,8 +1834,9 @@ class HDF5DFTracer : public HDF5 {
   htri_t H5Lexists(hid_t loc_id, const char* name, hid_t lapl_id) override;
 #endif
 #if (BRAHMA_HDF5_VERSION >= 101405 && BRAHMA_HDF5_VERSION < 101500)
-  herr_t H5Lexists_async(hid_t loc_id, const char* name, hbool_t* exists,
-                         hid_t lapl_id, hid_t es_id) override;
+  herr_t H5Lexists_async(const char* app_file, const char* app_func,
+                         unsigned app_line, hid_t loc_id, const char* name,
+                         hbool_t* exists, hid_t lapl_id, hid_t es_id) override;
 #endif
 #if ((BRAHMA_HDF5_VERSION >= 100823 && BRAHMA_HDF5_VERSION < 100900) || \
      (BRAHMA_HDF5_VERSION >= 101005 && BRAHMA_HDF5_VERSION < 101100))
@@ -1871,9 +1921,10 @@ class HDF5DFTracer : public HDF5 {
                      hsize_t* idx, H5L_iterate2_t op, void* op_data) override;
 #endif
 #if (BRAHMA_HDF5_VERSION >= 101405 && BRAHMA_HDF5_VERSION < 101500)
-  herr_t H5Literate_async(hid_t group_id, H5_index_t idx_type,
-                          H5_iter_order_t order, hsize_t* idx_p,
-                          H5L_iterate2_t op, void* op_data,
+  herr_t H5Literate_async(const char* app_file, const char* app_func,
+                          unsigned app_line, hid_t group_id,
+                          H5_index_t idx_type, H5_iter_order_t order,
+                          hsize_t* idx_p, H5L_iterate2_t op, void* op_data,
                           hid_t es_id) override;
 #endif
 #if ((BRAHMA_HDF5_VERSION >= 100823 && BRAHMA_HDF5_VERSION < 100900) || \
@@ -1973,7 +2024,9 @@ class HDF5DFTracer : public HDF5 {
   herr_t H5Oclose(hid_t object_id) override;
 #endif
 #if (BRAHMA_HDF5_VERSION >= 101405 && BRAHMA_HDF5_VERSION < 101500)
-  herr_t H5Oclose_async(hid_t object_id, hid_t es_id) override;
+  herr_t H5Oclose_async(const char* app_file, const char* app_func,
+                        unsigned app_line, hid_t object_id,
+                        hid_t es_id) override;
 #endif
 #if ((BRAHMA_HDF5_VERSION >= 100823 && BRAHMA_HDF5_VERSION < 100900) || \
      (BRAHMA_HDF5_VERSION >= 101005 && BRAHMA_HDF5_VERSION < 101100) || \
@@ -1983,7 +2036,9 @@ class HDF5DFTracer : public HDF5 {
                  const char* dst_name, hid_t ocpypl_id, hid_t lcpl_id) override;
 #endif
 #if (BRAHMA_HDF5_VERSION >= 101405 && BRAHMA_HDF5_VERSION < 101500)
-  herr_t H5Ocopy_async(hid_t src_loc_id, const char* src_name, hid_t dst_loc_id,
+  herr_t H5Ocopy_async(const char* app_file, const char* app_func,
+                       unsigned app_line, hid_t src_loc_id,
+                       const char* src_name, hid_t dst_loc_id,
                        const char* dst_name, hid_t ocpypl_id, hid_t lcpl_id,
                        hid_t es_id) override;
 #endif
@@ -2016,7 +2071,8 @@ class HDF5DFTracer : public HDF5 {
   herr_t H5Oflush(hid_t obj_id) override;
 #endif
 #if (BRAHMA_HDF5_VERSION >= 101405 && BRAHMA_HDF5_VERSION < 101500)
-  herr_t H5Oflush_async(hid_t obj_id, hid_t es_id) override;
+  herr_t H5Oflush_async(const char* app_file, const char* app_func,
+                        unsigned app_line, hid_t obj_id, hid_t es_id) override;
 #endif
 #if ((BRAHMA_HDF5_VERSION >= 100823 && BRAHMA_HDF5_VERSION < 100900) || \
      (BRAHMA_HDF5_VERSION >= 101005 && BRAHMA_HDF5_VERSION < 101100) || \
@@ -2127,9 +2183,11 @@ class HDF5DFTracer : public HDF5 {
                               hid_t lapl_id) override;
 #endif
 #if (BRAHMA_HDF5_VERSION >= 101405 && BRAHMA_HDF5_VERSION < 101500)
-  herr_t H5Oget_info_by_name_async(hid_t loc_id, const char* name,
-                                   H5O_info2_t* oinfo, unsigned int fields,
-                                   hid_t lapl_id, hid_t es_id) override;
+  herr_t H5Oget_info_by_name_async(const char* app_file, const char* app_func,
+                                   unsigned app_line, hid_t loc_id,
+                                   const char* name, H5O_info2_t* oinfo,
+                                   unsigned int fields, hid_t lapl_id,
+                                   hid_t es_id) override;
 #endif
 #if ((BRAHMA_HDF5_VERSION >= 101203 && BRAHMA_HDF5_VERSION < 101300) || \
      (BRAHMA_HDF5_VERSION >= 101405 && BRAHMA_HDF5_VERSION < 101500))
@@ -2170,8 +2228,9 @@ class HDF5DFTracer : public HDF5 {
   hid_t H5Oopen(hid_t loc_id, const char* name, hid_t lapl_id) override;
 #endif
 #if (BRAHMA_HDF5_VERSION >= 101405 && BRAHMA_HDF5_VERSION < 101500)
-  hid_t H5Oopen_async(hid_t loc_id, const char* name, hid_t lapl_id,
-                      hid_t es_id) override;
+  hid_t H5Oopen_async(const char* app_file, const char* app_func,
+                      unsigned app_line, hid_t loc_id, const char* name,
+                      hid_t lapl_id, hid_t es_id) override;
 #endif
 #if ((BRAHMA_HDF5_VERSION >= 100823 && BRAHMA_HDF5_VERSION < 100900) || \
      (BRAHMA_HDF5_VERSION >= 101005 && BRAHMA_HDF5_VERSION < 101100) || \
@@ -2188,9 +2247,11 @@ class HDF5DFTracer : public HDF5 {
                        hid_t lapl_id) override;
 #endif
 #if (BRAHMA_HDF5_VERSION >= 101405 && BRAHMA_HDF5_VERSION < 101500)
-  hid_t H5Oopen_by_idx_async(hid_t loc_id, const char* group_name,
-                             H5_index_t idx_type, H5_iter_order_t order,
-                             hsize_t n, hid_t lapl_id, hid_t es_id) override;
+  hid_t H5Oopen_by_idx_async(const char* app_file, const char* app_func,
+                             unsigned app_line, hid_t loc_id,
+                             const char* group_name, H5_index_t idx_type,
+                             H5_iter_order_t order, hsize_t n, hid_t lapl_id,
+                             hid_t es_id) override;
 #endif
 #if ((BRAHMA_HDF5_VERSION >= 101203 && BRAHMA_HDF5_VERSION < 101300) || \
      (BRAHMA_HDF5_VERSION >= 101405 && BRAHMA_HDF5_VERSION < 101500))
@@ -2202,7 +2263,8 @@ class HDF5DFTracer : public HDF5 {
   herr_t H5Orefresh(hid_t oid) override;
 #endif
 #if (BRAHMA_HDF5_VERSION >= 101405 && BRAHMA_HDF5_VERSION < 101500)
-  herr_t H5Orefresh_async(hid_t oid, hid_t es_id) override;
+  herr_t H5Orefresh_async(const char* app_file, const char* app_func,
+                          unsigned app_line, hid_t oid, hid_t es_id) override;
 #endif
 #if ((BRAHMA_HDF5_VERSION >= 100823 && BRAHMA_HDF5_VERSION < 100900) || \
      (BRAHMA_HDF5_VERSION >= 101005 && BRAHMA_HDF5_VERSION < 101100) || \
@@ -4025,8 +4087,9 @@ class HDF5DFTracer : public HDF5 {
   hid_t H5Ropen_attr(H5R_ref_t* ref_ptr, hid_t rapl_id, hid_t aapl_id) override;
 #endif
 #if (BRAHMA_HDF5_VERSION >= 101405 && BRAHMA_HDF5_VERSION < 101500)
-  hid_t H5Ropen_attr_async(H5R_ref_t* ref_ptr, hid_t rapl_id, hid_t aapl_id,
-                           hid_t es_id) override;
+  hid_t H5Ropen_attr_async(const char* app_file, const char* app_func,
+                           unsigned app_line, H5R_ref_t* ref_ptr, hid_t rapl_id,
+                           hid_t aapl_id, hid_t es_id) override;
 #endif
 #if ((BRAHMA_HDF5_VERSION >= 101203 && BRAHMA_HDF5_VERSION < 101300) || \
      (BRAHMA_HDF5_VERSION >= 101405 && BRAHMA_HDF5_VERSION < 101500))
@@ -4034,7 +4097,8 @@ class HDF5DFTracer : public HDF5 {
                        hid_t oapl_id) override;
 #endif
 #if (BRAHMA_HDF5_VERSION >= 101405 && BRAHMA_HDF5_VERSION < 101500)
-  hid_t H5Ropen_object_async(unsigned int app_line, H5R_ref_t* ref_ptr,
+  hid_t H5Ropen_object_async(const char* app_file, const char* app_func,
+                             unsigned app_line, H5R_ref_t* ref_ptr,
                              hid_t rapl_id, hid_t oapl_id,
                              hid_t es_id) override;
 #endif
@@ -4044,7 +4108,9 @@ class HDF5DFTracer : public HDF5 {
                        hid_t oapl_id) override;
 #endif
 #if (BRAHMA_HDF5_VERSION >= 101405 && BRAHMA_HDF5_VERSION < 101500)
-  hid_t H5Ropen_region_async(H5R_ref_t* ref_ptr, hid_t rapl_id, hid_t oapl_id,
+  hid_t H5Ropen_region_async(const char* app_file, const char* app_func,
+                             unsigned app_line, H5R_ref_t* ref_ptr,
+                             hid_t rapl_id, hid_t oapl_id,
                              hid_t es_id) override;
 #endif
 #if ((BRAHMA_HDF5_VERSION >= 100823 && BRAHMA_HDF5_VERSION < 100900) || \
@@ -4342,7 +4408,8 @@ class HDF5DFTracer : public HDF5 {
   herr_t H5Tclose(hid_t type_id) override;
 #endif
 #if (BRAHMA_HDF5_VERSION >= 101405 && BRAHMA_HDF5_VERSION < 101500)
-  herr_t H5Tclose_async(hid_t type_id, hid_t es_id) override;
+  herr_t H5Tclose_async(const char* app_file, const char* app_func,
+                        unsigned app_line, hid_t type_id, hid_t es_id) override;
 #endif
 #if ((BRAHMA_HDF5_VERSION >= 100823 && BRAHMA_HDF5_VERSION < 100900) || \
      (BRAHMA_HDF5_VERSION >= 101005 && BRAHMA_HDF5_VERSION < 101100) || \
@@ -4365,9 +4432,10 @@ class HDF5DFTracer : public HDF5 {
                         hid_t tapl_id) override;
 #endif
 #if (BRAHMA_HDF5_VERSION >= 101405 && BRAHMA_HDF5_VERSION < 101500)
-  herr_t H5Tcommit_async(hid_t loc_id, const char* name, hid_t type_id,
-                         hid_t lcpl_id, hid_t tcpl_id, hid_t tapl_id,
-                         hid_t es_id) override;
+  herr_t H5Tcommit_async(const char* app_file, const char* app_func,
+                         unsigned app_line, hid_t loc_id, const char* name,
+                         hid_t type_id, hid_t lcpl_id, hid_t tcpl_id,
+                         hid_t tapl_id, hid_t es_id) override;
 #endif
 #if ((BRAHMA_HDF5_VERSION >= 100823 && BRAHMA_HDF5_VERSION < 100900) || \
      (BRAHMA_HDF5_VERSION >= 101005 && BRAHMA_HDF5_VERSION < 101100) || \
@@ -4633,8 +4701,9 @@ class HDF5DFTracer : public HDF5 {
   hid_t H5Topen2(hid_t loc_id, const char* name, hid_t tapl_id) override;
 #endif
 #if (BRAHMA_HDF5_VERSION >= 101405 && BRAHMA_HDF5_VERSION < 101500)
-  hid_t H5Topen_async(hid_t loc_id, const char* name, hid_t tapl_id,
-                      hid_t es_id) override;
+  hid_t H5Topen_async(const char* app_file, const char* app_func,
+                      unsigned app_line, hid_t loc_id, const char* name,
+                      hid_t tapl_id, hid_t es_id) override;
 #endif
 #if ((BRAHMA_HDF5_VERSION >= 100823 && BRAHMA_HDF5_VERSION < 100900) || \
      (BRAHMA_HDF5_VERSION >= 101005 && BRAHMA_HDF5_VERSION < 101100) || \

@@ -28,12 +28,16 @@ herr_t brahma::HDF5DFTracer::H5Aclose(hid_t attr_id) {
 }
 #endif
 #if (BRAHMA_HDF5_VERSION >= 101405 && BRAHMA_HDF5_VERSION < 101500)
-herr_t brahma::HDF5DFTracer::H5Aclose_async(hid_t attr_id, hid_t es_id) {
+herr_t brahma::HDF5DFTracer::H5Aclose_async(const char* app_file,
+                                            const char* app_func,
+                                            unsigned app_line, hid_t attr_id,
+                                            hid_t es_id) {
   BRAHMA_MAP_OR_FAIL(H5Aclose_async);
   DFT_LOGGER_START_ALWAYS();
   DFT_LOGGER_UPDATE_TYPE(attr_id, MetadataType::MT_VALUE);
   DFT_LOGGER_UPDATE_TYPE(es_id, MetadataType::MT_VALUE);
-  herr_t ret = __real_H5Aclose_async(attr_id, es_id);
+  herr_t ret =
+      __real_H5Aclose_async(app_file, app_func, app_line, attr_id, es_id);
   DFT_LOGGER_UPDATE_TYPE(ret, MetadataType::MT_VALUE);
   DFT_LOGGER_END();
   return ret;
@@ -80,10 +84,10 @@ hid_t brahma::HDF5DFTracer::H5Acreate2(hid_t loc_id, const char* attr_name,
 }
 #endif
 #if (BRAHMA_HDF5_VERSION >= 101405 && BRAHMA_HDF5_VERSION < 101500)
-hid_t brahma::HDF5DFTracer::H5Acreate_async(hid_t loc_id, const char* attr_name,
-                                            hid_t type_id, hid_t space_id,
-                                            hid_t acpl_id, hid_t aapl_id,
-                                            hid_t es_id) {
+hid_t brahma::HDF5DFTracer::H5Acreate_async(
+    const char* app_file, const char* app_func, unsigned app_line, hid_t loc_id,
+    const char* attr_name, hid_t type_id, hid_t space_id, hid_t acpl_id,
+    hid_t aapl_id, hid_t es_id) {
   BRAHMA_MAP_OR_FAIL(H5Acreate_async);
   DFT_LOGGER_START_ALWAYS();
   DFT_LOGGER_UPDATE_TYPE(loc_id, MetadataType::MT_VALUE);
@@ -92,8 +96,9 @@ hid_t brahma::HDF5DFTracer::H5Acreate_async(hid_t loc_id, const char* attr_name,
   DFT_LOGGER_UPDATE_TYPE(acpl_id, MetadataType::MT_VALUE);
   DFT_LOGGER_UPDATE_TYPE(aapl_id, MetadataType::MT_VALUE);
   DFT_LOGGER_UPDATE_TYPE(es_id, MetadataType::MT_VALUE);
-  hid_t ret = __real_H5Acreate_async(loc_id, attr_name, type_id, space_id,
-                                     acpl_id, aapl_id, es_id);
+  hid_t ret =
+      __real_H5Acreate_async(app_file, app_func, app_line, loc_id, attr_name,
+                             type_id, space_id, acpl_id, aapl_id, es_id);
   DFT_LOGGER_UPDATE_TYPE(ret, MetadataType::MT_VALUE);
   DFT_LOGGER_END();
   return ret;
@@ -123,8 +128,9 @@ hid_t brahma::HDF5DFTracer::H5Acreate_by_name(
 #endif
 #if (BRAHMA_HDF5_VERSION >= 101405 && BRAHMA_HDF5_VERSION < 101500)
 hid_t brahma::HDF5DFTracer::H5Acreate_by_name_async(
-    hid_t loc_id, const char* obj_name, const char* attr_name, hid_t type_id,
-    hid_t space_id, hid_t acpl_id, hid_t aapl_id, hid_t lapl_id, hid_t es_id) {
+    const char* app_file, const char* app_func, unsigned app_line, hid_t loc_id,
+    const char* obj_name, const char* attr_name, hid_t type_id, hid_t space_id,
+    hid_t acpl_id, hid_t aapl_id, hid_t lapl_id, hid_t es_id) {
   BRAHMA_MAP_OR_FAIL(H5Acreate_by_name_async);
   DFT_LOGGER_START_ALWAYS();
   DFT_LOGGER_UPDATE_TYPE(loc_id, MetadataType::MT_VALUE);
@@ -134,9 +140,9 @@ hid_t brahma::HDF5DFTracer::H5Acreate_by_name_async(
   DFT_LOGGER_UPDATE_TYPE(aapl_id, MetadataType::MT_VALUE);
   DFT_LOGGER_UPDATE_TYPE(lapl_id, MetadataType::MT_VALUE);
   DFT_LOGGER_UPDATE_TYPE(es_id, MetadataType::MT_VALUE);
-  hid_t ret = __real_H5Acreate_by_name_async(loc_id, obj_name, attr_name,
-                                             type_id, space_id, acpl_id,
-                                             aapl_id, lapl_id, es_id);
+  hid_t ret = __real_H5Acreate_by_name_async(
+      app_file, app_func, app_line, loc_id, obj_name, attr_name, type_id,
+      space_id, acpl_id, aapl_id, lapl_id, es_id);
   DFT_LOGGER_UPDATE_TYPE(ret, MetadataType::MT_VALUE);
   DFT_LOGGER_END();
   return ret;
@@ -210,14 +216,17 @@ htri_t brahma::HDF5DFTracer::H5Aexists(hid_t obj_id, const char* attr_name) {
 }
 #endif
 #if (BRAHMA_HDF5_VERSION >= 101405 && BRAHMA_HDF5_VERSION < 101500)
-herr_t brahma::HDF5DFTracer::H5Aexists_async(hid_t obj_id,
+herr_t brahma::HDF5DFTracer::H5Aexists_async(const char* app_file,
+                                             const char* app_func,
+                                             unsigned app_line, hid_t obj_id,
                                              const char* attr_name,
                                              hbool_t* exists, hid_t es_id) {
   BRAHMA_MAP_OR_FAIL(H5Aexists_async);
   DFT_LOGGER_START_ALWAYS();
   DFT_LOGGER_UPDATE_TYPE(obj_id, MetadataType::MT_VALUE);
   DFT_LOGGER_UPDATE_TYPE(es_id, MetadataType::MT_VALUE);
-  herr_t ret = __real_H5Aexists_async(obj_id, attr_name, exists, es_id);
+  herr_t ret = __real_H5Aexists_async(app_file, app_func, app_line, obj_id,
+                                      attr_name, exists, es_id);
   DFT_LOGGER_UPDATE_TYPE(ret, MetadataType::MT_VALUE);
   DFT_LOGGER_END();
   return ret;
@@ -243,14 +252,16 @@ htri_t brahma::HDF5DFTracer::H5Aexists_by_name(hid_t obj_id,
 #endif
 #if (BRAHMA_HDF5_VERSION >= 101405 && BRAHMA_HDF5_VERSION < 101500)
 herr_t brahma::HDF5DFTracer::H5Aexists_by_name_async(
-    hid_t loc_id, const char* obj_name, const char* attr_name, hbool_t* exists,
-    hid_t lapl_id, hid_t es_id) {
+    const char* app_file, const char* app_func, unsigned app_line, hid_t loc_id,
+    const char* obj_name, const char* attr_name, hbool_t* exists, hid_t lapl_id,
+    hid_t es_id) {
   BRAHMA_MAP_OR_FAIL(H5Aexists_by_name_async);
   DFT_LOGGER_START_ALWAYS();
   DFT_LOGGER_UPDATE_TYPE(loc_id, MetadataType::MT_VALUE);
   DFT_LOGGER_UPDATE_TYPE(lapl_id, MetadataType::MT_VALUE);
   DFT_LOGGER_UPDATE_TYPE(es_id, MetadataType::MT_VALUE);
-  herr_t ret = __real_H5Aexists_by_name_async(loc_id, obj_name, attr_name,
+  herr_t ret = __real_H5Aexists_by_name_async(app_file, app_func, app_line,
+                                              loc_id, obj_name, attr_name,
                                               exists, lapl_id, es_id);
   DFT_LOGGER_UPDATE_TYPE(ret, MetadataType::MT_VALUE);
   DFT_LOGGER_END();
@@ -483,14 +494,18 @@ hid_t brahma::HDF5DFTracer::H5Aopen(hid_t obj_id, const char* attr_name,
 }
 #endif
 #if (BRAHMA_HDF5_VERSION >= 101405 && BRAHMA_HDF5_VERSION < 101500)
-hid_t brahma::HDF5DFTracer::H5Aopen_async(hid_t obj_id, const char* attr_name,
-                                          hid_t aapl_id, hid_t es_id) {
+hid_t brahma::HDF5DFTracer::H5Aopen_async(const char* app_file,
+                                          const char* app_func,
+                                          unsigned app_line, hid_t obj_id,
+                                          const char* attr_name, hid_t aapl_id,
+                                          hid_t es_id) {
   BRAHMA_MAP_OR_FAIL(H5Aopen_async);
   DFT_LOGGER_START_ALWAYS();
   DFT_LOGGER_UPDATE_TYPE(obj_id, MetadataType::MT_VALUE);
   DFT_LOGGER_UPDATE_TYPE(aapl_id, MetadataType::MT_VALUE);
   DFT_LOGGER_UPDATE_TYPE(es_id, MetadataType::MT_VALUE);
-  hid_t ret = __real_H5Aopen_async(obj_id, attr_name, aapl_id, es_id);
+  hid_t ret = __real_H5Aopen_async(app_file, app_func, app_line, obj_id,
+                                   attr_name, aapl_id, es_id);
   DFT_LOGGER_UPDATE_TYPE(ret, MetadataType::MT_VALUE);
   DFT_LOGGER_END();
   return ret;
@@ -518,12 +533,10 @@ hid_t brahma::HDF5DFTracer::H5Aopen_by_idx(hid_t loc_id, const char* obj_name,
 }
 #endif
 #if (BRAHMA_HDF5_VERSION >= 101405 && BRAHMA_HDF5_VERSION < 101500)
-hid_t brahma::HDF5DFTracer::H5Aopen_by_idx_async(hid_t loc_id,
-                                                 const char* obj_name,
-                                                 H5_index_t idx_type,
-                                                 H5_iter_order_t order,
-                                                 hsize_t n, hid_t aapl_id,
-                                                 hid_t lapl_id, hid_t es_id) {
+hid_t brahma::HDF5DFTracer::H5Aopen_by_idx_async(
+    const char* app_file, const char* app_func, unsigned app_line, hid_t loc_id,
+    const char* obj_name, H5_index_t idx_type, H5_iter_order_t order, hsize_t n,
+    hid_t aapl_id, hid_t lapl_id, hid_t es_id) {
   BRAHMA_MAP_OR_FAIL(H5Aopen_by_idx_async);
   DFT_LOGGER_START_ALWAYS();
   DFT_LOGGER_UPDATE_TYPE(loc_id, MetadataType::MT_VALUE);
@@ -531,8 +544,9 @@ hid_t brahma::HDF5DFTracer::H5Aopen_by_idx_async(hid_t loc_id,
   DFT_LOGGER_UPDATE_TYPE(aapl_id, MetadataType::MT_VALUE);
   DFT_LOGGER_UPDATE_TYPE(lapl_id, MetadataType::MT_VALUE);
   DFT_LOGGER_UPDATE_TYPE(es_id, MetadataType::MT_VALUE);
-  hid_t ret = __real_H5Aopen_by_idx_async(loc_id, obj_name, idx_type, order, n,
-                                          aapl_id, lapl_id, es_id);
+  hid_t ret = __real_H5Aopen_by_idx_async(app_file, app_func, app_line, loc_id,
+                                          obj_name, idx_type, order, n, aapl_id,
+                                          lapl_id, es_id);
   DFT_LOGGER_UPDATE_TYPE(ret, MetadataType::MT_VALUE);
   DFT_LOGGER_END();
   return ret;
@@ -558,18 +572,18 @@ hid_t brahma::HDF5DFTracer::H5Aopen_by_name(hid_t loc_id, const char* obj_name,
 }
 #endif
 #if (BRAHMA_HDF5_VERSION >= 101405 && BRAHMA_HDF5_VERSION < 101500)
-hid_t brahma::HDF5DFTracer::H5Aopen_by_name_async(hid_t loc_id,
-                                                  const char* obj_name,
-                                                  const char* attr_name,
-                                                  hid_t aapl_id, hid_t lapl_id,
-                                                  hid_t es_id) {
+hid_t brahma::HDF5DFTracer::H5Aopen_by_name_async(
+    const char* app_file, const char* app_func, unsigned app_line, hid_t loc_id,
+    const char* obj_name, const char* attr_name, hid_t aapl_id, hid_t lapl_id,
+    hid_t es_id) {
   BRAHMA_MAP_OR_FAIL(H5Aopen_by_name_async);
   DFT_LOGGER_START_ALWAYS();
   DFT_LOGGER_UPDATE_TYPE(loc_id, MetadataType::MT_VALUE);
   DFT_LOGGER_UPDATE_TYPE(aapl_id, MetadataType::MT_VALUE);
   DFT_LOGGER_UPDATE_TYPE(lapl_id, MetadataType::MT_VALUE);
   DFT_LOGGER_UPDATE_TYPE(es_id, MetadataType::MT_VALUE);
-  hid_t ret = __real_H5Aopen_by_name_async(loc_id, obj_name, attr_name, aapl_id,
+  hid_t ret = __real_H5Aopen_by_name_async(app_file, app_func, app_line, loc_id,
+                                           obj_name, attr_name, aapl_id,
                                            lapl_id, es_id);
   DFT_LOGGER_UPDATE_TYPE(ret, MetadataType::MT_VALUE);
   DFT_LOGGER_END();
@@ -621,14 +635,18 @@ herr_t brahma::HDF5DFTracer::H5Aread(hid_t attr_id, hid_t type_id, void* buf) {
 }
 #endif
 #if (BRAHMA_HDF5_VERSION >= 101405 && BRAHMA_HDF5_VERSION < 101500)
-herr_t brahma::HDF5DFTracer::H5Aread_async(hid_t attr_id, hid_t dtype_id,
-                                           void* buf, hid_t es_id) {
+herr_t brahma::HDF5DFTracer::H5Aread_async(const char* app_file,
+                                           const char* app_func,
+                                           unsigned app_line, hid_t attr_id,
+                                           hid_t dtype_id, void* buf,
+                                           hid_t es_id) {
   BRAHMA_MAP_OR_FAIL(H5Aread_async);
   DFT_LOGGER_START_ALWAYS();
   DFT_LOGGER_UPDATE_TYPE(attr_id, MetadataType::MT_VALUE);
   DFT_LOGGER_UPDATE_TYPE(dtype_id, MetadataType::MT_VALUE);
   DFT_LOGGER_UPDATE_TYPE(es_id, MetadataType::MT_VALUE);
-  herr_t ret = __real_H5Aread_async(attr_id, dtype_id, buf, es_id);
+  herr_t ret = __real_H5Aread_async(app_file, app_func, app_line, attr_id,
+                                    dtype_id, buf, es_id);
   DFT_LOGGER_UPDATE_TYPE(ret, MetadataType::MT_VALUE);
   DFT_LOGGER_END();
   return ret;
@@ -650,14 +668,15 @@ herr_t brahma::HDF5DFTracer::H5Arename(hid_t loc_id, const char* old_name,
 }
 #endif
 #if (BRAHMA_HDF5_VERSION >= 101405 && BRAHMA_HDF5_VERSION < 101500)
-herr_t brahma::HDF5DFTracer::H5Arename_async(hid_t loc_id, const char* old_name,
-                                             const char* new_name,
-                                             hid_t es_id) {
+herr_t brahma::HDF5DFTracer::H5Arename_async(
+    const char* app_file, const char* app_func, unsigned app_line, hid_t loc_id,
+    const char* old_name, const char* new_name, hid_t es_id) {
   BRAHMA_MAP_OR_FAIL(H5Arename_async);
   DFT_LOGGER_START_ALWAYS();
   DFT_LOGGER_UPDATE_TYPE(loc_id, MetadataType::MT_VALUE);
   DFT_LOGGER_UPDATE_TYPE(es_id, MetadataType::MT_VALUE);
-  herr_t ret = __real_H5Arename_async(loc_id, old_name, new_name, es_id);
+  herr_t ret = __real_H5Arename_async(app_file, app_func, app_line, loc_id,
+                                      old_name, new_name, es_id);
   DFT_LOGGER_UPDATE_TYPE(ret, MetadataType::MT_VALUE);
   DFT_LOGGER_END();
   return ret;
@@ -685,14 +704,16 @@ herr_t brahma::HDF5DFTracer::H5Arename_by_name(hid_t loc_id,
 #endif
 #if (BRAHMA_HDF5_VERSION >= 101405 && BRAHMA_HDF5_VERSION < 101500)
 herr_t brahma::HDF5DFTracer::H5Arename_by_name_async(
-    hid_t loc_id, const char* obj_name, const char* old_attr_name,
-    const char* new_attr_name, hid_t lapl_id, hid_t es_id) {
+    const char* app_file, const char* app_func, unsigned app_line, hid_t loc_id,
+    const char* obj_name, const char* old_attr_name, const char* new_attr_name,
+    hid_t lapl_id, hid_t es_id) {
   BRAHMA_MAP_OR_FAIL(H5Arename_by_name_async);
   DFT_LOGGER_START_ALWAYS();
   DFT_LOGGER_UPDATE_TYPE(loc_id, MetadataType::MT_VALUE);
   DFT_LOGGER_UPDATE_TYPE(lapl_id, MetadataType::MT_VALUE);
   DFT_LOGGER_UPDATE_TYPE(es_id, MetadataType::MT_VALUE);
-  herr_t ret = __real_H5Arename_by_name_async(loc_id, obj_name, old_attr_name,
+  herr_t ret = __real_H5Arename_by_name_async(app_file, app_func, app_line,
+                                              loc_id, obj_name, old_attr_name,
                                               new_attr_name, lapl_id, es_id);
   DFT_LOGGER_UPDATE_TYPE(ret, MetadataType::MT_VALUE);
   DFT_LOGGER_END();
@@ -716,14 +737,18 @@ herr_t brahma::HDF5DFTracer::H5Awrite(hid_t attr_id, hid_t type_id,
 }
 #endif
 #if (BRAHMA_HDF5_VERSION >= 101405 && BRAHMA_HDF5_VERSION < 101500)
-herr_t brahma::HDF5DFTracer::H5Awrite_async(hid_t attr_id, hid_t type_id,
-                                            const void* buf, hid_t es_id) {
+herr_t brahma::HDF5DFTracer::H5Awrite_async(const char* app_file,
+                                            const char* app_func,
+                                            unsigned app_line, hid_t attr_id,
+                                            hid_t type_id, const void* buf,
+                                            hid_t es_id) {
   BRAHMA_MAP_OR_FAIL(H5Awrite_async);
   DFT_LOGGER_START_ALWAYS();
   DFT_LOGGER_UPDATE_TYPE(attr_id, MetadataType::MT_VALUE);
   DFT_LOGGER_UPDATE_TYPE(type_id, MetadataType::MT_VALUE);
   DFT_LOGGER_UPDATE_TYPE(es_id, MetadataType::MT_VALUE);
-  herr_t ret = __real_H5Awrite_async(attr_id, type_id, buf, es_id);
+  herr_t ret = __real_H5Awrite_async(app_file, app_func, app_line, attr_id,
+                                     type_id, buf, es_id);
   DFT_LOGGER_UPDATE_TYPE(ret, MetadataType::MT_VALUE);
   DFT_LOGGER_END();
   return ret;
@@ -761,12 +786,16 @@ herr_t brahma::HDF5DFTracer::H5Dclose(hid_t dset_id) {
 }
 #endif
 #if (BRAHMA_HDF5_VERSION >= 101405 && BRAHMA_HDF5_VERSION < 101500)
-herr_t brahma::HDF5DFTracer::H5Dclose_async(hid_t dset_id, hid_t es_id) {
+herr_t brahma::HDF5DFTracer::H5Dclose_async(const char* app_file,
+                                            const char* app_func,
+                                            unsigned app_line, hid_t dset_id,
+                                            hid_t es_id) {
   BRAHMA_MAP_OR_FAIL(H5Dclose_async);
   DFT_LOGGER_START_ALWAYS();
   DFT_LOGGER_UPDATE_TYPE(dset_id, MetadataType::MT_VALUE);
   DFT_LOGGER_UPDATE_TYPE(es_id, MetadataType::MT_VALUE);
-  herr_t ret = __real_H5Dclose_async(dset_id, es_id);
+  herr_t ret =
+      __real_H5Dclose_async(app_file, app_func, app_line, dset_id, es_id);
   DFT_LOGGER_UPDATE_TYPE(ret, MetadataType::MT_VALUE);
   DFT_LOGGER_END();
   return ret;
@@ -836,10 +865,10 @@ hid_t brahma::HDF5DFTracer::H5Dcreate_anon(hid_t loc_id, hid_t type_id,
 }
 #endif
 #if (BRAHMA_HDF5_VERSION >= 101405 && BRAHMA_HDF5_VERSION < 101500)
-hid_t brahma::HDF5DFTracer::H5Dcreate_async(hid_t loc_id, const char* name,
-                                            hid_t type_id, hid_t space_id,
-                                            hid_t lcpl_id, hid_t dcpl_id,
-                                            hid_t dapl_id, hid_t es_id) {
+hid_t brahma::HDF5DFTracer::H5Dcreate_async(
+    const char* app_file, const char* app_func, unsigned app_line, hid_t loc_id,
+    const char* name, hid_t type_id, hid_t space_id, hid_t lcpl_id,
+    hid_t dcpl_id, hid_t dapl_id, hid_t es_id) {
   BRAHMA_MAP_OR_FAIL(H5Dcreate_async);
   DFT_LOGGER_START_ALWAYS();
   DFT_LOGGER_UPDATE_TYPE(loc_id, MetadataType::MT_VALUE);
@@ -849,8 +878,9 @@ hid_t brahma::HDF5DFTracer::H5Dcreate_async(hid_t loc_id, const char* name,
   DFT_LOGGER_UPDATE_TYPE(dcpl_id, MetadataType::MT_VALUE);
   DFT_LOGGER_UPDATE_TYPE(dapl_id, MetadataType::MT_VALUE);
   DFT_LOGGER_UPDATE_TYPE(es_id, MetadataType::MT_VALUE);
-  hid_t ret = __real_H5Dcreate_async(loc_id, name, type_id, space_id, lcpl_id,
-                                     dcpl_id, dapl_id, es_id);
+  hid_t ret = __real_H5Dcreate_async(app_file, app_func, app_line, loc_id, name,
+                                     type_id, space_id, lcpl_id, dcpl_id,
+                                     dapl_id, es_id);
   DFT_LOGGER_UPDATE_TYPE(ret, MetadataType::MT_VALUE);
   DFT_LOGGER_END();
   return ret;
@@ -1085,12 +1115,16 @@ hid_t brahma::HDF5DFTracer::H5Dget_space(hid_t dset_id) {
 }
 #endif
 #if (BRAHMA_HDF5_VERSION >= 101405 && BRAHMA_HDF5_VERSION < 101500)
-hid_t brahma::HDF5DFTracer::H5Dget_space_async(hid_t dset_id, hid_t es_id) {
+hid_t brahma::HDF5DFTracer::H5Dget_space_async(const char* app_file,
+                                               const char* app_func,
+                                               unsigned app_line, hid_t dset_id,
+                                               hid_t es_id) {
   BRAHMA_MAP_OR_FAIL(H5Dget_space_async);
   DFT_LOGGER_START_ALWAYS();
   DFT_LOGGER_UPDATE_TYPE(dset_id, MetadataType::MT_VALUE);
   DFT_LOGGER_UPDATE_TYPE(es_id, MetadataType::MT_VALUE);
-  hid_t ret = __real_H5Dget_space_async(dset_id, es_id);
+  hid_t ret =
+      __real_H5Dget_space_async(app_file, app_func, app_line, dset_id, es_id);
   DFT_LOGGER_UPDATE_TYPE(ret, MetadataType::MT_VALUE);
   DFT_LOGGER_END();
   return ret;
@@ -1187,14 +1221,18 @@ hid_t brahma::HDF5DFTracer::H5Dopen2(hid_t loc_id, const char* name,
 }
 #endif
 #if (BRAHMA_HDF5_VERSION >= 101405 && BRAHMA_HDF5_VERSION < 101500)
-hid_t brahma::HDF5DFTracer::H5Dopen_async(hid_t loc_id, const char* name,
-                                          hid_t dapl_id, hid_t es_id) {
+hid_t brahma::HDF5DFTracer::H5Dopen_async(const char* app_file,
+                                          const char* app_func,
+                                          unsigned app_line, hid_t loc_id,
+                                          const char* name, hid_t dapl_id,
+                                          hid_t es_id) {
   BRAHMA_MAP_OR_FAIL(H5Dopen_async);
   DFT_LOGGER_START_ALWAYS();
   DFT_LOGGER_UPDATE_TYPE(loc_id, MetadataType::MT_VALUE);
   DFT_LOGGER_UPDATE_TYPE(dapl_id, MetadataType::MT_VALUE);
   DFT_LOGGER_UPDATE_TYPE(es_id, MetadataType::MT_VALUE);
-  hid_t ret = __real_H5Dopen_async(loc_id, name, dapl_id, es_id);
+  hid_t ret = __real_H5Dopen_async(app_file, app_func, app_line, loc_id, name,
+                                   dapl_id, es_id);
   DFT_LOGGER_UPDATE_TYPE(ret, MetadataType::MT_VALUE);
   DFT_LOGGER_END();
   return ret;
@@ -1222,10 +1260,10 @@ herr_t brahma::HDF5DFTracer::H5Dread(hid_t dset_id, hid_t mem_type_id,
 }
 #endif
 #if (BRAHMA_HDF5_VERSION >= 101405 && BRAHMA_HDF5_VERSION < 101500)
-herr_t brahma::HDF5DFTracer::H5Dread_async(hid_t dset_id, hid_t mem_type_id,
-                                           hid_t mem_space_id,
-                                           hid_t file_space_id, hid_t dxpl_id,
-                                           void* buf, hid_t es_id) {
+herr_t brahma::HDF5DFTracer::H5Dread_async(
+    const char* app_file, const char* app_func, unsigned app_line,
+    hid_t dset_id, hid_t mem_type_id, hid_t mem_space_id, hid_t file_space_id,
+    hid_t dxpl_id, void* buf, hid_t es_id) {
   BRAHMA_MAP_OR_FAIL(H5Dread_async);
   DFT_LOGGER_START_ALWAYS();
   DFT_LOGGER_UPDATE_TYPE(dset_id, MetadataType::MT_VALUE);
@@ -1234,8 +1272,9 @@ herr_t brahma::HDF5DFTracer::H5Dread_async(hid_t dset_id, hid_t mem_type_id,
   DFT_LOGGER_UPDATE_TYPE(file_space_id, MetadataType::MT_VALUE);
   DFT_LOGGER_UPDATE_TYPE(dxpl_id, MetadataType::MT_VALUE);
   DFT_LOGGER_UPDATE_TYPE(es_id, MetadataType::MT_VALUE);
-  herr_t ret = __real_H5Dread_async(dset_id, mem_type_id, mem_space_id,
-                                    file_space_id, dxpl_id, buf, es_id);
+  herr_t ret =
+      __real_H5Dread_async(app_file, app_func, app_line, dset_id, mem_type_id,
+                           mem_space_id, file_space_id, dxpl_id, buf, es_id);
   DFT_LOGGER_UPDATE_TYPE(ret, MetadataType::MT_VALUE);
   DFT_LOGGER_END();
   return ret;
@@ -1276,16 +1315,17 @@ herr_t brahma::HDF5DFTracer::H5Dread_multi(size_t count, hid_t dset_id[],
 #endif
 #if (BRAHMA_HDF5_VERSION >= 101405 && BRAHMA_HDF5_VERSION < 101500)
 herr_t brahma::HDF5DFTracer::H5Dread_multi_async(
-    size_t count, hid_t dset_id[], hid_t mem_type_id[], hid_t mem_space_id[],
+    const char* app_file, const char* app_func, unsigned app_line, size_t count,
+    hid_t dset_id[], hid_t mem_type_id[], hid_t mem_space_id[],
     hid_t file_space_id[], hid_t dxpl_id, void* buf[], hid_t es_id) {
   BRAHMA_MAP_OR_FAIL(H5Dread_multi_async);
   DFT_LOGGER_START_ALWAYS();
   DFT_LOGGER_UPDATE_TYPE(count, MetadataType::MT_VALUE);
   DFT_LOGGER_UPDATE_TYPE(dxpl_id, MetadataType::MT_VALUE);
   DFT_LOGGER_UPDATE_TYPE(es_id, MetadataType::MT_VALUE);
-  herr_t ret =
-      __real_H5Dread_multi_async(count, dset_id, mem_type_id, mem_space_id,
-                                 file_space_id, dxpl_id, buf, es_id);
+  herr_t ret = __real_H5Dread_multi_async(app_file, app_func, app_line, count,
+                                          dset_id, mem_type_id, mem_space_id,
+                                          file_space_id, dxpl_id, buf, es_id);
   DFT_LOGGER_UPDATE_TYPE(ret, MetadataType::MT_VALUE);
   DFT_LOGGER_END();
   return ret;
@@ -1337,14 +1377,15 @@ herr_t brahma::HDF5DFTracer::H5Dset_extent(hid_t dset_id,
 }
 #endif
 #if (BRAHMA_HDF5_VERSION >= 101405 && BRAHMA_HDF5_VERSION < 101500)
-herr_t brahma::HDF5DFTracer::H5Dset_extent_async(hid_t dset_id,
-                                                 const hsize_t size[],
-                                                 hid_t es_id) {
+herr_t brahma::HDF5DFTracer::H5Dset_extent_async(
+    const char* app_file, const char* app_func, unsigned app_line,
+    hid_t dset_id, const hsize_t size[], hid_t es_id) {
   BRAHMA_MAP_OR_FAIL(H5Dset_extent_async);
   DFT_LOGGER_START_ALWAYS();
   DFT_LOGGER_UPDATE_TYPE(dset_id, MetadataType::MT_VALUE);
   DFT_LOGGER_UPDATE_TYPE(es_id, MetadataType::MT_VALUE);
-  herr_t ret = __real_H5Dset_extent_async(dset_id, size, es_id);
+  herr_t ret = __real_H5Dset_extent_async(app_file, app_func, app_line, dset_id,
+                                          size, es_id);
   DFT_LOGGER_UPDATE_TYPE(ret, MetadataType::MT_VALUE);
   DFT_LOGGER_END();
   return ret;
@@ -1407,10 +1448,10 @@ herr_t brahma::HDF5DFTracer::H5Dwrite(hid_t dset_id, hid_t mem_type_id,
 }
 #endif
 #if (BRAHMA_HDF5_VERSION >= 101405 && BRAHMA_HDF5_VERSION < 101500)
-herr_t brahma::HDF5DFTracer::H5Dwrite_async(hid_t dset_id, hid_t mem_type_id,
-                                            hid_t mem_space_id,
-                                            hid_t file_space_id, hid_t dxpl_id,
-                                            const void* buf, hid_t es_id) {
+herr_t brahma::HDF5DFTracer::H5Dwrite_async(
+    const char* app_file, const char* app_func, unsigned app_line,
+    hid_t dset_id, hid_t mem_type_id, hid_t mem_space_id, hid_t file_space_id,
+    hid_t dxpl_id, const void* buf, hid_t es_id) {
   BRAHMA_MAP_OR_FAIL(H5Dwrite_async);
   DFT_LOGGER_START_ALWAYS();
   DFT_LOGGER_UPDATE_TYPE(dset_id, MetadataType::MT_VALUE);
@@ -1419,8 +1460,9 @@ herr_t brahma::HDF5DFTracer::H5Dwrite_async(hid_t dset_id, hid_t mem_type_id,
   DFT_LOGGER_UPDATE_TYPE(file_space_id, MetadataType::MT_VALUE);
   DFT_LOGGER_UPDATE_TYPE(dxpl_id, MetadataType::MT_VALUE);
   DFT_LOGGER_UPDATE_TYPE(es_id, MetadataType::MT_VALUE);
-  herr_t ret = __real_H5Dwrite_async(dset_id, mem_type_id, mem_space_id,
-                                     file_space_id, dxpl_id, buf, es_id);
+  herr_t ret =
+      __real_H5Dwrite_async(app_file, app_func, app_line, dset_id, mem_type_id,
+                            mem_space_id, file_space_id, dxpl_id, buf, es_id);
   DFT_LOGGER_UPDATE_TYPE(ret, MetadataType::MT_VALUE);
   DFT_LOGGER_END();
   return ret;
@@ -1465,16 +1507,17 @@ herr_t brahma::HDF5DFTracer::H5Dwrite_multi(size_t count, hid_t dset_id[],
 #endif
 #if (BRAHMA_HDF5_VERSION >= 101405 && BRAHMA_HDF5_VERSION < 101500)
 herr_t brahma::HDF5DFTracer::H5Dwrite_multi_async(
-    size_t count, hid_t dset_id[], hid_t mem_type_id[], hid_t mem_space_id[],
+    const char* app_file, const char* app_func, unsigned app_line, size_t count,
+    hid_t dset_id[], hid_t mem_type_id[], hid_t mem_space_id[],
     hid_t file_space_id[], hid_t dxpl_id, const void* buf[], hid_t es_id) {
   BRAHMA_MAP_OR_FAIL(H5Dwrite_multi_async);
   DFT_LOGGER_START_ALWAYS();
   DFT_LOGGER_UPDATE_TYPE(count, MetadataType::MT_VALUE);
   DFT_LOGGER_UPDATE_TYPE(dxpl_id, MetadataType::MT_VALUE);
   DFT_LOGGER_UPDATE_TYPE(es_id, MetadataType::MT_VALUE);
-  herr_t ret =
-      __real_H5Dwrite_multi_async(count, dset_id, mem_type_id, mem_space_id,
-                                  file_space_id, dxpl_id, buf, es_id);
+  herr_t ret = __real_H5Dwrite_multi_async(app_file, app_func, app_line, count,
+                                           dset_id, mem_type_id, mem_space_id,
+                                           file_space_id, dxpl_id, buf, es_id);
   DFT_LOGGER_UPDATE_TYPE(ret, MetadataType::MT_VALUE);
   DFT_LOGGER_END();
   return ret;
@@ -2813,12 +2856,16 @@ herr_t brahma::HDF5DFTracer::H5Fclose(hid_t file_id) {
 }
 #endif
 #if (BRAHMA_HDF5_VERSION >= 101405 && BRAHMA_HDF5_VERSION < 101500)
-herr_t brahma::HDF5DFTracer::H5Fclose_async(hid_t file_id, hid_t es_id) {
+herr_t brahma::HDF5DFTracer::H5Fclose_async(const char* app_file,
+                                            const char* app_func,
+                                            unsigned app_line, hid_t file_id,
+                                            hid_t es_id) {
   BRAHMA_MAP_OR_FAIL(H5Fclose_async);
   DFT_LOGGER_START_ALWAYS();
   DFT_LOGGER_UPDATE_TYPE(file_id, MetadataType::MT_VALUE);
   DFT_LOGGER_UPDATE_TYPE(es_id, MetadataType::MT_VALUE);
-  herr_t ret = __real_H5Fclose_async(file_id, es_id);
+  herr_t ret =
+      __real_H5Fclose_async(app_file, app_func, app_line, file_id, es_id);
   DFT_LOGGER_UPDATE_TYPE(ret, MetadataType::MT_VALUE);
   DFT_LOGGER_END();
   return ret;
@@ -2842,7 +2889,10 @@ hid_t brahma::HDF5DFTracer::H5Fcreate(const char* filename, unsigned int flags,
 }
 #endif
 #if (BRAHMA_HDF5_VERSION >= 101405 && BRAHMA_HDF5_VERSION < 101500)
-hid_t brahma::HDF5DFTracer::H5Fcreate_async(const char* filename,
+hid_t brahma::HDF5DFTracer::H5Fcreate_async(const char* app_file,
+                                            const char* app_func,
+                                            unsigned app_line,
+                                            const char* filename,
                                             unsigned int flags, hid_t fcpl_id,
                                             hid_t fapl_id, hid_t es_id) {
   BRAHMA_MAP_OR_FAIL(H5Fcreate_async);
@@ -2851,7 +2901,8 @@ hid_t brahma::HDF5DFTracer::H5Fcreate_async(const char* filename,
   DFT_LOGGER_UPDATE_TYPE(fcpl_id, MetadataType::MT_VALUE);
   DFT_LOGGER_UPDATE_TYPE(fapl_id, MetadataType::MT_VALUE);
   DFT_LOGGER_UPDATE_TYPE(es_id, MetadataType::MT_VALUE);
-  hid_t ret = __real_H5Fcreate_async(filename, flags, fcpl_id, fapl_id, es_id);
+  hid_t ret = __real_H5Fcreate_async(app_file, app_func, app_line, filename,
+                                     flags, fcpl_id, fapl_id, es_id);
   DFT_LOGGER_UPDATE_TYPE(ret, MetadataType::MT_VALUE);
   DFT_LOGGER_END();
   return ret;
@@ -2884,13 +2935,16 @@ herr_t brahma::HDF5DFTracer::H5Fflush(hid_t object_id, H5F_scope_t scope) {
 }
 #endif
 #if (BRAHMA_HDF5_VERSION >= 101405 && BRAHMA_HDF5_VERSION < 101500)
-herr_t brahma::HDF5DFTracer::H5Fflush_async(hid_t object_id, H5F_scope_t scope,
-                                            hid_t es_id) {
+herr_t brahma::HDF5DFTracer::H5Fflush_async(const char* app_file,
+                                            const char* app_func,
+                                            unsigned app_line, hid_t object_id,
+                                            H5F_scope_t scope, hid_t es_id) {
   BRAHMA_MAP_OR_FAIL(H5Fflush_async);
   DFT_LOGGER_START_ALWAYS();
   DFT_LOGGER_UPDATE_TYPE(object_id, MetadataType::MT_VALUE);
   DFT_LOGGER_UPDATE_TYPE(es_id, MetadataType::MT_VALUE);
-  herr_t ret = __real_H5Fflush_async(object_id, scope, es_id);
+  herr_t ret = __real_H5Fflush_async(app_file, app_func, app_line, object_id,
+                                     scope, es_id);
   DFT_LOGGER_UPDATE_TYPE(ret, MetadataType::MT_VALUE);
   DFT_LOGGER_END();
   return ret;
@@ -3348,15 +3402,16 @@ hid_t brahma::HDF5DFTracer::H5Fopen(const char* filename, unsigned int flags,
 }
 #endif
 #if (BRAHMA_HDF5_VERSION >= 101405 && BRAHMA_HDF5_VERSION < 101500)
-hid_t brahma::HDF5DFTracer::H5Fopen_async(const char* filename,
-                                          unsigned int flags,
-                                          hid_t access_plist, hid_t es_id) {
+hid_t brahma::HDF5DFTracer::H5Fopen_async(
+    const char* app_file, const char* app_func, unsigned app_line,
+    const char* filename, unsigned int flags, hid_t access_plist, hid_t es_id) {
   BRAHMA_MAP_OR_FAIL(H5Fopen_async);
   DFT_LOGGER_START_ALWAYS();
   DFT_LOGGER_UPDATE_TYPE(flags, MetadataType::MT_VALUE);
   DFT_LOGGER_UPDATE_TYPE(access_plist, MetadataType::MT_VALUE);
   DFT_LOGGER_UPDATE_TYPE(es_id, MetadataType::MT_VALUE);
-  hid_t ret = __real_H5Fopen_async(filename, flags, access_plist, es_id);
+  hid_t ret = __real_H5Fopen_async(app_file, app_func, app_line, filename,
+                                   flags, access_plist, es_id);
   DFT_LOGGER_UPDATE_TYPE(ret, MetadataType::MT_VALUE);
   DFT_LOGGER_END();
   return ret;
@@ -3377,12 +3432,16 @@ hid_t brahma::HDF5DFTracer::H5Freopen(hid_t file_id) {
 }
 #endif
 #if (BRAHMA_HDF5_VERSION >= 101405 && BRAHMA_HDF5_VERSION < 101500)
-hid_t brahma::HDF5DFTracer::H5Freopen_async(hid_t file_id, hid_t es_id) {
+hid_t brahma::HDF5DFTracer::H5Freopen_async(const char* app_file,
+                                            const char* app_func,
+                                            unsigned app_line, hid_t file_id,
+                                            hid_t es_id) {
   BRAHMA_MAP_OR_FAIL(H5Freopen_async);
   DFT_LOGGER_START_ALWAYS();
   DFT_LOGGER_UPDATE_TYPE(file_id, MetadataType::MT_VALUE);
   DFT_LOGGER_UPDATE_TYPE(es_id, MetadataType::MT_VALUE);
-  hid_t ret = __real_H5Freopen_async(file_id, es_id);
+  hid_t ret =
+      __real_H5Freopen_async(app_file, app_func, app_line, file_id, es_id);
   DFT_LOGGER_UPDATE_TYPE(ret, MetadataType::MT_VALUE);
   DFT_LOGGER_END();
   return ret;
@@ -3569,12 +3628,16 @@ herr_t brahma::HDF5DFTracer::H5Gclose(hid_t group_id) {
 }
 #endif
 #if (BRAHMA_HDF5_VERSION >= 101405 && BRAHMA_HDF5_VERSION < 101500)
-herr_t brahma::HDF5DFTracer::H5Gclose_async(hid_t group_id, hid_t es_id) {
+herr_t brahma::HDF5DFTracer::H5Gclose_async(const char* app_file,
+                                            const char* app_func,
+                                            unsigned app_line, hid_t group_id,
+                                            hid_t es_id) {
   BRAHMA_MAP_OR_FAIL(H5Gclose_async);
   DFT_LOGGER_START_ALWAYS();
   DFT_LOGGER_UPDATE_TYPE(group_id, MetadataType::MT_VALUE);
   DFT_LOGGER_UPDATE_TYPE(es_id, MetadataType::MT_VALUE);
-  herr_t ret = __real_H5Gclose_async(group_id, es_id);
+  herr_t ret =
+      __real_H5Gclose_async(app_file, app_func, app_line, group_id, es_id);
   DFT_LOGGER_UPDATE_TYPE(ret, MetadataType::MT_VALUE);
   DFT_LOGGER_END();
   return ret;
@@ -3633,9 +3696,12 @@ hid_t brahma::HDF5DFTracer::H5Gcreate_anon(hid_t loc_id, hid_t gcpl_id,
 }
 #endif
 #if (BRAHMA_HDF5_VERSION >= 101405 && BRAHMA_HDF5_VERSION < 101500)
-hid_t brahma::HDF5DFTracer::H5Gcreate_async(hid_t loc_id, const char* name,
-                                            hid_t lcpl_id, hid_t gcpl_id,
-                                            hid_t gapl_id, hid_t es_id) {
+hid_t brahma::HDF5DFTracer::H5Gcreate_async(const char* app_file,
+                                            const char* app_func,
+                                            unsigned app_line, hid_t loc_id,
+                                            const char* name, hid_t lcpl_id,
+                                            hid_t gcpl_id, hid_t gapl_id,
+                                            hid_t es_id) {
   BRAHMA_MAP_OR_FAIL(H5Gcreate_async);
   DFT_LOGGER_START_ALWAYS();
   DFT_LOGGER_UPDATE_TYPE(loc_id, MetadataType::MT_VALUE);
@@ -3643,8 +3709,8 @@ hid_t brahma::HDF5DFTracer::H5Gcreate_async(hid_t loc_id, const char* name,
   DFT_LOGGER_UPDATE_TYPE(gcpl_id, MetadataType::MT_VALUE);
   DFT_LOGGER_UPDATE_TYPE(gapl_id, MetadataType::MT_VALUE);
   DFT_LOGGER_UPDATE_TYPE(es_id, MetadataType::MT_VALUE);
-  hid_t ret =
-      __real_H5Gcreate_async(loc_id, name, lcpl_id, gcpl_id, gapl_id, es_id);
+  hid_t ret = __real_H5Gcreate_async(app_file, app_func, app_line, loc_id, name,
+                                     lcpl_id, gcpl_id, gapl_id, es_id);
   DFT_LOGGER_UPDATE_TYPE(ret, MetadataType::MT_VALUE);
   DFT_LOGGER_END();
   return ret;
@@ -3709,13 +3775,16 @@ herr_t brahma::HDF5DFTracer::H5Gget_info(hid_t loc_id, H5G_info_t* ginfo) {
 }
 #endif
 #if (BRAHMA_HDF5_VERSION >= 101405 && BRAHMA_HDF5_VERSION < 101500)
-herr_t brahma::HDF5DFTracer::H5Gget_info_async(hid_t loc_id, H5G_info_t* ginfo,
-                                               hid_t es_id) {
+herr_t brahma::HDF5DFTracer::H5Gget_info_async(const char* app_file,
+                                               const char* app_func,
+                                               unsigned app_line, hid_t loc_id,
+                                               H5G_info_t* ginfo, hid_t es_id) {
   BRAHMA_MAP_OR_FAIL(H5Gget_info_async);
   DFT_LOGGER_START_ALWAYS();
   DFT_LOGGER_UPDATE_TYPE(loc_id, MetadataType::MT_VALUE);
   DFT_LOGGER_UPDATE_TYPE(es_id, MetadataType::MT_VALUE);
-  herr_t ret = __real_H5Gget_info_async(loc_id, ginfo, es_id);
+  herr_t ret = __real_H5Gget_info_async(app_file, app_func, app_line, loc_id,
+                                        ginfo, es_id);
   DFT_LOGGER_UPDATE_TYPE(ret, MetadataType::MT_VALUE);
   DFT_LOGGER_END();
   return ret;
@@ -3742,16 +3811,17 @@ herr_t brahma::HDF5DFTracer::H5Gget_info_by_idx(
 #endif
 #if (BRAHMA_HDF5_VERSION >= 101405 && BRAHMA_HDF5_VERSION < 101500)
 herr_t brahma::HDF5DFTracer::H5Gget_info_by_idx_async(
-    hid_t loc_id, const char* group_name, H5_index_t idx_type,
-    H5_iter_order_t order, hsize_t n, H5G_info_t* ginfo, hid_t lapl_id,
-    hid_t es_id) {
+    const char* app_file, const char* app_func, unsigned app_line, hid_t loc_id,
+    const char* group_name, H5_index_t idx_type, H5_iter_order_t order,
+    hsize_t n, H5G_info_t* ginfo, hid_t lapl_id, hid_t es_id) {
   BRAHMA_MAP_OR_FAIL(H5Gget_info_by_idx_async);
   DFT_LOGGER_START_ALWAYS();
   DFT_LOGGER_UPDATE_TYPE(loc_id, MetadataType::MT_VALUE);
   DFT_LOGGER_UPDATE_TYPE(n, MetadataType::MT_VALUE);
   DFT_LOGGER_UPDATE_TYPE(lapl_id, MetadataType::MT_VALUE);
   DFT_LOGGER_UPDATE_TYPE(es_id, MetadataType::MT_VALUE);
-  herr_t ret = __real_H5Gget_info_by_idx_async(loc_id, group_name, idx_type,
+  herr_t ret = __real_H5Gget_info_by_idx_async(app_file, app_func, app_line,
+                                               loc_id, group_name, idx_type,
                                                order, n, ginfo, lapl_id, es_id);
   DFT_LOGGER_UPDATE_TYPE(ret, MetadataType::MT_VALUE);
   DFT_LOGGER_END();
@@ -3776,18 +3846,16 @@ herr_t brahma::HDF5DFTracer::H5Gget_info_by_name(hid_t loc_id, const char* name,
 }
 #endif
 #if (BRAHMA_HDF5_VERSION >= 101405 && BRAHMA_HDF5_VERSION < 101500)
-herr_t brahma::HDF5DFTracer::H5Gget_info_by_name_async(hid_t loc_id,
-                                                       const char* name,
-                                                       H5G_info_t* ginfo,
-                                                       hid_t lapl_id,
-                                                       hid_t es_id) {
+herr_t brahma::HDF5DFTracer::H5Gget_info_by_name_async(
+    const char* app_file, const char* app_func, unsigned app_line, hid_t loc_id,
+    const char* name, H5G_info_t* ginfo, hid_t lapl_id, hid_t es_id) {
   BRAHMA_MAP_OR_FAIL(H5Gget_info_by_name_async);
   DFT_LOGGER_START_ALWAYS();
   DFT_LOGGER_UPDATE_TYPE(loc_id, MetadataType::MT_VALUE);
   DFT_LOGGER_UPDATE_TYPE(lapl_id, MetadataType::MT_VALUE);
   DFT_LOGGER_UPDATE_TYPE(es_id, MetadataType::MT_VALUE);
-  herr_t ret =
-      __real_H5Gget_info_by_name_async(loc_id, name, ginfo, lapl_id, es_id);
+  herr_t ret = __real_H5Gget_info_by_name_async(
+      app_file, app_func, app_line, loc_id, name, ginfo, lapl_id, es_id);
   DFT_LOGGER_UPDATE_TYPE(ret, MetadataType::MT_VALUE);
   DFT_LOGGER_END();
   return ret;
@@ -3985,14 +4053,18 @@ hid_t brahma::HDF5DFTracer::H5Gopen2(hid_t loc_id, const char* name,
 }
 #endif
 #if (BRAHMA_HDF5_VERSION >= 101405 && BRAHMA_HDF5_VERSION < 101500)
-hid_t brahma::HDF5DFTracer::H5Gopen_async(hid_t loc_id, const char* name,
-                                          hid_t gapl_id, hid_t es_id) {
+hid_t brahma::HDF5DFTracer::H5Gopen_async(const char* app_file,
+                                          const char* app_func,
+                                          unsigned app_line, hid_t loc_id,
+                                          const char* name, hid_t gapl_id,
+                                          hid_t es_id) {
   BRAHMA_MAP_OR_FAIL(H5Gopen_async);
   DFT_LOGGER_START_ALWAYS();
   DFT_LOGGER_UPDATE_TYPE(loc_id, MetadataType::MT_VALUE);
   DFT_LOGGER_UPDATE_TYPE(gapl_id, MetadataType::MT_VALUE);
   DFT_LOGGER_UPDATE_TYPE(es_id, MetadataType::MT_VALUE);
-  hid_t ret = __real_H5Gopen_async(loc_id, name, gapl_id, es_id);
+  hid_t ret = __real_H5Gopen_async(app_file, app_func, app_line, loc_id, name,
+                                   gapl_id, es_id);
   DFT_LOGGER_UPDATE_TYPE(ret, MetadataType::MT_VALUE);
   DFT_LOGGER_END();
   return ret;
@@ -4408,6 +4480,7 @@ herr_t brahma::HDF5DFTracer::H5Lcreate_hard(hid_t cur_loc, const char* cur_name,
 #endif
 #if (BRAHMA_HDF5_VERSION >= 101405 && BRAHMA_HDF5_VERSION < 101500)
 herr_t brahma::HDF5DFTracer::H5Lcreate_hard_async(
+    const char* app_file, const char* app_func, unsigned app_line,
     hid_t cur_loc_id, const char* cur_name, hid_t new_loc_id,
     const char* new_name, hid_t lcpl_id, hid_t lapl_id, hid_t es_id) {
   BRAHMA_MAP_OR_FAIL(H5Lcreate_hard_async);
@@ -4417,7 +4490,8 @@ herr_t brahma::HDF5DFTracer::H5Lcreate_hard_async(
   DFT_LOGGER_UPDATE_TYPE(lcpl_id, MetadataType::MT_VALUE);
   DFT_LOGGER_UPDATE_TYPE(lapl_id, MetadataType::MT_VALUE);
   DFT_LOGGER_UPDATE_TYPE(es_id, MetadataType::MT_VALUE);
-  herr_t ret = __real_H5Lcreate_hard_async(cur_loc_id, cur_name, new_loc_id,
+  herr_t ret = __real_H5Lcreate_hard_async(app_file, app_func, app_line,
+                                           cur_loc_id, cur_name, new_loc_id,
                                            new_name, lcpl_id, lapl_id, es_id);
   DFT_LOGGER_UPDATE_TYPE(ret, MetadataType::MT_VALUE);
   DFT_LOGGER_END();
@@ -4445,18 +4519,18 @@ herr_t brahma::HDF5DFTracer::H5Lcreate_soft(const char* link_target,
 }
 #endif
 #if (BRAHMA_HDF5_VERSION >= 101405 && BRAHMA_HDF5_VERSION < 101500)
-herr_t brahma::HDF5DFTracer::H5Lcreate_soft_async(const char* link_target,
-                                                  hid_t link_loc_id,
-                                                  const char* link_name,
-                                                  hid_t lcpl_id, hid_t lapl_id,
-                                                  hid_t es_id) {
+herr_t brahma::HDF5DFTracer::H5Lcreate_soft_async(
+    const char* app_file, const char* app_func, unsigned app_line,
+    const char* link_target, hid_t link_loc_id, const char* link_name,
+    hid_t lcpl_id, hid_t lapl_id, hid_t es_id) {
   BRAHMA_MAP_OR_FAIL(H5Lcreate_soft_async);
   DFT_LOGGER_START_ALWAYS();
   DFT_LOGGER_UPDATE_TYPE(link_loc_id, MetadataType::MT_VALUE);
   DFT_LOGGER_UPDATE_TYPE(lcpl_id, MetadataType::MT_VALUE);
   DFT_LOGGER_UPDATE_TYPE(lapl_id, MetadataType::MT_VALUE);
   DFT_LOGGER_UPDATE_TYPE(es_id, MetadataType::MT_VALUE);
-  herr_t ret = __real_H5Lcreate_soft_async(link_target, link_loc_id, link_name,
+  herr_t ret = __real_H5Lcreate_soft_async(app_file, app_func, app_line,
+                                           link_target, link_loc_id, link_name,
                                            lcpl_id, lapl_id, es_id);
   DFT_LOGGER_UPDATE_TYPE(ret, MetadataType::MT_VALUE);
   DFT_LOGGER_END();
@@ -4502,14 +4576,18 @@ herr_t brahma::HDF5DFTracer::H5Ldelete(hid_t loc_id, const char* name,
 }
 #endif
 #if (BRAHMA_HDF5_VERSION >= 101405 && BRAHMA_HDF5_VERSION < 101500)
-herr_t brahma::HDF5DFTracer::H5Ldelete_async(hid_t loc_id, const char* name,
-                                             hid_t lapl_id, hid_t es_id) {
+herr_t brahma::HDF5DFTracer::H5Ldelete_async(const char* app_file,
+                                             const char* app_func,
+                                             unsigned app_line, hid_t loc_id,
+                                             const char* name, hid_t lapl_id,
+                                             hid_t es_id) {
   BRAHMA_MAP_OR_FAIL(H5Ldelete_async);
   DFT_LOGGER_START_ALWAYS();
   DFT_LOGGER_UPDATE_TYPE(loc_id, MetadataType::MT_VALUE);
   DFT_LOGGER_UPDATE_TYPE(lapl_id, MetadataType::MT_VALUE);
   DFT_LOGGER_UPDATE_TYPE(es_id, MetadataType::MT_VALUE);
-  herr_t ret = __real_H5Ldelete_async(loc_id, name, lapl_id, es_id);
+  herr_t ret = __real_H5Ldelete_async(app_file, app_func, app_line, loc_id,
+                                      name, lapl_id, es_id);
   DFT_LOGGER_UPDATE_TYPE(ret, MetadataType::MT_VALUE);
   DFT_LOGGER_END();
   return ret;
@@ -4538,15 +4616,17 @@ herr_t brahma::HDF5DFTracer::H5Ldelete_by_idx(hid_t loc_id,
 #endif
 #if (BRAHMA_HDF5_VERSION >= 101405 && BRAHMA_HDF5_VERSION < 101500)
 herr_t brahma::HDF5DFTracer::H5Ldelete_by_idx_async(
-    hid_t loc_id, const char* group_name, H5_index_t idx_type,
-    H5_iter_order_t order, hsize_t n, hid_t lapl_id, hid_t es_id) {
+    const char* app_file, const char* app_func, unsigned app_line, hid_t loc_id,
+    const char* group_name, H5_index_t idx_type, H5_iter_order_t order,
+    hsize_t n, hid_t lapl_id, hid_t es_id) {
   BRAHMA_MAP_OR_FAIL(H5Ldelete_by_idx_async);
   DFT_LOGGER_START_ALWAYS();
   DFT_LOGGER_UPDATE_TYPE(loc_id, MetadataType::MT_VALUE);
   DFT_LOGGER_UPDATE_TYPE(n, MetadataType::MT_VALUE);
   DFT_LOGGER_UPDATE_TYPE(lapl_id, MetadataType::MT_VALUE);
   DFT_LOGGER_UPDATE_TYPE(es_id, MetadataType::MT_VALUE);
-  herr_t ret = __real_H5Ldelete_by_idx_async(loc_id, group_name, idx_type,
+  herr_t ret = __real_H5Ldelete_by_idx_async(app_file, app_func, app_line,
+                                             loc_id, group_name, idx_type,
                                              order, n, lapl_id, es_id);
   DFT_LOGGER_UPDATE_TYPE(ret, MetadataType::MT_VALUE);
   DFT_LOGGER_END();
@@ -4570,15 +4650,18 @@ htri_t brahma::HDF5DFTracer::H5Lexists(hid_t loc_id, const char* name,
 }
 #endif
 #if (BRAHMA_HDF5_VERSION >= 101405 && BRAHMA_HDF5_VERSION < 101500)
-herr_t brahma::HDF5DFTracer::H5Lexists_async(hid_t loc_id, const char* name,
-                                             hbool_t* exists, hid_t lapl_id,
-                                             hid_t es_id) {
+herr_t brahma::HDF5DFTracer::H5Lexists_async(const char* app_file,
+                                             const char* app_func,
+                                             unsigned app_line, hid_t loc_id,
+                                             const char* name, hbool_t* exists,
+                                             hid_t lapl_id, hid_t es_id) {
   BRAHMA_MAP_OR_FAIL(H5Lexists_async);
   DFT_LOGGER_START_ALWAYS();
   DFT_LOGGER_UPDATE_TYPE(loc_id, MetadataType::MT_VALUE);
   DFT_LOGGER_UPDATE_TYPE(lapl_id, MetadataType::MT_VALUE);
   DFT_LOGGER_UPDATE_TYPE(es_id, MetadataType::MT_VALUE);
-  herr_t ret = __real_H5Lexists_async(loc_id, name, exists, lapl_id, es_id);
+  herr_t ret = __real_H5Lexists_async(app_file, app_func, app_line, loc_id,
+                                      name, exists, lapl_id, es_id);
   DFT_LOGGER_UPDATE_TYPE(ret, MetadataType::MT_VALUE);
   DFT_LOGGER_END();
   return ret;
@@ -4792,18 +4875,18 @@ herr_t brahma::HDF5DFTracer::H5Literate2(hid_t grp_id, H5_index_t idx_type,
 }
 #endif
 #if (BRAHMA_HDF5_VERSION >= 101405 && BRAHMA_HDF5_VERSION < 101500)
-herr_t brahma::HDF5DFTracer::H5Literate_async(hid_t group_id,
-                                              H5_index_t idx_type,
-                                              H5_iter_order_t order,
-                                              hsize_t* idx_p, H5L_iterate2_t op,
-                                              void* op_data, hid_t es_id) {
+herr_t brahma::HDF5DFTracer::H5Literate_async(
+    const char* app_file, const char* app_func, unsigned app_line,
+    hid_t group_id, H5_index_t idx_type, H5_iter_order_t order, hsize_t* idx_p,
+    H5L_iterate2_t op, void* op_data, hid_t es_id) {
   BRAHMA_MAP_OR_FAIL(H5Literate_async);
   DFT_LOGGER_START_ALWAYS();
   DFT_LOGGER_UPDATE_TYPE(group_id, MetadataType::MT_VALUE);
   DFT_LOGGER_UPDATE_TYPE(op, MetadataType::MT_VALUE);
   DFT_LOGGER_UPDATE_TYPE(es_id, MetadataType::MT_VALUE);
-  herr_t ret = __real_H5Literate_async(group_id, idx_type, order, idx_p, op,
-                                       op_data, es_id);
+  herr_t ret =
+      __real_H5Literate_async(app_file, app_func, app_line, group_id, idx_type,
+                              order, idx_p, op, op_data, es_id);
   DFT_LOGGER_UPDATE_TYPE(ret, MetadataType::MT_VALUE);
   DFT_LOGGER_END();
   return ret;
@@ -5052,12 +5135,16 @@ herr_t brahma::HDF5DFTracer::H5Oclose(hid_t object_id) {
 }
 #endif
 #if (BRAHMA_HDF5_VERSION >= 101405 && BRAHMA_HDF5_VERSION < 101500)
-herr_t brahma::HDF5DFTracer::H5Oclose_async(hid_t object_id, hid_t es_id) {
+herr_t brahma::HDF5DFTracer::H5Oclose_async(const char* app_file,
+                                            const char* app_func,
+                                            unsigned app_line, hid_t object_id,
+                                            hid_t es_id) {
   BRAHMA_MAP_OR_FAIL(H5Oclose_async);
   DFT_LOGGER_START_ALWAYS();
   DFT_LOGGER_UPDATE_TYPE(object_id, MetadataType::MT_VALUE);
   DFT_LOGGER_UPDATE_TYPE(es_id, MetadataType::MT_VALUE);
-  herr_t ret = __real_H5Oclose_async(object_id, es_id);
+  herr_t ret =
+      __real_H5Oclose_async(app_file, app_func, app_line, object_id, es_id);
   DFT_LOGGER_UPDATE_TYPE(ret, MetadataType::MT_VALUE);
   DFT_LOGGER_END();
   return ret;
@@ -5085,6 +5172,7 @@ herr_t brahma::HDF5DFTracer::H5Ocopy(hid_t src_loc_id, const char* src_name,
 #endif
 #if (BRAHMA_HDF5_VERSION >= 101405 && BRAHMA_HDF5_VERSION < 101500)
 herr_t brahma::HDF5DFTracer::H5Ocopy_async(
+    const char* app_file, const char* app_func, unsigned app_line,
     hid_t src_loc_id, const char* src_name, hid_t dst_loc_id,
     const char* dst_name, hid_t ocpypl_id, hid_t lcpl_id, hid_t es_id) {
   BRAHMA_MAP_OR_FAIL(H5Ocopy_async);
@@ -5094,8 +5182,9 @@ herr_t brahma::HDF5DFTracer::H5Ocopy_async(
   DFT_LOGGER_UPDATE_TYPE(ocpypl_id, MetadataType::MT_VALUE);
   DFT_LOGGER_UPDATE_TYPE(lcpl_id, MetadataType::MT_VALUE);
   DFT_LOGGER_UPDATE_TYPE(es_id, MetadataType::MT_VALUE);
-  herr_t ret = __real_H5Ocopy_async(src_loc_id, src_name, dst_loc_id, dst_name,
-                                    ocpypl_id, lcpl_id, es_id);
+  herr_t ret =
+      __real_H5Ocopy_async(app_file, app_func, app_line, src_loc_id, src_name,
+                           dst_loc_id, dst_name, ocpypl_id, lcpl_id, es_id);
   DFT_LOGGER_UPDATE_TYPE(ret, MetadataType::MT_VALUE);
   DFT_LOGGER_END();
   return ret;
@@ -5171,12 +5260,16 @@ herr_t brahma::HDF5DFTracer::H5Oflush(hid_t obj_id) {
 }
 #endif
 #if (BRAHMA_HDF5_VERSION >= 101405 && BRAHMA_HDF5_VERSION < 101500)
-herr_t brahma::HDF5DFTracer::H5Oflush_async(hid_t obj_id, hid_t es_id) {
+herr_t brahma::HDF5DFTracer::H5Oflush_async(const char* app_file,
+                                            const char* app_func,
+                                            unsigned app_line, hid_t obj_id,
+                                            hid_t es_id) {
   BRAHMA_MAP_OR_FAIL(H5Oflush_async);
   DFT_LOGGER_START_ALWAYS();
   DFT_LOGGER_UPDATE_TYPE(obj_id, MetadataType::MT_VALUE);
   DFT_LOGGER_UPDATE_TYPE(es_id, MetadataType::MT_VALUE);
-  herr_t ret = __real_H5Oflush_async(obj_id, es_id);
+  herr_t ret =
+      __real_H5Oflush_async(app_file, app_func, app_line, obj_id, es_id);
   DFT_LOGGER_UPDATE_TYPE(ret, MetadataType::MT_VALUE);
   DFT_LOGGER_END();
   return ret;
@@ -5505,16 +5598,18 @@ herr_t brahma::HDF5DFTracer::H5Oget_info_by_name3(hid_t loc_id,
 #endif
 #if (BRAHMA_HDF5_VERSION >= 101405 && BRAHMA_HDF5_VERSION < 101500)
 herr_t brahma::HDF5DFTracer::H5Oget_info_by_name_async(
-    hid_t loc_id, const char* name, H5O_info2_t* oinfo, unsigned int fields,
-    hid_t lapl_id, hid_t es_id) {
+    const char* app_file, const char* app_func, unsigned app_line, hid_t loc_id,
+    const char* name, H5O_info2_t* oinfo, unsigned int fields, hid_t lapl_id,
+    hid_t es_id) {
   BRAHMA_MAP_OR_FAIL(H5Oget_info_by_name_async);
   DFT_LOGGER_START_ALWAYS();
   DFT_LOGGER_UPDATE_TYPE(loc_id, MetadataType::MT_VALUE);
   DFT_LOGGER_UPDATE_TYPE(fields, MetadataType::MT_VALUE);
   DFT_LOGGER_UPDATE_TYPE(lapl_id, MetadataType::MT_VALUE);
   DFT_LOGGER_UPDATE_TYPE(es_id, MetadataType::MT_VALUE);
-  herr_t ret = __real_H5Oget_info_by_name_async(loc_id, name, oinfo, fields,
-                                                lapl_id, es_id);
+  herr_t ret =
+      __real_H5Oget_info_by_name_async(app_file, app_func, app_line, loc_id,
+                                       name, oinfo, fields, lapl_id, es_id);
   DFT_LOGGER_UPDATE_TYPE(ret, MetadataType::MT_VALUE);
   DFT_LOGGER_END();
   return ret;
@@ -5621,14 +5716,18 @@ hid_t brahma::HDF5DFTracer::H5Oopen(hid_t loc_id, const char* name,
 }
 #endif
 #if (BRAHMA_HDF5_VERSION >= 101405 && BRAHMA_HDF5_VERSION < 101500)
-hid_t brahma::HDF5DFTracer::H5Oopen_async(hid_t loc_id, const char* name,
-                                          hid_t lapl_id, hid_t es_id) {
+hid_t brahma::HDF5DFTracer::H5Oopen_async(const char* app_file,
+                                          const char* app_func,
+                                          unsigned app_line, hid_t loc_id,
+                                          const char* name, hid_t lapl_id,
+                                          hid_t es_id) {
   BRAHMA_MAP_OR_FAIL(H5Oopen_async);
   DFT_LOGGER_START_ALWAYS();
   DFT_LOGGER_UPDATE_TYPE(loc_id, MetadataType::MT_VALUE);
   DFT_LOGGER_UPDATE_TYPE(lapl_id, MetadataType::MT_VALUE);
   DFT_LOGGER_UPDATE_TYPE(es_id, MetadataType::MT_VALUE);
-  hid_t ret = __real_H5Oopen_async(loc_id, name, lapl_id, es_id);
+  hid_t ret = __real_H5Oopen_async(app_file, app_func, app_line, loc_id, name,
+                                   lapl_id, es_id);
   DFT_LOGGER_UPDATE_TYPE(ret, MetadataType::MT_VALUE);
   DFT_LOGGER_END();
   return ret;
@@ -5671,16 +5770,18 @@ hid_t brahma::HDF5DFTracer::H5Oopen_by_idx(hid_t loc_id, const char* group_name,
 #endif
 #if (BRAHMA_HDF5_VERSION >= 101405 && BRAHMA_HDF5_VERSION < 101500)
 hid_t brahma::HDF5DFTracer::H5Oopen_by_idx_async(
-    hid_t loc_id, const char* group_name, H5_index_t idx_type,
-    H5_iter_order_t order, hsize_t n, hid_t lapl_id, hid_t es_id) {
+    const char* app_file, const char* app_func, unsigned app_line, hid_t loc_id,
+    const char* group_name, H5_index_t idx_type, H5_iter_order_t order,
+    hsize_t n, hid_t lapl_id, hid_t es_id) {
   BRAHMA_MAP_OR_FAIL(H5Oopen_by_idx_async);
   DFT_LOGGER_START_ALWAYS();
   DFT_LOGGER_UPDATE_TYPE(loc_id, MetadataType::MT_VALUE);
   DFT_LOGGER_UPDATE_TYPE(n, MetadataType::MT_VALUE);
   DFT_LOGGER_UPDATE_TYPE(lapl_id, MetadataType::MT_VALUE);
   DFT_LOGGER_UPDATE_TYPE(es_id, MetadataType::MT_VALUE);
-  hid_t ret = __real_H5Oopen_by_idx_async(loc_id, group_name, idx_type, order,
-                                          n, lapl_id, es_id);
+  hid_t ret = __real_H5Oopen_by_idx_async(app_file, app_func, app_line, loc_id,
+                                          group_name, idx_type, order, n,
+                                          lapl_id, es_id);
   DFT_LOGGER_UPDATE_TYPE(ret, MetadataType::MT_VALUE);
   DFT_LOGGER_END();
   return ret;
@@ -5713,12 +5814,16 @@ herr_t brahma::HDF5DFTracer::H5Orefresh(hid_t oid) {
 }
 #endif
 #if (BRAHMA_HDF5_VERSION >= 101405 && BRAHMA_HDF5_VERSION < 101500)
-herr_t brahma::HDF5DFTracer::H5Orefresh_async(hid_t oid, hid_t es_id) {
+herr_t brahma::HDF5DFTracer::H5Orefresh_async(const char* app_file,
+                                              const char* app_func,
+                                              unsigned app_line, hid_t oid,
+                                              hid_t es_id) {
   BRAHMA_MAP_OR_FAIL(H5Orefresh_async);
   DFT_LOGGER_START_ALWAYS();
   DFT_LOGGER_UPDATE_TYPE(oid, MetadataType::MT_VALUE);
   DFT_LOGGER_UPDATE_TYPE(es_id, MetadataType::MT_VALUE);
-  herr_t ret = __real_H5Orefresh_async(oid, es_id);
+  herr_t ret =
+      __real_H5Orefresh_async(app_file, app_func, app_line, oid, es_id);
   DFT_LOGGER_UPDATE_TYPE(ret, MetadataType::MT_VALUE);
   DFT_LOGGER_END();
   return ret;
@@ -10233,15 +10338,16 @@ hid_t brahma::HDF5DFTracer::H5Ropen_attr(H5R_ref_t* ref_ptr, hid_t rapl_id,
 }
 #endif
 #if (BRAHMA_HDF5_VERSION >= 101405 && BRAHMA_HDF5_VERSION < 101500)
-hid_t brahma::HDF5DFTracer::H5Ropen_attr_async(H5R_ref_t* ref_ptr,
-                                               hid_t rapl_id, hid_t aapl_id,
-                                               hid_t es_id) {
+hid_t brahma::HDF5DFTracer::H5Ropen_attr_async(
+    const char* app_file, const char* app_func, unsigned app_line,
+    H5R_ref_t* ref_ptr, hid_t rapl_id, hid_t aapl_id, hid_t es_id) {
   BRAHMA_MAP_OR_FAIL(H5Ropen_attr_async);
   DFT_LOGGER_START_ALWAYS();
   DFT_LOGGER_UPDATE_TYPE(rapl_id, MetadataType::MT_VALUE);
   DFT_LOGGER_UPDATE_TYPE(aapl_id, MetadataType::MT_VALUE);
   DFT_LOGGER_UPDATE_TYPE(es_id, MetadataType::MT_VALUE);
-  hid_t ret = __real_H5Ropen_attr_async(ref_ptr, rapl_id, aapl_id, es_id);
+  hid_t ret = __real_H5Ropen_attr_async(app_file, app_func, app_line, ref_ptr,
+                                        rapl_id, aapl_id, es_id);
   DFT_LOGGER_UPDATE_TYPE(ret, MetadataType::MT_VALUE);
   DFT_LOGGER_END();
   return ret;
@@ -10262,18 +10368,17 @@ hid_t brahma::HDF5DFTracer::H5Ropen_object(H5R_ref_t* ref_ptr, hid_t rapl_id,
 }
 #endif
 #if (BRAHMA_HDF5_VERSION >= 101405 && BRAHMA_HDF5_VERSION < 101500)
-hid_t brahma::HDF5DFTracer::H5Ropen_object_async(unsigned int app_line,
-                                                 H5R_ref_t* ref_ptr,
-                                                 hid_t rapl_id, hid_t oapl_id,
-                                                 hid_t es_id) {
+hid_t brahma::HDF5DFTracer::H5Ropen_object_async(
+    const char* app_file, const char* app_func, unsigned app_line,
+    H5R_ref_t* ref_ptr, hid_t rapl_id, hid_t oapl_id, hid_t es_id) {
   BRAHMA_MAP_OR_FAIL(H5Ropen_object_async);
   DFT_LOGGER_START_ALWAYS();
   DFT_LOGGER_UPDATE_TYPE(app_line, MetadataType::MT_VALUE);
   DFT_LOGGER_UPDATE_TYPE(rapl_id, MetadataType::MT_VALUE);
   DFT_LOGGER_UPDATE_TYPE(oapl_id, MetadataType::MT_VALUE);
   DFT_LOGGER_UPDATE_TYPE(es_id, MetadataType::MT_VALUE);
-  hid_t ret =
-      __real_H5Ropen_object_async(app_line, ref_ptr, rapl_id, oapl_id, es_id);
+  hid_t ret = __real_H5Ropen_object_async(app_file, app_func, app_line, ref_ptr,
+                                          rapl_id, oapl_id, es_id);
   DFT_LOGGER_UPDATE_TYPE(ret, MetadataType::MT_VALUE);
   DFT_LOGGER_END();
   return ret;
@@ -10294,15 +10399,16 @@ hid_t brahma::HDF5DFTracer::H5Ropen_region(H5R_ref_t* ref_ptr, hid_t rapl_id,
 }
 #endif
 #if (BRAHMA_HDF5_VERSION >= 101405 && BRAHMA_HDF5_VERSION < 101500)
-hid_t brahma::HDF5DFTracer::H5Ropen_region_async(H5R_ref_t* ref_ptr,
-                                                 hid_t rapl_id, hid_t oapl_id,
-                                                 hid_t es_id) {
+hid_t brahma::HDF5DFTracer::H5Ropen_region_async(
+    const char* app_file, const char* app_func, unsigned app_line,
+    H5R_ref_t* ref_ptr, hid_t rapl_id, hid_t oapl_id, hid_t es_id) {
   BRAHMA_MAP_OR_FAIL(H5Ropen_region_async);
   DFT_LOGGER_START_ALWAYS();
   DFT_LOGGER_UPDATE_TYPE(rapl_id, MetadataType::MT_VALUE);
   DFT_LOGGER_UPDATE_TYPE(oapl_id, MetadataType::MT_VALUE);
   DFT_LOGGER_UPDATE_TYPE(es_id, MetadataType::MT_VALUE);
-  hid_t ret = __real_H5Ropen_region_async(ref_ptr, rapl_id, oapl_id, es_id);
+  hid_t ret = __real_H5Ropen_region_async(app_file, app_func, app_line, ref_ptr,
+                                          rapl_id, oapl_id, es_id);
   DFT_LOGGER_UPDATE_TYPE(ret, MetadataType::MT_VALUE);
   DFT_LOGGER_END();
   return ret;
@@ -11044,12 +11150,16 @@ herr_t brahma::HDF5DFTracer::H5Tclose(hid_t type_id) {
 }
 #endif
 #if (BRAHMA_HDF5_VERSION >= 101405 && BRAHMA_HDF5_VERSION < 101500)
-herr_t brahma::HDF5DFTracer::H5Tclose_async(hid_t type_id, hid_t es_id) {
+herr_t brahma::HDF5DFTracer::H5Tclose_async(const char* app_file,
+                                            const char* app_func,
+                                            unsigned app_line, hid_t type_id,
+                                            hid_t es_id) {
   BRAHMA_MAP_OR_FAIL(H5Tclose_async);
   DFT_LOGGER_START_ALWAYS();
   DFT_LOGGER_UPDATE_TYPE(type_id, MetadataType::MT_VALUE);
   DFT_LOGGER_UPDATE_TYPE(es_id, MetadataType::MT_VALUE);
-  herr_t ret = __real_H5Tclose_async(type_id, es_id);
+  herr_t ret =
+      __real_H5Tclose_async(app_file, app_func, app_line, type_id, es_id);
   DFT_LOGGER_UPDATE_TYPE(ret, MetadataType::MT_VALUE);
   DFT_LOGGER_END();
   return ret;
@@ -11111,10 +11221,12 @@ herr_t brahma::HDF5DFTracer::H5Tcommit_anon(hid_t loc_id, hid_t type_id,
 }
 #endif
 #if (BRAHMA_HDF5_VERSION >= 101405 && BRAHMA_HDF5_VERSION < 101500)
-herr_t brahma::HDF5DFTracer::H5Tcommit_async(hid_t loc_id, const char* name,
-                                             hid_t type_id, hid_t lcpl_id,
-                                             hid_t tcpl_id, hid_t tapl_id,
-                                             hid_t es_id) {
+herr_t brahma::HDF5DFTracer::H5Tcommit_async(const char* app_file,
+                                             const char* app_func,
+                                             unsigned app_line, hid_t loc_id,
+                                             const char* name, hid_t type_id,
+                                             hid_t lcpl_id, hid_t tcpl_id,
+                                             hid_t tapl_id, hid_t es_id) {
   BRAHMA_MAP_OR_FAIL(H5Tcommit_async);
   DFT_LOGGER_START_ALWAYS();
   DFT_LOGGER_UPDATE_TYPE(loc_id, MetadataType::MT_VALUE);
@@ -11123,8 +11235,9 @@ herr_t brahma::HDF5DFTracer::H5Tcommit_async(hid_t loc_id, const char* name,
   DFT_LOGGER_UPDATE_TYPE(tcpl_id, MetadataType::MT_VALUE);
   DFT_LOGGER_UPDATE_TYPE(tapl_id, MetadataType::MT_VALUE);
   DFT_LOGGER_UPDATE_TYPE(es_id, MetadataType::MT_VALUE);
-  herr_t ret = __real_H5Tcommit_async(loc_id, name, type_id, lcpl_id, tcpl_id,
-                                      tapl_id, es_id);
+  herr_t ret =
+      __real_H5Tcommit_async(app_file, app_func, app_line, loc_id, name,
+                             type_id, lcpl_id, tcpl_id, tapl_id, es_id);
   DFT_LOGGER_UPDATE_TYPE(ret, MetadataType::MT_VALUE);
   DFT_LOGGER_END();
   return ret;
@@ -11765,14 +11878,18 @@ hid_t brahma::HDF5DFTracer::H5Topen2(hid_t loc_id, const char* name,
 }
 #endif
 #if (BRAHMA_HDF5_VERSION >= 101405 && BRAHMA_HDF5_VERSION < 101500)
-hid_t brahma::HDF5DFTracer::H5Topen_async(hid_t loc_id, const char* name,
-                                          hid_t tapl_id, hid_t es_id) {
+hid_t brahma::HDF5DFTracer::H5Topen_async(const char* app_file,
+                                          const char* app_func,
+                                          unsigned app_line, hid_t loc_id,
+                                          const char* name, hid_t tapl_id,
+                                          hid_t es_id) {
   BRAHMA_MAP_OR_FAIL(H5Topen_async);
   DFT_LOGGER_START_ALWAYS();
   DFT_LOGGER_UPDATE_TYPE(loc_id, MetadataType::MT_VALUE);
   DFT_LOGGER_UPDATE_TYPE(tapl_id, MetadataType::MT_VALUE);
   DFT_LOGGER_UPDATE_TYPE(es_id, MetadataType::MT_VALUE);
-  hid_t ret = __real_H5Topen_async(loc_id, name, tapl_id, es_id);
+  hid_t ret = __real_H5Topen_async(app_file, app_func, app_line, loc_id, name,
+                                   tapl_id, es_id);
   DFT_LOGGER_UPDATE_TYPE(ret, MetadataType::MT_VALUE);
   DFT_LOGGER_END();
   return ret;
