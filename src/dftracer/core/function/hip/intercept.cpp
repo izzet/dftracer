@@ -70,20 +70,30 @@ bool dftracer::Singleton<dftracer::HIPFunction>::stop_creating_instances =
     false;
 namespace dftracer {
 
+// rocprofiler timestamps are always nanoseconds; scale them into whatever
+// unit DFTLogger::get_time()/config->time_metric is currently using so GPU
+// events line up with CPU-side events in the same trace.
+static double roc_ns_to_time_metric_factor() {
+  auto config =
+      dftracer::Singleton<dftracer::ConfigurationManager>::get_instance();
+  return time_metric_units_per_second(config->time_metric) / 1e9;
+}
+
 TimeResolution HIPFunction::transform_time(rocprofiler_timestamp_t end_time,
                                            rocprofiler_timestamp_t start_time) {
-  // Convert from nanoseconds to microseconds
-  return std::floor(end_time / 1000.0) - std::floor(start_time / 1000.0);
+  double factor = roc_ns_to_time_metric_factor();
+  return std::floor(end_time * factor) - std::floor(start_time * factor);
 }
 
 TimeResolution HIPFunction::transform_timestamp(
     rocprofiler_timestamp_t timestamp) {
+  double factor = roc_ns_to_time_metric_factor();
   if (time_diff == 0) {
     rocprofiler_timestamp_t roctime;
     rocprofiler_get_timestamp(&roctime);
-    time_diff = logger->get_time() - std::floor(roctime / 1000.0);
+    time_diff = logger->get_time() - std::floor(roctime * factor);
   }
-  return std::floor(timestamp / 1000.0) + time_diff;
+  return std::floor(timestamp * factor) + time_diff;
 }
 
 void HIPFunction::tool_code_object_callback(

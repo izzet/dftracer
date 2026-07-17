@@ -19,6 +19,7 @@
 #define DFT_YAML_TRACER_LOG_FILE "log_file"
 #define DFT_YAML_TRACER_DATA_DIRS "data_dirs"
 #define DFT_YAML_TRACER_LOG_LEVEL "log_level"
+#define DFT_YAML_TRACER_TIME_METRIC "time_metric"
 #define DFT_YAML_TRACER_COMPRESSION "compression"
 #define DFT_YAML_TRACER_INTERVAL "interval"
 #define DFT_YAML_TRACER_LIBUV_THREADS "libuv_threads"
@@ -62,6 +63,7 @@ dftracer::ConfigurationManager::ConfigurationManager()
       core_affinity(false),
       gotcha_priority(1),
       logger_level(cpplogger::CPP_LOGGER_ERROR),
+      time_metric(TimeMetricType::TIME_METRIC_US),
       io(true),
       posix(true),
       stdio(true),
@@ -106,6 +108,13 @@ dftracer::ConfigurationManager::ConfigurationManager()
       }
       DFTRACER_LOG_DEBUG("YAML ConfigurationManager.logger_level %d",
                          this->logger_level);
+      if (config[DFT_YAML_TRACER][DFT_YAML_TRACER_TIME_METRIC]) {
+        convert(config[DFT_YAML_TRACER][DFT_YAML_TRACER_TIME_METRIC]
+                    .as<std::string>(),
+                this->time_metric);
+      }
+      DFTRACER_LOG_DEBUG("YAML ConfigurationManager.time_metric %s",
+                         to_string(this->time_metric).c_str());
       if (config[DFT_YAML_TRACER][DFT_YAML_TRACER_INIT]) {
         convert(config[DFT_YAML_TRACER][DFT_YAML_TRACER_INIT].as<std::string>(),
                 this->init_type);
@@ -267,6 +276,14 @@ dftracer::ConfigurationManager::ConfigurationManager()
                          this->write_buffer_size);
     }
   }
+  // ENV variables override any YAML configuration, so this must run after
+  // the YAML block above has had a chance to set time_metric.
+  const char* env_time_metric = getenv(DFTRACER_TIME_METRIC);
+  if (env_time_metric != nullptr) {
+    convert(env_time_metric, this->time_metric);
+  }
+  DFTRACER_LOG_DEBUG("ConfigurationManager.time_metric %s",
+                     to_string(this->time_metric).c_str());
   const char* env_enable = getenv(DFTRACER_ENABLE);
   if (env_enable != nullptr && strcmp(env_enable, "1") == 0) {
     this->enable = true;

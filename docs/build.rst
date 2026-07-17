@@ -138,12 +138,25 @@ Build Variables
    DFTRACER_BUILD_TYPE              STRING  Sets the build type for DFTRACER (default Release). Values are Debug or Release
    DFTRACER_ENABLE_FTRACING         BOOL    Enables function tracing (default OFF).
    DFTRACER_ENABLE_HIP_TRACING      BOOL    Enables AMD GPU tracing (default OFF).
-   DFTRACER_ENABLE_MPI              BOOL    Enables MPI Rank (default ON).
+   DFTRACER_ENABLE_MPI              BOOL    Enables MPI Rank (default OFF).
+   DFTRACER_MPI_IMPL                STRING  Selects the MPI implementation to build against (default: empty/auto-detect).
    DFTRACER_DISABLE_HWLOC           BOOL    Disables HWLOC (default ON).
+   DFTRACER_ENABLE_HDF5             BOOL    Enables HDF5 tracing support (default OFF).
+   DFTRACER_ENABLE_DYNAMIC_DETECTION BOOL   Enables Dynamic library detection for HWLOC, MPI, and HIP (default OFF).
+   DFTRACER_GENERATE_INTERFACES     BOOL    Generate Brahma and DFTracer interfaces from discovered headers (default OFF).
+   DFTRACER_ENABLE_NATIVE_SCRIPT    BOOL    Build with native scripting support (default OFF).
    DFTRACER_PYTHON_EXE              STRING  Sets path to python executable. Only Cmake.
    DFTRACER_PYTHON_SITE             STRING  Sets path to python site-packages. Only Cmake.
-   DFTRACER_BUILD_PYTHON_BINDINGS   STRING  Enable python bindings for DFTracer. Only Cmake.
-   DFTRACER_ENABLE_DYNAMIC_DETECTION BOOL   Enables Dynamic library detection for HWLOC, MPI, and HIP (default OFF).
+   DFTRACER_BUILD_PYTHON_BINDINGS   BOOL    Enable python bindings for DFTracer (default ON).
+   DFTRACER_LIBDIR_AS_LIB           BOOL    Install libraries directly under ``lib`` instead of an arch-specific subdir (default OFF).
+   DFTRACER_WARNINGS_AS_ERRORS      BOOL    Build with warnings promoted to errors (default OFF).
+   DFTRACER_USE_CLANG_LIBCXX        BOOL    Build against Clang's ``libc++`` instead of ``libstdc++`` (default OFF).
+   DFTRACER_INSTALL_DEPENDENCIES    BOOL    Install DFTracer's dependencies (cpp-logger, GOTCHA, brahma) as part of the build (default OFF).
+   DFTRACER_ENABLE_TESTS            BOOL    Enable tests for DFTracer (default OFF).
+   DFTRACER_ENABLE_DLIO_BENCHMARK_TESTS BOOL Enable dlio_benchmark integration tests (default OFF).
+   DFTRACER_ENABLE_PAPER_TESTS      BOOL    Enable paper/reproducibility tests (default OFF).
+   DFTRACER_TEST_LD_LIBRARY_PATH    STRING  Additional ``LD_LIBRARY_PATH`` entries to include when running tests (default: empty).
+   DFTRACER_MPI_TEST_LAUNCHER_FLAGS STRING  Additional flags passed to the MPI test launcher (default: auto-detected).
    ================================ ======  ===========================================================================
 
 These build variables can be set with cmake as ``-DDISABLE_HWLOC=OFF`` or as environment variables ``export DFTRACER_DISABLE_HWLOC=OFF``

@@ -38,6 +38,7 @@ YAML configuration supported. WE need to set DFTRACER_CONFIGURATION ENV variable
       log_level: DEBUG  # Logging level within DFTracer ERROR/WARN/INFO/DEBUG (default ERROR).
       compression: True # Enable trace compression (default True)
       libuv_threads: 1  # Number of libuv worker threads for dftracer_service (default 1)
+      time_metric: US   # Time scale used for event timestamps US/NS/MS/SEC (default US).
     gotcha:
       priority: 1       # PRIORITY of DFTracer in GOTCHA (default: True).
     features:
@@ -73,6 +74,8 @@ ENV Variables supported
                                             ``DFTRACER_INC_METADATA`` needs to be enabled.
    DFTRACER_GOTCHA_PRIORITY         INT     PRIORITY of DFTracer in GOTCHA (default: 1).
    DFTRACER_LOG_LEVEL               STRING  Logging level within DFTracer ``ERROR``/``WARN``/``INFO``/``DEBUG`` (default ``ERROR``).
+   DFTRACER_TIME_METRIC             STRING  Time scale used for event timestamps ``US``/``NS``/``MS``/``SEC`` (default ``US``).
+                                            Also emitted as a ``time_metric`` metadata event so it is recorded in every trace.
    DFTRACER_BIND_SIGNALS            INT     Install DFTracer signal and exception handlers (default: 0).
                                             When set to ``1``, DFTracer registers handlers for the following signals:
                                             ``SIGSEGV`` (segmentation fault), ``SIGABRT`` (abort / assertion failure),
