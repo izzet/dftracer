@@ -23,6 +23,7 @@ class ConfigurationManager {
   bool core_affinity;
   int gotcha_priority;
   cpplogger::LoggerType logger_level;
+  TimeMetricType time_metric;
   bool io;
   bool posix;
   bool stdio;

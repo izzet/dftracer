@@ -29,6 +29,12 @@ enum AggregationType : uint8_t {
   AGGREGATION_TYPE_FULL = 0,
   AGGREGATION_TYPE_SELECTIVE = 1
 };
+enum TimeMetricType : uint8_t {
+  TIME_METRIC_US = 0,
+  TIME_METRIC_NS = 1,
+  TIME_METRIC_MS = 2,
+  TIME_METRIC_SEC = 3
+};
 enum class RuleOp { AND, OR, NOT, EQ, NEQ, GT, LT, GTE, LTE, IN, LIKE };
 
 inline MetadataType convert(const int& s) {
@@ -92,6 +98,49 @@ inline std::string to_string(const AggregationType& type) {
       return "SELECTIVE";
     default:
       return "FULL";
+  }
+}
+inline void convert(const std::string& s, TimeMetricType& type) {
+  if (s == "NS") {
+    type = TimeMetricType::TIME_METRIC_NS;
+  } else if (s == "MS") {
+    type = TimeMetricType::TIME_METRIC_MS;
+  } else if (s == "SEC") {
+    type = TimeMetricType::TIME_METRIC_SEC;
+  } else if (s == "US") {
+    type = TimeMetricType::TIME_METRIC_US;
+  } else {
+    type = TimeMetricType::TIME_METRIC_US;
+  }
+}
+inline std::string to_string(const TimeMetricType& type) {
+  switch (type) {
+    case TimeMetricType::TIME_METRIC_NS:
+      return "NS";
+    case TimeMetricType::TIME_METRIC_MS:
+      return "MS";
+    case TimeMetricType::TIME_METRIC_SEC:
+      return "SEC";
+    case TimeMetricType::TIME_METRIC_US:
+      return "US";
+    default:
+      return "US";
+  }
+}
+// Number of TIME_METRIC units in one second. Used by any consumer that needs
+// to convert a wall-clock quantity (e.g. a millisecond interval) into the
+// same unit that DFTLogger::get_time() is currently returning.
+inline double time_metric_units_per_second(const TimeMetricType& type) {
+  switch (type) {
+    case TimeMetricType::TIME_METRIC_NS:
+      return 1e9;
+    case TimeMetricType::TIME_METRIC_MS:
+      return 1e3;
+    case TimeMetricType::TIME_METRIC_SEC:
+      return 1.0;
+    case TimeMetricType::TIME_METRIC_US:
+    default:
+      return 1e6;
   }
 }
 

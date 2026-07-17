@@ -184,6 +184,10 @@ class DFTLogger {
       this->buffer_manager->log_metadata_event(
           thread_name, METADATA_NAME_THREAD_NAME, METADATA_NAME_THREAD_NAME,
           this->process_id, tid);
+      std::string time_metric_value = to_string(config->time_metric);
+      this->buffer_manager->log_metadata_event(
+          "time_metric", time_metric_value.c_str(), CUSTOM_METADATA,
+          this->process_id, tid);
       dftracer::Metadata* meta = nullptr;
       if (include_metadata) {
         meta = new dftracer::Metadata();
@@ -279,7 +283,24 @@ class DFTLogger {
     DFTRACER_LOG_DEBUG("DFTLogger.get_time");
     struct timeval tv{};
     gettimeofday(&tv, NULL);
-    TimeResolution t = 1000000 * tv.tv_sec + tv.tv_usec;
+    TimeResolution t;
+    switch (config->time_metric) {
+      case TimeMetricType::TIME_METRIC_NS:
+        t = (TimeResolution)tv.tv_sec * 1000000000ULL +
+            (TimeResolution)tv.tv_usec * 1000ULL;
+        break;
+      case TimeMetricType::TIME_METRIC_MS:
+        t = (TimeResolution)tv.tv_sec * 1000ULL +
+            (TimeResolution)tv.tv_usec / 1000ULL;
+        break;
+      case TimeMetricType::TIME_METRIC_SEC:
+        t = (TimeResolution)tv.tv_sec;
+        break;
+      case TimeMetricType::TIME_METRIC_US:
+      default:
+        t = (TimeResolution)tv.tv_sec * 1000000ULL + (TimeResolution)tv.tv_usec;
+        break;
+    }
     return t;
   }
 

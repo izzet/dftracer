@@ -34,7 +34,8 @@ class Aggregator {
   AggregatedDataType aggregated_data_;
   std::shared_ptr<dftracer::ConfigurationManager> config;
   TimeResolution last_interval;
-  TimeResolution cached_interval_us;  // Cache interval calculation
+  TimeResolution cached_interval;  // trace_interval_ms, cached in the
+                                   // configured time_metric unit
   bool is_first;
   std::shared_mutex mtx;
   Rules inclusion_rules;
@@ -102,8 +103,14 @@ class Aggregator {
     }
     last_interval = 0;
     is_first = true;
-    cached_interval_us =
-        config->trace_interval_ms * 1000;  // Cache to avoid per-event division
+    // Cache trace_interval_ms (a wall-clock millisecond value) scaled into
+    // whatever unit get_time()/config->time_metric is currently using, so
+    // interval bucketing below stays correct regardless of TIME_METRIC.
+    double units_per_ms =
+        time_metric_units_per_second(config->time_metric) / 1000.0;
+    cached_interval =
+        (TimeResolution)(config->trace_interval_ms * units_per_ms);
+    if (cached_interval == 0) cached_interval = 1;  // avoid divide-by-zero
   }
   bool should_aggregate(const AggregatedKey* key) {
     if (always_aggregate) return true;

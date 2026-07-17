@@ -241,6 +241,89 @@ void test_logger_level() {
   std::cout << "✓ Logger level configuration tests passed" << std::endl;
 }
 
+void test_time_metric() {
+  std::cout << "Testing time metric configuration..." << std::endl;
+
+  // Default (no env, no yaml) is US
+  unsetenv("DFTRACER_TIME_METRIC");
+  auto config_default = std::make_shared<ConfigurationManager>();
+  assert(config_default->time_metric == TimeMetricType::TIME_METRIC_US);
+
+  // Test each valid ENV value
+  setenv("DFTRACER_TIME_METRIC", "NS", 1);
+  auto config_ns = std::make_shared<ConfigurationManager>();
+  assert(config_ns->time_metric == TimeMetricType::TIME_METRIC_NS);
+  unsetenv("DFTRACER_TIME_METRIC");
+
+  setenv("DFTRACER_TIME_METRIC", "MS", 1);
+  auto config_ms = std::make_shared<ConfigurationManager>();
+  assert(config_ms->time_metric == TimeMetricType::TIME_METRIC_MS);
+  unsetenv("DFTRACER_TIME_METRIC");
+
+  setenv("DFTRACER_TIME_METRIC", "SEC", 1);
+  auto config_sec = std::make_shared<ConfigurationManager>();
+  assert(config_sec->time_metric == TimeMetricType::TIME_METRIC_SEC);
+  unsetenv("DFTRACER_TIME_METRIC");
+
+  setenv("DFTRACER_TIME_METRIC", "US", 1);
+  auto config_us = std::make_shared<ConfigurationManager>();
+  assert(config_us->time_metric == TimeMetricType::TIME_METRIC_US);
+  unsetenv("DFTRACER_TIME_METRIC");
+
+  // Invalid ENV value falls back to the default (US)
+  setenv("DFTRACER_TIME_METRIC", "BOGUS", 1);
+  auto config_invalid = std::make_shared<ConfigurationManager>();
+  assert(config_invalid->time_metric == TimeMetricType::TIME_METRIC_US);
+  unsetenv("DFTRACER_TIME_METRIC");
+
+  // Test YAML tracer.time_metric
+  std::string yaml_path = "/tmp/test_time_metric.yaml";
+  {
+    std::ofstream yaml_file(yaml_path);
+    yaml_file << "enable: True\n";
+    yaml_file << "tracer:\n";
+    yaml_file << "  time_metric: NS\n";
+    yaml_file.close();
+  }
+  setenv("DFTRACER_CONFIGURATION", yaml_path.c_str(), 1);
+  auto config_yaml = std::make_shared<ConfigurationManager>();
+  assert(config_yaml->time_metric == TimeMetricType::TIME_METRIC_NS);
+  unsetenv("DFTRACER_CONFIGURATION");
+  std::filesystem::remove(yaml_path);
+
+  // ENV var overrides YAML value
+  {
+    std::ofstream yaml_file(yaml_path);
+    yaml_file << "enable: True\n";
+    yaml_file << "tracer:\n";
+    yaml_file << "  time_metric: NS\n";
+    yaml_file.close();
+  }
+  setenv("DFTRACER_CONFIGURATION", yaml_path.c_str(), 1);
+  setenv("DFTRACER_TIME_METRIC", "SEC", 1);
+  auto config_override = std::make_shared<ConfigurationManager>();
+  assert(config_override->time_metric == TimeMetricType::TIME_METRIC_SEC);
+  unsetenv("DFTRACER_CONFIGURATION");
+  unsetenv("DFTRACER_TIME_METRIC");
+  std::filesystem::remove(yaml_path);
+
+  // Invalid YAML value falls back to the default (US)
+  {
+    std::ofstream yaml_file(yaml_path);
+    yaml_file << "enable: True\n";
+    yaml_file << "tracer:\n";
+    yaml_file << "  time_metric: NOT_A_UNIT\n";
+    yaml_file.close();
+  }
+  setenv("DFTRACER_CONFIGURATION", yaml_path.c_str(), 1);
+  auto config_yaml_invalid = std::make_shared<ConfigurationManager>();
+  assert(config_yaml_invalid->time_metric == TimeMetricType::TIME_METRIC_US);
+  unsetenv("DFTRACER_CONFIGURATION");
+  std::filesystem::remove(yaml_path);
+
+  std::cout << "✓ Time metric configuration tests passed" << std::endl;
+}
+
 int main(int argc, char* argv[]) {
   std::cout << "=== Running Configuration Manager Unit Tests ===" << std::endl;
 
@@ -253,6 +336,7 @@ int main(int argc, char* argv[]) {
     test_io_flags();
     test_buffer_size_configuration();
     test_logger_level();
+    test_time_metric();
 
     std::cout << "\n✓ All Configuration Manager tests passed!" << std::endl;
     return 0;

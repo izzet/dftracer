@@ -18,9 +18,10 @@ bool Aggregator::aggregate(AggregatedKey& aggregated_key) {
   bool is_first_local = is_first;
   is_first = false;
   std::unique_lock<std::shared_mutex> lock(mtx);
-  // Use cached interval_us to avoid division per event
+  // Use cached_interval (in the configured time_metric unit) to avoid
+  // division per event
   aggregated_key.time_interval =
-      (aggregated_key.time_interval / cached_interval_us) * cached_interval_us;
+      (aggregated_key.time_interval / cached_interval) * cached_interval;
   auto time_iter = aggregated_data_.find(aggregated_key.time_interval);
   if (time_iter == aggregated_data_.end()) {
     aggregated_data_.insert_or_assign(
