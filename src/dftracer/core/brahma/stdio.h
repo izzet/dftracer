@@ -12,7 +12,9 @@
 #include <dftracer/core/df_logger.h>
 #include <dftracer/core/utils/utils.h>
 #include <fcntl.h>
+#include <features.h>
 
+#include <cstdarg>
 #include <filesystem>
 #include <fstream>
 #include <vector>
@@ -154,6 +156,63 @@ class STDIODFTracer : public STDIO {
   int setvbuf(FILE*, char*, int, size_t) override;
 
   int ungetc(int, FILE*) override;
+
+  // --- New overrides mirroring brahma's expanded STDIO interception surface
+  // ---
+
+  FILE* freopen64(const char*, const char*, FILE*) override;
+
+  // printf/scanf family: all call through dftracer::STDIOBypass for the
+  // real-function step rather than BRAHMA_MAP_OR_FAIL/__real_* -- see the
+  // comment on stdio_bypass.h's own printf/scanf declarations for why
+  // (GOTCHA's variadic-wrapper dispatch and, for __isoc23_*, a glibc
+  // 2.38+ redirect brahma itself needed extern "C" workarounds for, are
+  // both exactly the kind of unusual symbol resolution where
+  // gotcha_get_wrappee() is at risk of misbehaving, matching what was
+  // already observed for flockfile/funlockfile/ftrylockfile/fflush).
+  //
+  // printf/sprintf/vsprintf/snprintf/vsnprintf, and (for consistency)
+  // scanf/sscanf/vscanf/vsscanf and their __isoc23_* aliases, are
+  // deliberately NOT overridden here (unlike the rest of this family):
+  // they operate on stdin/an in-memory buffer rather than an arbitrary
+  // file, and dftracer's own internal diagnostic logger (cpp-logger) calls
+  // vsprintf directly to format its own log messages. If STDIODFTracer
+  // traced these, every DFTRACER_LOG_DEBUG/ERROR call inside any
+  // interceptor body (including this one) would recurse back into
+  // cpp_logger_clog -> vsprintf -> this interceptor -> logging -> vsprintf
+  // -> ... infinitely (observed as unbounded memory growth/hang in even
+  // the simplest traced binary). Leaving these unoverridden means brahma's
+  // own STDIO base class handles them (a plain passthrough, see
+  // brahma/interface/stdio.cpp) -- GOTCHA still binds the symbols
+  // (brahma's bind<>() is unconditional), but no tracing/logging happens
+  // for them, so the recursion can't occur. Only the FILE*-targeting
+  // members of this family (fprintf/vfprintf/fscanf/vfscanf, which can
+  // point at a real file, not just stdin/stdout/a buffer) stay traced.
+  int fprintf(FILE* stream, const char* format, va_list args) override;
+  int vfprintf(FILE* stream, const char* format, va_list args) override;
+  int fscanf(FILE* stream, const char* format, va_list args) override;
+  int vfscanf(FILE* stream, const char* format, va_list args) override;
+#if defined(__GLIBC__) && __GLIBC_PREREQ(2, 38)
+  int __isoc23_fscanf(FILE* stream, const char* format, va_list args) override;
+  int __isoc23_vfscanf(FILE* stream, const char* format, va_list args) override;
+#endif
+
+  int puts(const char* s) override;
+  int putchar(int c) override;
+  int putc(int c, FILE* stream) override;
+  int putc_unlocked(int c, FILE* stream) override;
+  int getchar(void) override;
+  int getchar_unlocked(void) override;
+  void perror(const char* s) override;
+  void setbuf(FILE* stream, char* buf) override;
+  void setbuffer(FILE* stream, char* buf, size_t size) override;
+  void setlinebuf(FILE* stream) override;
+  ssize_t getline(char** lineptr, size_t* n, FILE* stream) override;
+  ssize_t getdelim(char** lineptr, size_t* n, int delim, FILE* stream) override;
+  FILE* fmemopen(void* buf, size_t size, const char* mode) override;
+  FILE* open_memstream(char** ptr, size_t* sizeloc) override;
+  FILE* popen(const char* command, const char* type) override;
+  char* tmpnam(char* s) override;
 };
 
 }  // namespace brahma

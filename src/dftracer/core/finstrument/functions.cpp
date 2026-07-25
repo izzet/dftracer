@@ -33,7 +33,7 @@ void __cyg_profile_func_enter(void* func, void* caller) {
   std::string event_name;
   if (!info.dli_sname) {
     char name[256];
-    sprintf(name, "%p", func);
+    dftracer_logging_real_sprintf()(name, "%p", func);
     event_name = name;
   } else {
     event_name = info.dli_sname;
@@ -53,7 +53,7 @@ void __cyg_profile_func_exit(void* func, void* caller) {
   std::string event_name;
   if (!info.dli_sname) {
     char name[256];
-    sprintf(name, "%p", func);
+    dftracer_logging_real_sprintf()(name, "%p", func);
     event_name = name;
   } else {
     event_name = info.dli_sname;

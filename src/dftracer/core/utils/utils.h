@@ -273,7 +273,7 @@ inline std::string get_filename(int fd) {
   DFTRACER_LOG_DEBUG("get_filename");
   char proclnk[PATH_MAX];
   char filename[PATH_MAX];
-  snprintf(proclnk, PATH_MAX, "/proc/self/fd/%d", fd);
+  dftracer_logging_real_snprintf()(proclnk, PATH_MAX, "/proc/self/fd/%d", fd);
   size_t r = dftracer::POSIXBypass::get_instance().readlink(proclnk, filename,
                                                             PATH_MAX);
   filename[r] = '\0';

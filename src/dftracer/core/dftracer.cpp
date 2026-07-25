@@ -41,14 +41,16 @@ bool region_debug_enabled() {
 void dump_live_regions() {
   if (!region_debug_enabled()) return;
   std::lock_guard<std::mutex> lock(g_region_lock);
-  std::fprintf(stderr, "[DFTRACER_REGION_DEBUG] outstanding regions=%zu\n",
-               g_region_debug_map.size());
+  dftracer_logging_real_fprintf()(
+      stderr, "[DFTRACER_REGION_DEBUG] outstanding regions=%zu\n",
+      g_region_debug_map.size());
   for (const auto& [data, entry] : g_region_debug_map) {
-    std::fprintf(stderr,
-                 "[DFTRACER_REGION_DEBUG] id=%zu data=%p profiler=%p event=%d "
-                 "name=%s category=%s\n",
-                 entry.id, static_cast<void*>(data), entry.profiler,
-                 entry.event_type, entry.name.c_str(), entry.category.c_str());
+    dftracer_logging_real_fprintf()(
+        stderr,
+        "[DFTRACER_REGION_DEBUG] id=%zu data=%p profiler=%p event=%d "
+        "name=%s category=%s\n",
+        entry.id, static_cast<void*>(data), entry.profiler, entry.event_type,
+        entry.name.c_str(), entry.category.c_str());
   }
 }
 
@@ -193,11 +195,12 @@ struct DFTracerData* initialize_region(ConstEventNameType name,
                              cat ? cat : "", event_type, data->profiler};
       g_region_debug_map.insert_or_assign(data, std::move(entry));
       const auto& e = g_region_debug_map[data];
-      std::fprintf(stderr,
-                   "[DFTRACER_REGION_DEBUG] alloc id=%zu data=%p profiler=%p "
-                   "event=%d name=%s category=%s\n",
-                   e.id, static_cast<void*>(data), e.profiler, e.event_type,
-                   e.name.c_str(), e.category.c_str());
+      dftracer_logging_real_fprintf()(
+          stderr,
+          "[DFTRACER_REGION_DEBUG] alloc id=%zu data=%p profiler=%p "
+          "event=%d name=%s category=%s\n",
+          e.id, static_cast<void*>(data), e.profiler, e.event_type,
+          e.name.c_str(), e.category.c_str());
     }
   }
   return data;
@@ -216,12 +219,13 @@ void finalize_region(struct DFTracerData* data) {
     if (region_debug_enabled()) {
       auto dbg = g_region_debug_map.find(data);
       if (dbg != g_region_debug_map.end()) {
-        std::fprintf(stderr,
-                     "[DFTRACER_REGION_DEBUG] free id=%zu data=%p profiler=%p "
-                     "event=%d name=%s category=%s\n",
-                     dbg->second.id, static_cast<void*>(data),
-                     dbg->second.profiler, dbg->second.event_type,
-                     dbg->second.name.c_str(), dbg->second.category.c_str());
+        dftracer_logging_real_fprintf()(
+            stderr,
+            "[DFTRACER_REGION_DEBUG] free id=%zu data=%p profiler=%p "
+            "event=%d name=%s category=%s\n",
+            dbg->second.id, static_cast<void*>(data), dbg->second.profiler,
+            dbg->second.event_type, dbg->second.name.c_str(),
+            dbg->second.category.c_str());
         g_region_debug_map.erase(dbg);
       }
     }

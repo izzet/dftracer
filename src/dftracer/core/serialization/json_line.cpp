@@ -76,13 +76,13 @@ size_t JsonLines::data(char* buffer, int index, ConstEventNameType event_name,
     if (has_meta) {
       all_stream << "," << meta_stream.str();
     }
-    n = snprintf(
+    n = dftracer_logging_real_snprintf()(
         buffer, DFTRACER_SERIALIZATION_EVENT_MAX,
         R"({"id":%d,"name":"%s","cat":"%s","pid":%d,"tid":%lu,"ts":%llu,"dur":%llu,"ph":"X","args":{"hhash":"%s"%s}})",
         index, event_name, category, process_id, thread_id, start_time,
         duration, this->hostname_hash, all_stream.str().c_str());
   } else {
-    n = snprintf(
+    n = dftracer_logging_real_snprintf()(
         buffer, DFTRACER_SERIALIZATION_EVENT_MAX,
         R"({"id":%d,"name":"%s","cat":"%s","pid":%d,"tid":%lu,"ts":%llu,"dur":%llu,"ph":"X"})",
         index, event_name, category, process_id, thread_id, start_time,
@@ -123,13 +123,13 @@ size_t JsonLines::counter(char* buffer, int index,
     if (has_meta) {
       all_stream << "," << meta_stream.str();
     }
-    n = snprintf(
+    n = dftracer_logging_real_snprintf()(
         buffer, DFTRACER_SERIALIZATION_EVENT_MAX,
         R"({"name":"%s","cat":"%s","ts":%llu,"ph":"C","pid":%d,"tid":%lu,"args":{"hhash":"%s"%s}})",
         event_name, category, start_time, process_id, thread_id,
         this->hostname_hash, all_stream.str().c_str());
   } else {
-    n = snprintf(
+    n = dftracer_logging_real_snprintf()(
         buffer, DFTRACER_SERIALIZATION_EVENT_MAX,
         R"({"name":"%s","cat":"%s","ts":%llu,"ph":"C","pid":%d,"tid":%lu})",
         event_name, category, start_time, process_id, thread_id);
@@ -161,12 +161,12 @@ size_t JsonLines::metadata(char* buffer, ConstEventNameType name,
   size_t written_size = 0;
   int n = 0;
   if (is_string) {
-    n = snprintf(
+    n = dftracer_logging_real_snprintf()(
         buffer, DFTRACER_SERIALIZATION_EVENT_MAX,
         R"({"name":"%s","cat":"dftracer","pid":%d,"tid":%lu,"ph":"M","args":{"hhash":"%s","name":"%s","value":"%s"}})",
         ph, process_id, thread_id, this->hostname_hash, name, value);
   } else {
-    n = snprintf(
+    n = dftracer_logging_real_snprintf()(
         buffer, DFTRACER_SERIALIZATION_EVENT_MAX,
         R"({"name":"%s","cat":"dftracer","pid":%d,"tid":%lu,"ph":"M","args":{"hhash":"%s","name":"%s","value":%s}})",
         ph, process_id, thread_id, this->hostname_hash, name, value);

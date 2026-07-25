@@ -147,7 +147,7 @@ class DFTLogger {
     md5String(name, result);
     char* hash_str = (char*)malloc(HASH_OUTPUT * 2 + 1);
     for (int i = 0; i < HASH_OUTPUT; i += 2) {
-      sprintf(hash_str + i, "%02x", result[i]);
+      dftracer_logging_real_sprintf()(hash_str + i, "%02x", result[i]);
     }
     hash_str[HASH_OUTPUT * 2] = '\0';
     return hash_str;
@@ -179,7 +179,8 @@ class DFTLogger {
                                                METADATA_NAME_HOSTNAME_HASH,
                                                this->process_id, tid, true);
       char thread_name[128];
-      auto size = sprintf(thread_name, "%d", this->process_id);
+      auto size =
+          dftracer_logging_real_sprintf()(thread_name, "%d", this->process_id);
       thread_name[size] = '\0';
       this->buffer_manager->log_metadata_event(
           thread_name, METADATA_NAME_THREAD_NAME, METADATA_NAME_THREAD_NAME,
@@ -210,7 +211,8 @@ class DFTLogger {
         time_t ltime;       /* calendar time */
         ltime = time(NULL); /* get current cal time */
         char timestamp[1024];
-        auto size = sprintf(timestamp, "%s", asctime(localtime(&ltime)));
+        auto size = dftracer_logging_real_sprintf()(timestamp, "%s",
+                                                    asctime(localtime(&ltime)));
         timestamp[size - 1] = '\0';
         meta->insert_or_assign("date", std::string(timestamp));
         meta->insert_or_assign("ppid", getppid());
@@ -338,7 +340,8 @@ class DFTLogger {
             "rank", std::to_string(rank).c_str(), METADATA_NAME_PROCESS,
             this->process_id, tid);
         char process_name[1024];
-        auto size = sprintf(process_name, "Rank %d", rank);
+        auto size =
+            dftracer_logging_real_sprintf()(process_name, "Rank %d", rank);
         process_name[size] = '\0';
         this->buffer_manager->log_metadata_event(
             process_name, METADATA_NAME_PROCESS_NAME,

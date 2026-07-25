@@ -289,3 +289,224 @@ int brahma::STDIODFTracer::ungetc(int c, FILE* fp) {
   DFT_LOGGER_END();
   return ret;
 }
+
+// --- New overrides mirroring brahma's expanded STDIO interception surface ---
+
+FILE* brahma::STDIODFTracer::freopen64(const char* path, const char* mode,
+                                       FILE* fp) {
+  BRAHMA_MAP_OR_FAIL(freopen64);
+  DFT_LOGGER_START(fp);
+  DFT_LOGGER_UPDATE_HASH(path);
+  DFT_LOGGER_UPDATE_TYPE(mode, MetadataType::MT_VALUE);
+  FILE* ret = __real_freopen64(path, mode, fp);
+  DFT_LOGGER_END();
+  return ret;
+}
+
+// printf/scanf family: see the comment on these overrides' declarations in
+// stdio.h -- the real-function step goes through dftracer::STDIOBypass
+// instead of BRAHMA_MAP_OR_FAIL/__real_*.
+
+int brahma::STDIODFTracer::fprintf(FILE* stream, const char* format,
+                                   va_list args) {
+  DFT_LOGGER_START(stream);
+  int ret =
+      dftracer::STDIOBypass::get_instance().vfprintf(stream, format, args);
+  DFT_LOGGER_UPDATE_TYPE(ret, MetadataType::MT_VALUE);
+  DFT_LOGGER_END();
+  return ret;
+}
+
+int brahma::STDIODFTracer::vfprintf(FILE* stream, const char* format,
+                                    va_list args) {
+  DFT_LOGGER_START(stream);
+  int ret =
+      dftracer::STDIOBypass::get_instance().vfprintf(stream, format, args);
+  DFT_LOGGER_UPDATE_TYPE(ret, MetadataType::MT_VALUE);
+  DFT_LOGGER_END();
+  return ret;
+}
+
+int brahma::STDIODFTracer::fscanf(FILE* stream, const char* format,
+                                  va_list args) {
+  DFT_LOGGER_START(stream);
+  int ret = dftracer::STDIOBypass::get_instance().vfscanf(stream, format, args);
+  DFT_LOGGER_UPDATE_TYPE(ret, MetadataType::MT_VALUE);
+  DFT_LOGGER_END();
+  return ret;
+}
+
+int brahma::STDIODFTracer::vfscanf(FILE* stream, const char* format,
+                                   va_list args) {
+  DFT_LOGGER_START(stream);
+  int ret = dftracer::STDIOBypass::get_instance().vfscanf(stream, format, args);
+  DFT_LOGGER_UPDATE_TYPE(ret, MetadataType::MT_VALUE);
+  DFT_LOGGER_END();
+  return ret;
+}
+
+#if defined(__GLIBC__) && __GLIBC_PREREQ(2, 38)
+int brahma::STDIODFTracer::__isoc23_fscanf(FILE* stream, const char* format,
+                                           va_list args) {
+  DFT_LOGGER_START(stream);
+  int ret = dftracer::STDIOBypass::get_instance().__isoc23_vfscanf(
+      stream, format, args);
+  DFT_LOGGER_UPDATE_TYPE(ret, MetadataType::MT_VALUE);
+  DFT_LOGGER_END();
+  return ret;
+}
+
+int brahma::STDIODFTracer::__isoc23_vfscanf(FILE* stream, const char* format,
+                                            va_list args) {
+  DFT_LOGGER_START(stream);
+  int ret = dftracer::STDIOBypass::get_instance().__isoc23_vfscanf(
+      stream, format, args);
+  DFT_LOGGER_UPDATE_TYPE(ret, MetadataType::MT_VALUE);
+  DFT_LOGGER_END();
+  return ret;
+}
+#endif
+
+int brahma::STDIODFTracer::puts(const char* s) {
+  BRAHMA_MAP_OR_FAIL(puts);
+  DFT_LOGGER_START(stdout);
+  if (s != nullptr) {
+    size_t s_len = strlen(s);
+    DFT_LOGGER_UPDATE_TYPE(s_len, MetadataType::MT_VALUE);
+  }
+  int ret = __real_puts(s);
+  DFT_LOGGER_UPDATE_TYPE(ret, MetadataType::MT_VALUE);
+  DFT_LOGGER_END();
+  return ret;
+}
+
+int brahma::STDIODFTracer::putchar(int c) {
+  BRAHMA_MAP_OR_FAIL(putchar);
+  DFT_LOGGER_START(stdout);
+  int ret = __real_putchar(c);
+  DFT_LOGGER_UPDATE_TYPE(ret, MetadataType::MT_VALUE);
+  DFT_LOGGER_END();
+  return ret;
+}
+
+int brahma::STDIODFTracer::putc(int c, FILE* stream) {
+  BRAHMA_MAP_OR_FAIL(putc);
+  DFT_LOGGER_START(stream);
+  int ret = __real_putc(c, stream);
+  DFT_LOGGER_UPDATE_TYPE(ret, MetadataType::MT_VALUE);
+  DFT_LOGGER_END();
+  return ret;
+}
+
+int brahma::STDIODFTracer::putc_unlocked(int c, FILE* stream) {
+  BRAHMA_MAP_OR_FAIL(putc_unlocked);
+  DFT_LOGGER_START(stream);
+  int ret = __real_putc_unlocked(c, stream);
+  DFT_LOGGER_UPDATE_TYPE(ret, MetadataType::MT_VALUE);
+  DFT_LOGGER_END();
+  return ret;
+}
+
+int brahma::STDIODFTracer::getchar(void) {
+  BRAHMA_MAP_OR_FAIL(getchar);
+  DFT_LOGGER_START(stdin);
+  int ret = __real_getchar();
+  DFT_LOGGER_UPDATE_TYPE(ret, MetadataType::MT_VALUE);
+  DFT_LOGGER_END();
+  return ret;
+}
+
+int brahma::STDIODFTracer::getchar_unlocked(void) {
+  BRAHMA_MAP_OR_FAIL(getchar_unlocked);
+  DFT_LOGGER_START(stdin);
+  int ret = __real_getchar_unlocked();
+  DFT_LOGGER_UPDATE_TYPE(ret, MetadataType::MT_VALUE);
+  DFT_LOGGER_END();
+  return ret;
+}
+
+void brahma::STDIODFTracer::perror(const char* s) {
+  BRAHMA_MAP_OR_FAIL(perror);
+  DFT_LOGGER_START(stderr);
+  __real_perror(s);
+  DFT_LOGGER_END();
+}
+
+void brahma::STDIODFTracer::setbuf(FILE* stream, char* buf) {
+  BRAHMA_MAP_OR_FAIL(setbuf);
+  DFT_LOGGER_START(stream);
+  __real_setbuf(stream, buf);
+  DFT_LOGGER_END();
+}
+
+void brahma::STDIODFTracer::setbuffer(FILE* stream, char* buf, size_t size) {
+  BRAHMA_MAP_OR_FAIL(setbuffer);
+  DFT_LOGGER_START(stream);
+  DFT_LOGGER_UPDATE_TYPE(size, MetadataType::MT_VALUE);
+  __real_setbuffer(stream, buf, size);
+  DFT_LOGGER_END();
+}
+
+void brahma::STDIODFTracer::setlinebuf(FILE* stream) {
+  BRAHMA_MAP_OR_FAIL(setlinebuf);
+  DFT_LOGGER_START(stream);
+  __real_setlinebuf(stream);
+  DFT_LOGGER_END();
+}
+
+ssize_t brahma::STDIODFTracer::getline(char** lineptr, size_t* n,
+                                       FILE* stream) {
+  BRAHMA_MAP_OR_FAIL(getline);
+  DFT_LOGGER_START(stream);
+  ssize_t ret = __real_getline(lineptr, n, stream);
+  DFT_LOGGER_UPDATE_TYPE(ret, MetadataType::MT_VALUE);
+  DFT_LOGGER_END();
+  return ret;
+}
+
+ssize_t brahma::STDIODFTracer::getdelim(char** lineptr, size_t* n, int delim,
+                                        FILE* stream) {
+  BRAHMA_MAP_OR_FAIL(getdelim);
+  DFT_LOGGER_START(stream);
+  DFT_LOGGER_UPDATE_TYPE(delim, MetadataType::MT_VALUE);
+  ssize_t ret = __real_getdelim(lineptr, n, delim, stream);
+  DFT_LOGGER_UPDATE_TYPE(ret, MetadataType::MT_VALUE);
+  DFT_LOGGER_END();
+  return ret;
+}
+
+FILE* brahma::STDIODFTracer::fmemopen(void* buf, size_t size,
+                                      const char* mode) {
+  BRAHMA_MAP_OR_FAIL(fmemopen);
+  DFT_LOGGER_START_ALWAYS();
+  DFT_LOGGER_UPDATE_TYPE(size, MetadataType::MT_VALUE);
+  FILE* ret = __real_fmemopen(buf, size, mode);
+  DFT_LOGGER_END();
+  return ret;
+}
+
+FILE* brahma::STDIODFTracer::open_memstream(char** ptr, size_t* sizeloc) {
+  BRAHMA_MAP_OR_FAIL(open_memstream);
+  DFT_LOGGER_START_ALWAYS();
+  FILE* ret = __real_open_memstream(ptr, sizeloc);
+  DFT_LOGGER_END();
+  return ret;
+}
+
+FILE* brahma::STDIODFTracer::popen(const char* command, const char* type) {
+  BRAHMA_MAP_OR_FAIL(popen);
+  DFT_LOGGER_START(command);
+  DFT_LOGGER_UPDATE_TYPE(type, MetadataType::MT_VALUE);
+  FILE* ret = __real_popen(command, type);
+  DFT_LOGGER_END();
+  if (trace) this->trace(ret, fhash);
+  return ret;
+}
+
+char* brahma::STDIODFTracer::tmpnam(char* s) {
+  BRAHMA_MAP_OR_FAIL(tmpnam);
+  DFT_LOGGER_START_ALWAYS();
+  char* ret = __real_tmpnam(s);
+  DFT_LOGGER_END();
+  return ret;
+}
