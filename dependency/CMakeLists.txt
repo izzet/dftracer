@@ -173,7 +173,7 @@ if(_dftracer_dep_hdf5_version_str)
     "-DBRAHMA_HDF5_VERSION_STRING:STRING=${_dftracer_dep_hdf5_version_str}")
 endif()
 
-find_package(brahma 5.0.0 QUIET)
+find_package(brahma 5.1.0 QUIET)
 if(brahma_FOUND)
   message(STATUS "[${PROJECT_NAME}] found brahma already installed")
 else()
@@ -181,7 +181,7 @@ else()
     brahma
     PREFIX ${CMAKE_BINARY_DIR}
     GIT_REPOSITORY https://github.com/hariharan-devarajan/brahma.git
-    GIT_TAG v1.0.11
+    GIT_TAG v1.1.0
     TIMEOUT 10
     PATCH_COMMAND ${CMAKE_COMMAND}
       -DSOURCE_DIR=<SOURCE_DIR>
