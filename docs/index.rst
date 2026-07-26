@@ -86,6 +86,8 @@ DFTracer: is a library for profiling I/O calls and application functions.
    Python Binding GitHub <https://github.com/LLNL/pydftracer>
    Utilities Documentation <https://dftracer.readthedocs.io/projects/utils/>
    Utilities GitHub <https://github.com/LLNL/dftracer-utils>
+   VS Code Viewer <https://marketplace.visualstudio.com/items?itemName=rayandrew.dftracer-viewer>
+   VS Code Viewer GitHub <https://github.com/rayandrew/vscode-dftracer-viewer>
 
 ==================
 Indices and tables

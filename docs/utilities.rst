@@ -11,6 +11,11 @@ All scripts are installed with DFTracer in the installation's directories bin fo
 Please see the `DFTracer Utilities Documentation <https://dftracer.readthedocs.io/projects/utils/en/latest/index.html>`_ for
 more detailed documentation on these utilities.
 
+To browse a trace interactively, the `DFTracer Viewer <https://marketplace.visualstudio.com/items?itemName=rayandrew.dftracer-viewer>`_
+VS Code extension (`source <https://github.com/rayandrew/vscode-dftracer-viewer>`_)
+opens :code:`.pfw` and :code:`.pfw.gz` files directly. See :doc:`perfetto` for
+loading a trace into Perfetto UI instead.
+
 ++++++++++++++++++++
 Additional Utilities
 ++++++++++++++++++++
