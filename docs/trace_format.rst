@@ -4,19 +4,93 @@ DFTracer Format
 
 At a high-level, DFTracer events are inspired by the `chrome tracing document`_.
 The similarity to chrome tracing format is in the structure of each event type.
-Specifically, we use complete and metadata events within DFTracer.
-However, it does not strictly follow the format due to parallelization reasons. 
-Essentially, the DFTracer format is as follows
+However, it does not strictly follow the format due to parallelization reasons.
+A DFTracer trace is newline-delimited JSON and nothing else: one complete JSON
+object per line, with no enclosing array.
 
 .. code-block:: bash
 
-    [ # Marking the start of the trace 
-    JSON LINES
-    ] # Marking the end of the trace 
+    JSON LINE
+    JSON LINE
+    JSON LINE
 
-The "[" and "]" are required only for perfetto format.
-Each JSON line is an event of two types: a) Complete Events and b) Metadata Events
+Earlier versions wrapped the trace in "[" and "]" for Perfetto. Those are gone,
+so a trace can be piped straight into line-oriented tools:
 
+.. code-block:: bash
+
+    jq -c 'select(.ph == 1)' trace.pfw
+
+Feeding a trace to Perfetto now requires wrapping it yourself, for example
+``jq --slurp '.' trace.pfw``.
+
+
+----------
+
+.. _`Event Types`:
+
+----------------------------------------
+Event Types
+----------------------------------------
+
+Every event carries a "type" column: a small integer naming the instrumentation
+layer that produced it. It is a closed vocabulary, unlike "cat", which stays
+free-form and holds the sub-category within that layer.
+
+========  =============  ===================================================
+ Value     Name           Produced by
+========  =============  ===================================================
+ 0         UNKNOWN        Never written; fallback for unrecognised values
+ 1         DFTRACER       Internal events: start, end, hash and metadata
+ 2         C_APP          C API (``DFTRACER_C_*``)
+ 3         LIBC_IO        POSIX and STDIO interception (cat: POSIX, STDIO)
+ 4         HIP            rocprofiler (cat: the rocprofiler kind name)
+ 5         HDF5           HDF5 interception
+ 6         PYTHON         Python API (cat: caller-supplied)
+ 7         PSUTIL         dftracer_service telemetry (cat: sys, net, io)
+ 8         FINSTRUMENT    ``-finstrument-functions`` (cat: FUNC)
+ 9         CPP_APP        C++ API (``DFTRACER_CPP_*``)
+ 10        MPI            MPI and MPI-IO interception (cat: MPI, MPIIO)
+========  =============  ===================================================
+
+The numbering is append-only: values are never renumbered or reused, so a
+reader can always interpret a trace written by an older DFTracer. A reader that
+meets a value it does not know should treat it as UNKNOWN rather than fail.
+
+Custom metadata events carry the type of the API that logged them, so metadata
+written from Python is PYTHON and metadata written through the C API is C_APP.
+The hash events (FH, SH, HH) and the process and thread metadata are DFTRACER:
+they are emitted by the tracer's own bookkeeping. A hash record in particular
+is written once by whichever layer first saw the string, so attributing it to
+that layer would not be meaningful.
+
+----------
+
+.. _`Record Phases`:
+
+----------------------------------------
+Record Phases
+----------------------------------------
+
+The "ph" column says what kind of record a line is, as a small integer. It
+replaces the single letters DFTracer used to borrow from the Chrome tracing
+format; the letter each value supersedes is given for reference.
+
+========  =============  =========  ==========================================
+ Value     Name           Was        Meaning
+========  =============  =========  ==========================================
+ 0         UNKNOWN        --         Never written; fallback for unknown values
+ 1         COMPLETE       "X"        An individual event with a duration
+ 2         COUNTER        "C"        Time series counter, from dftracer_service
+ 3         AGGREGATED     "A"        An aggregated event
+ 4         METADATA       "M"        A metadata record
+========  =============  =========  ==========================================
+
+AGGREGATED is new. Aggregated records used to be written as counters, so a
+consumer could not tell a genuine psutil counter sample apart from an
+aggregate. COUNTER now means only the former.
+
+Like "type", this numbering is append-only and never renumbered or reused.
 
 ----------
 
@@ -28,11 +102,13 @@ A sample complete event looks like the following
 
 .. code-block:: bash
 
-    {"id":8,"name":"CUSTOM_BLOCK","cat":"CPP_APP","pid":3308801,"tid":6617602,"ts":1727286231145121,"dur":1000054,"ph":"X","args":{"hhash":39537,"p_idx":7,"key":0,"level":3}}
+    {"id":8,"name":"CUSTOM_BLOCK","cat":"CPP_APP","type":9,"pid":3308801,"tid":6617602,"ts":1727286231145121,"dur":1000054,"ph":1,"args":{"hhash":39537,"p_idx":7,"key":0,"level":3}}
 
 Here, "id" refers to the index of the record in the process. Only for complete events.
 "name" refers to the event name.
 "cat" refers to category.
+"type" refers to the instrumentation layer that produced the event (see `Event Types`_).
+"ph" refers to the kind of record (see `Record Phases`_).
 "pid" and "tid" are the process id and thread id, respectively.
 "ts" and "dur" is the timestamp and duration of the event.
 Finally, "args" is a dictionary of other events.
@@ -52,7 +128,7 @@ A sample hash event looks like the following
 
 .. code-block:: bash
 
-    {"id":1,"name":"HH","cat":"dftracer","pid":3487304,"tid":3487304,"ph":"M","args":{"name":"corona211","value":51242}}
+    {"id":1,"name":"HH","cat":"dftracer","type":1,"pid":3487304,"tid":3487304,"ph":4,"args":{"name":"corona211","value":51242}}
 
 
 Here, "name" is the type of hash. "HH" for hostname hash, "FH" for filename hash, "SH" for general string hash.
@@ -65,7 +141,7 @@ An example of such event is below.
 
 .. code-block:: bash
 
-    {"name":"PR","cat":"dftracer","pid":3487304,"tid":6974608,"ph":"M","args":{"name":"core_affinity","value":[0,1,2,3,4,5,6,7,8,9,10,11,12,13,14,15,16,17,18,19,20,21,22,23,24,25,26,27,28,29,30,31,32,33,34,35,36,37,38,39,40,41,42,43,44,45,46,47]}}
+    {"name":"PR","cat":"dftracer","type":1,"pid":3487304,"tid":6974608,"ph":4,"args":{"name":"core_affinity","value":[0,1,2,3,4,5,6,7,8,9,10,11,12,13,14,15,16,17,18,19,20,21,22,23,24,25,26,27,28,29,30,31,32,33,34,35,36,37,38,39,40,41,42,43,44,45,46,47]}}
 
 Here, the "name" "PR" represents a metadata event for process and the args contain the metadata name and its value. 
 

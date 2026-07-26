@@ -67,7 +67,7 @@ int BufferManager::initialize(const char* filename, HashType hostname_hash) {
   return 0;
 }
 
-int BufferManager::finalize(int index, ProcessID process_id, bool end_sym) {
+int BufferManager::finalize(int index, ProcessID process_id) {
   std::unique_lock<std::shared_mutex> lock(mtx);
   if (buffer) {
     size_t size = 0;
@@ -78,9 +78,7 @@ int BufferManager::finalize(int index, ProcessID process_id, bool end_sym) {
                                           process_id, data);
       this->aggregator->finalize();
     }
-    auto end_size =
-        this->serializer->finalize(buffer + buffer_pos + size, end_sym);
-    compress_and_write_if_needed(size + end_size, true);
+    compress_and_write_if_needed(size, true);
 
     if (this->config->compression) this->compressor->finalize();
     this->writer->finalize(index);
@@ -91,12 +89,10 @@ int BufferManager::finalize(int index, ProcessID process_id, bool end_sym) {
   return 0;
 }
 
-void BufferManager::log_data_event(int index, ConstEventNameType event_name,
-                                   ConstEventNameType category,
-                                   TimeResolution start_time,
-                                   TimeResolution duration,
-                                   dftracer::Metadata* metadata,
-                                   ProcessID process_id, ThreadID tid) {
+void BufferManager::log_data_event(
+    int index, ConstEventNameType event_name, ConstEventNameType category,
+    TraceEventType type, TimeResolution start_time, TimeResolution duration,
+    dftracer::Metadata* metadata, ProcessID process_id, ThreadID tid) {
   std::unique_lock<std::shared_mutex> lock(mtx);
   DFTRACER_LOG_DEBUG("BufferManager.log_data_event %d", index);
   size_t size = 0;
@@ -104,8 +100,8 @@ void BufferManager::log_data_event(int index, ConstEventNameType event_name,
   if (this->config->aggregation_enable && strcmp(category, "dftracer") != 0) {
     enable_tracing = false;
     auto aggregated_key =
-        AggregatedKey{category, event_name, start_time,     duration,
-                      tid,      metadata,   get_app_name(), &rank};
+        AggregatedKey{category, event_name,     type, start_time, duration, tid,
+                      metadata, get_app_name(), &rank};
     if (this->config->aggregation_type ==
         AggregationType::AGGREGATION_TYPE_SELECTIVE) {
       enable_tracing = !this->aggregator->should_aggregate(&aggregated_key);
@@ -113,6 +109,11 @@ void BufferManager::log_data_event(int index, ConstEventNameType event_name,
     if (!enable_tracing) {
       // Accumulate data; returns true when time interval changes
       bool interval_changed = this->aggregator->aggregate(aggregated_key);
+      // aggregate() only reads additional_keys to fold values into the
+      // aggregated buckets; it never stores or frees the original metadata,
+      // so we must release it here (the non-aggregated path below frees its
+      // copy inside serializer->data()).
+      delete metadata;
       // Serialize aggregated data when moving to new time interval
       if (interval_changed) {
         auto data = dftracer::AggregatedDataType();
@@ -130,9 +131,9 @@ void BufferManager::log_data_event(int index, ConstEventNameType event_name,
     }
   }
   if (enable_tracing) {
-    size =
-        this->serializer->data(buffer + buffer_pos, index, event_name, category,
-                               start_time, duration, metadata, process_id, tid);
+    size = this->serializer->data(buffer + buffer_pos, index, event_name,
+                                  category, type, start_time, duration,
+                                  metadata, process_id, tid);
     DFTRACER_LOG_DEBUG(
         "BufferManager.log_data_event serialized tracing size %zu bytes", size);
   }
@@ -141,26 +142,29 @@ void BufferManager::log_data_event(int index, ConstEventNameType event_name,
 
 void BufferManager::log_counter_event(int index, ConstEventNameType name,
                                       ConstEventNameType category,
+                                      TraceEventType type,
                                       TimeResolution start_time,
                                       ProcessID process_id, ThreadID thread_id,
                                       dftracer::Metadata* metadata) {
   std::unique_lock<std::shared_mutex> lock(mtx);
   DFTRACER_LOG_DEBUG("BufferManager.log_counter_event %d", index);
-  size_t size =
-      this->serializer->counter(buffer + buffer_pos, index, name, category,
-                                start_time, process_id, thread_id, metadata);
+  size_t size = this->serializer->counter(buffer + buffer_pos, index, name,
+                                          category, type, start_time,
+                                          process_id, thread_id, metadata);
   compress_and_write_if_needed(size);
 }
 
 void BufferManager::log_metadata_event(ConstEventNameType name,
                                        ConstEventNameType value,
-                                       ConstEventNameType ph,
+                                       ConstEventNameType record_name,
+                                       TraceEventType type,
                                        ProcessID process_id, ThreadID tid,
                                        bool is_string) {
   std::unique_lock<std::shared_mutex> lock(mtx);
   DFTRACER_LOG_DEBUG("BufferManager.log_metadata_event %s", value);
-  size_t size = this->serializer->metadata(buffer + buffer_pos, name, value, ph,
-                                           process_id, tid, is_string);
+  size_t size =
+      this->serializer->metadata(buffer + buffer_pos, name, value, record_name,
+                                 type, process_id, tid, is_string);
   compress_and_write_if_needed(size);
 }
 }  // namespace dftracer

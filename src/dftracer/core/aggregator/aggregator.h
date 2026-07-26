@@ -45,16 +45,22 @@ class Aggregator {
   inline void insert_number_value(TimeResolution& time_interval,
                                   AggregatedKey& aggregated_key,
                                   const std::string& key, T value) {
-    auto iter = aggregated_data_[time_interval].find(aggregated_key);
+    // Stored keys always have additional_keys nulled out (see below), so the
+    // lookup key must match that shape too. Looking up with the live
+    // aggregated_key (non-null additional_keys) would never match what was
+    // stored, causing every metric after the first for the same event to
+    // insert a colliding "equal" key and silently leak the prior entry via
+    // insert_or_assign.
+    AggregatedKey lookup_key(aggregated_key);
+    lookup_key.additional_keys = nullptr;
+    auto iter = aggregated_data_[time_interval].find(lookup_key);
     auto num_value = new NumberAggregationValue<T>(value);
     if (iter != aggregated_data_[time_interval].end()) {
       iter->second->update(key, typeid(TimeResolution), num_value);
     } else {
       auto value = new AggregatedValues();
       value->update(key, typeid(TimeResolution), num_value);
-      AggregatedKey owned_key(aggregated_key);
-      owned_key.additional_keys = nullptr;
-      aggregated_data_[time_interval].insert_or_assign(owned_key, value);
+      aggregated_data_[time_interval].insert_or_assign(lookup_key, value);
       DFTRACER_LOG_INFO("Events in %llu are %d", time_interval,
                         aggregated_data_[time_interval].size());
     }
@@ -64,16 +70,18 @@ class Aggregator {
   inline void insert_general_value(TimeResolution& time_interval,
                                    AggregatedKey& aggregated_key,
                                    const std::string& key, T value) {
-    auto iter = aggregated_data_[time_interval].find(aggregated_key);
+    // See insert_number_value: lookup must use the same nulled-out shape
+    // that gets stored, or repeated metrics for one event leak.
+    AggregatedKey lookup_key(aggregated_key);
+    lookup_key.additional_keys = nullptr;
+    auto iter = aggregated_data_[time_interval].find(lookup_key);
     auto num_value = new AggregatedValue<T>(value);
     if (iter != aggregated_data_[time_interval].end()) {
       iter->second->update(key, typeid(TimeResolution), num_value);
     } else {
       auto value = new AggregatedValues();
       value->update(key, typeid(TimeResolution), num_value);
-      AggregatedKey owned_key(aggregated_key);
-      owned_key.additional_keys = nullptr;
-      aggregated_data_[time_interval].insert_or_assign(owned_key, value);
+      aggregated_data_[time_interval].insert_or_assign(lookup_key, value);
       DFTRACER_LOG_INFO("Events in %llu are %d", time_interval,
                         aggregated_data_[time_interval].size());
     }

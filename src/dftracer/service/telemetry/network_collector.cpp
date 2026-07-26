@@ -11,9 +11,12 @@ void NetworkTelemetryCollector::initialize() {
   if (!file) return;
 
   char line[256];
-  // Skip first two header lines
-  fgets(line, sizeof(line), file);
-  fgets(line, sizeof(line), file);
+  // Skip first two header lines; a file too short to have them has no data.
+  if (fgets(line, sizeof(line), file) == nullptr ||
+      fgets(line, sizeof(line), file) == nullptr) {
+    fclose(file);
+    return;
+  }
 
   while (fgets(line, sizeof(line), file)) {
     char iface[32];
@@ -60,9 +63,12 @@ void NetworkTelemetryCollector::parseNetworkMetrics(
   if (!file) return;
 
   char line[256];
-  // Skip header lines
-  fgets(line, sizeof(line), file);
-  fgets(line, sizeof(line), file);
+  // Skip header lines; a file too short to have them has no data.
+  if (fgets(line, sizeof(line), file) == nullptr ||
+      fgets(line, sizeof(line), file) == nullptr) {
+    fclose(file);
+    return;
+  }
 
   while (fgets(line, sizeof(line), file)) {
     char iface[32];
@@ -153,7 +159,8 @@ void NetworkTelemetryCollector::parseNetworkMetrics(
     std::string net_name = "net-" + if_name;
     int current_index = index.fetch_add(1, std::memory_order_relaxed);
     buffer_manager->log_counter_event(current_index, net_name.c_str(), "net",
-                                      time, 0, 0, metadata);
+                                      TraceEventType::TRACE_TYPE_PSUTIL, time,
+                                      0, 0, metadata);
   }
   fclose(file);
 }

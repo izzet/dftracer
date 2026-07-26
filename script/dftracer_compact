@@ -125,14 +125,6 @@ cd "${OUTPUT_DIR}" || { log "Failed to change directory to ${OUTPUT_DIR}"; exit 
 log "Compacting all trace files with ${LINES} lines per file into ${OUTPUT_DIR} folder."
 split -l "${LINES}" --numeric-suffixes --additional-suffix=.pfw "$d2" "${PREFIX}"-
 
-for file in *.pfw; do
-  log "Processing file: $file"
-  echo "[" > "$file".$$
-  cat "$file" >> "$file".$$
-  echo "]" >> "$file".$$
-  mv "$file".$$ "$file"
-done
-
 rm "$d2"
 log "Temporary file $d2 removed"
 

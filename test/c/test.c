@@ -31,11 +31,9 @@ void foo() {
 }
 
 int main(int argc, char* argv[]) {
-  int init = 0;
   if (argc > 2) {
     if (strcmp(argv[2], "1") == 0) {
       DFTRACER_C_INIT(NULL, NULL, NULL);
-      init = 1;
     }
   }
   DFTRACER_C_METADATA(meta, "key", "value");

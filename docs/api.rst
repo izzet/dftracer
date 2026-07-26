@@ -95,8 +95,8 @@ ENV Variables supported
                                             this won't work for AI workloads which uses ``fork`` and ``spawn`` without a clear ``exit``.
                                             Also, it does not work for workloads which uses ``exec`` and rewrite process buffer state.
    DFTRACER_TRACE_INTERVAL_MS       INT     Setup the interval for trace collection (default 1000).
-    DFTRACER_LIBUV_THREADS           INT     Number of libuv worker threads for ``dftracer_service`` (default 1).
-   DFTRACER_ENABLE_AGGREGATION      INT     set aggregation type (default 0).
+   DFTRACER_LIBUV_THREADS           INT     Number of libuv worker threads for ``dftracer_service`` (default 1).
+   DFTRACER_ENABLE_AGGREGATION      INT     Enable aggregation of events (default 0).
    DFTRACER_AGGREGATION_TYPE        STRING  set aggregation type FULL or SELECTIVE (default: FULL).
                                             If SELECTIVE need to set DFTRACER_AGGREGATION_FILE else all are aggregated.
    DFTRACER_AGGREGATION_FILE        STRING  PATH to the aggregation rules file (default: empty).

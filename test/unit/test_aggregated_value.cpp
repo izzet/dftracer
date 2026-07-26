@@ -1,8 +1,9 @@
 #include <dftracer/core/common/datastructure.h>
 
-#include <cassert>
 #include <iostream>
 #include <typeinfo>
+
+#include "check.h"
 
 using namespace dftracer;
 
@@ -17,10 +18,10 @@ void test_number_aggregation_creation() {
   std::cout << "val2: min=" << val2.min << " max=" << val2.max
             << " sum=" << val2.sum << " count=" << val2.count << std::endl;
 
-  assert(val1.min == 10);
-  assert(val1.max == 10);
-  assert(val1.sum == 10);
-  assert(val1.count == 1);
+  DFT_CHECK(val1.min == 10);
+  DFT_CHECK(val1.max == 10);
+  DFT_CHECK(val1.sum == 10);
+  DFT_CHECK(val1.count == 1);
 
   std::cout << "✓ Creation test passed\n" << std::endl;
 }
@@ -35,8 +36,8 @@ void test_type_info() {
   std::cout << "val2._id: " << val2._id.name() << std::endl;
   std::cout << "typeid(int): " << typeid(int).name() << std::endl;
 
-  assert(val1._id == val2._id);
-  assert(val1._id == typeid(int));
+  DFT_CHECK(val1._id == val2._id);
+  DFT_CHECK(val1._id == typeid(int));
 
   std::cout << "✓ Type info test passed\n" << std::endl;
 }
@@ -71,8 +72,8 @@ void test_base_pointer_cast() {
     std::cerr << "  base2 type: " << typeid(*base2).name() << std::endl;
   }
 
-  assert(derived1 != nullptr);
-  assert(derived2 != nullptr);
+  DFT_CHECK(derived1 != nullptr);
+  DFT_CHECK(derived2 != nullptr);
 
   std::cout << "✓ Dynamic cast test passed\n" << std::endl;
 }
@@ -93,10 +94,10 @@ void test_direct_update() {
   std::cout << "  val1: min=" << val1.min << " max=" << val1.max
             << " sum=" << val1.sum << " count=" << val1.count << std::endl;
 
-  assert(val1.min == 10);
-  assert(val1.max == 20);
-  assert(val1.sum == 30);
-  assert(val1.count == 2);
+  DFT_CHECK(val1.min == 10);
+  DFT_CHECK(val1.max == 20);
+  DFT_CHECK(val1.sum == 30);
+  DFT_CHECK(val1.count == 2);
 
   std::cout << "✓ Direct update test passed\n" << std::endl;
 }
@@ -122,10 +123,10 @@ void test_base_update() {
   std::cout << "  val1: min=" << val1.min << " max=" << val1.max
             << " sum=" << val1.sum << " count=" << val1.count << std::endl;
 
-  assert(val1.min == 10);
-  assert(val1.max == 20);
-  assert(val1.sum == 30);
-  assert(val1.count == 2);
+  DFT_CHECK(val1.min == 10);
+  DFT_CHECK(val1.max == 20);
+  DFT_CHECK(val1.sum == 30);
+  DFT_CHECK(val1.count == 2);
 
   std::cout << "✓ Base update test passed\n" << std::endl;
 }
@@ -146,18 +147,18 @@ void test_multiple_types() {
 
   // Int update
   base_int1->update(base_int2);
-  assert(int_val1.sum == 30);
-  assert(int_val1.count == 2);
+  DFT_CHECK(int_val1.sum == 30);
+  DFT_CHECK(int_val1.count == 2);
 
   // Double update
   base_double1->update(base_double2);
-  assert(double_val1.sum == 31.0);
-  assert(double_val1.count == 2);
+  DFT_CHECK(double_val1.sum == 31.0);
+  DFT_CHECK(double_val1.count == 2);
 
   // Cross-type update should be safe (no-op)
   base_int1->update(base_double1);
-  assert(int_val1.sum == 30);   // Should not change
-  assert(int_val1.count == 2);  // Should not change
+  DFT_CHECK(int_val1.sum == 30);   // Should not change
+  DFT_CHECK(int_val1.count == 2);  // Should not change
 
   std::cout << "✓ Multiple types test passed\n" << std::endl;
 }

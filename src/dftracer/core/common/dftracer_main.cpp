@@ -32,10 +32,10 @@ dftracer::DFTracerCore::DFTracerCore(ProfilerStage stage, ProfileType type,
                                      const char* log_file,
                                      const char* data_dirs,
                                      const int* process_id)
-    : is_initialized(false),
+    : process_id(-1),
+      is_initialized(false),
       bind(false),
       log_file_suffix(),
-      process_id(-1),
       include_metadata(false) {
   int requested_process_id = (process_id != nullptr) ? *process_id : -1;
   this->process_id = requested_process_id;
@@ -82,13 +82,13 @@ dftracer::DFTracerCore::DFTracerCore(ProfilerStage stage, ProfileType type,
 
 bool dftracer::DFTracerCore::log(ConstEventNameType event_name,
                                  ConstEventNameType category,
-                                 TimeResolution start_time,
+                                 TraceEventType type, TimeResolution start_time,
                                  TimeResolution duration,
                                  dftracer::Metadata* metadata) {
   DFTRACER_LOG_DEBUG("DFTracerCore::log");
   if (this->is_initialized && conf->enable) {
     if (logger != nullptr) {
-      logger->log(event_name, category, start_time, duration, metadata);
+      logger->log(event_name, category, type, start_time, duration, metadata);
       return true;
     } else {
       DFTRACER_LOG_ERROR("DFTracerCore::log logger not initialized");
@@ -98,11 +98,12 @@ bool dftracer::DFTracerCore::log(ConstEventNameType event_name,
 }
 
 void dftracer::DFTracerCore::log_metadata(ConstEventNameType key,
-                                          ConstEventNameType value) {
+                                          ConstEventNameType value,
+                                          TraceEventType type) {
   DFTRACER_LOG_DEBUG("DFTracerCore::log");
   if (this->is_initialized && conf->enable) {
     if (logger != nullptr) {
-      logger->log_metadata(key, value);
+      logger->log_metadata(key, value, type);
     } else {
       DFTRACER_LOG_ERROR("DFTracerCore::log logger not initialized");
     }

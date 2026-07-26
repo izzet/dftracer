@@ -172,7 +172,7 @@ void HIPFunction::tool_tracing_callback(rocprofiler_context_id_t context,
           std::string(client_name_info[record->kind][record->operation]);
       function->logger->enter_event();
       function->logger->log(
-          event_name.c_str(), kind_name.c_str(),
+          event_name.c_str(), kind_name.c_str(), TraceEventType::TRACE_TYPE_HIP,
           function->transform_timestamp(record->start_timestamp),
           function->transform_time(record->end_timestamp,
                                    record->start_timestamp),
@@ -198,7 +198,7 @@ void HIPFunction::tool_tracing_callback(rocprofiler_context_id_t context,
           std::string(client_name_info[record->kind][record->operation]);
       function->logger->enter_event();
       function->logger->log(
-          event_name.c_str(), kind_name.c_str(),
+          event_name.c_str(), kind_name.c_str(), TraceEventType::TRACE_TYPE_HIP,
           function->transform_timestamp(record->start_timestamp),
           function->transform_time(record->end_timestamp,
                                    record->start_timestamp),
@@ -224,7 +224,7 @@ void HIPFunction::tool_tracing_callback(rocprofiler_context_id_t context,
       event_name = std::to_string(record->dispatch_info.kernel_id) + event_name;
       function->logger->enter_event();
       function->logger->log(
-          event_name.c_str(), kind_name.c_str(),
+          event_name.c_str(), kind_name.c_str(), TraceEventType::TRACE_TYPE_HIP,
           function->transform_timestamp(record->start_timestamp),
           function->transform_time(record->end_timestamp,
                                    record->start_timestamp),
@@ -253,7 +253,7 @@ void HIPFunction::tool_tracing_callback(rocprofiler_context_id_t context,
           std::string(client_name_info.at(record->kind, record->operation));
       function->logger->enter_event();
       function->logger->log(
-          event_name.c_str(), kind_name.c_str(),
+          event_name.c_str(), kind_name.c_str(), TraceEventType::TRACE_TYPE_HIP,
           function->transform_timestamp(record->start_timestamp),
           function->transform_time(record->end_timestamp,
                                    record->start_timestamp),
@@ -282,7 +282,7 @@ void HIPFunction::tool_tracing_callback(rocprofiler_context_id_t context,
           std::string(client_name_info.at(record->kind, record->operation));
       function->logger->enter_event();
       function->logger->log(
-          event_name.c_str(), kind_name.c_str(),
+          event_name.c_str(), kind_name.c_str(), TraceEventType::TRACE_TYPE_HIP,
           function->transform_timestamp(record->start_timestamp),
           function->transform_time(record->end_timestamp,
                                    record->start_timestamp),
@@ -415,9 +415,9 @@ void HIPFunction::tool_tracing_callback(rocprofiler_context_id_t context,
       std::string event_name =
           std::string(client_name_info.at(record->kind, record->operation));
       function->logger->enter_event();
-      function->logger->log(event_name.c_str(), kind_name.c_str(),
-                            function->transform_timestamp(record->timestamp), 0,
-                            metadata);
+      function->logger->log(
+          event_name.c_str(), kind_name.c_str(), TraceEventType::TRACE_TYPE_HIP,
+          function->transform_timestamp(record->timestamp), 0, metadata);
       function->logger->exit_event();
 
 #else
@@ -465,7 +465,7 @@ void HIPFunction::tool_tracing_callback(rocprofiler_context_id_t context,
           std::string(client_name_info.at(record->kind, record->operation));
       function->logger->enter_event();
       function->logger->log(
-          event_name.c_str(), kind_name.c_str(),
+          event_name.c_str(), kind_name.c_str(), TraceEventType::TRACE_TYPE_HIP,
           function->transform_timestamp(record->start_timestamp),
           function->transform_time(record->end_timestamp,
                                    record->start_timestamp),
@@ -499,9 +499,9 @@ void HIPFunction::tool_tracing_callback(rocprofiler_context_id_t context,
       std::string event_name =
           std::string(client_name_info.at(record->kind, record->operation));
       function->logger->enter_event();
-      function->logger->log(event_name.c_str(), kind_name.c_str(),
-                            function->transform_timestamp(record->timestamp), 0,
-                            metadata);
+      function->logger->log(
+          event_name.c_str(), kind_name.c_str(), TraceEventType::TRACE_TYPE_HIP,
+          function->transform_timestamp(record->timestamp), 0, metadata);
       function->logger->exit_event();
 
     } else if (header->category == ROCPROFILER_BUFFER_CATEGORY_TRACING &&
@@ -520,9 +520,9 @@ void HIPFunction::tool_tracing_callback(rocprofiler_context_id_t context,
       std::string event_name =
           std::string(client_name_info.at(record->kind, record->operation));
       function->logger->enter_event();
-      function->logger->log(event_name.c_str(), kind_name.c_str(),
-                            function->transform_timestamp(record->timestamp), 0,
-                            metadata);
+      function->logger->log(
+          event_name.c_str(), kind_name.c_str(), TraceEventType::TRACE_TYPE_HIP,
+          function->transform_timestamp(record->timestamp), 0, metadata);
       function->logger->exit_event();
 
     } else if (header->category == ROCPROFILER_BUFFER_CATEGORY_TRACING &&
@@ -539,9 +539,9 @@ void HIPFunction::tool_tracing_callback(rocprofiler_context_id_t context,
       std::string event_name =
           std::string(client_name_info.at(record->kind, record->operation));
       function->logger->enter_event();
-      function->logger->log(event_name.c_str(), kind_name.c_str(),
-                            function->transform_timestamp(record->timestamp), 0,
-                            metadata);
+      function->logger->log(
+          event_name.c_str(), kind_name.c_str(), TraceEventType::TRACE_TYPE_HIP,
+          function->transform_timestamp(record->timestamp), 0, metadata);
       function->logger->exit_event();
 
     } else if (header->category == ROCPROFILER_BUFFER_CATEGORY_TRACING &&
@@ -561,9 +561,9 @@ void HIPFunction::tool_tracing_callback(rocprofiler_context_id_t context,
       std::string event_name =
           std::string(client_name_info.at(record->kind, record->operation));
       function->logger->enter_event();
-      function->logger->log(event_name.c_str(), kind_name.c_str(),
-                            function->transform_timestamp(record->timestamp), 0,
-                            metadata);
+      function->logger->log(
+          event_name.c_str(), kind_name.c_str(), TraceEventType::TRACE_TYPE_HIP,
+          function->transform_timestamp(record->timestamp), 0, metadata);
       function->logger->exit_event();
 
     } else if (header->category == ROCPROFILER_BUFFER_CATEGORY_TRACING &&
@@ -581,9 +581,9 @@ void HIPFunction::tool_tracing_callback(rocprofiler_context_id_t context,
       std::string event_name =
           std::string(client_name_info.at(record->kind, record->operation));
       function->logger->enter_event();
-      function->logger->log(event_name.c_str(), kind_name.c_str(),
-                            function->transform_timestamp(record->timestamp), 0,
-                            metadata);
+      function->logger->log(
+          event_name.c_str(), kind_name.c_str(), TraceEventType::TRACE_TYPE_HIP,
+          function->transform_timestamp(record->timestamp), 0, metadata);
       function->logger->exit_event();
 
 #endif  // page migration version split
@@ -604,7 +604,7 @@ void HIPFunction::tool_tracing_callback(rocprofiler_context_id_t context,
           std::string(client_name_info.at(record->kind, record->operation));
       function->logger->enter_event();
       function->logger->log(
-          event_name.c_str(), kind_name.c_str(),
+          event_name.c_str(), kind_name.c_str(), TraceEventType::TRACE_TYPE_HIP,
           function->transform_timestamp(record->start_timestamp),
           function->transform_time(record->end_timestamp,
                                    record->start_timestamp),

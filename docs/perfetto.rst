@@ -4,6 +4,46 @@ Perfetto UI
 
 This section describes how to use `Perfetto UI <https://ui.perfetto.dev/>`_ to visualize :code:`dftracer` traces.
 
+.. tip::
+
+    Perfetto needs a conversion step (below). Two tools read DFTracer traces
+    as they are:
+
+    * The `DFTracer Viewer <https://marketplace.visualstudio.com/items?itemName=rayandrew.dftracer-viewer>`_
+      VS Code extension (`source <https://github.com/rayandrew/vscode-dftracer-viewer>`_),
+      for browsing a trace in the editor.
+    * `dftracer-utils <https://github.com/LLNL/dftracer-utils>`_
+      (`docs <https://dftracer.readthedocs.io/projects/utils/>`_), for
+      querying and summarising from the command line.
+
+----------------------------------------
+Converting a trace first
+----------------------------------------
+
+.. important::
+
+    A DFTracer trace is not loadable by Perfetto as-is. It is newline-delimited
+    JSON rather than a JSON array, and it records ``ph`` as an integer (see
+    :doc:`trace_format`) where Perfetto expects a single-letter string.
+
+Convert with :code:`jq` before loading:
+
+.. code-block:: bash
+
+    jq --slurp '[ .[]
+      | .ph = ({"1":"X","2":"C","3":"C","4":"M"}[.ph|tostring]) ]' \
+      trace.pfw > trace.json
+
+For a compressed trace, pipe it in instead:
+
+.. code-block:: bash
+
+    gunzip -c trace.pfw.gz | jq --slurp '[ .[]
+      | .ph = ({"1":"X","2":"C","3":"C","4":"M"}[.ph|tostring]) ]' > trace.json
+
+Aggregated records become counters, since Perfetto has no aggregate event of
+its own. Everything below then applies to the converted :code:`trace.json`.
+
 ----------------------------------------
 Loading traces
 ----------------------------------------

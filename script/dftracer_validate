@@ -100,7 +100,7 @@
       {
         # if file is gz get the name
         name=${filename%.pfw.gz}
-        if jq -e -c > /dev/null <<< "$(gunzip -c "$file" | grep -v "\[" | grep -v "\]")"; then
+        if gunzip -c "$file" | jq -e -c > /dev/null; then
         date_echo "Successfully parsed JSON for $name"
         else
         date_echo "Failed to parse JSON for $name"
@@ -111,7 +111,7 @@
       {
         # if file is pfw get the name
         name=${filename%.pfw}
-        if jq -e -c > /dev/null <<< "$(grep -v "\[" "$file" | grep -v "\]")"; then
+        if jq -e -c > /dev/null < "$file"; then
         date_echo "Successfully parsed JSON for $name"
         else
         date_echo "Failed to parse JSON for $name"

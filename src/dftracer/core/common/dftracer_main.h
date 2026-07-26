@@ -64,10 +64,11 @@ class DFTracerCore {
   TimeResolution get_time();
 
   bool log(ConstEventNameType event_name, ConstEventNameType category,
-           TimeResolution start_time, TimeResolution duration,
-           dftracer::Metadata* metadata);
+           TraceEventType type, TimeResolution start_time,
+           TimeResolution duration, dftracer::Metadata* metadata);
 
-  void log_metadata(ConstEventNameType key, ConstEventNameType value);
+  void log_metadata(ConstEventNameType key, ConstEventNameType value,
+                    TraceEventType type);
 
   inline int enter_event() { return logger->enter_event(); }
 

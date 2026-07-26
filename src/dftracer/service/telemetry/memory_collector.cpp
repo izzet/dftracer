@@ -62,8 +62,9 @@ void MemoryTelemetryCollector::parseMemMetrics(
   }
 
   if (!metadata->empty()) {
-    buffer_manager->log_counter_event(current_index, "memory", "sys", time, 0,
-                                      0, metadata);
+    buffer_manager->log_counter_event(current_index, "memory", "sys",
+                                      TraceEventType::TRACE_TYPE_PSUTIL, time,
+                                      0, 0, metadata);
   }
   fclose(file);
 }

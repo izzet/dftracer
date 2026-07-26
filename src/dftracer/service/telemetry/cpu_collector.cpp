@@ -69,8 +69,9 @@ void CPUTelemetryCollector::parseCpuMetrics(
                                  100.0 * metrics.guest_nice / total_jiffies);
 
       int current_index = index.fetch_add(1, std::memory_order_relaxed);
-      buffer_manager->log_counter_event(current_index, "cpu", "sys", time, 0, 0,
-                                        metadata);
+      buffer_manager->log_counter_event(current_index, "cpu", "sys",
+                                        TraceEventType::TRACE_TYPE_PSUTIL, time,
+                                        0, 0, metadata);
     }
     // Per-CPU metrics (e.g., cpu0, cpu1, ...)
     else if (str.find("cpu") == 0 && isdigit(str[3])) {
@@ -104,7 +105,8 @@ void CPUTelemetryCollector::parseCpuMetrics(
       std::string cpu_name = "cpu-" + std::to_string(cpu_index);
       int current_index = index.fetch_add(1, std::memory_order_relaxed);
       buffer_manager->log_counter_event(current_index, cpu_name.c_str(), "sys",
-                                        time, 0, 0, metadata);
+                                        TraceEventType::TRACE_TYPE_PSUTIL, time,
+                                        0, 0, metadata);
     }
   }
   fclose(file);

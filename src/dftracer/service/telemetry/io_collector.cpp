@@ -112,8 +112,9 @@ void IOTelemetryCollector::parseIOMetrics(
     previous_io_metrics[dev_name] = metrics;
 
     int current_index = index.fetch_add(1, std::memory_order_relaxed);
-    buffer_manager->log_counter_event(current_index, dev_name, "io", time, 0, 0,
-                                      metadata);
+    buffer_manager->log_counter_event(current_index, dev_name, "io",
+                                      TraceEventType::TRACE_TYPE_PSUTIL, time,
+                                      0, 0, metadata);
   }
   fclose(file);
 }

@@ -3,7 +3,9 @@
  * Tests all C API functions provided by dftracer
  */
 
+#ifndef _POSIX_C_SOURCE
 #define _POSIX_C_SOURCE 199309L
+#endif
 #include <dftracer/dftracer.h>
 #include <fcntl.h>
 #include <stdio.h>
@@ -11,6 +13,8 @@
 #include <sys/stat.h>
 #include <time.h>
 #include <unistd.h>
+
+#include "ignore_result.h"
 
 /* Helper function for sleeping */
 static void sleep_ms(int milliseconds) {
@@ -129,9 +133,9 @@ void test_c_io_operations(const char* data_dir) {
   int fd = open(filename, O_CREAT | O_RDWR, 0644);
   if (fd != -1) {
     char buf[128] = "C test data";
-    write(fd, buf, strlen(buf));
+    DFT_IGNORE(write(fd, buf, strlen(buf)));
     lseek(fd, 0, SEEK_SET);
-    read(fd, buf, sizeof(buf));
+    DFT_IGNORE(read(fd, buf, sizeof(buf)));
     close(fd);
   }
 
@@ -139,7 +143,7 @@ void test_c_io_operations(const char* data_dir) {
   FILE* fp = fopen(filename, "r");
   if (fp != NULL) {
     char buf[128];
-    fread(buf, 1, sizeof(buf), fp);
+    DFT_IGNORE(fread(buf, 1, sizeof(buf), fp));
     fclose(fp);
   }
 

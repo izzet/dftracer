@@ -64,14 +64,16 @@ int Aggregator::get_previous_aggregations(AggregatedDataType& data, bool all) {
   std::unique_lock<std::shared_mutex> lock(mtx);
   DFTRACER_LOG_INFO("Getting %d timestamps all: %d", aggregated_data_.size(),
                     all);
+  int moved = 0;
   for (auto it = aggregated_data_.begin(); it != aggregated_data_.end();) {
     if (all || it->first < last_interval) {
       data[it->first] = std::move(it->second);
       it = aggregated_data_.erase(it);
+      ++moved;
     } else {
       ++it;
     }
   }
-  return 0;
+  return moved;
 }
 }  // namespace dftracer

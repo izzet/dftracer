@@ -175,20 +175,20 @@ class DFTLogger {
       strcpy(hostname_event, hostname);
       hostname_event[255] = '\0';
       fix_str(hostname_event, sizeof(hostname_event));
-      this->buffer_manager->log_metadata_event(hostname_event, hostname_hash,
-                                               METADATA_NAME_HOSTNAME_HASH,
-                                               this->process_id, tid, true);
+      this->buffer_manager->log_metadata_event(
+          hostname_event, hostname_hash, METADATA_NAME_HOSTNAME_HASH,
+          TraceEventType::TRACE_TYPE_DFTRACER, this->process_id, tid, true);
       char thread_name[128];
       auto size =
           dftracer_logging_real_sprintf()(thread_name, "%d", this->process_id);
       thread_name[size] = '\0';
       this->buffer_manager->log_metadata_event(
           thread_name, METADATA_NAME_THREAD_NAME, METADATA_NAME_THREAD_NAME,
-          this->process_id, tid);
+          TraceEventType::TRACE_TYPE_DFTRACER, this->process_id, tid);
       std::string time_metric_value = to_string(config->time_metric);
       this->buffer_manager->log_metadata_event(
           "time_metric", time_metric_value.c_str(), CUSTOM_METADATA,
-          this->process_id, tid);
+          TraceEventType::TRACE_TYPE_DFTRACER, this->process_id, tid);
       dftracer::Metadata* meta = nullptr;
       if (include_metadata) {
         meta = new dftracer::Metadata();
@@ -219,7 +219,8 @@ class DFTLogger {
         this->buffer_manager->set_app_name(exec_name.c_str());
       }
       this->enter_event();
-      this->log("start", "dftracer", this->get_time(), 0, meta);
+      this->log("start", "dftracer", TraceEventType::TRACE_TYPE_DFTRACER,
+                this->get_time(), 0, meta);
       this->exit_event();
       if (enable_core_affinity) {
 #ifdef DFTRACER_HWLOC_ENABLE
@@ -239,7 +240,8 @@ class DFTLogger {
           }
           this->buffer_manager->log_metadata_event(
               "core_affinity", all_stream.str().c_str(), METADATA_NAME_PROCESS,
-              this->process_id, tid, false);
+              TraceEventType::TRACE_TYPE_DFTRACER, this->process_id, tid,
+              false);
         }
 #endif
       }
@@ -338,14 +340,15 @@ class DFTLogger {
         }
         this->buffer_manager->log_metadata_event(
             "rank", std::to_string(rank).c_str(), METADATA_NAME_PROCESS,
-            this->process_id, tid);
+            TraceEventType::TRACE_TYPE_DFTRACER, this->process_id, tid);
         char process_name[1024];
         auto size =
             dftracer_logging_real_sprintf()(process_name, "Rank %d", rank);
         process_name[size] = '\0';
         this->buffer_manager->log_metadata_event(
             process_name, METADATA_NAME_PROCESS_NAME,
-            METADATA_NAME_PROCESS_NAME, this->process_id, tid);
+            METADATA_NAME_PROCESS_NAME, TraceEventType::TRACE_TYPE_DFTRACER,
+            this->process_id, tid);
         mpi_event = true;
       }
     }
@@ -353,8 +356,8 @@ class DFTLogger {
   }
 
   inline void log(ConstEventNameType event_name, ConstEventNameType category,
-                  TimeResolution start_time, TimeResolution duration,
-                  dftracer::Metadata* metadata) {
+                  TraceEventType type, TimeResolution start_time,
+                  TimeResolution duration, dftracer::Metadata* metadata) {
     DFTRACER_LOG_DEBUG("DFTLogger.log");
 
     // Get thread id and process id from metadata if it exists
@@ -380,19 +383,20 @@ class DFTLogger {
     // during Py_FinalizeEx) must not dereference a destroyed manager.
     if (this->buffer_manager == nullptr) return;
     this->buffer_manager->log_data_event(current_index, event_name, category,
-                                         start_time, duration, metadata,
+                                         type, start_time, duration, metadata,
                                          this->process_id, tid);
     has_entry = true;
   }
 
-  inline void log_metadata(ConstEventNameType key, ConstEventNameType value) {
+  inline void log_metadata(ConstEventNameType key, ConstEventNameType value,
+                           TraceEventType type) {
     DFTRACER_LOG_DEBUG("DFTLogger.log_metadata");
     ThreadID tid = 0;
     if (dftracer_tid) {
       tid = df_gettid();
     }
     handle_mpi(tid);
-    this->buffer_manager->log_metadata_event(key, value, CUSTOM_METADATA,
+    this->buffer_manager->log_metadata_event(key, value, CUSTOM_METADATA, type,
                                              this->process_id, tid);
   }
 
@@ -435,8 +439,9 @@ class DFTLogger {
         tid = df_gettid();
       }
       fix_str(file, PATH_MAX);
-      this->buffer_manager->log_metadata_event(file, hash, name,
-                                               this->process_id, tid, true);
+      this->buffer_manager->log_metadata_event(
+          file, hash, name, TraceEventType::TRACE_TYPE_DFTRACER,
+          this->process_id, tid, true);
     }
     return hash;
   }
@@ -457,11 +462,11 @@ class DFTLogger {
       meta->insert_or_assign("num_events", index.load());
       int current_index = this->increment_index();
       auto tid = df_gettid();
-      this->buffer_manager->log_data_event(current_index, "end", "dftracer",
-                                           this->get_time(), 0, meta,
-                                           this->process_id, tid);
+      this->buffer_manager->log_data_event(
+          current_index, "end", "dftracer", TraceEventType::TRACE_TYPE_DFTRACER,
+          this->get_time(), 0, meta, this->process_id, tid);
       this->exit_event();
-      this->buffer_manager->finalize(index.load(), this->process_id, true);
+      this->buffer_manager->finalize(index.load(), this->process_id);
       DFTRACER_LOG_INFO("Released Logger");
       this->buffer_manager.reset();
       this->is_init = false;
@@ -520,12 +525,12 @@ class DFTLogger {
     this->logger->enter_event();                                  \
     start_time = this->logger->get_time();                        \
   }
-#define DFT_LOGGER_END()                                         \
-  if (trace) {                                                   \
-    TimeResolution end_time = this->logger->get_time();          \
-    this->logger->log((char*)__FUNCTION__, CATEGORY, start_time, \
-                      end_time - start_time, metadata);          \
-    this->logger->exit_event();                                  \
+#define DFT_LOGGER_END()                                                     \
+  if (trace) {                                                               \
+    TimeResolution end_time = this->logger->get_time();                      \
+    this->logger->log((char*)__FUNCTION__, CATEGORY, TRACE_TYPE, start_time, \
+                      end_time - start_time, metadata);                      \
+    this->logger->exit_event();                                              \
   }
 
 #endif  // DFTRACER_GENERIC_LOGGER_H

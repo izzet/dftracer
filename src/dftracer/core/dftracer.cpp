@@ -83,11 +83,12 @@ void release_all_live_regions() {
 }  // namespace
 
 DFTracer::DFTracer(ConstEventNameType _name, ConstEventNameType _cat,
-                   int event_type)
+                   int event_type, TraceEventType _type)
     : event_type(event_type),
       initialized(true),
       name(_name),
       cat(_cat),
+      type(_type),
       metadata(nullptr) {
   DFTRACER_LOG_DEBUG("DFTracer::DFTracer event %s cat %s ", _name, _cat);
   auto dftracer_core = DFTRACER_MAIN_SINGLETON(ProfilerStage::PROFILER_OTHER,
@@ -135,13 +136,13 @@ void DFTracer::finalize() {
   if (dftracer_core != nullptr && dftracer_core->is_active()) {
     if (event_type == DF_DATA_EVENT) {
       TimeResolution end_time = dftracer_core->get_time();
-      bool consumed = dftracer_core->log(name, cat, start_time,
+      bool consumed = dftracer_core->log(name, cat, type, start_time,
                                          end_time - start_time, metadata);
       if (consumed) {
         metadata = nullptr;
       }
     } else if (event_type == DF_METADATA_EVENT) {
-      dftracer_core->log_metadata(name, cat);
+      dftracer_core->log_metadata(name, cat, type);
     }
 
     dftracer_core->exit_event();
@@ -185,7 +186,8 @@ struct DFTracerData* initialize_region(ConstEventNameType name,
   }
 
   auto data = new DFTracerData();
-  data->profiler = new DFTracer(name, cat, event_type);
+  data->profiler =
+      new DFTracer(name, cat, event_type, TraceEventType::TRACE_TYPE_C_APP);
 
   {
     std::lock_guard<std::mutex> lock(g_region_lock);
@@ -298,7 +300,8 @@ void log_event(ConstEventNameType name, ConstEventNameType cat,
   auto dftracer = DFTRACER_MAIN_SINGLETON(ProfilerStage::PROFILER_OTHER,
                                           ProfileType::PROFILER_C_APP);
   if (dftracer != nullptr)
-    dftracer->log(name, cat, start_time, duration, nullptr);
+    dftracer->log(name, cat, TraceEventType::TRACE_TYPE_C_APP, start_time,
+                  duration, nullptr);
   else
     DFTRACER_LOG_ERROR("dftracer.cpp.log_event dftracer not initialized");
 }

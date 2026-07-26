@@ -1,10 +1,11 @@
 #include <dftracer/core/common/enumeration.h>
 #include <dftracer/core/utils/configuration_manager.h>
 
-#include <cassert>
 #include <filesystem>
 #include <fstream>
 #include <iostream>
+
+#include "check.h"
 
 using namespace dftracer;
 
@@ -23,12 +24,12 @@ void test_default_configuration() {
   auto config = std::make_shared<ConfigurationManager>();
 
   // Check defaults
-  assert(config->enable ==
-         false);  // Defaults to false, only true if DFTRACER_ENABLE=1
-  assert(config->aggregation_enable == false);
-  assert(config->compression == true);  // Constructor default is true
-  assert(config->metadata == false);
-  assert(config->libuv_thread_count == 1);
+  DFT_CHECK(config->enable ==
+            false);  // Defaults to false, only true if DFTRACER_ENABLE=1
+  DFT_CHECK(config->aggregation_enable == false);
+  DFT_CHECK(config->compression == true);  // Constructor default is true
+  DFT_CHECK(config->metadata == false);
+  DFT_CHECK(config->libuv_thread_count == 1);
 
   std::cout << "✓ Default configuration tests passed" << std::endl;
 }
@@ -39,16 +40,17 @@ void test_environment_variables() {
   // Test DFTRACER_ENABLE
   setenv("DFTRACER_ENABLE", "0", 1);
   auto config1 = std::make_shared<ConfigurationManager>();
-  assert(config1->enable == false);
+  DFT_CHECK(config1->enable == false);
   unsetenv("DFTRACER_ENABLE");
 
   // Test DFTRACER_ENABLE_AGGREGATION (requires DFTRACER_ENABLE=1)
   setenv("DFTRACER_ENABLE", "1", 1);
   setenv("DFTRACER_ENABLE_AGGREGATION", "1", 1);
   auto config2 = std::make_shared<ConfigurationManager>();
-  assert(config2->enable == true);
-  assert(config2->aggregation_enable == true);
-  assert(config2->aggregation_type == AggregationType::AGGREGATION_TYPE_FULL);
+  DFT_CHECK(config2->enable == true);
+  DFT_CHECK(config2->aggregation_enable == true);
+  DFT_CHECK(config2->aggregation_type ==
+            AggregationType::AGGREGATION_TYPE_FULL);
   unsetenv("DFTRACER_ENABLE_AGGREGATION");
   unsetenv("DFTRACER_ENABLE");
 
@@ -58,9 +60,9 @@ void test_environment_variables() {
   setenv("DFTRACER_ENABLE_AGGREGATION", "1", 1);
   setenv("DFTRACER_AGGREGATION_TYPE", "SELECTIVE", 1);
   auto config3 = std::make_shared<ConfigurationManager>();
-  assert(config3->aggregation_enable == true);
-  assert(config3->aggregation_type ==
-         AggregationType::AGGREGATION_TYPE_SELECTIVE);
+  DFT_CHECK(config3->aggregation_enable == true);
+  DFT_CHECK(config3->aggregation_type ==
+            AggregationType::AGGREGATION_TYPE_SELECTIVE);
   unsetenv("DFTRACER_ENABLE_AGGREGATION");
   unsetenv("DFTRACER_AGGREGATION_TYPE");
   unsetenv("DFTRACER_ENABLE");
@@ -69,7 +71,7 @@ void test_environment_variables() {
   setenv("DFTRACER_ENABLE", "1", 1);
   setenv("DFTRACER_TRACE_COMPRESSION", "0", 1);
   auto config4 = std::make_shared<ConfigurationManager>();
-  assert(config4->compression == false);
+  DFT_CHECK(config4->compression == false);
   unsetenv("DFTRACER_TRACE_COMPRESSION");
   unsetenv("DFTRACER_ENABLE");
 
@@ -77,7 +79,7 @@ void test_environment_variables() {
   setenv("DFTRACER_ENABLE", "1", 1);
   setenv("DFTRACER_INC_METADATA", "1", 1);
   auto config5 = std::make_shared<ConfigurationManager>();
-  assert(config5->metadata == true);
+  DFT_CHECK(config5->metadata == true);
   unsetenv("DFTRACER_INC_METADATA");
   unsetenv("DFTRACER_ENABLE");
 
@@ -85,7 +87,7 @@ void test_environment_variables() {
   setenv("DFTRACER_ENABLE", "1", 1);
   setenv("DFTRACER_TRACE_INTERVAL_MS", "2000", 1);
   auto config6 = std::make_shared<ConfigurationManager>();
-  assert(config6->trace_interval_ms == 2000);
+  DFT_CHECK(config6->trace_interval_ms == 2000);
   unsetenv("DFTRACER_TRACE_INTERVAL_MS");
   unsetenv("DFTRACER_ENABLE");
 
@@ -93,7 +95,7 @@ void test_environment_variables() {
   setenv("DFTRACER_ENABLE", "1", 1);
   setenv("DFTRACER_LIBUV_THREADS", "8", 1);
   auto config7 = std::make_shared<ConfigurationManager>();
-  assert(config7->libuv_thread_count == 8);
+  DFT_CHECK(config7->libuv_thread_count == 8);
   unsetenv("DFTRACER_LIBUV_THREADS");
   unsetenv("DFTRACER_ENABLE");
 
@@ -123,11 +125,11 @@ void test_aggregation_rules_from_file() {
   auto config = std::make_shared<ConfigurationManager>();
 
   // Check that rules were loaded
-  assert(config->aggregation_inclusion_rules.size() == 2);
-  assert(config->aggregation_exclusion_rules.size() == 1);
-  assert(config->aggregation_inclusion_rules[0] == "cat == 'posix'");
-  assert(config->aggregation_inclusion_rules[1] == "name LIKE 'read%'");
-  assert(config->aggregation_exclusion_rules[0] == "name == 'stat'");
+  DFT_CHECK(config->aggregation_inclusion_rules.size() == 2);
+  DFT_CHECK(config->aggregation_exclusion_rules.size() == 1);
+  DFT_CHECK(config->aggregation_inclusion_rules[0] == "cat == 'posix'");
+  DFT_CHECK(config->aggregation_inclusion_rules[1] == "name LIKE 'read%'");
+  DFT_CHECK(config->aggregation_exclusion_rules[0] == "name == 'stat'");
 
   // Cleanup
   std::filesystem::remove(yaml_path);
@@ -147,7 +149,7 @@ void test_log_file_configuration() {
   setenv("DFTRACER_LOG_FILE", test_log_file, 1);
 
   auto config = std::make_shared<ConfigurationManager>();
-  assert(config->log_file == test_log_file);
+  DFT_CHECK(config->log_file == test_log_file);
 
   unsetenv("DFTRACER_ENABLE");
   unsetenv("DFTRACER_LOG_FILE");
@@ -163,7 +165,7 @@ void test_data_dirs_configuration() {
   setenv("DFTRACER_DATA_DIR", test_dirs, 1);
 
   auto config = std::make_shared<ConfigurationManager>();
-  assert(config->data_dirs == test_dirs);
+  DFT_CHECK(config->data_dirs == test_dirs);
 
   unsetenv("DFTRACER_ENABLE");
   unsetenv("DFTRACER_DATA_DIR");
@@ -178,7 +180,7 @@ void test_io_flags() {
   setenv("DFTRACER_ENABLE", "1", 1);
   setenv("DFTRACER_DISABLE_POSIX", "1", 1);
   auto config1 = std::make_shared<ConfigurationManager>();
-  assert(config1->posix == false);
+  DFT_CHECK(config1->posix == false);
   unsetenv("DFTRACER_DISABLE_POSIX");
   unsetenv("DFTRACER_ENABLE");
 
@@ -186,7 +188,7 @@ void test_io_flags() {
   setenv("DFTRACER_ENABLE", "1", 1);
   setenv("DFTRACER_DISABLE_STDIO", "1", 1);
   auto config2 = std::make_shared<ConfigurationManager>();
-  assert(config2->stdio == false);
+  DFT_CHECK(config2->stdio == false);
   unsetenv("DFTRACER_DISABLE_STDIO");
   unsetenv("DFTRACER_ENABLE");
 
@@ -194,7 +196,7 @@ void test_io_flags() {
   setenv("DFTRACER_ENABLE", "1", 1);
   setenv("DFTRACER_DISABLE_IO", "1", 1);
   auto config3 = std::make_shared<ConfigurationManager>();
-  assert(config3->io == false);
+  DFT_CHECK(config3->io == false);
   unsetenv("DFTRACER_DISABLE_IO");
   unsetenv("DFTRACER_ENABLE");
 
@@ -209,7 +211,7 @@ void test_buffer_size_configuration() {
   setenv("DFTRACER_WRITE_BUFFER_SIZE", "1048576", 1);
 
   auto config = std::make_shared<ConfigurationManager>();
-  assert(config->write_buffer_size == test_size);
+  DFT_CHECK(config->write_buffer_size == test_size);
 
   unsetenv("DFTRACER_ENABLE");
   unsetenv("DFTRACER_WRITE_BUFFER_SIZE");
@@ -223,19 +225,19 @@ void test_logger_level() {
   // Test DEBUG level
   setenv("DFTRACER_LOG_LEVEL", "DEBUG", 1);
   auto config1 = std::make_shared<ConfigurationManager>();
-  assert(config1->logger_level == cpplogger::LoggerType::CPP_LOGGER_DEBUG);
+  DFT_CHECK(config1->logger_level == cpplogger::LoggerType::CPP_LOGGER_DEBUG);
   unsetenv("DFTRACER_LOG_LEVEL");
 
   // Test INFO level
   setenv("DFTRACER_LOG_LEVEL", "INFO", 1);
   auto config2 = std::make_shared<ConfigurationManager>();
-  assert(config2->logger_level == cpplogger::LoggerType::CPP_LOGGER_INFO);
+  DFT_CHECK(config2->logger_level == cpplogger::LoggerType::CPP_LOGGER_INFO);
   unsetenv("DFTRACER_LOG_LEVEL");
 
   // Test ERROR level
   setenv("DFTRACER_LOG_LEVEL", "ERROR", 1);
   auto config3 = std::make_shared<ConfigurationManager>();
-  assert(config3->logger_level == cpplogger::LoggerType::CPP_LOGGER_ERROR);
+  DFT_CHECK(config3->logger_level == cpplogger::LoggerType::CPP_LOGGER_ERROR);
   unsetenv("DFTRACER_LOG_LEVEL");
 
   std::cout << "✓ Logger level configuration tests passed" << std::endl;
@@ -247,33 +249,33 @@ void test_time_metric() {
   // Default (no env, no yaml) is US
   unsetenv("DFTRACER_TIME_METRIC");
   auto config_default = std::make_shared<ConfigurationManager>();
-  assert(config_default->time_metric == TimeMetricType::TIME_METRIC_US);
+  DFT_CHECK(config_default->time_metric == TimeMetricType::TIME_METRIC_US);
 
   // Test each valid ENV value
   setenv("DFTRACER_TIME_METRIC", "NS", 1);
   auto config_ns = std::make_shared<ConfigurationManager>();
-  assert(config_ns->time_metric == TimeMetricType::TIME_METRIC_NS);
+  DFT_CHECK(config_ns->time_metric == TimeMetricType::TIME_METRIC_NS);
   unsetenv("DFTRACER_TIME_METRIC");
 
   setenv("DFTRACER_TIME_METRIC", "MS", 1);
   auto config_ms = std::make_shared<ConfigurationManager>();
-  assert(config_ms->time_metric == TimeMetricType::TIME_METRIC_MS);
+  DFT_CHECK(config_ms->time_metric == TimeMetricType::TIME_METRIC_MS);
   unsetenv("DFTRACER_TIME_METRIC");
 
   setenv("DFTRACER_TIME_METRIC", "SEC", 1);
   auto config_sec = std::make_shared<ConfigurationManager>();
-  assert(config_sec->time_metric == TimeMetricType::TIME_METRIC_SEC);
+  DFT_CHECK(config_sec->time_metric == TimeMetricType::TIME_METRIC_SEC);
   unsetenv("DFTRACER_TIME_METRIC");
 
   setenv("DFTRACER_TIME_METRIC", "US", 1);
   auto config_us = std::make_shared<ConfigurationManager>();
-  assert(config_us->time_metric == TimeMetricType::TIME_METRIC_US);
+  DFT_CHECK(config_us->time_metric == TimeMetricType::TIME_METRIC_US);
   unsetenv("DFTRACER_TIME_METRIC");
 
   // Invalid ENV value falls back to the default (US)
   setenv("DFTRACER_TIME_METRIC", "BOGUS", 1);
   auto config_invalid = std::make_shared<ConfigurationManager>();
-  assert(config_invalid->time_metric == TimeMetricType::TIME_METRIC_US);
+  DFT_CHECK(config_invalid->time_metric == TimeMetricType::TIME_METRIC_US);
   unsetenv("DFTRACER_TIME_METRIC");
 
   // Test YAML tracer.time_metric
@@ -287,7 +289,7 @@ void test_time_metric() {
   }
   setenv("DFTRACER_CONFIGURATION", yaml_path.c_str(), 1);
   auto config_yaml = std::make_shared<ConfigurationManager>();
-  assert(config_yaml->time_metric == TimeMetricType::TIME_METRIC_NS);
+  DFT_CHECK(config_yaml->time_metric == TimeMetricType::TIME_METRIC_NS);
   unsetenv("DFTRACER_CONFIGURATION");
   std::filesystem::remove(yaml_path);
 
@@ -302,7 +304,7 @@ void test_time_metric() {
   setenv("DFTRACER_CONFIGURATION", yaml_path.c_str(), 1);
   setenv("DFTRACER_TIME_METRIC", "SEC", 1);
   auto config_override = std::make_shared<ConfigurationManager>();
-  assert(config_override->time_metric == TimeMetricType::TIME_METRIC_SEC);
+  DFT_CHECK(config_override->time_metric == TimeMetricType::TIME_METRIC_SEC);
   unsetenv("DFTRACER_CONFIGURATION");
   unsetenv("DFTRACER_TIME_METRIC");
   std::filesystem::remove(yaml_path);
@@ -317,7 +319,7 @@ void test_time_metric() {
   }
   setenv("DFTRACER_CONFIGURATION", yaml_path.c_str(), 1);
   auto config_yaml_invalid = std::make_shared<ConfigurationManager>();
-  assert(config_yaml_invalid->time_metric == TimeMetricType::TIME_METRIC_US);
+  DFT_CHECK(config_yaml_invalid->time_metric == TimeMetricType::TIME_METRIC_US);
   unsetenv("DFTRACER_CONFIGURATION");
   std::filesystem::remove(yaml_path);
 

@@ -49,9 +49,6 @@
 
 #define DFTRACER_PATH_DELIM "/"
 
-// #define DFTRACER_NOOP_MACRO do {} while (0)
-#define DFTRACER_NOOP_MACRO
-
 // Detect VAR_OPT
 // https://stackoverflow.com/questions/48045470/portably-detect-va-opt-support
 #if __cplusplus <= 201703 && defined __GNUC__ && !defined __clang__ && \

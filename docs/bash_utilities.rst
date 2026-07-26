@@ -32,26 +32,36 @@ Extracting JSON data
 
 Once the uncompressed data is parsed. The JSON utility `jq` can be used to parse args.
 
-In each case we have to remove the first `[` which has been added to support perfetto ui.
+A trace is newline-delimited JSON with no enclosing array, so it can be fed to
+`jq` directly.
 
 For uncompressed files
 
 .. code-block:: bash
 
-    cat *.pfw | grep -i "[^#[]" | jq -c '.'
+    cat *.pfw | jq -c '.'
 
 
 For compressed files
 
 .. code-block:: bash
 
-    gzip -c -d `echo *.gz` | grep -i "[^#[]" | jq -c '.'
+    gzip -c -d `echo *.gz` | jq -c '.'
 
 We can extract specific fields from these JSON lines as follows
 
 1. `jq -c '.name'`: extracts all the names of events
 2. `jq -c '.cat'`: extracts all the category of events
-3. `jq -c '.args.hostname'`: extracts the fields from extra args like hostname in this case.
+3. `jq -c '.type'`: extracts the instrumentation layer that produced each event
+4. `jq -c '.ph'`: extracts the record kind
+5. `jq -c '.args.hostname'`: extracts the fields from extra args like hostname in this case.
+
+See :doc:`trace_format` for the values `type` and `ph` can take. To keep only
+the individual events from POSIX and STDIO interception, for example:
+
+.. code-block:: bash
+
+    cat *.pfw | jq -c 'select(.ph == 1 and .type == 3)'
 
 Useful querying using jq
 ************************
@@ -60,31 +70,31 @@ Extract unique functions with their counts from traces.
 
 .. code-block:: bash
 
-    cat *.pfw | grep -i "[^#[]" | jq -c '.name' | sort | uniq -c 
+    cat *.pfw | jq -c '.name' | sort | uniq -c 
 
 Extract unique categories with their counts from traces.
 
 .. code-block:: bash
 
-    cat *.pfw | grep -i "[^#[]" | jq -c '.cat' | sort | uniq -c 
+    cat *.pfw | jq -c '.cat' | sort | uniq -c 
 
 Extract unique process id and thread id combination with their counts from traces.
 
 .. code-block:: bash
 
-    cat *.pfw | grep -i "[^#[]" | jq -c '"\(.pid) \(.tid)"' | sort | uniq -c 
+    cat *.pfw | jq -c '"\(.pid) \(.tid)"' | sort | uniq -c 
 
 Extract min timestamp
 
 .. code-block:: bash
 
-    cat *.pfw | grep -i "[^#[]" | jq -c '.ts | tonumber' | sort -n | tail -1
+    cat *.pfw | jq -c '.ts | tonumber' | sort -n | tail -1
 
 Extract max timestamp
 
 .. code-block:: bash
 
-    cat *.pfw | grep -i "[^#[]" | jq -c '.ts | tonumber' | sort -n | tail -n 1
+    cat *.pfw | jq -c '.ts | tonumber' | sort -n | tail -n 1
 
 
 For more commands on `jq` refer to  `JQ Manual

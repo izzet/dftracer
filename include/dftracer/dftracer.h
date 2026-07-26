@@ -29,6 +29,7 @@ void finalize();
  * CPP Only
  */
 #include <dftracer/core/common/cpp_typedefs.h>
+#include <dftracer/core/common/enumeration.h>
 
 // External Headers
 
@@ -40,12 +41,14 @@ class DFTracer {
   bool initialized;
   ConstEventNameType name;
   ConstEventNameType cat;
+  TraceEventType type;
   TimeResolution start_time;
   dftracer::Metadata* metadata;
 
  public:
   DFTracer(ConstEventNameType _name, ConstEventNameType _cat,
-           int event_type = DF_DATA_EVENT);
+           int event_type = DF_DATA_EVENT,
+           TraceEventType _type = TraceEventType::TRACE_TYPE_CPP_APP);
 
   void update(const char* key, int value,
               MetadataType type = MetadataType::MT_KEY);

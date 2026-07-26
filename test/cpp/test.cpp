@@ -13,6 +13,8 @@
 
 #include <string>
 
+#include "ignore_result.h"
+
 void foo() {
   DFTRACER_CPP_FUNCTION();
 
@@ -45,7 +47,7 @@ int main(int argc, char* argv[]) {
   char filename_link[1024];
   sprintf(filename_link, "%s/demofile_link.txt", argv[1]);
   foo();
-  truncate(filename, 0);
+  DFT_IGNORE(truncate(filename, 0));
   FILE* fh = fopen(filename, "w+");
   if (fh != nullptr) {
     fwrite("hello", sizeof("hello"), 1, fh);
@@ -54,12 +56,12 @@ int main(int argc, char* argv[]) {
     fwrite("hello", sizeof("hello"), 1, fh);
     fclose(fh);
   }
-  link(filename, filename_link);
+  DFT_IGNORE(link(filename, filename_link));
   unlink(filename_link);
-  symlink(filename, filename_link);
+  DFT_IGNORE(symlink(filename, filename_link));
   chmod(filename, S_ISUID);
-  chown(filename, 0, 0);
-  lchown(filename, 0, 0);
+  DFT_IGNORE(chown(filename, 0, 0));
+  DFT_IGNORE(lchown(filename, 0, 0));
   struct utimbuf utimbuf1;
   utime(filename, &utimbuf1);
   char dir[1024];
@@ -73,10 +75,10 @@ int main(int argc, char* argv[]) {
   dup2(dd, dd2);
   umask(0);
   mkfifo(filename, 0);
-  symlinkat(filename, dd, filename_link);
-  faccessat(dd, "demofile.txt", O_RDONLY, 0);
-  linkat(dd, "demofile.txt", dd, "demofile_link2.txt", 0);
-  chdir(dir);
+  DFT_IGNORE(symlinkat(filename, dd, filename_link));
+  DFT_IGNORE(faccessat(dd, "demofile.txt", O_RDONLY, 0));
+  DFT_IGNORE(linkat(dd, "demofile.txt", dd, "demofile_link2.txt", 0));
+  DFT_IGNORE(chdir(dir));
   int fd = openat(dd, "demofile.txt", O_RDONLY);
   if (fd != -1) close(fd);
   fd = openat(dd, "demofile2.txt", O_WRONLY | O_CREAT, 777);
@@ -91,14 +93,14 @@ int main(int argc, char* argv[]) {
   int set_offset = lseek(fd, 1, SEEK_SET);
   (void)set_offset;
   char buf[1];
-  pread(fd, buf, 1, 1);
-  pread64(fd, buf, 1, 1);
-  pwrite(fd, buf, 1, 1);
-  pwrite64(fd, buf, 1, 1);
+  DFT_IGNORE(pread(fd, buf, 1, 1));
+  DFT_IGNORE(pread64(fd, buf, 1, 1));
+  DFT_IGNORE(pwrite(fd, buf, 1, 1));
+  DFT_IGNORE(pwrite64(fd, buf, 1, 1));
   fsync(fd);
   fdatasync(fd);
-  readlinkat(fd, filename, buf, 1);
-  ftruncate(fd, 0);
+  DFT_IGNORE(readlinkat(fd, filename, buf, 1));
+  DFT_IGNORE(ftruncate(fd, 0));
   close(fd);
   remove(filename);
   remove(filename_link);

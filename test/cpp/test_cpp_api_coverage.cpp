@@ -11,6 +11,8 @@
 #include <cstdio>
 #include <cstring>
 
+#include "ignore_result.h"
+
 // Test all function-level tracing APIs
 void test_function_tracing() {
   DFTRACER_CPP_FUNCTION();
@@ -73,9 +75,9 @@ void test_io_operations(const char* data_dir) {
   int fd = open(filename, O_CREAT | O_RDWR, 0644);
   if (fd != -1) {
     char buf[128] = "test data";
-    write(fd, buf, strlen(buf));
+    DFT_IGNORE(write(fd, buf, strlen(buf)));
     lseek(fd, 0, SEEK_SET);
-    read(fd, buf, sizeof(buf));
+    DFT_IGNORE(read(fd, buf, sizeof(buf)));
     fsync(fd);
     close(fd);
   }
@@ -86,7 +88,7 @@ void test_io_operations(const char* data_dir) {
     char buf[128];
     fwrite("more data", 1, 9, fp);
     fseek(fp, 0, SEEK_SET);
-    fread(buf, 1, sizeof(buf), fp);
+    DFT_IGNORE(fread(buf, 1, sizeof(buf), fp));
     fflush(fp);
     fclose(fp);
   }

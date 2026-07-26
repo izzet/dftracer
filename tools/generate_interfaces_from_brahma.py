@@ -20,7 +20,7 @@ import tempfile
 from dataclasses import dataclass, field
 from datetime import datetime
 from pathlib import Path
-from typing import Dict, Iterable, List, Optional, Sequence, Set, Tuple
+from typing import Callable, Dict, Iterable, List, Optional, Sequence, Set, Tuple
 
 import clang.cindex as cix
 
@@ -57,6 +57,7 @@ class InterfaceSpec:
     version_macro: str
     system_header: str
     category: str
+    trace_type: str
     mpi_interface: bool
 
 
@@ -69,6 +70,7 @@ SPECS: Dict[str, InterfaceSpec] = {
         version_macro="BRAHMA_HDF5_VERSION",
         system_header="hdf5.h",
         category="HDF5",
+        trace_type="TRACE_TYPE_HDF5",
         mpi_interface=False,
     ),
     "mpi": InterfaceSpec(
@@ -79,6 +81,7 @@ SPECS: Dict[str, InterfaceSpec] = {
         version_macro="BRAHMA_MPI_VERSION",
         system_header="mpi.h",
         category="MPI",
+        trace_type="TRACE_TYPE_MPI",
         mpi_interface=True,
     ),
     "mpiio": InterfaceSpec(
@@ -89,6 +92,7 @@ SPECS: Dict[str, InterfaceSpec] = {
         version_macro="BRAHMA_MPI_VERSION",
         system_header="mpi.h",
         category="MPIIO",
+        trace_type="TRACE_TYPE_MPI",
         mpi_interface=True,
     ),
 }
@@ -97,6 +101,83 @@ NO_LOG_METHODS: Dict[str, Set[str]] = {
     # DFTLogger internally queries MPI state; wrapping these with
     # DFT_LOGGER_START_ALWAYS() causes recursive interception.
     "mpi": {"MPI_Initialized", "MPI_Finalized"},
+}
+
+# Sub-categories within a single `type`, grouping functions by the MPI
+# standard chapter they belong to (point-to-point, collective, RMA, ...)
+# so a trace reader can tell e.g. a Bcast from a Send without decoding args.
+MPI_CATEGORY_RULES: List[Tuple[str, str]] = [
+    (r"^MPI_Win_", "rma"),
+    (r"^MPI_R(get|put)(_accumulate)?(_c)?$", "rma"),
+    (r"^MPI_Raccumulate(_c)?$", "rma"),
+    (r"^MPI_(Put|Get|Accumulate|Get_accumulate)(_c)?$", "rma"),
+    (r"^MPI_Fetch_and_op(_c)?$", "rma"),
+    (r"^MPI_Compare_and_swap$", "rma"),
+
+    (r"^MPI_I?Bcast", "collective"),
+    (r"^MPI_I?Allreduce", "collective"),
+    (r"^MPI_I?Reduce", "collective"),
+    (r"^MPI_I?Allgather", "collective"),
+    (r"^MPI_I?Gather", "collective"),
+    (r"^MPI_I?Scatter", "collective"),
+    (r"^MPI_I?Alltoall", "collective"),
+    (r"^MPI_I?Scan", "collective"),
+    (r"^MPI_I?Exscan", "collective"),
+    (r"^MPI_I?Barrier", "collective"),
+    (r"^MPI_I?Neighbor_", "collective"),
+    (r"^MPI_Op_", "collective"),
+
+    (r"^MPI_Cart", "topology"),
+    (r"^MPI_Graph", "topology"),
+    (r"^MPI_Dist_graph", "topology"),
+    (r"^MPI_Dims_create$", "topology"),
+    (r"^MPI_Topo_test$", "topology"),
+
+    (r"^MPI_Type_", "datatype"),
+    (r"^MPI_Pack", "datatype"),
+    (r"^MPI_Unpack", "datatype"),
+    (r"^MPI_Get_address$", "datatype"),
+    (r"^MPI_Address$", "datatype"),
+    (r"^MPI_Aint_", "datatype"),
+
+    (r"^MPI_(Comm_spawn|Comm_accept|Comm_connect|Comm_disconnect|Comm_join|Comm_get_parent)", "spawn"),
+    (r"^MPI_(Open_port|Close_port|Publish_name|Unpublish_name|Lookup_name)$", "spawn"),
+
+    (r"^MPI_(Comm|Intercomm)_", "comm"),
+    (r"^MPI_Group_", "comm"),
+    (r"^MPI_Keyval_", "comm"),
+    (r"^MPI_Attr_", "comm"),
+    (r"^MPI_Errhandler_", "comm"),
+
+    (r"^MPI_Info_", "metadata"),
+    (r"^MPI_Register_datarep", "metadata"),
+
+    (r"^MPI_I?[BRS]?send", "p2p"),
+    (r"^MPI_I?M?recv", "p2p"),
+    (r"^MPI_P(ready|send_init|recv_init|arrived)", "p2p"),
+    (r"^MPI_(Wait|Test|Start|Cancel|Request_|Status_|I?M?probe|Buffer_|Grequest_|Is_thread_main)", "p2p"),
+]
+
+
+def mpi_category(name: str) -> str:
+    for pattern, category in MPI_CATEGORY_RULES:
+        if re.match(pattern, name, re.IGNORECASE):
+            return category
+    return "env"
+
+
+def hdf5_category(name: str) -> str:
+    # HDF5's own naming convention already groups functions by module
+    # (H5F* file, H5D* dataset, H5T* datatype, ...); reuse that letter.
+    match = re.match(r"^H5([A-Z])", name)
+    if match:
+        return "h5" + match.group(1).lower()
+    return "h5"
+
+
+PER_FUNCTION_CATEGORY: Dict[str, Callable[[str], str]] = {
+    "mpi": mpi_category,
+    "hdf5": hdf5_category,
 }
 
 
@@ -394,6 +475,7 @@ def make_shim_brahma_config(tmp_dir: Path) -> Path:
 
 def find_virtual_methods(
     index: cix.Index,
+    spec: InterfaceSpec,
     header_path: Path,
     class_name: str,
     include_dirs: Sequence[str],
@@ -481,7 +563,7 @@ def collect_methods_for_interface(
         if ctx.impl_macro:
             defines.append(ctx.impl_macro)
 
-        found = find_virtual_methods(index, header_path, spec.base_class, include_dirs, defines)
+        found = find_virtual_methods(index, spec, header_path, spec.base_class, include_dirs, defines)
         if verbose:
             impl_name = ctx.impl_macro or "-"
             print(f"[{spec.name}] context {idx}/{len(contexts)} v={ctx.version} impl={impl_name}: {len(found)} methods")
@@ -517,6 +599,13 @@ def method_impl_block(spec: InterfaceSpec, info: MethodInfo) -> str:
     arg_call = ", ".join(info.arg_names)
     skip_logging = info.key.name in NO_LOG_METHODS.get(spec.name, set())
 
+    category_fn = PER_FUNCTION_CATEGORY.get(spec.name)
+    category_line = (
+        f'  ConstEventNameType CATEGORY = "{category_fn(info.key.name)}";\n'
+        if category_fn and not skip_logging
+        else ""
+    )
+
     if skip_logging:
         if info.return_kind == cix.TypeKind.VOID:
             return (
@@ -546,6 +635,7 @@ def method_impl_block(spec: InterfaceSpec, info: MethodInfo) -> str:
     if info.return_kind == cix.TypeKind.VOID:
         return (
             f"void brahma::{spec.tracer_class}::{info.key.name}({args}) {{\n"
+            f"{category_line}"
             f"  BRAHMA_MAP_OR_FAIL({info.key.name});\n"
             f"  DFT_LOGGER_START_ALWAYS();\n"
             f"{log_block}"
@@ -556,6 +646,7 @@ def method_impl_block(spec: InterfaceSpec, info: MethodInfo) -> str:
 
     return (
         f"{info.key.return_type} brahma::{spec.tracer_class}::{info.key.name}({args}) {{\n"
+        f"{category_line}"
         f"  BRAHMA_MAP_OR_FAIL({info.key.name});\n"
         f"  DFT_LOGGER_START_ALWAYS();\n"
         f"{log_block}"
@@ -622,6 +713,12 @@ def generate_cpp(spec: InterfaceSpec, methods: Sequence[MethodInfo], timestamp: 
         cond = build_condition(spec, method.contexts)
         blocks.append(wrap_if(cond, method_impl_block(spec, method)))
 
+    category_static = (
+        ""
+        if spec.name in PER_FUNCTION_CATEGORY
+        else f'static ConstEventNameType CATEGORY = "{spec.category}";\n'
+    )
+
     return (
         "///\n"
         f"/// This file is generated by tools/generate_interfaces_from_brahma.py\n"
@@ -631,7 +728,8 @@ def generate_cpp(spec: InterfaceSpec, methods: Sequence[MethodInfo], timestamp: 
         "///\n\n"
         f"#include <dftracer/core/brahma/{spec.name}.h>\n"
         f"#ifdef {spec.enable_macro}\n\n"
-        f"static ConstEventNameType CATEGORY = \"{spec.category}\";\n\n"
+        f"{category_static}"
+        f"static TraceEventType TRACE_TYPE = TraceEventType::{spec.trace_type};\n\n"
         f"std::shared_ptr<brahma::{spec.tracer_class}> brahma::{spec.tracer_class}::instance = nullptr;\n"
         f"bool brahma::{spec.tracer_class}::stop_trace = false;\n\n"
         + "".join(blocks)

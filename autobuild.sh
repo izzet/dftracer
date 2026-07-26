@@ -1950,6 +1950,11 @@ if not files:
 
 print(f"Checking {len(files)} trace file(s)...")
 
+# TraceEventType values from include/dftracer/core/common/enumeration.h
+# (append-only, so these numbers are a stable on-disk contract).
+TRACE_TYPE_HDF5 = 5
+TRACE_TYPE_MPI = 10  # also covers the MPIIO layer, which shares this type
+
 hdf5_funcs, mpi_funcs = set(), set()
 for path in files:
     with gzip.open(path, "rt") as fh:
@@ -1961,11 +1966,11 @@ for path in files:
                 ev = json.loads(line)
             except json.JSONDecodeError:
                 continue
-            cat  = ev.get("cat", "")
+            event_type = ev.get("type", -1)
             name = ev.get("name", "")
-            if cat == "HDF5":
+            if event_type == TRACE_TYPE_HDF5:
                 hdf5_funcs.add(name)
-            elif cat in ("MPI", "MPIIO"):
+            elif event_type == TRACE_TYPE_MPI:
                 mpi_funcs.add(name)
 
 print(f"HDF5 functions intercepted: {sorted(hdf5_funcs)}")
