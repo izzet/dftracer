@@ -45,8 +45,14 @@ class ConfigurationManager {
 
   // Writes the effective configuration (and compile-time layer availability)
   // into `meta` as a single batch, so callers fold it into one trace event
-  // instead of emitting one metadata event per setting.
-  void populate_metadata(Metadata* meta) const;
+  // instead of emitting one metadata event per setting. `bind` and
+  // `log_file` are resolved at runtime by DFTracerCore (not stored on
+  // ConfigurationManager itself: `bind` depends on how initialize_main vs
+  // initialize_no_bind was called, and `log_file` is the final path after
+  // the hostname/exec hash and extension are appended to the configured
+  // prefix), so the caller supplies them.
+  void populate_metadata(Metadata* meta, bool bind,
+                         const std::string& log_file) const;
 };
 }  // namespace dftracer
 #endif  // DFTRACER_CONFIGURATION_MANAGER_H

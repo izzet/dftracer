@@ -360,7 +360,6 @@ jobs:
         with:
           github-token: ${{ secrets.GITHUB_TOKEN }}
           file: ${{ steps.generate_coverage.outputs.coverage_file }}
-          debug: true
           fail-on-error: true
 
       - name: Upload Coverage Artifacts

@@ -33,6 +33,7 @@
 #include <shared_mutex>
 #include <string>
 #include <unordered_map>
+#include <unordered_set>
 #ifdef DFTRACER_HWLOC_ENABLE
 #include <hwloc.h>
 #endif
@@ -93,6 +94,24 @@ class DFTLogger {
   // finalize(), separate from the per-region metadata the update_* APIs emit.
   std::mutex app_metadata_mtx_;
   dftracer::Metadata app_metadata_;
+
+  // Named "sub-layers" reported used via the public mark_used API, folded
+  // into the same "used" object as the TraceEventType-derived layers (see
+  // used_layers_). This is how integrations that all log through a single
+  // TraceEventType (e.g. every Python-side integration logs as PYTHON) can
+  // still distinguish themselves in the end event, e.g. "used.torch_profiler"
+  // vs "used.dynamo" vs "used.ai" vs "used.python_function", the same way
+  // "used.C_APP" vs "used.CPP_APP" fall out of the C and C++ APIs using
+  // different TraceEventTypes.
+  std::shared_mutex used_extra_mtx_;
+  std::unordered_set<std::string> used_extra_;
+
+  // Runtime facts resolved by DFTracerCore at init (see set_runtime_info),
+  // folded into the "cfg" object at finalize() alongside the static
+  // ConfigurationManager settings: whether GOTCHA interception was actually
+  // bound this run, and the fully-resolved trace log file path.
+  bool runtime_bind_ = false;
+  std::string runtime_log_file_;
 
   std::vector<unsigned> core_affinity() {
     DFTRACER_LOG_DEBUG("DFTLogger.core_affinity");
@@ -160,6 +179,30 @@ class DFTLogger {
                                const std::string& value) {
     std::lock_guard<std::mutex> lock(app_metadata_mtx_);
     app_metadata_.insert_or_assign(key, value);
+  }
+
+  // Reports that a named sub-layer/integration was exercised this run (see
+  // used_extra_). Meant to be cheap to call on every invocation of the
+  // integration when there is no natural one-time init hook: the common case
+  // (name already recorded) only takes a shared/read lock to check
+  // membership, so concurrent repeat callers don't serialize on each other;
+  // only the first caller for a given name pays the exclusive lock to insert.
+  inline void mark_used(const std::string& name) {
+    {
+      std::shared_lock<std::shared_mutex> lock(used_extra_mtx_);
+      if (used_extra_.find(name) != used_extra_.end()) return;
+    }
+    std::unique_lock<std::shared_mutex> lock(used_extra_mtx_);
+    used_extra_.insert(name);
+  }
+
+  // Called once by DFTracerCore right after it resolves the trace log file
+  // and binds (or doesn't bind) interceptors, so both facts can be folded
+  // into the "cfg" object at finalize(). Single-threaded at init time (no
+  // lock needed).
+  inline void set_runtime_info(bool bind, const std::string& log_file) {
+    runtime_bind_ = bind;
+    runtime_log_file_ = log_file;
   }
 
   // Returns false once finalize() has been called (is_init set to false).
@@ -490,7 +533,7 @@ class DFTLogger {
   // cross-referencing how it was launched and without paying for one
   // metadata event per setting.
   inline void add_end_event_metadata(dftracer::Metadata* meta) {
-    config->populate_metadata(meta);
+    config->populate_metadata(meta, runtime_bind_, runtime_log_file_);
 
     // Instrumentation layers that produced at least one event this run (see
     // used_layers_ in log()), e.g. {"MPI":1,"PYTHON":1}.
@@ -504,6 +547,16 @@ class DFTLogger {
         if (!first) used_json << ",";
         used_json << "\"" << to_string(static_cast<TraceEventType>(t))
                   << "\":1";
+        first = false;
+      }
+    }
+    // Named sub-layers/integrations reported via mark_used(), e.g. a Python
+    // integration distinguishing itself within TRACE_TYPE_PYTHON.
+    {
+      std::shared_lock<std::shared_mutex> lock(used_extra_mtx_);
+      for (const auto& name : used_extra_) {
+        if (!first) used_json << ",";
+        used_json << "\"" << name << "\":1";
         first = false;
       }
     }

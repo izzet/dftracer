@@ -81,6 +81,14 @@ class DFTracerCore {
     logger->add_app_metadata(key, std::string(value));
   }
 
+  // Reports that a named sub-layer/integration was exercised this run,
+  // folded into the "end" event's "used" object (see DFTLogger::mark_used).
+  // No-op if tracing isn't enabled.
+  inline void mark_used(const char* name) {
+    if (!is_active() || name == nullptr) return;
+    logger->mark_used(name);
+  }
+
   inline int enter_event() { return logger->enter_event(); }
 
   inline void exit_event() { logger->exit_event(); }

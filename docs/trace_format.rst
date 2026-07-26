@@ -247,7 +247,7 @@ readability; on disk it is a single line):
 
     {
       "id": 10, "name": "end", "cat": "dftracer", "type": 1,
-      "pid": 28230, "tid": 28230, "ts": 1785089433770414, "dur": 0, "ph": 1,
+      "pid": 226346, "tid": 226346, "ts": 1785104602739106, "dur": 0, "ph": 1,
       "args": {
         "hhash": "8e0caa2d595b2a4d",
         "num_events": 9,
@@ -257,31 +257,47 @@ readability; on disk it is a single line):
           "compression": 1, "trace_all_files": 0, "tids": 1,
           "bind_signals": 0, "write_buffer_size": 16777216,
           "trace_interval_ms": 1000, "libuv_thread_count": 1,
-          "aggregation_enable": 0, "aggregation_type": "FULL"
+          "aggregation_enable": 0, "aggregation_type": "FULL",
+          "bind": 1,
+          "log_file": "/tmp/final_check/t-fbd87939335a24cd-app.pfw.gz"
         },
         "build": {"mpi": 1, "hdf5": 1, "hip": 0, "finstrument": 0},
         "used": {"C_APP": 1, "LIBC_IO": 1},
-        "app": {}
+        "app": {"batch_size": 32, "model": "resnet50"}
       }
     }
 
-Four "args" keys partition this record by where a value came from. Each is a
-nested JSON object rather than a flat set of dotted keys, so the whole group
-can be sliced out at once with a tool like ``jq`` (e.g. ``jq '.args.cfg'``):
+Five "args" keys partition this record by where a value came from. "cfg",
+"build", "used", and "app" are nested JSON objects rather than a flat set of
+dotted keys, so any one group can be sliced out at once with a tool like
+``jq`` (e.g. ``jq '.args.cfg'``):
 
 ========  ===========================================================
  Key       Meaning
 ========  ===========================================================
  cfg       ``ConfigurationManager`` settings effective for this run
-           (env var / YAML config, resolved), e.g. ``cfg.compression``
+           (env var / YAML config, resolved), e.g. ``cfg.compression``,
+           plus two facts resolved by ``DFTracerCore`` at runtime
+           rather than settable via env/YAML: ``cfg.bind`` (whether
+           GOTCHA interception was actually bound this run — see
+           ``initialize_main`` vs. ``initialize_no_bind``) and
+           ``cfg.log_file`` (the fully-resolved trace path: the
+           configured prefix plus the hostname/exec hash, suffix, and
+           extension)
  build     Layers this build was compiled with support for,
            regardless of whether they were used this run, e.g.
            ``build.mpi``, ``build.hdf5``, ``build.hip``,
            ``build.finstrument``
  used      Layers (see `Event Types`_) that produced at least one
-           event this run, e.g. ``used.MPI``, ``used.PYTHON``,
-           ``used.HIP`` — a layer's absence here means it never
-           fired, not that it is unavailable
+           event this run, plus any named sub-layer/integration
+           reported via the ``mark_used``/``DFTRACER_C_MARK_USED``/
+           ``DFTRACER_CPP_MARK_USED`` API — e.g. ``used.MPI``,
+           ``used.PYTHON``, ``used.torch_profiler``, ``used.dynamo``,
+           ``used.ai``. A key's absence here means that layer or
+           integration never fired, not that it is unavailable.
+           ``used.C_APP``/``used.CPP_APP`` are set as soon as
+           ``DFTRACER_C_INIT``/``DFTRACER_CPP_INIT`` runs, so they
+           appear even if the app never wraps an explicit region.
  app       Application-supplied metadata set via
            ``set_app_metadata_int``/``set_app_metadata_string``
            (C, C++, or Python), e.g. ``app.batch_size``; empty when
@@ -291,6 +307,16 @@ can be sliced out at once with a tool like ``jq`` (e.g. ``jq '.args.cfg'``):
 In the example above, the run used the C API over POSIX/STDIO
 (``used.C_APP``, ``used.LIBC_IO``) even though the build also supports MPI
 and HDF5 (``build.mpi``, ``build.hdf5``) — those layers were compiled in but
-never exercised, so they don't appear under "used".
+never exercised, so they don't appear under "used". The app also recorded
+its own ``batch_size``/``model`` metadata via ``set_app_metadata_int``/
+``set_app_metadata_string``.
+
+Each Python-side integration (PyTorch profiler, ``torch.compile``/dynamo, the
+AI decorator framework) reports itself once, at its own initialization point,
+rather than on every event it logs — all three log through the single
+PYTHON ``type``, so without an explicit marker they'd be indistinguishable
+under ``used.PYTHON``. Calling ``mark_used`` a second time for a name already
+recorded is a cheap no-op (a single membership check), so it is safe to call
+from a hot path if an integration has no natural one-time hook.
 
 .. _`chrome tracing document`: https://docs.google.com/document/d/1CvAClvFfyA5R-PhYUmn5OOQtYMH4h6I0nSsKchNAySU/preview#heading=h.yr4qxyxotyw

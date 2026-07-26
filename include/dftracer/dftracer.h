@@ -29,6 +29,15 @@ void finalize();
 // tracing isn't enabled.
 void set_app_metadata_int(const char* key, int value);
 void set_app_metadata_string(const char* key, const char* value);
+
+// Reports that a named sub-layer/integration was exercised this run, folded
+// into the "end" event's "used" object alongside the automatically-tracked
+// TraceEventType layers (see docs/trace_format.rst). Use this to distinguish
+// integrations that all log through the same TraceEventType — e.g. the
+// PyTorch profiler, torch.compile/dynamo, and the AI decorator framework all
+// log as PYTHON, so each calls this with its own name to tell them apart.
+// Idempotent; safe to call on every invocation.
+void mark_used(const char* name);
 #ifdef __cplusplus
 }
 #endif
@@ -71,13 +80,16 @@ class DFTracer {
 };
 
 #define DFTRACER_CPP_INIT(log_file, data_dirs, process_id) \
-  initialize_main(log_file, data_dirs, process_id);
+  initialize_main(log_file, data_dirs, process_id);        \
+  mark_used("CPP_APP");
 #define DFTRACER_CPP_INIT_NO_BIND(log_file, data_dirs, process_id) \
-  initialize_no_bind(log_file, data_dirs, process_id);
+  initialize_no_bind(log_file, data_dirs, process_id);             \
+  mark_used("CPP_APP");
 #define DFTRACER_CPP_FINI() finalize()
 #define DFTRACER_CPP_APP_METADATA_INT(key, val) set_app_metadata_int(key, val);
 #define DFTRACER_CPP_APP_METADATA_STR(key, val) \
   set_app_metadata_string(key, val);
+#define DFTRACER_CPP_MARK_USED(name) mark_used(name);
 #define DFTRACER_CPP_FUNCTION() \
   DFTracer profiler_dft_fn =    \
       DFTracer((char*)__FUNCTION__, CPP_LOG_CATEGORY, DF_DATA_EVENT);
@@ -136,12 +148,15 @@ void update_metadata_string_type(struct DFTracerData* data, const char* key,
                                  const char* value, int type);
 
 #define DFTRACER_C_INIT(log_file, data_dirs, process_id) \
-  initialize_main(log_file, data_dirs, process_id);
+  initialize_main(log_file, data_dirs, process_id);      \
+  mark_used("C_APP");
 #define DFTRACER_C_INIT_NO_BIND(log_file, data_dirs, process_id) \
-  initialize_no_bind(log_file, data_dirs, process_id);
+  initialize_no_bind(log_file, data_dirs, process_id);           \
+  mark_used("C_APP");
 #define DFTRACER_C_FINI() finalize()
 #define DFTRACER_C_APP_METADATA_INT(key, val) set_app_metadata_int(key, val);
 #define DFTRACER_C_APP_METADATA_STR(key, val) set_app_metadata_string(key, val);
+#define DFTRACER_C_MARK_USED(name) mark_used(name);
 
 #if defined(__GNUC__) || defined(__clang__)
 #define DFTRACER_C_REGION_CLEANUP \

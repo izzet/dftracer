@@ -50,5 +50,9 @@ PYBIND11_MODULE(dftracer, m) {
         "set process-global app metadata (string), folded into the trace's "
         "end event at finalize",
         py::arg("key"), py::arg("value"));
+  m.def("mark_used", &dftracer::mark_used,
+        "report that a named sub-layer/integration was exercised this run, "
+        "folded into the trace's end event 'used' object",
+        py::arg("name"));
   m.def("finalize", &dftracer::finalize, "finalize dftracer");
 }

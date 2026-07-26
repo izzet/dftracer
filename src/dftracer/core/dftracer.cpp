@@ -328,6 +328,16 @@ extern "C" void set_app_metadata_string(const char* key, const char* value) {
         "dftracer.cpp.set_app_metadata_string dftracer not initialized");
 }
 
+extern "C" void mark_used(const char* name) {
+  DFTRACER_LOG_DEBUG("dftracer.cpp.mark_used");
+  auto dftracer = DFTRACER_MAIN_SINGLETON(ProfilerStage::PROFILER_OTHER,
+                                          ProfileType::PROFILER_ANY);
+  if (dftracer != nullptr)
+    dftracer->mark_used(name);
+  else
+    DFTRACER_LOG_ERROR("dftracer.cpp.mark_used dftracer not initialized");
+}
+
 void finalize() {
   DFTRACER_LOG_DEBUG("dftracer.cpp.finalize");
   release_all_live_regions();

@@ -474,8 +474,34 @@ void dftracer::ConfigurationManager::derive_configurations() {
                      "");
 }
 
+namespace {
+// Minimal JSON string escaping for arbitrary runtime values (e.g. a log file
+// path) that, unlike the fixed enum-derived strings elsewhere in this
+// function, aren't guaranteed free of quote/backslash/control characters.
+std::string json_escape(const std::string& s) {
+  std::string out;
+  out.reserve(s.size());
+  for (char c : s) {
+    switch (c) {
+      case '"':
+        out += "\\\"";
+        break;
+      case '\\':
+        out += "\\\\";
+        break;
+      case '\n':
+        out += "\\n";
+        break;
+      default:
+        out += c;
+    }
+  }
+  return out;
+}
+}  // namespace
+
 void dftracer::ConfigurationManager::populate_metadata(
-    dftracer::Metadata* meta) const {
+    dftracer::Metadata* meta, bool bind, const std::string& log_file) const {
   std::ostringstream cfg;
   cfg << "{"
       << "\"enable\":" << (int)this->enable << ","
@@ -493,7 +519,15 @@ void dftracer::ConfigurationManager::populate_metadata(
       << "\"trace_interval_ms\":" << this->trace_interval_ms << ","
       << "\"libuv_thread_count\":" << this->libuv_thread_count << ","
       << "\"aggregation_enable\":" << (int)this->aggregation_enable << ","
-      << "\"aggregation_type\":\"" << to_string(this->aggregation_type) << "\""
+      << "\"aggregation_type\":\"" << to_string(this->aggregation_type)
+      << "\","
+      // Whether GOTCHA interception was actually bound this run (i.e.
+      // initialize_main vs initialize_no_bind), and the fully-resolved trace
+      // log file path (configured prefix + hostname/exec hash + suffix +
+      // extension) — both runtime facts from DFTracerCore, not settable via
+      // env/YAML, but important for reconstructing how a trace was produced.
+      << "\"bind\":" << (int)bind << ","
+      << "\"log_file\":\"" << json_escape(log_file) << "\""
       << "}";
   meta->insert_or_assign("cfg", dftracer::RawJson(cfg.str()));
 
