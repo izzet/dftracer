@@ -200,9 +200,13 @@ int main(int argc, char* argv[]) {
     // Start the server as a daemon
     daemonize();
 
-    // Redirect stdout and stderr to log files (truncate on running)
-    freopen(out_log_path.c_str(), "w", stdout);
-    freopen(err_log_path.c_str(), "w", stderr);
+    // Redirect stdout and stderr to log files (truncate on running).
+    // Nothing can be reported if this fails: the streams we would report on
+    // are the ones being redirected.
+    if (freopen(out_log_path.c_str(), "w", stdout) == nullptr ||
+        freopen(err_log_path.c_str(), "w", stderr) == nullptr) {
+      _exit(EXIT_FAILURE);
+    }
 
     // Write the server's PID to a file for later reference
     std::ofstream pid_file(pid_file_path);

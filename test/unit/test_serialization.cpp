@@ -2,7 +2,6 @@
 #include <dftracer/core/serialization/json_line.h>
 #include <dftracer/core/utils/configuration_manager.h>
 
-#include <cassert>
 #include <cstring>
 #include <iostream>
 #include <string>
@@ -58,10 +57,10 @@ void test_data_event_serialization() {
                                  TraceEventType::TRACE_TYPE_LIBC_IO, start_time,
                                  duration, metadata, process_id, thread_id);
 
-  assert(size > 0);
+  DFT_CHECK(size > 0);
   std::string result(buffer);
-  assert(result.find("read") != std::string::npos);
-  assert(result.find("posix") != std::string::npos);
+  DFT_CHECK(result.find("read") != std::string::npos);
+  DFT_CHECK(result.find("posix") != std::string::npos);
   // The layer that produced the event is carried in "type"; "cat" is unchanged.
   DFT_CHECK(result.find("\"cat\":\"posix\",\"type\":3") != std::string::npos);
 
@@ -103,13 +102,13 @@ void test_aggregated_serialization() {
   // Serialize aggregated data
   char buffer1[4096];
   size_t size1 = serializer->aggregated(buffer1, index, 1234, data1);
-  assert(size1 > 0);
-  assert(std::string(buffer1).find("read") != std::string::npos);
+  DFT_CHECK(size1 > 0);
+  DFT_CHECK(std::string(buffer1).find("read") != std::string::npos);
 
   char buffer2[4096];
   size_t size2 = serializer->aggregated(buffer2, index, 1234, data2);
-  assert(size2 > 0);
-  assert(std::string(buffer2).find("write") != std::string::npos);
+  DFT_CHECK(size2 > 0);
+  DFT_CHECK(std::string(buffer2).find("write") != std::string::npos);
 
   // Clean up allocated memory
   delete data1[time_interval][key1];
@@ -213,8 +212,8 @@ void test_multiple_events() {
 
   // Verify buffer contains multiple events
   std::string result(buffer);
-  assert(result.find("open") != std::string::npos);
-  assert(total_size > 0);
+  DFT_CHECK(result.find("open") != std::string::npos);
+  DFT_CHECK(total_size > 0);
 
   // No trailing bracket: every byte written is part of a JSON line.
   DFT_CHECK(buffer[total_size - 1] == '\n');

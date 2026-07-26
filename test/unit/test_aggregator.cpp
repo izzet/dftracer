@@ -3,10 +3,11 @@
 #include <dftracer/core/common/singleton.h>
 #include <dftracer/core/utils/configuration_manager.h>
 
-#include <cassert>
 #include <cstdlib>
 #include <iostream>
 #include <string>
+
+#include "check.h"
 
 using namespace dftracer;
 
@@ -39,13 +40,13 @@ void test_rules_evaluation() {
 
   // Test if rules match
   bool matches = inclusion_rules.satisfies(&key);
-  assert(matches == true);
+  DFT_CHECK(matches == true);
 
   // Test with different category
   AggregatedKey key2("stdio", "write", TraceEventType::TRACE_TYPE_LIBC_IO, 0, 0,
                      0, &metadata, nullptr, nullptr);
   bool matches2 = inclusion_rules.satisfies(&key2);
-  assert(matches2 == false);
+  DFT_CHECK(matches2 == false);
 
   std::cout << "✓ Rules evaluation test passed\n" << std::endl;
 }
@@ -63,12 +64,12 @@ void test_like_pattern_matching() {
                     0, &metadata, nullptr, nullptr);
 
   bool matches = rules.satisfies(&key);
-  assert(matches == true);
+  DFT_CHECK(matches == true);
 
   AggregatedKey key2("stdio", "read", TraceEventType::TRACE_TYPE_LIBC_IO, 0, 0,
                      0, &metadata, nullptr, nullptr);
   bool matches2 = rules.satisfies(&key2);
-  assert(matches2 == false);
+  DFT_CHECK(matches2 == false);
 
   std::cout << "✓ LIKE pattern matching test passed\n" << std::endl;
 }
@@ -92,7 +93,7 @@ void test_aggregator_basic() {
                     1000000, 5000, tid, &metadata, nullptr, nullptr);
 
   // In FULL mode, all events should be aggregated
-  assert(aggregator->should_aggregate(&key) == true);
+  DFT_CHECK(aggregator->should_aggregate(&key) == true);
 
   // Test aggregate method
   aggregator->aggregate(key);
@@ -201,7 +202,7 @@ void test_aggregator_with_metadata() {
   AggregatedDataType data;
   aggregator->get_previous_aggregations(data, true);
 
-  assert(data.size() > 0);
+  DFT_CHECK(data.size() > 0);
   std::cout << "  Aggregated " << data.size() << " time intervals" << std::endl;
   Aggregator::release_aggregated_data(data);
 
@@ -378,7 +379,7 @@ void test_aggregator_multiple_threads() {
   AggregatedDataType data;
   aggregator->get_previous_aggregations(data, true);
 
-  assert(data.size() > 0);
+  DFT_CHECK(data.size() > 0);
   std::cout << "  Aggregated events from multiple threads across "
             << data.size() << " intervals" << std::endl;
   Aggregator::release_aggregated_data(data);

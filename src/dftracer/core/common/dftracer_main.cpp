@@ -32,10 +32,10 @@ dftracer::DFTracerCore::DFTracerCore(ProfilerStage stage, ProfileType type,
                                      const char* log_file,
                                      const char* data_dirs,
                                      const int* process_id)
-    : is_initialized(false),
+    : process_id(-1),
+      is_initialized(false),
       bind(false),
       log_file_suffix(),
-      process_id(-1),
       include_metadata(false) {
   int requested_process_id = (process_id != nullptr) ? *process_id : -1;
   this->process_id = requested_process_id;

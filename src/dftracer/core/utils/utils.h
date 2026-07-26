@@ -27,6 +27,14 @@
 void dft_finalize(bool force = false);
 
 // Shared helper: dump backtrace to stderr and flush.  Safe to call from
+// warn_unused_result is not silenced by a (void) cast; assigning the result
+// is. These are crash-handler writes with nothing useful to do on failure.
+#define DFTRACER_IGNORE_RESULT(expr) \
+  do {                               \
+    auto _dft_ignored = (expr);      \
+    (void)_dft_ignored;              \
+  } while (0)
+
 // both signal handlers (uses async-signal-safe backtrace_symbols_fd) and
 // from C++ terminate handlers.
 inline void dftracer_dump_stack() {  // GCOVR_EXCL_START
@@ -34,19 +42,19 @@ inline void dftracer_dump_stack() {  // GCOVR_EXCL_START
   void* buffer[STACK_SIZE];
   int nptrs = backtrace(buffer, STACK_SIZE);
   const char hdr[] = "=== DFTRACER STACK TRACE ===\n";
-  (void)write(STDERR_FILENO, hdr, sizeof(hdr) - 1);
+  DFTRACER_IGNORE_RESULT(write(STDERR_FILENO, hdr, sizeof(hdr) - 1));
   backtrace_symbols_fd(buffer, nptrs, STDERR_FILENO);
   const char ftr[] = "=== END STACK TRACE ===\n";
-  (void)write(STDERR_FILENO, ftr, sizeof(ftr) - 1);
+  DFTRACER_IGNORE_RESULT(write(STDERR_FILENO, ftr, sizeof(ftr) - 1));
   // fsync so the FD buffer is flushed to the OS before we die
-  (void)fsync(STDERR_FILENO);
+  DFTRACER_IGNORE_RESULT(fsync(STDERR_FILENO));
 }  // GCOVR_EXCL_STOP
 
 // C++ terminate handler: catches any unhandled exception, prints its
 // message (if available) and a stack trace, then exits.
 inline void dftracer_terminate_handler() {  // GCOVR_EXCL_START
   const char msg[] = "[DFTRACER] unhandled exception — dumping stack trace\n";
-  (void)write(STDERR_FILENO, msg, sizeof(msg) - 1);
+  DFTRACER_IGNORE_RESULT(write(STDERR_FILENO, msg, sizeof(msg) - 1));
   // Try to extract the exception message
   try {
     auto eptr = std::current_exception();
@@ -54,12 +62,12 @@ inline void dftracer_terminate_handler() {  // GCOVR_EXCL_START
   } catch (const std::exception& e) {
     const char* what = e.what();
     const char pfx[] = "[DFTRACER] exception: ";
-    (void)write(STDERR_FILENO, pfx, sizeof(pfx) - 1);
-    (void)write(STDERR_FILENO, what, strlen(what));
-    (void)write(STDERR_FILENO, "\n", 1);
+    DFTRACER_IGNORE_RESULT(write(STDERR_FILENO, pfx, sizeof(pfx) - 1));
+    DFTRACER_IGNORE_RESULT(write(STDERR_FILENO, what, strlen(what)));
+    DFTRACER_IGNORE_RESULT(write(STDERR_FILENO, "\n", 1));
   } catch (...) {
     const char unk[] = "[DFTRACER] exception: (unknown type)\n";
-    (void)write(STDERR_FILENO, unk, sizeof(unk) - 1);
+    DFTRACER_IGNORE_RESULT(write(STDERR_FILENO, unk, sizeof(unk) - 1));
   }
   dftracer_dump_stack();
   dft_finalize();

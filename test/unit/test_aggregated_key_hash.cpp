@@ -1,6 +1,5 @@
 #include <dftracer/core/common/datastructure.h>
 
-#include <cassert>
 #include <iostream>
 #include <unordered_map>
 
@@ -20,8 +19,8 @@ void test_hash_equality_basic() {
   size_t hash1 = hasher(key1);
   size_t hash2 = hasher(key2);
 
-  assert(key1 == key2);
-  assert(hash1 == hash2);
+  DFT_CHECK(key1 == key2);
+  DFT_CHECK(hash1 == hash2);
 
   std::cout << "✓ Basic hash equality test passed\n" << std::endl;
 }
@@ -38,8 +37,8 @@ void test_hash_inequality_basic() {
   size_t hash1 = hasher(key1);
   size_t hash2 = hasher(key2);
 
-  assert(!(key1 == key2));
-  assert(hash1 != hash2);
+  DFT_CHECK(!(key1 == key2));
+  DFT_CHECK(hash1 != hash2);
 
   std::cout << "✓ Basic hash inequality test passed\n" << std::endl;
 }
@@ -64,8 +63,8 @@ void test_hash_equality_with_metadata() {
   size_t hash1 = hasher(key1);
   size_t hash2 = hasher(key2);
 
-  assert(key1 == key2);
-  assert(hash1 == hash2);
+  DFT_CHECK(key1 == key2);
+  DFT_CHECK(hash1 == hash2);
 
   std::cout << "✓ Hash equality with metadata test passed\n" << std::endl;
 }
@@ -89,10 +88,10 @@ void test_hash_inequality_with_different_metadata() {
   size_t hash1 = hasher(key1);
   size_t hash2 = hasher(key2);
 
-  assert(!(key1 == key2));
+  DFT_CHECK(!(key1 == key2));
   // Different metadata should (very likely) produce different hashes
   // Note: hash collisions are possible but extremely unlikely
-  assert(hash1 != hash2);
+  DFT_CHECK(hash1 != hash2);
 
   std::cout << "✓ Hash inequality with different metadata test passed\n"
             << std::endl;
@@ -116,8 +115,8 @@ void test_hash_in_unordered_map() {
   map[key1] = 10;
 
   // key2 should find the same entry since key1 == key2 and hash1 == hash2
-  assert(map.find(key2) != map.end());
-  assert(map[key2] == 10);
+  DFT_CHECK(map.find(key2) != map.end());
+  DFT_CHECK(map[key2] == 10);
 
   std::cout << "✓ Hash in unordered map test passed\n" << std::endl;
 }
@@ -140,8 +139,8 @@ void test_hash_contract() {
     size_t hash1 = hasher(key1);
     size_t hash2 = hasher(key2);
 
-    assert(key1 == key2);
-    assert(hash1 == hash2);
+    DFT_CHECK(key1 == key2);
+    DFT_CHECK(hash1 == hash2);
   }
 
   std::cout << "✓ Hash contract test passed\n" << std::endl;
