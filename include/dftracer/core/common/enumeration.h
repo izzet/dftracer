@@ -92,6 +92,44 @@ inline void convert(const int& s, TraceEventType& type) {
   }
 }
 
+// Kind of record, written as the integer "ph" column. Replaces the single
+// letters DFTracer used to borrow from the Chrome tracing format; the letter
+// each value supersedes is noted below. AGGREGATED is new: aggregated records
+// used to be written as counters and could not be told apart from them.
+// On-disk format: append-only, never renumber or reuse a value.
+enum TracePhaseType : uint8_t {
+  TRACE_PHASE_UNKNOWN = 0,
+  TRACE_PHASE_COMPLETE = 1,    // "X" -- individual events
+  TRACE_PHASE_COUNTER = 2,     // "C" -- time series counters, from psutil
+  TRACE_PHASE_AGGREGATED = 3,  // "A" -- aggregated events
+  TRACE_PHASE_METADATA = 4,    // "M" -- metadata records
+  // Append new phases above. Sentinel only, never serialized.
+  TRACE_PHASE_MAX
+};
+
+inline const char* to_string(const TracePhaseType& phase) {
+  switch (phase) {
+    case TracePhaseType::TRACE_PHASE_COMPLETE:
+      return "COMPLETE";
+    case TracePhaseType::TRACE_PHASE_COUNTER:
+      return "COUNTER";
+    case TracePhaseType::TRACE_PHASE_AGGREGATED:
+      return "AGGREGATED";
+    case TracePhaseType::TRACE_PHASE_METADATA:
+      return "METADATA";
+    default:
+      return "UNKNOWN";
+  }
+}
+
+inline void convert(const int& s, TracePhaseType& phase) {
+  if (s >= 0 && s < static_cast<int>(TracePhaseType::TRACE_PHASE_MAX)) {
+    phase = static_cast<TracePhaseType>(s);
+  } else {
+    phase = TracePhaseType::TRACE_PHASE_UNKNOWN;
+  }
+}
+
 inline MetadataType convert(const int& s) {
   if (s == 0) {
     return MetadataType::MT_KEY;

@@ -128,6 +128,7 @@ void test_type_column_serialization() {
   serializer->data(buffer, 0, "read", "POSIX", TraceEventType::TRACE_TYPE_HDF5,
                    1000, 10, nullptr, 1234, 1);
   DFT_CHECK(std::string(buffer).find("\"type\":5") != std::string::npos);
+  DFT_CHECK(std::string(buffer).find("\"ph\":1") != std::string::npos);
 
   // Counter events carry it too.
   serializer->counter(buffer, 0, "memory", "sys",
@@ -136,7 +137,7 @@ void test_type_column_serialization() {
   {
     std::string result(buffer);
     DFT_CHECK(result.find("\"type\":7") != std::string::npos);
-    DFT_CHECK(result.find("\"ph\":\"C\"") != std::string::npos);
+    DFT_CHECK(result.find("\"ph\":2") != std::string::npos);
   }
 
   // Metadata events are attributed to their caller rather than always being
@@ -146,7 +147,7 @@ void test_type_column_serialization() {
   {
     std::string result(buffer);
     DFT_CHECK(result.find("\"type\":6") != std::string::npos);
-    DFT_CHECK(result.find("\"ph\":\"M\"") != std::string::npos);
+    DFT_CHECK(result.find("\"ph\":4") != std::string::npos);
   }
 
   // Internal bookkeeping stays DFTRACER.
@@ -177,8 +178,11 @@ void test_aggregated_preserves_type() {
   char out[4096];
   size_t size = serializer->aggregated(out, 0, 1234, data);
   DFT_CHECK(size > 0);
-  // The aggregated record keeps the type of the layer it came from.
+  // The aggregated record keeps the type of the layer it came from, and is
+  // marked AGGREGATED rather than COUNTER so the two can be told apart.
   DFT_CHECK(std::string(out).find("\"type\":10") != std::string::npos);
+  DFT_CHECK(std::string(out).find("\"ph\":3") != std::string::npos);
+  DFT_CHECK(std::string(out).find("\"ph\":2") == std::string::npos);
 
   delete data[interval][key];
 

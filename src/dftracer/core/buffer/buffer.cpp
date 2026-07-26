@@ -151,13 +151,17 @@ void BufferManager::log_counter_event(int index, ConstEventNameType name,
   compress_and_write_if_needed(size);
 }
 
-void BufferManager::log_metadata_event(
-    ConstEventNameType name, ConstEventNameType value, ConstEventNameType ph,
-    TraceEventType type, ProcessID process_id, ThreadID tid, bool is_string) {
+void BufferManager::log_metadata_event(ConstEventNameType name,
+                                       ConstEventNameType value,
+                                       ConstEventNameType record_name,
+                                       TraceEventType type,
+                                       ProcessID process_id, ThreadID tid,
+                                       bool is_string) {
   std::unique_lock<std::shared_mutex> lock(mtx);
   DFTRACER_LOG_DEBUG("BufferManager.log_metadata_event %s", value);
-  size_t size = this->serializer->metadata(buffer + buffer_pos, name, value, ph,
-                                           type, process_id, tid, is_string);
+  size_t size =
+      this->serializer->metadata(buffer + buffer_pos, name, value, record_name,
+                                 type, process_id, tid, is_string);
   compress_and_write_if_needed(size);
 }
 }  // namespace dftracer

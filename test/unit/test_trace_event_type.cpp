@@ -83,13 +83,61 @@ void test_convert_rejects_out_of_range() {
   std::cout << "✓ convert clamps to UNKNOWN\n" << std::endl;
 }
 
+// Same contract for the "ph" column.
+void test_phase_wire_values_are_pinned() {
+  std::cout << "=== Test: TracePhaseType wire values ===\n" << std::endl;
+
+  DFT_CHECK(TRACE_PHASE_UNKNOWN == 0);
+  DFT_CHECK(TRACE_PHASE_COMPLETE == 1);
+  DFT_CHECK(TRACE_PHASE_COUNTER == 2);
+  DFT_CHECK(TRACE_PHASE_AGGREGATED == 3);
+  DFT_CHECK(TRACE_PHASE_METADATA == 4);
+  DFT_CHECK(TRACE_PHASE_MAX == 5);
+
+  // Counters and aggregated records are distinct; they used to share "C".
+  DFT_CHECK(TRACE_PHASE_COUNTER != TRACE_PHASE_AGGREGATED);
+
+  std::cout << "\u2713 Phase wire values pinned\n" << std::endl;
+}
+
+void test_phase_to_string_and_convert() {
+  std::cout << "=== Test: TracePhaseType to_string and convert ===\n"
+            << std::endl;
+
+  DFT_CHECK(std::string(to_string(TRACE_PHASE_UNKNOWN)) == "UNKNOWN");
+  DFT_CHECK(std::string(to_string(TRACE_PHASE_COMPLETE)) == "COMPLETE");
+  DFT_CHECK(std::string(to_string(TRACE_PHASE_COUNTER)) == "COUNTER");
+  DFT_CHECK(std::string(to_string(TRACE_PHASE_AGGREGATED)) == "AGGREGATED");
+  DFT_CHECK(std::string(to_string(TRACE_PHASE_METADATA)) == "METADATA");
+
+  std::set<std::string> names;
+  for (int i = 0; i < TRACE_PHASE_MAX; ++i) {
+    names.insert(to_string(static_cast<TracePhaseType>(i)));
+  }
+  DFT_CHECK(names.size() == static_cast<size_t>(TRACE_PHASE_MAX));
+
+  TracePhaseType phase;
+  for (int i = 0; i < TRACE_PHASE_MAX; ++i) {
+    convert(i, phase);
+    DFT_CHECK(phase == static_cast<TracePhaseType>(i));
+  }
+  convert(static_cast<int>(TRACE_PHASE_MAX), phase);
+  DFT_CHECK(phase == TRACE_PHASE_UNKNOWN);
+  convert(-1, phase);
+  DFT_CHECK(phase == TRACE_PHASE_UNKNOWN);
+
+  std::cout << "\u2713 Phase to_string and convert\n" << std::endl;
+}
+
 int main() {
-  std::cout << "\n=== Running TraceEventType Unit Tests ===\n" << std::endl;
+  std::cout << "\n=== Running Trace Enum Unit Tests ===\n" << std::endl;
   try {
     test_wire_values_are_pinned();
     test_to_string_is_total_and_unique();
     test_convert_rejects_out_of_range();
-    std::cout << "\n=== All TraceEventType Tests Passed ===\n" << std::endl;
+    test_phase_wire_values_are_pinned();
+    test_phase_to_string_and_convert();
+    std::cout << "\n=== All Trace Enum Tests Passed ===\n" << std::endl;
     return 0;
   } catch (const std::exception& e) {
     std::cerr << "Test failed with exception: " << e.what() << std::endl;

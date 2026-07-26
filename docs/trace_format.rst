@@ -59,6 +59,34 @@ that layer would not be meaningful.
 
 ----------
 
+.. _`Record Phases`:
+
+----------------------------------------
+Record Phases
+----------------------------------------
+
+The "ph" column says what kind of record a line is, as a small integer. It
+replaces the single letters DFTracer used to borrow from the Chrome tracing
+format; the letter each value supersedes is given for reference.
+
+========  =============  =========  ==========================================
+ Value     Name           Was        Meaning
+========  =============  =========  ==========================================
+ 0         UNKNOWN        --         Never written; fallback for unknown values
+ 1         COMPLETE       "X"        An individual event with a duration
+ 2         COUNTER        "C"        Time series counter, from dftracer_service
+ 3         AGGREGATED     "A"        An aggregated event
+ 4         METADATA       "M"        A metadata record
+========  =============  =========  ==========================================
+
+AGGREGATED is new. Aggregated records used to be written as counters, so a
+consumer could not tell a genuine psutil counter sample apart from an
+aggregate. COUNTER now means only the former.
+
+Like "type", this numbering is append-only and never renumbered or reused.
+
+----------
+
 ----------------------------------------
 Complete Events
 ----------------------------------------
@@ -67,12 +95,13 @@ A sample complete event looks like the following
 
 .. code-block:: bash
 
-    {"id":8,"name":"CUSTOM_BLOCK","cat":"CPP_APP","type":9,"pid":3308801,"tid":6617602,"ts":1727286231145121,"dur":1000054,"ph":"X","args":{"hhash":39537,"p_idx":7,"key":0,"level":3}}
+    {"id":8,"name":"CUSTOM_BLOCK","cat":"CPP_APP","type":9,"pid":3308801,"tid":6617602,"ts":1727286231145121,"dur":1000054,"ph":1,"args":{"hhash":39537,"p_idx":7,"key":0,"level":3}}
 
 Here, "id" refers to the index of the record in the process. Only for complete events.
 "name" refers to the event name.
 "cat" refers to category.
 "type" refers to the instrumentation layer that produced the event (see `Event Types`_).
+"ph" refers to the kind of record (see `Record Phases`_).
 "pid" and "tid" are the process id and thread id, respectively.
 "ts" and "dur" is the timestamp and duration of the event.
 Finally, "args" is a dictionary of other events.
@@ -92,7 +121,7 @@ A sample hash event looks like the following
 
 .. code-block:: bash
 
-    {"id":1,"name":"HH","cat":"dftracer","type":0,"pid":3487304,"tid":3487304,"ph":"M","args":{"name":"corona211","value":51242}}
+    {"id":1,"name":"HH","cat":"dftracer","type":1,"pid":3487304,"tid":3487304,"ph":4,"args":{"name":"corona211","value":51242}}
 
 
 Here, "name" is the type of hash. "HH" for hostname hash, "FH" for filename hash, "SH" for general string hash.
@@ -105,7 +134,7 @@ An example of such event is below.
 
 .. code-block:: bash
 
-    {"name":"PR","cat":"dftracer","type":0,"pid":3487304,"tid":6974608,"ph":"M","args":{"name":"core_affinity","value":[0,1,2,3,4,5,6,7,8,9,10,11,12,13,14,15,16,17,18,19,20,21,22,23,24,25,26,27,28,29,30,31,32,33,34,35,36,37,38,39,40,41,42,43,44,45,46,47]}}
+    {"name":"PR","cat":"dftracer","type":1,"pid":3487304,"tid":6974608,"ph":4,"args":{"name":"core_affinity","value":[0,1,2,3,4,5,6,7,8,9,10,11,12,13,14,15,16,17,18,19,20,21,22,23,24,25,26,27,28,29,30,31,32,33,34,35,36,37,38,39,40,41,42,43,44,45,46,47]}}
 
 Here, the "name" "PR" represents a metadata event for process and the args contain the metadata name and its value. 
 

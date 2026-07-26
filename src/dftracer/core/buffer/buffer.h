@@ -42,7 +42,7 @@ class BufferManager {
                       ThreadID tid);
 
   void log_metadata_event(ConstEventNameType name, ConstEventNameType value,
-                          ConstEventNameType ph, TraceEventType type,
+                          ConstEventNameType record_name, TraceEventType type,
                           ProcessID process_id, ThreadID tid,
                           bool is_string = true);
 
