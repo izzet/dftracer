@@ -109,6 +109,11 @@ void BufferManager::log_data_event(
     if (!enable_tracing) {
       // Accumulate data; returns true when time interval changes
       bool interval_changed = this->aggregator->aggregate(aggregated_key);
+      // aggregate() only reads additional_keys to fold values into the
+      // aggregated buckets; it never stores or frees the original metadata,
+      // so we must release it here (the non-aggregated path below frees its
+      // copy inside serializer->data()).
+      delete metadata;
       // Serialize aggregated data when moving to new time interval
       if (interval_changed) {
         auto data = dftracer::AggregatedDataType();
