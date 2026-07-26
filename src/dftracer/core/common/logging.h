@@ -8,12 +8,52 @@
 #endif
 
 /* External Headers */
+#include <dlfcn.h>
 #include <sys/types.h>
 #include <unistd.h>
 
 #include <chrono>
 #include <cstdio>
 #include <string>
+
+// dftracer's own internal logging (this file) calls sprintf/snprintf/fprintf
+// to format its debug/error messages. Those same symbol names are
+// GOTCHA-intercepted by STDIODFTracer (brahma/interface/stdio.h's expanded
+// printf family). Calling the plain global names here would recurse into
+// STDIODFTracer's own trace-writing path -- which itself logs -- causing a
+// self-recursive deadlock/stack overflow (observed as `std::system_error:
+// Resource deadlock avoided` and SIGSEGV in CI once fprintf/snprintf were
+// added to the interception surface). Resolving the real libc symbols
+// directly via dlsym sidesteps GOTCHA's PLT/GOT rewriting entirely, mirroring
+// dftracer::STDIOBypass -- but implemented locally (not via STDIOBypass)
+// since logging can fire before DFTracerCore::initialize() has run.
+using dftracer_logging_snprintf_fn = int (*)(char*, size_t, const char*, ...);
+using dftracer_logging_fprintf_fn = int (*)(FILE*, const char*, ...);
+using dftracer_logging_sprintf_fn = int (*)(char*, const char*, ...);
+
+#ifndef DFTRACER_LIBC_SO_PATH
+#define DFTRACER_LIBC_SO_PATH "libc.so.6"
+#endif
+
+inline void* dftracer_logging_libc_handle() {
+  static void* handle = dlopen(DFTRACER_LIBC_SO_PATH, RTLD_LAZY | RTLD_NOLOAD);
+  return handle;
+}
+inline dftracer_logging_snprintf_fn dftracer_logging_real_snprintf() {
+  static auto fn = reinterpret_cast<dftracer_logging_snprintf_fn>(
+      dlsym(dftracer_logging_libc_handle(), "snprintf"));
+  return fn;
+}
+inline dftracer_logging_fprintf_fn dftracer_logging_real_fprintf() {
+  static auto fn = reinterpret_cast<dftracer_logging_fprintf_fn>(
+      dlsym(dftracer_logging_libc_handle(), "fprintf"));
+  return fn;
+}
+inline dftracer_logging_sprintf_fn dftracer_logging_real_sprintf() {
+  static auto fn = reinterpret_cast<dftracer_logging_sprintf_fn>(
+      dlsym(dftracer_logging_libc_handle(), "sprintf"));
+  return fn;
+}
 
 inline std::string dftracer_macro_get_time() {
   auto dftracer_ts_millis =
@@ -24,9 +64,10 @@ inline std::string dftracer_macro_get_time() {
   auto dftracer_ts_t = std::time(0);
   auto now = std::localtime(&dftracer_ts_t);
   char dftracer_ts_time_str[256];
-  sprintf(dftracer_ts_time_str, "%04d-%02d-%02d %02d:%02d:%02d.%ld",
-          now->tm_year + 1900, now->tm_mon + 1, now->tm_mday, now->tm_hour,
-          now->tm_min, now->tm_sec, dftracer_ts_millis);
+  dftracer_logging_real_sprintf()(
+      dftracer_ts_time_str, "%04d-%02d-%02d %02d:%02d:%02d.%ld",
+      now->tm_year + 1900, now->tm_mon + 1, now->tm_mday, now->tm_hour,
+      now->tm_min, now->tm_sec, dftracer_ts_millis);
   return dftracer_ts_time_str;
 }
 
@@ -53,7 +94,8 @@ inline void dftracer_internal_trace_format(const char* file, int line,
                                            const char* name, int logger_level,
                                            const char* format, Args... args) {
   char user_message[4096];
-  std::snprintf(user_message, sizeof(user_message), format, args...);
+  dftracer_logging_real_snprintf()(user_message, sizeof(user_message), format,
+                                   args...);
   cpp_logger_clog(logger_level, name, "[%s] %s %s [%s:%d]",
                   dftracer_macro_get_time().c_str(), function, user_message,
                   file, line);
@@ -136,7 +178,7 @@ inline void dftracer_internal_trace_format(const char* file, int line,
 template <typename... Args>
 inline void dftracer_log_printf(FILE* stream, const char* format,
                                 Args... args) {
-  std::fprintf(stream, format, args...);
+  dftracer_logging_real_fprintf()(stream, format, args...);
 }
 #define DFTRACER_LOG_PRINT(...) dftracer_log_printf(stdout, __VA_ARGS__);
 #define DFTRACER_LOG_ERROR(...) dftracer_log_printf(stderr, __VA_ARGS__);

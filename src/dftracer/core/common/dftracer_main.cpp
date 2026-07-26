@@ -256,7 +256,7 @@ void dftracer::DFTracerCore::initialize(bool _bind, const char* _log_file,
       char exec_name[128] = "DEFAULT";
       char exec_cmd[DFT_PATH_MAX] = "DEFAULT";
       char cmd[128];
-      sprintf(cmd, "/proc/%d/cmdline", df_getpid());
+      dftracer_logging_real_sprintf()(cmd, "/proc/%d/cmdline", df_getpid());
       auto& posix_bypass = dftracer::POSIXBypass::get_instance();
       int fd = posix_bypass.open(cmd, O_RDONLY);
       if (fd != -1) {
@@ -283,9 +283,9 @@ void dftracer::DFTracerCore::initialize(bool _bind, const char* _log_file,
         }
         if (!has_extracted) {
           if (strstr(exec_name, "multiprocessing") != NULL) {
-            sprintf(exec_name, "DEFAULT-spawn");
+            dftracer_logging_real_sprintf()(exec_name, "DEFAULT-spawn");
           } else {
-            sprintf(exec_name, "DEFAULT");
+            dftracer_logging_real_sprintf()(exec_name, "DEFAULT");
           }
         }
         exec_cmd[DFT_PATH_MAX - 1] = '\0';
@@ -296,8 +296,9 @@ void dftracer::DFTracerCore::initialize(bool _bind, const char* _log_file,
       char hostname[256] = "unknown";
       gethostname(hostname, sizeof(hostname));
       hostname[sizeof(hostname) - 1] = '\0';
-      snprintf(log_filename_str, sizeof(log_filename_str), "%s-%s-%d",
-               exec_name, hostname, this->process_id);
+      dftracer_logging_real_snprintf()(log_filename_str,
+                                       sizeof(log_filename_str), "%s-%s-%d",
+                                       exec_name, hostname, this->process_id);
       char* log_file_hash = logger->get_hash(log_filename_str);
       if (_log_file == nullptr) {
         if (!conf->log_file.empty()) {

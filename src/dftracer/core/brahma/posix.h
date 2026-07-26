@@ -13,7 +13,13 @@
 #include <dftracer/core/utils/md5.h>
 #include <dftracer/core/utils/utils.h>
 #include <fcntl.h>
+#include <features.h>
+#include <sys/file.h>
 #include <sys/param.h>
+#include <sys/sendfile.h>
+#include <sys/statvfs.h>
+#include <sys/uio.h>
+#include <sys/wait.h>
 
 #include <filesystem>
 #include <fstream>
@@ -218,6 +224,87 @@ class POSIXDFTracer : public POSIX {
   void exit(int status) override;
 
   void _exit(int status) override;
+
+  // --- New overrides mirroring brahma's expanded POSIX interception surface
+  // ---
+
+  ssize_t readv(int fd, const struct iovec* iov, int iovcnt) override;
+
+  ssize_t writev(int fd, const struct iovec* iov, int iovcnt) override;
+
+  ssize_t preadv(int fd, const struct iovec* iov, int iovcnt,
+                 off_t offset) override;
+
+  ssize_t preadv64(int fd, const struct iovec* iov, int iovcnt,
+                   off64_t offset) override;
+
+  ssize_t pwritev(int fd, const struct iovec* iov, int iovcnt,
+                  off_t offset) override;
+
+  ssize_t pwritev64(int fd, const struct iovec* iov, int iovcnt,
+                    off64_t offset) override;
+
+  int statvfs(const char* path, struct statvfs* buf) override;
+
+  int statvfs64(const char* path, struct statvfs64* buf) override;
+
+  int fstatvfs(int fd, struct statvfs* buf) override;
+
+  int fstatvfs64(int fd, struct statvfs64* buf) override;
+
+  int flock(int fd, int operation) override;
+
+  int execve(const char* pathname, char* const argv[],
+             char* const envp[]) override;
+
+  pid_t wait(int* wstatus) override;
+
+  pid_t waitpid(pid_t pid, int* wstatus, int options) override;
+
+  char* realpath(const char* path, char* resolved_path) override;
+
+  int dirfd(DIR* dir) override;
+
+  ssize_t sendfile(int out_fd, int in_fd, off_t* offset, size_t count) override;
+
+  ssize_t sendfile64(int out_fd, int in_fd, off64_t* offset,
+                     size_t count) override;
+
+  ssize_t copy_file_range(int fd_in, off64_t* off_in, int fd_out,
+                          off64_t* off_out, size_t len,
+                          unsigned int flags) override;
+
+#if defined(__GLIBC__) && __GLIBC_PREREQ(2, 32)
+  // Before glibc 2.32 these weren't real exported dynamic symbols -- see
+  // the identical guard and rationale in brahma/interface/posix.h.
+  int mknod(const char* pathname, mode_t mode, dev_t dev) override;
+
+  int stat(const char* path, struct stat* buf) override;
+
+  int stat64(const char* path, struct stat64* buf) override;
+
+  int lstat(const char* path, struct stat* buf) override;
+
+  int lstat64(const char* path, struct stat64* buf) override;
+
+  int fstat(int fd, struct stat* buf) override;
+
+  int fstat64(int fd, struct stat64* buf) override;
+
+  int fstatat(int dirfd, const char* path, struct stat* buf,
+              int flags) override;
+
+  int fstatat64(int dirfd, const char* path, struct stat64* buf,
+                int flags) override;
+#endif
+
+  int posix_fadvise(int fd, off_t offset, off_t len, int advice) override;
+
+  int posix_fadvise64(int fd, off64_t offset, off64_t len, int advice) override;
+
+  int posix_fallocate(int fd, off_t offset, off_t len) override;
+
+  int posix_fallocate64(int fd, off64_t offset, off64_t len) override;
 };
 
 }  // namespace brahma

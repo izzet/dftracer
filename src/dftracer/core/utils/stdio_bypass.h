@@ -5,6 +5,9 @@
 #ifndef DFTRACER_STDIO_BYPASS_H
 #define DFTRACER_STDIO_BYPASS_H
 
+#include <features.h>
+
+#include <cstdarg>
 #include <cstdio>
 
 namespace dftracer {
@@ -65,6 +68,32 @@ class STDIOBypass {
   long ftell(FILE* fp);
   int fclose(FILE* fp);
 
+  // printf/scanf family: brahma's base class declares these to take a
+  // va_list (its GOTCHA_MACRO_TYPEDEF_VARFMT wrapper already turns the
+  // real "..." call into a va_list for us -- see brahma/interface/stdio.h),
+  // so STDIODFTracer's overrides just need somewhere safe to forward that
+  // va_list to the real v-function. Routed through this bypass rather than
+  // BRAHMA_MAP_OR_FAIL/__real_* for the same reason as flockfile/fflush
+  // above: these symbols involve either GOTCHA's variadic-wrapper dispatch
+  // or (for __isoc23_*) a glibc 2.38+ redirect that brahma's own gotcha
+  // binding required extern "C" workarounds for -- both are exactly the
+  // kind of unusual symbol resolution where gotcha_get_wrappee() has been
+  // observed to misbehave, so resolving the real function independently
+  // via dlopen+dlsym sidesteps the risk entirely rather than hoping it
+  // works out for each new symbol as it's added.
+  int vfprintf(FILE* stream, const char* format, va_list args);
+  int vprintf(const char* format, va_list args);
+  int vsprintf(char* str, const char* format, va_list args);
+  int vsnprintf(char* str, size_t size, const char* format, va_list args);
+  int vfscanf(FILE* stream, const char* format, va_list args);
+  int vscanf(const char* format, va_list args);
+  int vsscanf(const char* str, const char* format, va_list args);
+#if defined(__GLIBC__) && __GLIBC_PREREQ(2, 38)
+  int __isoc23_vfscanf(FILE* stream, const char* format, va_list args);
+  int __isoc23_vscanf(const char* format, va_list args);
+  int __isoc23_vsscanf(const char* str, const char* format, va_list args);
+#endif
+
  private:
   STDIOBypass() = default;
   STDIOBypass(const STDIOBypass&) = delete;
@@ -82,6 +111,13 @@ class STDIOBypass {
   using fseek_fn = int (*)(FILE*, long, int);
   using ftell_fn = long (*)(FILE*);
   using fclose_fn = int (*)(FILE*);
+  using vfprintf_fn = int (*)(FILE*, const char*, va_list);
+  using vprintf_fn = int (*)(const char*, va_list);
+  using vsprintf_fn = int (*)(char*, const char*, va_list);
+  using vsnprintf_fn = int (*)(char*, size_t, const char*, va_list);
+  using vfscanf_fn = int (*)(FILE*, const char*, va_list);
+  using vscanf_fn = int (*)(const char*, va_list);
+  using vsscanf_fn = int (*)(const char*, const char*, va_list);
 
   fopen_fn real_fopen_ = nullptr;
   setvbuf_fn real_setvbuf_ = nullptr;
@@ -93,6 +129,18 @@ class STDIOBypass {
   fseek_fn real_fseek_ = nullptr;
   ftell_fn real_ftell_ = nullptr;
   fclose_fn real_fclose_ = nullptr;
+  vfprintf_fn real_vfprintf_ = nullptr;
+  vprintf_fn real_vprintf_ = nullptr;
+  vsprintf_fn real_vsprintf_ = nullptr;
+  vsnprintf_fn real_vsnprintf_ = nullptr;
+  vfscanf_fn real_vfscanf_ = nullptr;
+  vscanf_fn real_vscanf_ = nullptr;
+  vsscanf_fn real_vsscanf_ = nullptr;
+#if defined(__GLIBC__) && __GLIBC_PREREQ(2, 38)
+  vfscanf_fn real_isoc23_vfscanf_ = nullptr;
+  vscanf_fn real_isoc23_vscanf_ = nullptr;
+  vsscanf_fn real_isoc23_vsscanf_ = nullptr;
+#endif
 };
 
 }  // namespace dftracer
