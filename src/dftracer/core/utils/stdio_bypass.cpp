@@ -77,9 +77,9 @@ void STDIOBypass::initialize() {
   assert(real_vscanf_ != nullptr);
   assert(real_vsscanf_ != nullptr);
 #if defined(__GLIBC__) && __GLIBC_PREREQ(2, 38)
-  assert(real_isoc23_vfscanf_ != nullptr);
-  assert(real_isoc23_vscanf_ != nullptr);
-  assert(real_isoc23_vsscanf_ != nullptr);
+  if (real_isoc23_vfscanf_ == nullptr) real_isoc23_vfscanf_ = real_vfscanf_;
+  if (real_isoc23_vscanf_ == nullptr) real_isoc23_vscanf_ = real_vscanf_;
+  if (real_isoc23_vsscanf_ == nullptr) real_isoc23_vsscanf_ = real_vsscanf_;
 #endif
   initialized_ = true;
 }
