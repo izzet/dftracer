@@ -8,7 +8,6 @@
 #include <dftracer/core/brahma/mpi.h>
 #ifdef BRAHMA_ENABLE_MPI
 
-static ConstEventNameType CATEGORY = "MPI";
 static TraceEventType TRACE_TYPE = TraceEventType::TRACE_TYPE_MPI;
 
 std::shared_ptr<brahma::MPIDFTracer> brahma::MPIDFTracer::instance = nullptr;
@@ -24,6 +23,7 @@ bool brahma::MPIDFTracer::stop_trace = false;
       ((BRAHMA_MPI_VERSION >= 400106 && BRAHMA_MPI_VERSION < 400200) ||   \
        (BRAHMA_MPI_VERSION >= 500006 && BRAHMA_MPI_VERSION < 500100))))
 int brahma::MPIDFTracer::MPI_Abort(MPI_Comm comm, int errorcode) {
+  ConstEventNameType CATEGORY = "env";
   BRAHMA_MAP_OR_FAIL(MPI_Abort);
   DFT_LOGGER_START_ALWAYS();
   DFT_LOGGER_UPDATE_TYPE(comm, MetadataType::MT_VALUE);
@@ -47,6 +47,7 @@ int brahma::MPIDFTracer::MPI_Accumulate(
     const void* origin_addr, int origin_count, MPI_Datatype origin_datatype,
     int target_rank, MPI_Aint target_disp, int target_count,
     MPI_Datatype target_datatype, MPI_Op op, MPI_Win win) {
+  ConstEventNameType CATEGORY = "rma";
   BRAHMA_MAP_OR_FAIL(MPI_Accumulate);
   DFT_LOGGER_START_ALWAYS();
   DFT_LOGGER_UPDATE_TYPE(origin_count, MetadataType::MT_VALUE);
@@ -74,6 +75,7 @@ int brahma::MPIDFTracer::MPI_Accumulate_c(const void* origin_addr,
                                           MPI_Count target_count,
                                           MPI_Datatype target_datatype,
                                           MPI_Op op, MPI_Win win) {
+  ConstEventNameType CATEGORY = "rma";
   BRAHMA_MAP_OR_FAIL(MPI_Accumulate_c);
   DFT_LOGGER_START_ALWAYS();
   DFT_LOGGER_UPDATE_TYPE(origin_count, MetadataType::MT_VALUE);
@@ -100,6 +102,7 @@ int brahma::MPIDFTracer::MPI_Accumulate_c(
     const void* origin_addr, MPI_Count origin_count, int origin_datatype,
     int target_rank, MPI_Aint target_disp, MPI_Count target_count,
     int target_datatype, int op, int win) {
+  ConstEventNameType CATEGORY = "rma";
   BRAHMA_MAP_OR_FAIL(MPI_Accumulate_c);
   DFT_LOGGER_START_ALWAYS();
   DFT_LOGGER_UPDATE_TYPE(origin_count, MetadataType::MT_VALUE);
@@ -128,6 +131,7 @@ int brahma::MPIDFTracer::MPI_Accumulate_c(
       ((BRAHMA_MPI_VERSION >= 400106 && BRAHMA_MPI_VERSION < 400200) ||   \
        (BRAHMA_MPI_VERSION >= 500006 && BRAHMA_MPI_VERSION < 500100))))
 int brahma::MPIDFTracer::MPI_Add_error_class(int* errorclass) {
+  ConstEventNameType CATEGORY = "env";
   BRAHMA_MAP_OR_FAIL(MPI_Add_error_class);
   DFT_LOGGER_START_ALWAYS();
   int ret = __real_MPI_Add_error_class(errorclass);
@@ -146,6 +150,7 @@ int brahma::MPIDFTracer::MPI_Add_error_class(int* errorclass) {
       ((BRAHMA_MPI_VERSION >= 400106 && BRAHMA_MPI_VERSION < 400200) ||   \
        (BRAHMA_MPI_VERSION >= 500006 && BRAHMA_MPI_VERSION < 500100))))
 int brahma::MPIDFTracer::MPI_Add_error_code(int errorclass, int* errorcode) {
+  ConstEventNameType CATEGORY = "env";
   BRAHMA_MAP_OR_FAIL(MPI_Add_error_code);
   DFT_LOGGER_START_ALWAYS();
   DFT_LOGGER_UPDATE_TYPE(errorclass, MetadataType::MT_VALUE);
@@ -166,6 +171,7 @@ int brahma::MPIDFTracer::MPI_Add_error_code(int errorclass, int* errorcode) {
        (BRAHMA_MPI_VERSION >= 500006 && BRAHMA_MPI_VERSION < 500100))))
 int brahma::MPIDFTracer::MPI_Add_error_string(int errorcode,
                                               const char* string) {
+  ConstEventNameType CATEGORY = "env";
   BRAHMA_MAP_OR_FAIL(MPI_Add_error_string);
   DFT_LOGGER_START_ALWAYS();
   DFT_LOGGER_UPDATE_TYPE(errorcode, MetadataType::MT_VALUE);
@@ -185,6 +191,7 @@ int brahma::MPIDFTracer::MPI_Add_error_string(int errorcode,
       ((BRAHMA_MPI_VERSION >= 400106 && BRAHMA_MPI_VERSION < 400200) ||   \
        (BRAHMA_MPI_VERSION >= 500006 && BRAHMA_MPI_VERSION < 500100))))
 int brahma::MPIDFTracer::MPI_Address(void* location, MPI_Aint* address) {
+  ConstEventNameType CATEGORY = "datatype";
   BRAHMA_MAP_OR_FAIL(MPI_Address);
   DFT_LOGGER_START_ALWAYS();
   int ret = __real_MPI_Address(location, address);
@@ -200,6 +207,7 @@ int brahma::MPIDFTracer::MPI_Address(void* location, MPI_Aint* address) {
       ((BRAHMA_MPI_VERSION >= 300403 && BRAHMA_MPI_VERSION < 300500) ||   \
        (BRAHMA_MPI_VERSION >= 400203 && BRAHMA_MPI_VERSION < 400300))))
 MPI_Aint brahma::MPIDFTracer::MPI_Aint_add(MPI_Aint base, MPI_Aint disp) {
+  ConstEventNameType CATEGORY = "datatype";
   BRAHMA_MAP_OR_FAIL(MPI_Aint_add);
   DFT_LOGGER_START_ALWAYS();
   DFT_LOGGER_UPDATE_TYPE(base, MetadataType::MT_VALUE);
@@ -217,6 +225,7 @@ MPI_Aint brahma::MPIDFTracer::MPI_Aint_add(MPI_Aint base, MPI_Aint disp) {
       ((BRAHMA_MPI_VERSION >= 300403 && BRAHMA_MPI_VERSION < 300500) ||   \
        (BRAHMA_MPI_VERSION >= 400203 && BRAHMA_MPI_VERSION < 400300))))
 MPI_Aint brahma::MPIDFTracer::MPI_Aint_diff(MPI_Aint addr1, MPI_Aint addr2) {
+  ConstEventNameType CATEGORY = "datatype";
   BRAHMA_MAP_OR_FAIL(MPI_Aint_diff);
   DFT_LOGGER_START_ALWAYS();
   DFT_LOGGER_UPDATE_TYPE(addr1, MetadataType::MT_VALUE);
@@ -240,6 +249,7 @@ int brahma::MPIDFTracer::MPI_Allgather(const void* sendbuf, int sendcount,
                                        MPI_Datatype sendtype, void* recvbuf,
                                        int recvcount, MPI_Datatype recvtype,
                                        MPI_Comm comm) {
+  ConstEventNameType CATEGORY = "collective";
   BRAHMA_MAP_OR_FAIL(MPI_Allgather);
   DFT_LOGGER_START_ALWAYS();
   DFT_LOGGER_UPDATE_TYPE(sendcount, MetadataType::MT_VALUE);
@@ -261,6 +271,7 @@ int brahma::MPIDFTracer::MPI_Allgather_c(const void* sendbuf,
                                          MPI_Datatype sendtype, void* recvbuf,
                                          MPI_Count recvcount,
                                          MPI_Datatype recvtype, MPI_Comm comm) {
+  ConstEventNameType CATEGORY = "collective";
   BRAHMA_MAP_OR_FAIL(MPI_Allgather_c);
   DFT_LOGGER_START_ALWAYS();
   DFT_LOGGER_UPDATE_TYPE(sendcount, MetadataType::MT_VALUE);
@@ -283,6 +294,7 @@ int brahma::MPIDFTracer::MPI_Allgather_c(const void* sendbuf,
                                          MPI_Count sendcount, int sendtype,
                                          void* recvbuf, MPI_Count recvcount,
                                          int recvtype, int comm) {
+  ConstEventNameType CATEGORY = "collective";
   BRAHMA_MAP_OR_FAIL(MPI_Allgather_c);
   DFT_LOGGER_START_ALWAYS();
   DFT_LOGGER_UPDATE_TYPE(sendcount, MetadataType::MT_VALUE);
@@ -307,6 +319,7 @@ int brahma::MPIDFTracer::MPI_Allgather_init(const void* sendbuf, int sendcount,
                                             MPI_Datatype recvtype,
                                             MPI_Comm comm, MPI_Info info,
                                             MPI_Request* request) {
+  ConstEventNameType CATEGORY = "collective";
   BRAHMA_MAP_OR_FAIL(MPI_Allgather_init);
   DFT_LOGGER_START_ALWAYS();
   DFT_LOGGER_UPDATE_TYPE(sendcount, MetadataType::MT_VALUE);
@@ -330,6 +343,7 @@ int brahma::MPIDFTracer::MPI_Allgather_init(const void* sendbuf, int sendcount,
                                             int sendtype, void* recvbuf,
                                             int recvcount, int recvtype,
                                             int comm, int info, int* request) {
+  ConstEventNameType CATEGORY = "collective";
   BRAHMA_MAP_OR_FAIL(MPI_Allgather_init);
   DFT_LOGGER_START_ALWAYS();
   DFT_LOGGER_UPDATE_TYPE(sendcount, MetadataType::MT_VALUE);
@@ -351,6 +365,7 @@ int brahma::MPIDFTracer::MPI_Allgather_init_c(
     const void* sendbuf, MPI_Count sendcount, MPI_Datatype sendtype,
     void* recvbuf, MPI_Count recvcount, MPI_Datatype recvtype, MPI_Comm comm,
     MPI_Info info, MPI_Request* request) {
+  ConstEventNameType CATEGORY = "collective";
   BRAHMA_MAP_OR_FAIL(MPI_Allgather_init_c);
   DFT_LOGGER_START_ALWAYS();
   DFT_LOGGER_UPDATE_TYPE(sendcount, MetadataType::MT_VALUE);
@@ -374,6 +389,7 @@ int brahma::MPIDFTracer::MPI_Allgather_init_c(
 int brahma::MPIDFTracer::MPI_Allgather_init_c(
     const void* sendbuf, MPI_Count sendcount, int sendtype, void* recvbuf,
     MPI_Count recvcount, int recvtype, int comm, int info, int* request) {
+  ConstEventNameType CATEGORY = "collective";
   BRAHMA_MAP_OR_FAIL(MPI_Allgather_init_c);
   DFT_LOGGER_START_ALWAYS();
   DFT_LOGGER_UPDATE_TYPE(sendcount, MetadataType::MT_VALUE);
@@ -397,6 +413,7 @@ int brahma::MPIDFTracer::MPI_Allgatherv(const void* sendbuf, int sendcount,
                                         const int* recvcounts,
                                         const int* displs,
                                         MPI_Datatype recvtype, MPI_Comm comm) {
+  ConstEventNameType CATEGORY = "collective";
   BRAHMA_MAP_OR_FAIL(MPI_Allgatherv);
   DFT_LOGGER_START_ALWAYS();
   DFT_LOGGER_UPDATE_TYPE(sendcount, MetadataType::MT_VALUE);
@@ -422,6 +439,7 @@ int brahma::MPIDFTracer::MPI_Allgatherv(const void* sendbuf, int sendcount,
                                         const int recvcounts[],
                                         const int displs[],
                                         MPI_Datatype recvtype, MPI_Comm comm) {
+  ConstEventNameType CATEGORY = "collective";
   BRAHMA_MAP_OR_FAIL(MPI_Allgatherv);
   DFT_LOGGER_START_ALWAYS();
   DFT_LOGGER_UPDATE_TYPE(sendcount, MetadataType::MT_VALUE);
@@ -441,6 +459,7 @@ int brahma::MPIDFTracer::MPI_Allgatherv_c(
     const void* sendbuf, MPI_Count sendcount, MPI_Datatype sendtype,
     void* recvbuf, const MPI_Count recvcounts[], const MPI_Aint displs[],
     MPI_Datatype recvtype, MPI_Comm comm) {
+  ConstEventNameType CATEGORY = "collective";
   BRAHMA_MAP_OR_FAIL(MPI_Allgatherv_c);
   DFT_LOGGER_START_ALWAYS();
   DFT_LOGGER_UPDATE_TYPE(sendcount, MetadataType::MT_VALUE);
@@ -464,6 +483,7 @@ int brahma::MPIDFTracer::MPI_Allgatherv_c(const void* sendbuf,
                                           const MPI_Count recvcounts[],
                                           const MPI_Aint displs[], int recvtype,
                                           int comm) {
+  ConstEventNameType CATEGORY = "collective";
   BRAHMA_MAP_OR_FAIL(MPI_Allgatherv_c);
   DFT_LOGGER_START_ALWAYS();
   DFT_LOGGER_UPDATE_TYPE(sendcount, MetadataType::MT_VALUE);
@@ -485,6 +505,7 @@ int brahma::MPIDFTracer::MPI_Allgatherv_init(
     const void* sendbuf, int sendcount, MPI_Datatype sendtype, void* recvbuf,
     const int recvcounts[], const int displs[], MPI_Datatype recvtype,
     MPI_Comm comm, MPI_Info info, MPI_Request* request) {
+  ConstEventNameType CATEGORY = "collective";
   BRAHMA_MAP_OR_FAIL(MPI_Allgatherv_init);
   DFT_LOGGER_START_ALWAYS();
   DFT_LOGGER_UPDATE_TYPE(sendcount, MetadataType::MT_VALUE);
@@ -509,6 +530,7 @@ int brahma::MPIDFTracer::MPI_Allgatherv_init(const void* sendbuf, int sendcount,
                                              const int recvcounts[],
                                              const int displs[], int recvtype,
                                              int comm, int info, int* request) {
+  ConstEventNameType CATEGORY = "collective";
   BRAHMA_MAP_OR_FAIL(MPI_Allgatherv_init);
   DFT_LOGGER_START_ALWAYS();
   DFT_LOGGER_UPDATE_TYPE(sendcount, MetadataType::MT_VALUE);
@@ -530,6 +552,7 @@ int brahma::MPIDFTracer::MPI_Allgatherv_init_c(
     const void* sendbuf, MPI_Count sendcount, MPI_Datatype sendtype,
     void* recvbuf, const MPI_Count recvcounts[], const MPI_Aint displs[],
     MPI_Datatype recvtype, MPI_Comm comm, MPI_Info info, MPI_Request* request) {
+  ConstEventNameType CATEGORY = "collective";
   BRAHMA_MAP_OR_FAIL(MPI_Allgatherv_init_c);
   DFT_LOGGER_START_ALWAYS();
   DFT_LOGGER_UPDATE_TYPE(sendcount, MetadataType::MT_VALUE);
@@ -553,6 +576,7 @@ int brahma::MPIDFTracer::MPI_Allgatherv_init_c(
     const void* sendbuf, MPI_Count sendcount, int sendtype, void* recvbuf,
     const MPI_Count recvcounts[], const MPI_Aint displs[], int recvtype,
     int comm, int info, int* request) {
+  ConstEventNameType CATEGORY = "collective";
   BRAHMA_MAP_OR_FAIL(MPI_Allgatherv_init_c);
   DFT_LOGGER_START_ALWAYS();
   DFT_LOGGER_UPDATE_TYPE(sendcount, MetadataType::MT_VALUE);
@@ -579,6 +603,7 @@ int brahma::MPIDFTracer::MPI_Allgatherv_init_c(
        (BRAHMA_MPI_VERSION >= 500006 && BRAHMA_MPI_VERSION < 500100))))
 int brahma::MPIDFTracer::MPI_Alloc_mem(MPI_Aint size, MPI_Info info,
                                        void* baseptr) {
+  ConstEventNameType CATEGORY = "env";
   BRAHMA_MAP_OR_FAIL(MPI_Alloc_mem);
   DFT_LOGGER_START_ALWAYS();
   DFT_LOGGER_UPDATE_TYPE(size, MetadataType::MT_VALUE);
@@ -601,6 +626,7 @@ int brahma::MPIDFTracer::MPI_Alloc_mem(MPI_Aint size, MPI_Info info,
 int brahma::MPIDFTracer::MPI_Allreduce(const void* sendbuf, void* recvbuf,
                                        int count, MPI_Datatype datatype,
                                        MPI_Op op, MPI_Comm comm) {
+  ConstEventNameType CATEGORY = "collective";
   BRAHMA_MAP_OR_FAIL(MPI_Allreduce);
   DFT_LOGGER_START_ALWAYS();
   DFT_LOGGER_UPDATE_TYPE(count, MetadataType::MT_VALUE);
@@ -618,6 +644,7 @@ int brahma::MPIDFTracer::MPI_Allreduce(const void* sendbuf, void* recvbuf,
 int brahma::MPIDFTracer::MPI_Allreduce_c(const void* sendbuf, void* recvbuf,
                                          MPI_Count count, MPI_Datatype datatype,
                                          MPI_Op op, MPI_Comm comm) {
+  ConstEventNameType CATEGORY = "collective";
   BRAHMA_MAP_OR_FAIL(MPI_Allreduce_c);
   DFT_LOGGER_START_ALWAYS();
   DFT_LOGGER_UPDATE_TYPE(count, MetadataType::MT_VALUE);
@@ -637,6 +664,7 @@ int brahma::MPIDFTracer::MPI_Allreduce_c(const void* sendbuf, void* recvbuf,
 int brahma::MPIDFTracer::MPI_Allreduce_c(const void* sendbuf, void* recvbuf,
                                          MPI_Count count, int datatype, int op,
                                          int comm) {
+  ConstEventNameType CATEGORY = "collective";
   BRAHMA_MAP_OR_FAIL(MPI_Allreduce_c);
   DFT_LOGGER_START_ALWAYS();
   DFT_LOGGER_UPDATE_TYPE(count, MetadataType::MT_VALUE);
@@ -658,6 +686,7 @@ int brahma::MPIDFTracer::MPI_Allreduce_init(const void* sendbuf, void* recvbuf,
                                             MPI_Op op, MPI_Comm comm,
                                             MPI_Info info,
                                             MPI_Request* request) {
+  ConstEventNameType CATEGORY = "collective";
   BRAHMA_MAP_OR_FAIL(MPI_Allreduce_init);
   DFT_LOGGER_START_ALWAYS();
   DFT_LOGGER_UPDATE_TYPE(count, MetadataType::MT_VALUE);
@@ -679,6 +708,7 @@ int brahma::MPIDFTracer::MPI_Allreduce_init(const void* sendbuf, void* recvbuf,
 int brahma::MPIDFTracer::MPI_Allreduce_init(const void* sendbuf, void* recvbuf,
                                             int count, int datatype, int op,
                                             int comm, int info, int* request) {
+  ConstEventNameType CATEGORY = "collective";
   BRAHMA_MAP_OR_FAIL(MPI_Allreduce_init);
   DFT_LOGGER_START_ALWAYS();
   DFT_LOGGER_UPDATE_TYPE(count, MetadataType::MT_VALUE);
@@ -700,6 +730,7 @@ int brahma::MPIDFTracer::MPI_Allreduce_init_c(const void* sendbuf,
                                               MPI_Datatype datatype, MPI_Op op,
                                               MPI_Comm comm, MPI_Info info,
                                               MPI_Request* request) {
+  ConstEventNameType CATEGORY = "collective";
   BRAHMA_MAP_OR_FAIL(MPI_Allreduce_init_c);
   DFT_LOGGER_START_ALWAYS();
   DFT_LOGGER_UPDATE_TYPE(count, MetadataType::MT_VALUE);
@@ -722,6 +753,7 @@ int brahma::MPIDFTracer::MPI_Allreduce_init_c(const void* sendbuf,
                                               void* recvbuf, MPI_Count count,
                                               int datatype, int op, int comm,
                                               int info, int* request) {
+  ConstEventNameType CATEGORY = "collective";
   BRAHMA_MAP_OR_FAIL(MPI_Allreduce_init_c);
   DFT_LOGGER_START_ALWAYS();
   DFT_LOGGER_UPDATE_TYPE(count, MetadataType::MT_VALUE);
@@ -749,6 +781,7 @@ int brahma::MPIDFTracer::MPI_Alltoall(const void* sendbuf, int sendcount,
                                       MPI_Datatype sendtype, void* recvbuf,
                                       int recvcount, MPI_Datatype recvtype,
                                       MPI_Comm comm) {
+  ConstEventNameType CATEGORY = "collective";
   BRAHMA_MAP_OR_FAIL(MPI_Alltoall);
   DFT_LOGGER_START_ALWAYS();
   DFT_LOGGER_UPDATE_TYPE(sendcount, MetadataType::MT_VALUE);
@@ -770,6 +803,7 @@ int brahma::MPIDFTracer::MPI_Alltoall_c(const void* sendbuf,
                                         MPI_Datatype sendtype, void* recvbuf,
                                         MPI_Count recvcount,
                                         MPI_Datatype recvtype, MPI_Comm comm) {
+  ConstEventNameType CATEGORY = "collective";
   BRAHMA_MAP_OR_FAIL(MPI_Alltoall_c);
   DFT_LOGGER_START_ALWAYS();
   DFT_LOGGER_UPDATE_TYPE(sendcount, MetadataType::MT_VALUE);
@@ -792,6 +826,7 @@ int brahma::MPIDFTracer::MPI_Alltoall_c(const void* sendbuf,
                                         MPI_Count sendcount, int sendtype,
                                         void* recvbuf, MPI_Count recvcount,
                                         int recvtype, int comm) {
+  ConstEventNameType CATEGORY = "collective";
   BRAHMA_MAP_OR_FAIL(MPI_Alltoall_c);
   DFT_LOGGER_START_ALWAYS();
   DFT_LOGGER_UPDATE_TYPE(sendcount, MetadataType::MT_VALUE);
@@ -815,6 +850,7 @@ int brahma::MPIDFTracer::MPI_Alltoall_init(const void* sendbuf, int sendcount,
                                            int recvcount, MPI_Datatype recvtype,
                                            MPI_Comm comm, MPI_Info info,
                                            MPI_Request* request) {
+  ConstEventNameType CATEGORY = "collective";
   BRAHMA_MAP_OR_FAIL(MPI_Alltoall_init);
   DFT_LOGGER_START_ALWAYS();
   DFT_LOGGER_UPDATE_TYPE(sendcount, MetadataType::MT_VALUE);
@@ -838,6 +874,7 @@ int brahma::MPIDFTracer::MPI_Alltoall_init(const void* sendbuf, int sendcount,
                                            int sendtype, void* recvbuf,
                                            int recvcount, int recvtype,
                                            int comm, int info, int* request) {
+  ConstEventNameType CATEGORY = "collective";
   BRAHMA_MAP_OR_FAIL(MPI_Alltoall_init);
   DFT_LOGGER_START_ALWAYS();
   DFT_LOGGER_UPDATE_TYPE(sendcount, MetadataType::MT_VALUE);
@@ -859,6 +896,7 @@ int brahma::MPIDFTracer::MPI_Alltoall_init_c(
     const void* sendbuf, MPI_Count sendcount, MPI_Datatype sendtype,
     void* recvbuf, MPI_Count recvcount, MPI_Datatype recvtype, MPI_Comm comm,
     MPI_Info info, MPI_Request* request) {
+  ConstEventNameType CATEGORY = "collective";
   BRAHMA_MAP_OR_FAIL(MPI_Alltoall_init_c);
   DFT_LOGGER_START_ALWAYS();
   DFT_LOGGER_UPDATE_TYPE(sendcount, MetadataType::MT_VALUE);
@@ -884,6 +922,7 @@ int brahma::MPIDFTracer::MPI_Alltoall_init_c(const void* sendbuf,
                                              void* recvbuf, MPI_Count recvcount,
                                              int recvtype, int comm, int info,
                                              int* request) {
+  ConstEventNameType CATEGORY = "collective";
   BRAHMA_MAP_OR_FAIL(MPI_Alltoall_init_c);
   DFT_LOGGER_START_ALWAYS();
   DFT_LOGGER_UPDATE_TYPE(sendcount, MetadataType::MT_VALUE);
@@ -906,6 +945,7 @@ int brahma::MPIDFTracer::MPI_Alltoallv(
     const void* sendbuf, const int* sendcounts, const int* sdispls,
     MPI_Datatype sendtype, void* recvbuf, const int* recvcounts,
     const int* rdispls, MPI_Datatype recvtype, MPI_Comm comm) {
+  ConstEventNameType CATEGORY = "collective";
   BRAHMA_MAP_OR_FAIL(MPI_Alltoallv);
   DFT_LOGGER_START_ALWAYS();
   DFT_LOGGER_UPDATE_TYPE(sendtype, MetadataType::MT_VALUE);
@@ -929,6 +969,7 @@ int brahma::MPIDFTracer::MPI_Alltoallv(
     const void* sendbuf, const int sendcounts[], const int sdispls[],
     MPI_Datatype sendtype, void* recvbuf, const int recvcounts[],
     const int rdispls[], MPI_Datatype recvtype, MPI_Comm comm) {
+  ConstEventNameType CATEGORY = "collective";
   BRAHMA_MAP_OR_FAIL(MPI_Alltoallv);
   DFT_LOGGER_START_ALWAYS();
   DFT_LOGGER_UPDATE_TYPE(sendtype, MetadataType::MT_VALUE);
@@ -947,6 +988,7 @@ int brahma::MPIDFTracer::MPI_Alltoallv_c(
     const void* sendbuf, const MPI_Count sendcounts[], const MPI_Aint sdispls[],
     MPI_Datatype sendtype, void* recvbuf, const MPI_Count recvcounts[],
     const MPI_Aint rdispls[], MPI_Datatype recvtype, MPI_Comm comm) {
+  ConstEventNameType CATEGORY = "collective";
   BRAHMA_MAP_OR_FAIL(MPI_Alltoallv_c);
   DFT_LOGGER_START_ALWAYS();
   DFT_LOGGER_UPDATE_TYPE(sendtype, MetadataType::MT_VALUE);
@@ -968,6 +1010,7 @@ int brahma::MPIDFTracer::MPI_Alltoallv_c(
     const void* sendbuf, const MPI_Count sendcounts[], const MPI_Aint sdispls[],
     int sendtype, void* recvbuf, const MPI_Count recvcounts[],
     const MPI_Aint rdispls[], int recvtype, int comm) {
+  ConstEventNameType CATEGORY = "collective";
   BRAHMA_MAP_OR_FAIL(MPI_Alltoallv_c);
   DFT_LOGGER_START_ALWAYS();
   DFT_LOGGER_UPDATE_TYPE(sendtype, MetadataType::MT_VALUE);
@@ -990,6 +1033,7 @@ int brahma::MPIDFTracer::MPI_Alltoallv_init(
     MPI_Datatype sendtype, void* recvbuf, const int recvcounts[],
     const int rdispls[], MPI_Datatype recvtype, MPI_Comm comm, MPI_Info info,
     MPI_Request* request) {
+  ConstEventNameType CATEGORY = "collective";
   BRAHMA_MAP_OR_FAIL(MPI_Alltoallv_init);
   DFT_LOGGER_START_ALWAYS();
   DFT_LOGGER_UPDATE_TYPE(sendtype, MetadataType::MT_VALUE);
@@ -1012,6 +1056,7 @@ int brahma::MPIDFTracer::MPI_Alltoallv_init(
     const void* sendbuf, const int sendcounts[], const int sdispls[],
     int sendtype, void* recvbuf, const int recvcounts[], const int rdispls[],
     int recvtype, int comm, int info, int* request) {
+  ConstEventNameType CATEGORY = "collective";
   BRAHMA_MAP_OR_FAIL(MPI_Alltoallv_init);
   DFT_LOGGER_START_ALWAYS();
   DFT_LOGGER_UPDATE_TYPE(sendtype, MetadataType::MT_VALUE);
@@ -1033,6 +1078,7 @@ int brahma::MPIDFTracer::MPI_Alltoallv_init_c(
     MPI_Datatype sendtype, void* recvbuf, const MPI_Count recvcounts[],
     const MPI_Aint rdispls[], MPI_Datatype recvtype, MPI_Comm comm,
     MPI_Info info, MPI_Request* request) {
+  ConstEventNameType CATEGORY = "collective";
   BRAHMA_MAP_OR_FAIL(MPI_Alltoallv_init_c);
   DFT_LOGGER_START_ALWAYS();
   DFT_LOGGER_UPDATE_TYPE(sendtype, MetadataType::MT_VALUE);
@@ -1055,6 +1101,7 @@ int brahma::MPIDFTracer::MPI_Alltoallv_init_c(
     const void* sendbuf, const MPI_Count sendcounts[], const MPI_Aint sdispls[],
     int sendtype, void* recvbuf, const MPI_Count recvcounts[],
     const MPI_Aint rdispls[], int recvtype, int comm, int info, int* request) {
+  ConstEventNameType CATEGORY = "collective";
   BRAHMA_MAP_OR_FAIL(MPI_Alltoallv_init_c);
   DFT_LOGGER_START_ALWAYS();
   DFT_LOGGER_UPDATE_TYPE(sendtype, MetadataType::MT_VALUE);
@@ -1082,6 +1129,7 @@ int brahma::MPIDFTracer::MPI_Alltoallw(
     const void* sendbuf, const int sendcounts[], const int sdispls[],
     const MPI_Datatype sendtypes[], void* recvbuf, const int recvcounts[],
     const int rdispls[], const MPI_Datatype recvtypes[], MPI_Comm comm) {
+  ConstEventNameType CATEGORY = "collective";
   BRAHMA_MAP_OR_FAIL(MPI_Alltoallw);
   DFT_LOGGER_START_ALWAYS();
   DFT_LOGGER_UPDATE_TYPE(comm, MetadataType::MT_VALUE);
@@ -1098,6 +1146,7 @@ int brahma::MPIDFTracer::MPI_Alltoallw_c(
     const void* sendbuf, const MPI_Count sendcounts[], const MPI_Aint sdispls[],
     const MPI_Datatype sendtypes[], void* recvbuf, const MPI_Count recvcounts[],
     const MPI_Aint rdispls[], const MPI_Datatype recvtypes[], MPI_Comm comm) {
+  ConstEventNameType CATEGORY = "collective";
   BRAHMA_MAP_OR_FAIL(MPI_Alltoallw_c);
   DFT_LOGGER_START_ALWAYS();
   DFT_LOGGER_UPDATE_TYPE(comm, MetadataType::MT_VALUE);
@@ -1117,6 +1166,7 @@ int brahma::MPIDFTracer::MPI_Alltoallw_c(
     const void* sendbuf, const MPI_Count sendcounts[], const MPI_Aint sdispls[],
     const int sendtypes[], void* recvbuf, const MPI_Count recvcounts[],
     const MPI_Aint rdispls[], const int recvtypes[], int comm) {
+  ConstEventNameType CATEGORY = "collective";
   BRAHMA_MAP_OR_FAIL(MPI_Alltoallw_c);
   DFT_LOGGER_START_ALWAYS();
   DFT_LOGGER_UPDATE_TYPE(comm, MetadataType::MT_VALUE);
@@ -1137,6 +1187,7 @@ int brahma::MPIDFTracer::MPI_Alltoallw_init(
     const MPI_Datatype sendtypes[], void* recvbuf, const int recvcounts[],
     const int rdispls[], const MPI_Datatype recvtypes[], MPI_Comm comm,
     MPI_Info info, MPI_Request* request) {
+  ConstEventNameType CATEGORY = "collective";
   BRAHMA_MAP_OR_FAIL(MPI_Alltoallw_init);
   DFT_LOGGER_START_ALWAYS();
   DFT_LOGGER_UPDATE_TYPE(comm, MetadataType::MT_VALUE);
@@ -1158,6 +1209,7 @@ int brahma::MPIDFTracer::MPI_Alltoallw_init(
     const int sendtypes[], void* recvbuf, const int recvcounts[],
     const int rdispls[], const int recvtypes[], int comm, int info,
     int* request) {
+  ConstEventNameType CATEGORY = "collective";
   BRAHMA_MAP_OR_FAIL(MPI_Alltoallw_init);
   DFT_LOGGER_START_ALWAYS();
   DFT_LOGGER_UPDATE_TYPE(comm, MetadataType::MT_VALUE);
@@ -1177,6 +1229,7 @@ int brahma::MPIDFTracer::MPI_Alltoallw_init_c(
     const MPI_Datatype sendtypes[], void* recvbuf, const MPI_Count recvcounts[],
     const MPI_Aint rdispls[], const MPI_Datatype recvtypes[], MPI_Comm comm,
     MPI_Info info, MPI_Request* request) {
+  ConstEventNameType CATEGORY = "collective";
   BRAHMA_MAP_OR_FAIL(MPI_Alltoallw_init_c);
   DFT_LOGGER_START_ALWAYS();
   DFT_LOGGER_UPDATE_TYPE(comm, MetadataType::MT_VALUE);
@@ -1198,6 +1251,7 @@ int brahma::MPIDFTracer::MPI_Alltoallw_init_c(
     const int sendtypes[], void* recvbuf, const MPI_Count recvcounts[],
     const MPI_Aint rdispls[], const int recvtypes[], int comm, int info,
     int* request) {
+  ConstEventNameType CATEGORY = "collective";
   BRAHMA_MAP_OR_FAIL(MPI_Alltoallw_init_c);
   DFT_LOGGER_START_ALWAYS();
   DFT_LOGGER_UPDATE_TYPE(comm, MetadataType::MT_VALUE);
@@ -1220,6 +1274,7 @@ int brahma::MPIDFTracer::MPI_Alltoallw_init_c(
     (defined(BRAHMA_MPI_IMPL_OPENMPI) &&                                   \
      (BRAHMA_MPI_VERSION >= 400106 && BRAHMA_MPI_VERSION < 400200))
 int brahma::MPIDFTracer::MPI_Attr_delete(MPI_Comm comm, int keyval) {
+  ConstEventNameType CATEGORY = "comm";
   BRAHMA_MAP_OR_FAIL(MPI_Attr_delete);
   DFT_LOGGER_START_ALWAYS();
   DFT_LOGGER_UPDATE_TYPE(comm, MetadataType::MT_VALUE);
@@ -1239,6 +1294,7 @@ int brahma::MPIDFTracer::MPI_Attr_delete(MPI_Comm comm, int keyval) {
     !(defined(BRAHMA_MPI_IMPL_OPENMPI) &&                                  \
       (BRAHMA_MPI_VERSION >= 400106 && BRAHMA_MPI_VERSION < 400200))
 int brahma::MPIDFTracer::MPI_Attr_delete(int comm, int keyval) {
+  ConstEventNameType CATEGORY = "comm";
   BRAHMA_MAP_OR_FAIL(MPI_Attr_delete);
   DFT_LOGGER_START_ALWAYS();
   DFT_LOGGER_UPDATE_TYPE(comm, MetadataType::MT_VALUE);
@@ -1260,6 +1316,7 @@ int brahma::MPIDFTracer::MPI_Attr_delete(int comm, int keyval) {
      (BRAHMA_MPI_VERSION >= 400106 && BRAHMA_MPI_VERSION < 400200))
 int brahma::MPIDFTracer::MPI_Attr_get(MPI_Comm comm, int keyval,
                                       void* attribute_val, int* flag) {
+  ConstEventNameType CATEGORY = "comm";
   BRAHMA_MAP_OR_FAIL(MPI_Attr_get);
   DFT_LOGGER_START_ALWAYS();
   DFT_LOGGER_UPDATE_TYPE(comm, MetadataType::MT_VALUE);
@@ -1280,6 +1337,7 @@ int brahma::MPIDFTracer::MPI_Attr_get(MPI_Comm comm, int keyval,
       (BRAHMA_MPI_VERSION >= 400106 && BRAHMA_MPI_VERSION < 400200))
 int brahma::MPIDFTracer::MPI_Attr_get(int comm, int keyval, void* attribute_val,
                                       int* flag) {
+  ConstEventNameType CATEGORY = "comm";
   BRAHMA_MAP_OR_FAIL(MPI_Attr_get);
   DFT_LOGGER_START_ALWAYS();
   DFT_LOGGER_UPDATE_TYPE(comm, MetadataType::MT_VALUE);
@@ -1301,6 +1359,7 @@ int brahma::MPIDFTracer::MPI_Attr_get(int comm, int keyval, void* attribute_val,
      (BRAHMA_MPI_VERSION >= 400106 && BRAHMA_MPI_VERSION < 400200))
 int brahma::MPIDFTracer::MPI_Attr_put(MPI_Comm comm, int keyval,
                                       void* attribute_val) {
+  ConstEventNameType CATEGORY = "comm";
   BRAHMA_MAP_OR_FAIL(MPI_Attr_put);
   DFT_LOGGER_START_ALWAYS();
   DFT_LOGGER_UPDATE_TYPE(comm, MetadataType::MT_VALUE);
@@ -1321,6 +1380,7 @@ int brahma::MPIDFTracer::MPI_Attr_put(MPI_Comm comm, int keyval,
       (BRAHMA_MPI_VERSION >= 400106 && BRAHMA_MPI_VERSION < 400200))
 int brahma::MPIDFTracer::MPI_Attr_put(int comm, int keyval,
                                       void* attribute_val) {
+  ConstEventNameType CATEGORY = "comm";
   BRAHMA_MAP_OR_FAIL(MPI_Attr_put);
   DFT_LOGGER_START_ALWAYS();
   DFT_LOGGER_UPDATE_TYPE(comm, MetadataType::MT_VALUE);
@@ -1341,6 +1401,7 @@ int brahma::MPIDFTracer::MPI_Attr_put(int comm, int keyval,
       ((BRAHMA_MPI_VERSION >= 400106 && BRAHMA_MPI_VERSION < 400200) ||   \
        (BRAHMA_MPI_VERSION >= 500006 && BRAHMA_MPI_VERSION < 500100))))
 int brahma::MPIDFTracer::MPI_Barrier(MPI_Comm comm) {
+  ConstEventNameType CATEGORY = "collective";
   BRAHMA_MAP_OR_FAIL(MPI_Barrier);
   DFT_LOGGER_START_ALWAYS();
   DFT_LOGGER_UPDATE_TYPE(comm, MetadataType::MT_VALUE);
@@ -1356,6 +1417,7 @@ int brahma::MPIDFTracer::MPI_Barrier(MPI_Comm comm) {
       (BRAHMA_MPI_VERSION >= 500006 && BRAHMA_MPI_VERSION < 500100)))
 int brahma::MPIDFTracer::MPI_Barrier_init(MPI_Comm comm, MPI_Info info,
                                           MPI_Request* request) {
+  ConstEventNameType CATEGORY = "collective";
   BRAHMA_MAP_OR_FAIL(MPI_Barrier_init);
   DFT_LOGGER_START_ALWAYS();
   DFT_LOGGER_UPDATE_TYPE(comm, MetadataType::MT_VALUE);
@@ -1371,6 +1433,7 @@ int brahma::MPIDFTracer::MPI_Barrier_init(MPI_Comm comm, MPI_Info info,
      (defined(BRAHMA_MPI_IMPL_MPICH) &&                                 \
       (BRAHMA_MPI_VERSION >= 400203 && BRAHMA_MPI_VERSION < 400300)))
 int brahma::MPIDFTracer::MPI_Barrier_init(int comm, int info, int* request) {
+  ConstEventNameType CATEGORY = "collective";
   BRAHMA_MAP_OR_FAIL(MPI_Barrier_init);
   DFT_LOGGER_START_ALWAYS();
   DFT_LOGGER_UPDATE_TYPE(comm, MetadataType::MT_VALUE);
@@ -1393,6 +1456,7 @@ int brahma::MPIDFTracer::MPI_Barrier_init(int comm, int info, int* request) {
 int brahma::MPIDFTracer::MPI_Bcast(void* buffer, int count,
                                    MPI_Datatype datatype, int root,
                                    MPI_Comm comm) {
+  ConstEventNameType CATEGORY = "collective";
   BRAHMA_MAP_OR_FAIL(MPI_Bcast);
   DFT_LOGGER_START_ALWAYS();
   DFT_LOGGER_UPDATE_TYPE(count, MetadataType::MT_VALUE);
@@ -1410,6 +1474,7 @@ int brahma::MPIDFTracer::MPI_Bcast(void* buffer, int count,
 int brahma::MPIDFTracer::MPI_Bcast_c(void* buffer, MPI_Count count,
                                      MPI_Datatype datatype, int root,
                                      MPI_Comm comm) {
+  ConstEventNameType CATEGORY = "collective";
   BRAHMA_MAP_OR_FAIL(MPI_Bcast_c);
   DFT_LOGGER_START_ALWAYS();
   DFT_LOGGER_UPDATE_TYPE(count, MetadataType::MT_VALUE);
@@ -1428,6 +1493,7 @@ int brahma::MPIDFTracer::MPI_Bcast_c(void* buffer, MPI_Count count,
       (BRAHMA_MPI_VERSION >= 400203 && BRAHMA_MPI_VERSION < 400300)))
 int brahma::MPIDFTracer::MPI_Bcast_c(void* buffer, MPI_Count count,
                                      int datatype, int root, int comm) {
+  ConstEventNameType CATEGORY = "collective";
   BRAHMA_MAP_OR_FAIL(MPI_Bcast_c);
   DFT_LOGGER_START_ALWAYS();
   DFT_LOGGER_UPDATE_TYPE(count, MetadataType::MT_VALUE);
@@ -1448,6 +1514,7 @@ int brahma::MPIDFTracer::MPI_Bcast_init(void* buffer, int count,
                                         MPI_Datatype datatype, int root,
                                         MPI_Comm comm, MPI_Info info,
                                         MPI_Request* request) {
+  ConstEventNameType CATEGORY = "collective";
   BRAHMA_MAP_OR_FAIL(MPI_Bcast_init);
   DFT_LOGGER_START_ALWAYS();
   DFT_LOGGER_UPDATE_TYPE(count, MetadataType::MT_VALUE);
@@ -1469,6 +1536,7 @@ int brahma::MPIDFTracer::MPI_Bcast_init(void* buffer, int count,
 int brahma::MPIDFTracer::MPI_Bcast_init(void* buffer, int count, int datatype,
                                         int root, int comm, int info,
                                         int* request) {
+  ConstEventNameType CATEGORY = "collective";
   BRAHMA_MAP_OR_FAIL(MPI_Bcast_init);
   DFT_LOGGER_START_ALWAYS();
   DFT_LOGGER_UPDATE_TYPE(count, MetadataType::MT_VALUE);
@@ -1489,6 +1557,7 @@ int brahma::MPIDFTracer::MPI_Bcast_init_c(void* buffer, MPI_Count count,
                                           MPI_Datatype datatype, int root,
                                           MPI_Comm comm, MPI_Info info,
                                           MPI_Request* request) {
+  ConstEventNameType CATEGORY = "collective";
   BRAHMA_MAP_OR_FAIL(MPI_Bcast_init_c);
   DFT_LOGGER_START_ALWAYS();
   DFT_LOGGER_UPDATE_TYPE(count, MetadataType::MT_VALUE);
@@ -1510,6 +1579,7 @@ int brahma::MPIDFTracer::MPI_Bcast_init_c(void* buffer, MPI_Count count,
 int brahma::MPIDFTracer::MPI_Bcast_init_c(void* buffer, MPI_Count count,
                                           int datatype, int root, int comm,
                                           int info, int* request) {
+  ConstEventNameType CATEGORY = "collective";
   BRAHMA_MAP_OR_FAIL(MPI_Bcast_init_c);
   DFT_LOGGER_START_ALWAYS();
   DFT_LOGGER_UPDATE_TYPE(count, MetadataType::MT_VALUE);
@@ -1536,6 +1606,7 @@ int brahma::MPIDFTracer::MPI_Bcast_init_c(void* buffer, MPI_Count count,
 int brahma::MPIDFTracer::MPI_Bsend(const void* buf, int count,
                                    MPI_Datatype datatype, int dest, int tag,
                                    MPI_Comm comm) {
+  ConstEventNameType CATEGORY = "p2p";
   BRAHMA_MAP_OR_FAIL(MPI_Bsend);
   DFT_LOGGER_START_ALWAYS();
   DFT_LOGGER_UPDATE_TYPE(count, MetadataType::MT_VALUE);
@@ -1554,6 +1625,7 @@ int brahma::MPIDFTracer::MPI_Bsend(const void* buf, int count,
 int brahma::MPIDFTracer::MPI_Bsend_c(const void* buf, MPI_Count count,
                                      MPI_Datatype datatype, int dest, int tag,
                                      MPI_Comm comm) {
+  ConstEventNameType CATEGORY = "p2p";
   BRAHMA_MAP_OR_FAIL(MPI_Bsend_c);
   DFT_LOGGER_START_ALWAYS();
   DFT_LOGGER_UPDATE_TYPE(count, MetadataType::MT_VALUE);
@@ -1574,6 +1646,7 @@ int brahma::MPIDFTracer::MPI_Bsend_c(const void* buf, MPI_Count count,
 int brahma::MPIDFTracer::MPI_Bsend_c(const void* buf, MPI_Count count,
                                      int datatype, int dest, int tag,
                                      int comm) {
+  ConstEventNameType CATEGORY = "p2p";
   BRAHMA_MAP_OR_FAIL(MPI_Bsend_c);
   DFT_LOGGER_START_ALWAYS();
   DFT_LOGGER_UPDATE_TYPE(count, MetadataType::MT_VALUE);
@@ -1600,6 +1673,7 @@ int brahma::MPIDFTracer::MPI_Bsend_init(const void* buf, int count,
                                         MPI_Datatype datatype, int dest,
                                         int tag, MPI_Comm comm,
                                         MPI_Request* request) {
+  ConstEventNameType CATEGORY = "p2p";
   BRAHMA_MAP_OR_FAIL(MPI_Bsend_init);
   DFT_LOGGER_START_ALWAYS();
   DFT_LOGGER_UPDATE_TYPE(count, MetadataType::MT_VALUE);
@@ -1620,6 +1694,7 @@ int brahma::MPIDFTracer::MPI_Bsend_init_c(const void* buf, MPI_Count count,
                                           MPI_Datatype datatype, int dest,
                                           int tag, MPI_Comm comm,
                                           MPI_Request* request) {
+  ConstEventNameType CATEGORY = "p2p";
   BRAHMA_MAP_OR_FAIL(MPI_Bsend_init_c);
   DFT_LOGGER_START_ALWAYS();
   DFT_LOGGER_UPDATE_TYPE(count, MetadataType::MT_VALUE);
@@ -1641,6 +1716,7 @@ int brahma::MPIDFTracer::MPI_Bsend_init_c(const void* buf, MPI_Count count,
 int brahma::MPIDFTracer::MPI_Bsend_init_c(const void* buf, MPI_Count count,
                                           int datatype, int dest, int tag,
                                           int comm, int* request) {
+  ConstEventNameType CATEGORY = "p2p";
   BRAHMA_MAP_OR_FAIL(MPI_Bsend_init_c);
   DFT_LOGGER_START_ALWAYS();
   DFT_LOGGER_UPDATE_TYPE(count, MetadataType::MT_VALUE);
@@ -1665,6 +1741,7 @@ int brahma::MPIDFTracer::MPI_Bsend_init_c(const void* buf, MPI_Count count,
       ((BRAHMA_MPI_VERSION >= 400106 && BRAHMA_MPI_VERSION < 400200) ||   \
        (BRAHMA_MPI_VERSION >= 500006 && BRAHMA_MPI_VERSION < 500100))))
 int brahma::MPIDFTracer::MPI_Buffer_attach(void* buffer, int size) {
+  ConstEventNameType CATEGORY = "p2p";
   BRAHMA_MAP_OR_FAIL(MPI_Buffer_attach);
   DFT_LOGGER_START_ALWAYS();
   DFT_LOGGER_UPDATE_TYPE(size, MetadataType::MT_VALUE);
@@ -1679,6 +1756,7 @@ int brahma::MPIDFTracer::MPI_Buffer_attach(void* buffer, int size) {
      (defined(BRAHMA_MPI_IMPL_MPICH) &&                                 \
       (BRAHMA_MPI_VERSION >= 400203 && BRAHMA_MPI_VERSION < 400300)))
 int brahma::MPIDFTracer::MPI_Buffer_attach_c(void* buffer, MPI_Count size) {
+  ConstEventNameType CATEGORY = "p2p";
   BRAHMA_MAP_OR_FAIL(MPI_Buffer_attach_c);
   DFT_LOGGER_START_ALWAYS();
   DFT_LOGGER_UPDATE_TYPE(size, MetadataType::MT_VALUE);
@@ -1698,6 +1776,7 @@ int brahma::MPIDFTracer::MPI_Buffer_attach_c(void* buffer, MPI_Count size) {
       ((BRAHMA_MPI_VERSION >= 400106 && BRAHMA_MPI_VERSION < 400200) ||   \
        (BRAHMA_MPI_VERSION >= 500006 && BRAHMA_MPI_VERSION < 500100))))
 int brahma::MPIDFTracer::MPI_Buffer_detach(void* buffer, int* size) {
+  ConstEventNameType CATEGORY = "p2p";
   BRAHMA_MAP_OR_FAIL(MPI_Buffer_detach);
   DFT_LOGGER_START_ALWAYS();
   int ret = __real_MPI_Buffer_detach(buffer, size);
@@ -1712,6 +1791,7 @@ int brahma::MPIDFTracer::MPI_Buffer_detach(void* buffer, int* size) {
       (BRAHMA_MPI_VERSION >= 400203 && BRAHMA_MPI_VERSION < 400300)))
 int brahma::MPIDFTracer::MPI_Buffer_detach_c(void* buffer_addr,
                                              MPI_Count* size) {
+  ConstEventNameType CATEGORY = "p2p";
   BRAHMA_MAP_OR_FAIL(MPI_Buffer_detach_c);
   DFT_LOGGER_START_ALWAYS();
   int ret = __real_MPI_Buffer_detach_c(buffer_addr, size);
@@ -1725,6 +1805,7 @@ int brahma::MPIDFTracer::MPI_Buffer_detach_c(void* buffer_addr,
      (defined(BRAHMA_MPI_IMPL_MPICH) &&                                 \
       (BRAHMA_MPI_VERSION >= 400203 && BRAHMA_MPI_VERSION < 400300)))
 int brahma::MPIDFTracer::MPI_Buffer_flush(void) {
+  ConstEventNameType CATEGORY = "p2p";
   BRAHMA_MAP_OR_FAIL(MPI_Buffer_flush);
   DFT_LOGGER_START_ALWAYS();
   int ret = __real_MPI_Buffer_flush();
@@ -1738,6 +1819,7 @@ int brahma::MPIDFTracer::MPI_Buffer_flush(void) {
      (defined(BRAHMA_MPI_IMPL_MPICH) &&                                 \
       (BRAHMA_MPI_VERSION >= 400203 && BRAHMA_MPI_VERSION < 400300)))
 int brahma::MPIDFTracer::MPI_Buffer_iflush(int* request) {
+  ConstEventNameType CATEGORY = "p2p";
   BRAHMA_MAP_OR_FAIL(MPI_Buffer_iflush);
   DFT_LOGGER_START_ALWAYS();
   int ret = __real_MPI_Buffer_iflush(request);
@@ -1756,6 +1838,7 @@ int brahma::MPIDFTracer::MPI_Buffer_iflush(int* request) {
       ((BRAHMA_MPI_VERSION >= 400106 && BRAHMA_MPI_VERSION < 400200) ||   \
        (BRAHMA_MPI_VERSION >= 500006 && BRAHMA_MPI_VERSION < 500100))))
 int brahma::MPIDFTracer::MPI_Cancel(MPI_Request* request) {
+  ConstEventNameType CATEGORY = "p2p";
   BRAHMA_MAP_OR_FAIL(MPI_Cancel);
   DFT_LOGGER_START_ALWAYS();
   int ret = __real_MPI_Cancel(request);
@@ -1775,6 +1858,7 @@ int brahma::MPIDFTracer::MPI_Cancel(MPI_Request* request) {
        (BRAHMA_MPI_VERSION >= 500006 && BRAHMA_MPI_VERSION < 500100))))
 int brahma::MPIDFTracer::MPI_Cart_coords(MPI_Comm comm, int rank, int maxdims,
                                          int coords[]) {
+  ConstEventNameType CATEGORY = "topology";
   BRAHMA_MAP_OR_FAIL(MPI_Cart_coords);
   DFT_LOGGER_START_ALWAYS();
   DFT_LOGGER_UPDATE_TYPE(comm, MetadataType::MT_VALUE);
@@ -1798,6 +1882,7 @@ int brahma::MPIDFTracer::MPI_Cart_coords(MPI_Comm comm, int rank, int maxdims,
 int brahma::MPIDFTracer::MPI_Cart_create(MPI_Comm old_comm, int ndims,
                                          const int dims[], const int periods[],
                                          int reorder, MPI_Comm* comm_cart) {
+  ConstEventNameType CATEGORY = "topology";
   BRAHMA_MAP_OR_FAIL(MPI_Cart_create);
   DFT_LOGGER_START_ALWAYS();
   DFT_LOGGER_UPDATE_TYPE(old_comm, MetadataType::MT_VALUE);
@@ -1821,6 +1906,7 @@ int brahma::MPIDFTracer::MPI_Cart_create(MPI_Comm old_comm, int ndims,
        (BRAHMA_MPI_VERSION >= 500006 && BRAHMA_MPI_VERSION < 500100))))
 int brahma::MPIDFTracer::MPI_Cart_get(MPI_Comm comm, int maxdims, int dims[],
                                       int periods[], int coords[]) {
+  ConstEventNameType CATEGORY = "topology";
   BRAHMA_MAP_OR_FAIL(MPI_Cart_get);
   DFT_LOGGER_START_ALWAYS();
   DFT_LOGGER_UPDATE_TYPE(comm, MetadataType::MT_VALUE);
@@ -1843,6 +1929,7 @@ int brahma::MPIDFTracer::MPI_Cart_get(MPI_Comm comm, int maxdims, int dims[],
 int brahma::MPIDFTracer::MPI_Cart_map(MPI_Comm comm, int ndims,
                                       const int dims[], const int periods[],
                                       int* newrank) {
+  ConstEventNameType CATEGORY = "topology";
   BRAHMA_MAP_OR_FAIL(MPI_Cart_map);
   DFT_LOGGER_START_ALWAYS();
   DFT_LOGGER_UPDATE_TYPE(comm, MetadataType::MT_VALUE);
@@ -1864,6 +1951,7 @@ int brahma::MPIDFTracer::MPI_Cart_map(MPI_Comm comm, int ndims,
        (BRAHMA_MPI_VERSION >= 500006 && BRAHMA_MPI_VERSION < 500100))))
 int brahma::MPIDFTracer::MPI_Cart_rank(MPI_Comm comm, const int coords[],
                                        int* rank) {
+  ConstEventNameType CATEGORY = "topology";
   BRAHMA_MAP_OR_FAIL(MPI_Cart_rank);
   DFT_LOGGER_START_ALWAYS();
   DFT_LOGGER_UPDATE_TYPE(comm, MetadataType::MT_VALUE);
@@ -1884,6 +1972,7 @@ int brahma::MPIDFTracer::MPI_Cart_rank(MPI_Comm comm, const int coords[],
        (BRAHMA_MPI_VERSION >= 500006 && BRAHMA_MPI_VERSION < 500100))))
 int brahma::MPIDFTracer::MPI_Cart_shift(MPI_Comm comm, int direction, int disp,
                                         int* rank_source, int* rank_dest) {
+  ConstEventNameType CATEGORY = "topology";
   BRAHMA_MAP_OR_FAIL(MPI_Cart_shift);
   DFT_LOGGER_START_ALWAYS();
   DFT_LOGGER_UPDATE_TYPE(comm, MetadataType::MT_VALUE);
@@ -1907,6 +1996,7 @@ int brahma::MPIDFTracer::MPI_Cart_shift(MPI_Comm comm, int direction, int disp,
        (BRAHMA_MPI_VERSION >= 500006 && BRAHMA_MPI_VERSION < 500100))))
 int brahma::MPIDFTracer::MPI_Cart_sub(MPI_Comm comm, const int remain_dims[],
                                       MPI_Comm* new_comm) {
+  ConstEventNameType CATEGORY = "topology";
   BRAHMA_MAP_OR_FAIL(MPI_Cart_sub);
   DFT_LOGGER_START_ALWAYS();
   DFT_LOGGER_UPDATE_TYPE(comm, MetadataType::MT_VALUE);
@@ -1926,6 +2016,7 @@ int brahma::MPIDFTracer::MPI_Cart_sub(MPI_Comm comm, const int remain_dims[],
       ((BRAHMA_MPI_VERSION >= 400106 && BRAHMA_MPI_VERSION < 400200) ||   \
        (BRAHMA_MPI_VERSION >= 500006 && BRAHMA_MPI_VERSION < 500100))))
 int brahma::MPIDFTracer::MPI_Cartdim_get(MPI_Comm comm, int* ndims) {
+  ConstEventNameType CATEGORY = "topology";
   BRAHMA_MAP_OR_FAIL(MPI_Cartdim_get);
   DFT_LOGGER_START_ALWAYS();
   DFT_LOGGER_UPDATE_TYPE(comm, MetadataType::MT_VALUE);
@@ -1945,6 +2036,7 @@ int brahma::MPIDFTracer::MPI_Cartdim_get(MPI_Comm comm, int* ndims) {
       ((BRAHMA_MPI_VERSION >= 400106 && BRAHMA_MPI_VERSION < 400200) ||   \
        (BRAHMA_MPI_VERSION >= 500006 && BRAHMA_MPI_VERSION < 500100))))
 int brahma::MPIDFTracer::MPI_Close_port(const char* port_name) {
+  ConstEventNameType CATEGORY = "spawn";
   BRAHMA_MAP_OR_FAIL(MPI_Close_port);
   DFT_LOGGER_START_ALWAYS();
   int ret = __real_MPI_Close_port(port_name);
@@ -1965,6 +2057,7 @@ int brahma::MPIDFTracer::MPI_Close_port(const char* port_name) {
 int brahma::MPIDFTracer::MPI_Comm_accept(const char* port_name, MPI_Info info,
                                          int root, MPI_Comm comm,
                                          MPI_Comm* newcomm) {
+  ConstEventNameType CATEGORY = "spawn";
   BRAHMA_MAP_OR_FAIL(MPI_Comm_accept);
   DFT_LOGGER_START_ALWAYS();
   DFT_LOGGER_UPDATE_TYPE(info, MetadataType::MT_VALUE);
@@ -1982,6 +2075,7 @@ int brahma::MPIDFTracer::MPI_Comm_accept(const char* port_name, MPI_Info info,
       (BRAHMA_MPI_VERSION >= 400203 && BRAHMA_MPI_VERSION < 400300)))
 int brahma::MPIDFTracer::MPI_Comm_attach_buffer(int comm, void* buffer,
                                                 int size) {
+  ConstEventNameType CATEGORY = "comm";
   BRAHMA_MAP_OR_FAIL(MPI_Comm_attach_buffer);
   DFT_LOGGER_START_ALWAYS();
   DFT_LOGGER_UPDATE_TYPE(comm, MetadataType::MT_VALUE);
@@ -1998,6 +2092,7 @@ int brahma::MPIDFTracer::MPI_Comm_attach_buffer(int comm, void* buffer,
       (BRAHMA_MPI_VERSION >= 400203 && BRAHMA_MPI_VERSION < 400300)))
 int brahma::MPIDFTracer::MPI_Comm_attach_buffer_c(int comm, void* buffer,
                                                   MPI_Count size) {
+  ConstEventNameType CATEGORY = "comm";
   BRAHMA_MAP_OR_FAIL(MPI_Comm_attach_buffer_c);
   DFT_LOGGER_START_ALWAYS();
   DFT_LOGGER_UPDATE_TYPE(comm, MetadataType::MT_VALUE);
@@ -2019,6 +2114,7 @@ int brahma::MPIDFTracer::MPI_Comm_attach_buffer_c(int comm, void* buffer,
        (BRAHMA_MPI_VERSION >= 500006 && BRAHMA_MPI_VERSION < 500100))))
 int brahma::MPIDFTracer::MPI_Comm_call_errhandler(MPI_Comm comm,
                                                   int errorcode) {
+  ConstEventNameType CATEGORY = "comm";
   BRAHMA_MAP_OR_FAIL(MPI_Comm_call_errhandler);
   DFT_LOGGER_START_ALWAYS();
   DFT_LOGGER_UPDATE_TYPE(comm, MetadataType::MT_VALUE);
@@ -2040,6 +2136,7 @@ int brahma::MPIDFTracer::MPI_Comm_call_errhandler(MPI_Comm comm,
        (BRAHMA_MPI_VERSION >= 500006 && BRAHMA_MPI_VERSION < 500100))))
 int brahma::MPIDFTracer::MPI_Comm_compare(MPI_Comm comm1, MPI_Comm comm2,
                                           int* result2) {
+  ConstEventNameType CATEGORY = "comm";
   BRAHMA_MAP_OR_FAIL(MPI_Comm_compare);
   DFT_LOGGER_START_ALWAYS();
   DFT_LOGGER_UPDATE_TYPE(comm1, MetadataType::MT_VALUE);
@@ -2062,6 +2159,7 @@ int brahma::MPIDFTracer::MPI_Comm_compare(MPI_Comm comm1, MPI_Comm comm2,
 int brahma::MPIDFTracer::MPI_Comm_connect(const char* port_name, MPI_Info info,
                                           int root, MPI_Comm comm,
                                           MPI_Comm* newcomm) {
+  ConstEventNameType CATEGORY = "spawn";
   BRAHMA_MAP_OR_FAIL(MPI_Comm_connect);
   DFT_LOGGER_START_ALWAYS();
   DFT_LOGGER_UPDATE_TYPE(info, MetadataType::MT_VALUE);
@@ -2084,6 +2182,7 @@ int brahma::MPIDFTracer::MPI_Comm_connect(const char* port_name, MPI_Info info,
        (BRAHMA_MPI_VERSION >= 500006 && BRAHMA_MPI_VERSION < 500100))))
 int brahma::MPIDFTracer::MPI_Comm_create(MPI_Comm comm, MPI_Group group,
                                          MPI_Comm* newcomm) {
+  ConstEventNameType CATEGORY = "comm";
   BRAHMA_MAP_OR_FAIL(MPI_Comm_create);
   DFT_LOGGER_START_ALWAYS();
   DFT_LOGGER_UPDATE_TYPE(comm, MetadataType::MT_VALUE);
@@ -2105,6 +2204,7 @@ int brahma::MPIDFTracer::MPI_Comm_create(MPI_Comm comm, MPI_Group group,
        (BRAHMA_MPI_VERSION >= 500006 && BRAHMA_MPI_VERSION < 500100))))
 int brahma::MPIDFTracer::MPI_Comm_create_errhandler(
     MPI_Comm_errhandler_function* function, MPI_Errhandler* errhandler) {
+  ConstEventNameType CATEGORY = "comm";
   BRAHMA_MAP_OR_FAIL(MPI_Comm_create_errhandler);
   DFT_LOGGER_START_ALWAYS();
   int ret = __real_MPI_Comm_create_errhandler(function, errhandler);
@@ -2122,6 +2222,7 @@ int brahma::MPIDFTracer::MPI_Comm_create_from_group(MPI_Group group,
                                                     MPI_Info info,
                                                     MPI_Errhandler errhandler,
                                                     MPI_Comm* newcomm) {
+  ConstEventNameType CATEGORY = "comm";
   BRAHMA_MAP_OR_FAIL(MPI_Comm_create_from_group);
   DFT_LOGGER_START_ALWAYS();
   DFT_LOGGER_UPDATE_TYPE(group, MetadataType::MT_VALUE);
@@ -2141,6 +2242,7 @@ int brahma::MPIDFTracer::MPI_Comm_create_from_group(MPI_Group group,
 int brahma::MPIDFTracer::MPI_Comm_create_from_group(int group, const char* tag,
                                                     int info, int errhandler,
                                                     int* newcomm) {
+  ConstEventNameType CATEGORY = "comm";
   BRAHMA_MAP_OR_FAIL(MPI_Comm_create_from_group);
   DFT_LOGGER_START_ALWAYS();
   DFT_LOGGER_UPDATE_TYPE(group, MetadataType::MT_VALUE);
@@ -2164,6 +2266,7 @@ int brahma::MPIDFTracer::MPI_Comm_create_from_group(int group, const char* tag,
        (BRAHMA_MPI_VERSION >= 500006 && BRAHMA_MPI_VERSION < 500100))))
 int brahma::MPIDFTracer::MPI_Comm_create_group(MPI_Comm comm, MPI_Group group,
                                                int tag, MPI_Comm* newcomm) {
+  ConstEventNameType CATEGORY = "comm";
   BRAHMA_MAP_OR_FAIL(MPI_Comm_create_group);
   DFT_LOGGER_START_ALWAYS();
   DFT_LOGGER_UPDATE_TYPE(comm, MetadataType::MT_VALUE);
@@ -2188,6 +2291,7 @@ int brahma::MPIDFTracer::MPI_Comm_create_keyval(
     MPI_Comm_copy_attr_function* comm_copy_attr_fn,
     MPI_Comm_delete_attr_function* comm_delete_attr_fn, int* comm_keyval,
     void* extra_state) {
+  ConstEventNameType CATEGORY = "comm";
   BRAHMA_MAP_OR_FAIL(MPI_Comm_create_keyval);
   DFT_LOGGER_START_ALWAYS();
   int ret = __real_MPI_Comm_create_keyval(
@@ -2207,6 +2311,7 @@ int brahma::MPIDFTracer::MPI_Comm_create_keyval(
       ((BRAHMA_MPI_VERSION >= 400106 && BRAHMA_MPI_VERSION < 400200) ||   \
        (BRAHMA_MPI_VERSION >= 500006 && BRAHMA_MPI_VERSION < 500100))))
 int brahma::MPIDFTracer::MPI_Comm_delete_attr(MPI_Comm comm, int comm_keyval) {
+  ConstEventNameType CATEGORY = "comm";
   BRAHMA_MAP_OR_FAIL(MPI_Comm_delete_attr);
   DFT_LOGGER_START_ALWAYS();
   DFT_LOGGER_UPDATE_TYPE(comm, MetadataType::MT_VALUE);
@@ -2223,6 +2328,7 @@ int brahma::MPIDFTracer::MPI_Comm_delete_attr(MPI_Comm comm, int comm_keyval) {
       (BRAHMA_MPI_VERSION >= 400203 && BRAHMA_MPI_VERSION < 400300)))
 int brahma::MPIDFTracer::MPI_Comm_detach_buffer(int comm, void* buffer_addr,
                                                 int* size) {
+  ConstEventNameType CATEGORY = "comm";
   BRAHMA_MAP_OR_FAIL(MPI_Comm_detach_buffer);
   DFT_LOGGER_START_ALWAYS();
   DFT_LOGGER_UPDATE_TYPE(comm, MetadataType::MT_VALUE);
@@ -2238,6 +2344,7 @@ int brahma::MPIDFTracer::MPI_Comm_detach_buffer(int comm, void* buffer_addr,
       (BRAHMA_MPI_VERSION >= 400203 && BRAHMA_MPI_VERSION < 400300)))
 int brahma::MPIDFTracer::MPI_Comm_detach_buffer_c(int comm, void* buffer_addr,
                                                   MPI_Count* size) {
+  ConstEventNameType CATEGORY = "comm";
   BRAHMA_MAP_OR_FAIL(MPI_Comm_detach_buffer_c);
   DFT_LOGGER_START_ALWAYS();
   DFT_LOGGER_UPDATE_TYPE(comm, MetadataType::MT_VALUE);
@@ -2257,6 +2364,7 @@ int brahma::MPIDFTracer::MPI_Comm_detach_buffer_c(int comm, void* buffer_addr,
       ((BRAHMA_MPI_VERSION >= 400106 && BRAHMA_MPI_VERSION < 400200) ||   \
        (BRAHMA_MPI_VERSION >= 500006 && BRAHMA_MPI_VERSION < 500100))))
 int brahma::MPIDFTracer::MPI_Comm_disconnect(MPI_Comm* comm) {
+  ConstEventNameType CATEGORY = "spawn";
   BRAHMA_MAP_OR_FAIL(MPI_Comm_disconnect);
   DFT_LOGGER_START_ALWAYS();
   int ret = __real_MPI_Comm_disconnect(comm);
@@ -2275,6 +2383,7 @@ int brahma::MPIDFTracer::MPI_Comm_disconnect(MPI_Comm* comm) {
       ((BRAHMA_MPI_VERSION >= 400106 && BRAHMA_MPI_VERSION < 400200) ||   \
        (BRAHMA_MPI_VERSION >= 500006 && BRAHMA_MPI_VERSION < 500100))))
 int brahma::MPIDFTracer::MPI_Comm_dup(MPI_Comm comm, MPI_Comm* newcomm) {
+  ConstEventNameType CATEGORY = "comm";
   BRAHMA_MAP_OR_FAIL(MPI_Comm_dup);
   DFT_LOGGER_START_ALWAYS();
   DFT_LOGGER_UPDATE_TYPE(comm, MetadataType::MT_VALUE);
@@ -2295,6 +2404,7 @@ int brahma::MPIDFTracer::MPI_Comm_dup(MPI_Comm comm, MPI_Comm* newcomm) {
        (BRAHMA_MPI_VERSION >= 500006 && BRAHMA_MPI_VERSION < 500100))))
 int brahma::MPIDFTracer::MPI_Comm_dup_with_info(MPI_Comm comm, MPI_Info info,
                                                 MPI_Comm* newcomm) {
+  ConstEventNameType CATEGORY = "comm";
   BRAHMA_MAP_OR_FAIL(MPI_Comm_dup_with_info);
   DFT_LOGGER_START_ALWAYS();
   DFT_LOGGER_UPDATE_TYPE(comm, MetadataType::MT_VALUE);
@@ -2310,6 +2420,7 @@ int brahma::MPIDFTracer::MPI_Comm_dup_with_info(MPI_Comm comm, MPI_Info info,
      (defined(BRAHMA_MPI_IMPL_MPICH) &&                                 \
       (BRAHMA_MPI_VERSION >= 400203 && BRAHMA_MPI_VERSION < 400300)))
 int brahma::MPIDFTracer::MPI_Comm_flush_buffer(int comm) {
+  ConstEventNameType CATEGORY = "comm";
   BRAHMA_MAP_OR_FAIL(MPI_Comm_flush_buffer);
   DFT_LOGGER_START_ALWAYS();
   DFT_LOGGER_UPDATE_TYPE(comm, MetadataType::MT_VALUE);
@@ -2329,6 +2440,7 @@ int brahma::MPIDFTracer::MPI_Comm_flush_buffer(int comm) {
     (defined(BRAHMA_MPI_IMPL_OPENMPI) &&                                   \
      (BRAHMA_MPI_VERSION >= 400106 && BRAHMA_MPI_VERSION < 400200))
 int brahma::MPIDFTracer::MPI_Comm_free(MPI_Comm* comm) {
+  ConstEventNameType CATEGORY = "comm";
   BRAHMA_MAP_OR_FAIL(MPI_Comm_free);
   DFT_LOGGER_START_ALWAYS();
   int ret = __real_MPI_Comm_free(comm);
@@ -2346,6 +2458,7 @@ int brahma::MPIDFTracer::MPI_Comm_free(MPI_Comm* comm) {
     !(defined(BRAHMA_MPI_IMPL_OPENMPI) &&                                  \
       (BRAHMA_MPI_VERSION >= 400106 && BRAHMA_MPI_VERSION < 400200))
 int brahma::MPIDFTracer::MPI_Comm_free(int* comm) {
+  ConstEventNameType CATEGORY = "comm";
   BRAHMA_MAP_OR_FAIL(MPI_Comm_free);
   DFT_LOGGER_START_ALWAYS();
   int ret = __real_MPI_Comm_free(comm);
@@ -2364,6 +2477,7 @@ int brahma::MPIDFTracer::MPI_Comm_free(int* comm) {
       ((BRAHMA_MPI_VERSION >= 400106 && BRAHMA_MPI_VERSION < 400200) ||   \
        (BRAHMA_MPI_VERSION >= 500006 && BRAHMA_MPI_VERSION < 500100))))
 int brahma::MPIDFTracer::MPI_Comm_free_keyval(int* comm_keyval) {
+  ConstEventNameType CATEGORY = "comm";
   BRAHMA_MAP_OR_FAIL(MPI_Comm_free_keyval);
   DFT_LOGGER_START_ALWAYS();
   int ret = __real_MPI_Comm_free_keyval(comm_keyval);
@@ -2383,6 +2497,7 @@ int brahma::MPIDFTracer::MPI_Comm_free_keyval(int* comm_keyval) {
      (BRAHMA_MPI_VERSION >= 400106 && BRAHMA_MPI_VERSION < 400200))
 int brahma::MPIDFTracer::MPI_Comm_get_attr(MPI_Comm comm, int comm_keyval,
                                            void* attribute_val, int* flag) {
+  ConstEventNameType CATEGORY = "comm";
   BRAHMA_MAP_OR_FAIL(MPI_Comm_get_attr);
   DFT_LOGGER_START_ALWAYS();
   DFT_LOGGER_UPDATE_TYPE(comm, MetadataType::MT_VALUE);
@@ -2403,6 +2518,7 @@ int brahma::MPIDFTracer::MPI_Comm_get_attr(MPI_Comm comm, int comm_keyval,
       (BRAHMA_MPI_VERSION >= 400106 && BRAHMA_MPI_VERSION < 400200))
 int brahma::MPIDFTracer::MPI_Comm_get_attr(int comm, int comm_keyval,
                                            void* attribute_val, int* flag) {
+  ConstEventNameType CATEGORY = "comm";
   BRAHMA_MAP_OR_FAIL(MPI_Comm_get_attr);
   DFT_LOGGER_START_ALWAYS();
   DFT_LOGGER_UPDATE_TYPE(comm, MetadataType::MT_VALUE);
@@ -2424,6 +2540,7 @@ int brahma::MPIDFTracer::MPI_Comm_get_attr(int comm, int comm_keyval,
      (BRAHMA_MPI_VERSION >= 400106 && BRAHMA_MPI_VERSION < 400200))
 int brahma::MPIDFTracer::MPI_Comm_get_errhandler(MPI_Comm comm,
                                                  MPI_Errhandler* erhandler) {
+  ConstEventNameType CATEGORY = "comm";
   BRAHMA_MAP_OR_FAIL(MPI_Comm_get_errhandler);
   DFT_LOGGER_START_ALWAYS();
   DFT_LOGGER_UPDATE_TYPE(comm, MetadataType::MT_VALUE);
@@ -2443,6 +2560,7 @@ int brahma::MPIDFTracer::MPI_Comm_get_errhandler(MPI_Comm comm,
       (BRAHMA_MPI_VERSION >= 400106 && BRAHMA_MPI_VERSION < 400200))
 int brahma::MPIDFTracer::MPI_Comm_get_errhandler(int comm,
                                                  MPI_Errhandler* erhandler) {
+  ConstEventNameType CATEGORY = "comm";
   BRAHMA_MAP_OR_FAIL(MPI_Comm_get_errhandler);
   DFT_LOGGER_START_ALWAYS();
   DFT_LOGGER_UPDATE_TYPE(comm, MetadataType::MT_VALUE);
@@ -2462,6 +2580,7 @@ int brahma::MPIDFTracer::MPI_Comm_get_errhandler(int comm,
     (defined(BRAHMA_MPI_IMPL_OPENMPI) &&                                   \
      (BRAHMA_MPI_VERSION >= 400106 && BRAHMA_MPI_VERSION < 400200))
 int brahma::MPIDFTracer::MPI_Comm_get_info(MPI_Comm comm, MPI_Info* info_used) {
+  ConstEventNameType CATEGORY = "comm";
   BRAHMA_MAP_OR_FAIL(MPI_Comm_get_info);
   DFT_LOGGER_START_ALWAYS();
   DFT_LOGGER_UPDATE_TYPE(comm, MetadataType::MT_VALUE);
@@ -2480,6 +2599,7 @@ int brahma::MPIDFTracer::MPI_Comm_get_info(MPI_Comm comm, MPI_Info* info_used) {
     !(defined(BRAHMA_MPI_IMPL_OPENMPI) &&                                  \
       (BRAHMA_MPI_VERSION >= 400106 && BRAHMA_MPI_VERSION < 400200))
 int brahma::MPIDFTracer::MPI_Comm_get_info(int comm, MPI_Info* info_used) {
+  ConstEventNameType CATEGORY = "comm";
   BRAHMA_MAP_OR_FAIL(MPI_Comm_get_info);
   DFT_LOGGER_START_ALWAYS();
   DFT_LOGGER_UPDATE_TYPE(comm, MetadataType::MT_VALUE);
@@ -2500,6 +2620,7 @@ int brahma::MPIDFTracer::MPI_Comm_get_info(int comm, MPI_Info* info_used) {
      (BRAHMA_MPI_VERSION >= 400106 && BRAHMA_MPI_VERSION < 400200))
 int brahma::MPIDFTracer::MPI_Comm_get_name(MPI_Comm comm, char* comm_name,
                                            int* resultlen) {
+  ConstEventNameType CATEGORY = "comm";
   BRAHMA_MAP_OR_FAIL(MPI_Comm_get_name);
   DFT_LOGGER_START_ALWAYS();
   DFT_LOGGER_UPDATE_TYPE(comm, MetadataType::MT_VALUE);
@@ -2519,6 +2640,7 @@ int brahma::MPIDFTracer::MPI_Comm_get_name(MPI_Comm comm, char* comm_name,
       (BRAHMA_MPI_VERSION >= 400106 && BRAHMA_MPI_VERSION < 400200))
 int brahma::MPIDFTracer::MPI_Comm_get_name(int comm, char* comm_name,
                                            int* resultlen) {
+  ConstEventNameType CATEGORY = "comm";
   BRAHMA_MAP_OR_FAIL(MPI_Comm_get_name);
   DFT_LOGGER_START_ALWAYS();
   DFT_LOGGER_UPDATE_TYPE(comm, MetadataType::MT_VALUE);
@@ -2538,6 +2660,7 @@ int brahma::MPIDFTracer::MPI_Comm_get_name(int comm, char* comm_name,
     (defined(BRAHMA_MPI_IMPL_OPENMPI) &&                                   \
      (BRAHMA_MPI_VERSION >= 400106 && BRAHMA_MPI_VERSION < 400200))
 int brahma::MPIDFTracer::MPI_Comm_get_parent(MPI_Comm* parent) {
+  ConstEventNameType CATEGORY = "spawn";
   BRAHMA_MAP_OR_FAIL(MPI_Comm_get_parent);
   DFT_LOGGER_START_ALWAYS();
   int ret = __real_MPI_Comm_get_parent(parent);
@@ -2555,6 +2678,7 @@ int brahma::MPIDFTracer::MPI_Comm_get_parent(MPI_Comm* parent) {
     !(defined(BRAHMA_MPI_IMPL_OPENMPI) &&                                  \
       (BRAHMA_MPI_VERSION >= 400106 && BRAHMA_MPI_VERSION < 400200))
 int brahma::MPIDFTracer::MPI_Comm_get_parent(int* parent) {
+  ConstEventNameType CATEGORY = "spawn";
   BRAHMA_MAP_OR_FAIL(MPI_Comm_get_parent);
   DFT_LOGGER_START_ALWAYS();
   int ret = __real_MPI_Comm_get_parent(parent);
@@ -2573,6 +2697,7 @@ int brahma::MPIDFTracer::MPI_Comm_get_parent(int* parent) {
     (defined(BRAHMA_MPI_IMPL_OPENMPI) &&                                   \
      (BRAHMA_MPI_VERSION >= 400106 && BRAHMA_MPI_VERSION < 400200))
 int brahma::MPIDFTracer::MPI_Comm_group(MPI_Comm comm, MPI_Group* group) {
+  ConstEventNameType CATEGORY = "comm";
   BRAHMA_MAP_OR_FAIL(MPI_Comm_group);
   DFT_LOGGER_START_ALWAYS();
   DFT_LOGGER_UPDATE_TYPE(comm, MetadataType::MT_VALUE);
@@ -2591,6 +2716,7 @@ int brahma::MPIDFTracer::MPI_Comm_group(MPI_Comm comm, MPI_Group* group) {
     !(defined(BRAHMA_MPI_IMPL_OPENMPI) &&                                  \
       (BRAHMA_MPI_VERSION >= 400106 && BRAHMA_MPI_VERSION < 400200))
 int brahma::MPIDFTracer::MPI_Comm_group(int comm, MPI_Group* group) {
+  ConstEventNameType CATEGORY = "comm";
   BRAHMA_MAP_OR_FAIL(MPI_Comm_group);
   DFT_LOGGER_START_ALWAYS();
   DFT_LOGGER_UPDATE_TYPE(comm, MetadataType::MT_VALUE);
@@ -2611,6 +2737,7 @@ int brahma::MPIDFTracer::MPI_Comm_group(int comm, MPI_Group* group) {
        (BRAHMA_MPI_VERSION >= 500006 && BRAHMA_MPI_VERSION < 500100))))
 int brahma::MPIDFTracer::MPI_Comm_idup(MPI_Comm comm, MPI_Comm* newcomm,
                                        MPI_Request* request) {
+  ConstEventNameType CATEGORY = "comm";
   BRAHMA_MAP_OR_FAIL(MPI_Comm_idup);
   DFT_LOGGER_START_ALWAYS();
   DFT_LOGGER_UPDATE_TYPE(comm, MetadataType::MT_VALUE);
@@ -2627,6 +2754,7 @@ int brahma::MPIDFTracer::MPI_Comm_idup(MPI_Comm comm, MPI_Comm* newcomm,
 int brahma::MPIDFTracer::MPI_Comm_idup_with_info(MPI_Comm comm, MPI_Info info,
                                                  MPI_Comm* newcomm,
                                                  MPI_Request* request) {
+  ConstEventNameType CATEGORY = "comm";
   BRAHMA_MAP_OR_FAIL(MPI_Comm_idup_with_info);
   DFT_LOGGER_START_ALWAYS();
   DFT_LOGGER_UPDATE_TYPE(comm, MetadataType::MT_VALUE);
@@ -2643,6 +2771,7 @@ int brahma::MPIDFTracer::MPI_Comm_idup_with_info(MPI_Comm comm, MPI_Info info,
       (BRAHMA_MPI_VERSION >= 400203 && BRAHMA_MPI_VERSION < 400300)))
 int brahma::MPIDFTracer::MPI_Comm_idup_with_info(int comm, int info,
                                                  int* newcomm, int* request) {
+  ConstEventNameType CATEGORY = "comm";
   BRAHMA_MAP_OR_FAIL(MPI_Comm_idup_with_info);
   DFT_LOGGER_START_ALWAYS();
   DFT_LOGGER_UPDATE_TYPE(comm, MetadataType::MT_VALUE);
@@ -2658,6 +2787,7 @@ int brahma::MPIDFTracer::MPI_Comm_idup_with_info(int comm, int info,
      (defined(BRAHMA_MPI_IMPL_MPICH) &&                                 \
       (BRAHMA_MPI_VERSION >= 400203 && BRAHMA_MPI_VERSION < 400300)))
 int brahma::MPIDFTracer::MPI_Comm_iflush_buffer(int comm, int* request) {
+  ConstEventNameType CATEGORY = "comm";
   BRAHMA_MAP_OR_FAIL(MPI_Comm_iflush_buffer);
   DFT_LOGGER_START_ALWAYS();
   DFT_LOGGER_UPDATE_TYPE(comm, MetadataType::MT_VALUE);
@@ -2677,6 +2807,7 @@ int brahma::MPIDFTracer::MPI_Comm_iflush_buffer(int comm, int* request) {
     (defined(BRAHMA_MPI_IMPL_OPENMPI) &&                                   \
      (BRAHMA_MPI_VERSION >= 400106 && BRAHMA_MPI_VERSION < 400200))
 int brahma::MPIDFTracer::MPI_Comm_join(int fd, MPI_Comm* intercomm) {
+  ConstEventNameType CATEGORY = "spawn";
   BRAHMA_MAP_OR_FAIL(MPI_Comm_join);
   DFT_LOGGER_START_ALWAYS();
   DFT_LOGGER_UPDATE_TYPE(fd, MetadataType::MT_VALUE);
@@ -2695,6 +2826,7 @@ int brahma::MPIDFTracer::MPI_Comm_join(int fd, MPI_Comm* intercomm) {
     !(defined(BRAHMA_MPI_IMPL_OPENMPI) &&                                  \
       (BRAHMA_MPI_VERSION >= 400106 && BRAHMA_MPI_VERSION < 400200))
 int brahma::MPIDFTracer::MPI_Comm_join(int fd, int* intercomm) {
+  ConstEventNameType CATEGORY = "spawn";
   BRAHMA_MAP_OR_FAIL(MPI_Comm_join);
   DFT_LOGGER_START_ALWAYS();
   DFT_LOGGER_UPDATE_TYPE(fd, MetadataType::MT_VALUE);
@@ -2714,6 +2846,7 @@ int brahma::MPIDFTracer::MPI_Comm_join(int fd, int* intercomm) {
     (defined(BRAHMA_MPI_IMPL_OPENMPI) &&                                   \
      (BRAHMA_MPI_VERSION >= 400106 && BRAHMA_MPI_VERSION < 400200))
 int brahma::MPIDFTracer::MPI_Comm_rank(MPI_Comm comm, int* rank) {
+  ConstEventNameType CATEGORY = "comm";
   BRAHMA_MAP_OR_FAIL(MPI_Comm_rank);
   DFT_LOGGER_START_ALWAYS();
   DFT_LOGGER_UPDATE_TYPE(comm, MetadataType::MT_VALUE);
@@ -2732,6 +2865,7 @@ int brahma::MPIDFTracer::MPI_Comm_rank(MPI_Comm comm, int* rank) {
     !(defined(BRAHMA_MPI_IMPL_OPENMPI) &&                                  \
       (BRAHMA_MPI_VERSION >= 400106 && BRAHMA_MPI_VERSION < 400200))
 int brahma::MPIDFTracer::MPI_Comm_rank(int comm, int* rank) {
+  ConstEventNameType CATEGORY = "comm";
   BRAHMA_MAP_OR_FAIL(MPI_Comm_rank);
   DFT_LOGGER_START_ALWAYS();
   DFT_LOGGER_UPDATE_TYPE(comm, MetadataType::MT_VALUE);
@@ -2752,6 +2886,7 @@ int brahma::MPIDFTracer::MPI_Comm_rank(int comm, int* rank) {
      (BRAHMA_MPI_VERSION >= 400106 && BRAHMA_MPI_VERSION < 400200))
 int brahma::MPIDFTracer::MPI_Comm_remote_group(MPI_Comm comm,
                                                MPI_Group* group) {
+  ConstEventNameType CATEGORY = "comm";
   BRAHMA_MAP_OR_FAIL(MPI_Comm_remote_group);
   DFT_LOGGER_START_ALWAYS();
   DFT_LOGGER_UPDATE_TYPE(comm, MetadataType::MT_VALUE);
@@ -2770,6 +2905,7 @@ int brahma::MPIDFTracer::MPI_Comm_remote_group(MPI_Comm comm,
     !(defined(BRAHMA_MPI_IMPL_OPENMPI) &&                                  \
       (BRAHMA_MPI_VERSION >= 400106 && BRAHMA_MPI_VERSION < 400200))
 int brahma::MPIDFTracer::MPI_Comm_remote_group(int comm, MPI_Group* group) {
+  ConstEventNameType CATEGORY = "comm";
   BRAHMA_MAP_OR_FAIL(MPI_Comm_remote_group);
   DFT_LOGGER_START_ALWAYS();
   DFT_LOGGER_UPDATE_TYPE(comm, MetadataType::MT_VALUE);
@@ -2789,6 +2925,7 @@ int brahma::MPIDFTracer::MPI_Comm_remote_group(int comm, MPI_Group* group) {
     (defined(BRAHMA_MPI_IMPL_OPENMPI) &&                                   \
      (BRAHMA_MPI_VERSION >= 400106 && BRAHMA_MPI_VERSION < 400200))
 int brahma::MPIDFTracer::MPI_Comm_remote_size(MPI_Comm comm, int* size) {
+  ConstEventNameType CATEGORY = "comm";
   BRAHMA_MAP_OR_FAIL(MPI_Comm_remote_size);
   DFT_LOGGER_START_ALWAYS();
   DFT_LOGGER_UPDATE_TYPE(comm, MetadataType::MT_VALUE);
@@ -2807,6 +2944,7 @@ int brahma::MPIDFTracer::MPI_Comm_remote_size(MPI_Comm comm, int* size) {
     !(defined(BRAHMA_MPI_IMPL_OPENMPI) &&                                  \
       (BRAHMA_MPI_VERSION >= 400106 && BRAHMA_MPI_VERSION < 400200))
 int brahma::MPIDFTracer::MPI_Comm_remote_size(int comm, int* size) {
+  ConstEventNameType CATEGORY = "comm";
   BRAHMA_MAP_OR_FAIL(MPI_Comm_remote_size);
   DFT_LOGGER_START_ALWAYS();
   DFT_LOGGER_UPDATE_TYPE(comm, MetadataType::MT_VALUE);
@@ -2827,6 +2965,7 @@ int brahma::MPIDFTracer::MPI_Comm_remote_size(int comm, int* size) {
      (BRAHMA_MPI_VERSION >= 400106 && BRAHMA_MPI_VERSION < 400200))
 int brahma::MPIDFTracer::MPI_Comm_set_attr(MPI_Comm comm, int comm_keyval,
                                            void* attribute_val) {
+  ConstEventNameType CATEGORY = "comm";
   BRAHMA_MAP_OR_FAIL(MPI_Comm_set_attr);
   DFT_LOGGER_START_ALWAYS();
   DFT_LOGGER_UPDATE_TYPE(comm, MetadataType::MT_VALUE);
@@ -2847,6 +2986,7 @@ int brahma::MPIDFTracer::MPI_Comm_set_attr(MPI_Comm comm, int comm_keyval,
       (BRAHMA_MPI_VERSION >= 400106 && BRAHMA_MPI_VERSION < 400200))
 int brahma::MPIDFTracer::MPI_Comm_set_attr(int comm, int comm_keyval,
                                            void* attribute_val) {
+  ConstEventNameType CATEGORY = "comm";
   BRAHMA_MAP_OR_FAIL(MPI_Comm_set_attr);
   DFT_LOGGER_START_ALWAYS();
   DFT_LOGGER_UPDATE_TYPE(comm, MetadataType::MT_VALUE);
@@ -2868,6 +3008,7 @@ int brahma::MPIDFTracer::MPI_Comm_set_attr(int comm, int comm_keyval,
      (BRAHMA_MPI_VERSION >= 400106 && BRAHMA_MPI_VERSION < 400200))
 int brahma::MPIDFTracer::MPI_Comm_set_errhandler(MPI_Comm comm,
                                                  MPI_Errhandler errhandler) {
+  ConstEventNameType CATEGORY = "comm";
   BRAHMA_MAP_OR_FAIL(MPI_Comm_set_errhandler);
   DFT_LOGGER_START_ALWAYS();
   DFT_LOGGER_UPDATE_TYPE(comm, MetadataType::MT_VALUE);
@@ -2888,6 +3029,7 @@ int brahma::MPIDFTracer::MPI_Comm_set_errhandler(MPI_Comm comm,
       (BRAHMA_MPI_VERSION >= 400106 && BRAHMA_MPI_VERSION < 400200))
 int brahma::MPIDFTracer::MPI_Comm_set_errhandler(int comm,
                                                  MPI_Errhandler errhandler) {
+  ConstEventNameType CATEGORY = "comm";
   BRAHMA_MAP_OR_FAIL(MPI_Comm_set_errhandler);
   DFT_LOGGER_START_ALWAYS();
   DFT_LOGGER_UPDATE_TYPE(comm, MetadataType::MT_VALUE);
@@ -2908,6 +3050,7 @@ int brahma::MPIDFTracer::MPI_Comm_set_errhandler(int comm,
     (defined(BRAHMA_MPI_IMPL_OPENMPI) &&                                   \
      (BRAHMA_MPI_VERSION >= 400106 && BRAHMA_MPI_VERSION < 400200))
 int brahma::MPIDFTracer::MPI_Comm_set_info(MPI_Comm comm, MPI_Info info) {
+  ConstEventNameType CATEGORY = "comm";
   BRAHMA_MAP_OR_FAIL(MPI_Comm_set_info);
   DFT_LOGGER_START_ALWAYS();
   DFT_LOGGER_UPDATE_TYPE(comm, MetadataType::MT_VALUE);
@@ -2927,6 +3070,7 @@ int brahma::MPIDFTracer::MPI_Comm_set_info(MPI_Comm comm, MPI_Info info) {
     !(defined(BRAHMA_MPI_IMPL_OPENMPI) &&                                  \
       (BRAHMA_MPI_VERSION >= 400106 && BRAHMA_MPI_VERSION < 400200))
 int brahma::MPIDFTracer::MPI_Comm_set_info(int comm, MPI_Info info) {
+  ConstEventNameType CATEGORY = "comm";
   BRAHMA_MAP_OR_FAIL(MPI_Comm_set_info);
   DFT_LOGGER_START_ALWAYS();
   DFT_LOGGER_UPDATE_TYPE(comm, MetadataType::MT_VALUE);
@@ -2948,6 +3092,7 @@ int brahma::MPIDFTracer::MPI_Comm_set_info(int comm, MPI_Info info) {
      (BRAHMA_MPI_VERSION >= 400106 && BRAHMA_MPI_VERSION < 400200))
 int brahma::MPIDFTracer::MPI_Comm_set_name(MPI_Comm comm,
                                            const char* comm_name) {
+  ConstEventNameType CATEGORY = "comm";
   BRAHMA_MAP_OR_FAIL(MPI_Comm_set_name);
   DFT_LOGGER_START_ALWAYS();
   DFT_LOGGER_UPDATE_TYPE(comm, MetadataType::MT_VALUE);
@@ -2966,6 +3111,7 @@ int brahma::MPIDFTracer::MPI_Comm_set_name(MPI_Comm comm,
     !(defined(BRAHMA_MPI_IMPL_OPENMPI) &&                                  \
       (BRAHMA_MPI_VERSION >= 400106 && BRAHMA_MPI_VERSION < 400200))
 int brahma::MPIDFTracer::MPI_Comm_set_name(int comm, const char* comm_name) {
+  ConstEventNameType CATEGORY = "comm";
   BRAHMA_MAP_OR_FAIL(MPI_Comm_set_name);
   DFT_LOGGER_START_ALWAYS();
   DFT_LOGGER_UPDATE_TYPE(comm, MetadataType::MT_VALUE);
@@ -2985,6 +3131,7 @@ int brahma::MPIDFTracer::MPI_Comm_set_name(int comm, const char* comm_name) {
     (defined(BRAHMA_MPI_IMPL_OPENMPI) &&                                   \
      (BRAHMA_MPI_VERSION >= 400106 && BRAHMA_MPI_VERSION < 400200))
 int brahma::MPIDFTracer::MPI_Comm_size(MPI_Comm comm, int* size) {
+  ConstEventNameType CATEGORY = "comm";
   BRAHMA_MAP_OR_FAIL(MPI_Comm_size);
   DFT_LOGGER_START_ALWAYS();
   DFT_LOGGER_UPDATE_TYPE(comm, MetadataType::MT_VALUE);
@@ -3003,6 +3150,7 @@ int brahma::MPIDFTracer::MPI_Comm_size(MPI_Comm comm, int* size) {
     !(defined(BRAHMA_MPI_IMPL_OPENMPI) &&                                  \
       (BRAHMA_MPI_VERSION >= 400106 && BRAHMA_MPI_VERSION < 400200))
 int brahma::MPIDFTracer::MPI_Comm_size(int comm, int* size) {
+  ConstEventNameType CATEGORY = "comm";
   BRAHMA_MAP_OR_FAIL(MPI_Comm_size);
   DFT_LOGGER_START_ALWAYS();
   DFT_LOGGER_UPDATE_TYPE(comm, MetadataType::MT_VALUE);
@@ -3025,6 +3173,7 @@ int brahma::MPIDFTracer::MPI_Comm_spawn(const char* command, char* argv[],
                                         int maxprocs, MPI_Info info, int root,
                                         MPI_Comm comm, MPI_Comm* intercomm,
                                         int array_of_errcodes[]) {
+  ConstEventNameType CATEGORY = "spawn";
   BRAHMA_MAP_OR_FAIL(MPI_Comm_spawn);
   DFT_LOGGER_START_ALWAYS();
   DFT_LOGGER_UPDATE_TYPE(maxprocs, MetadataType::MT_VALUE);
@@ -3050,6 +3199,7 @@ int brahma::MPIDFTracer::MPI_Comm_spawn(const char* command, char* argv[],
                                         int maxprocs, MPI_Info info, int root,
                                         int comm, int* intercomm,
                                         int array_of_errcodes[]) {
+  ConstEventNameType CATEGORY = "spawn";
   BRAHMA_MAP_OR_FAIL(MPI_Comm_spawn);
   DFT_LOGGER_START_ALWAYS();
   DFT_LOGGER_UPDATE_TYPE(maxprocs, MetadataType::MT_VALUE);
@@ -3076,6 +3226,7 @@ int brahma::MPIDFTracer::MPI_Comm_spawn_multiple(
     int count, char* array_of_commands[], char** array_of_argv[],
     const int array_of_maxprocs[], const MPI_Info array_of_info[], int root,
     MPI_Comm comm, MPI_Comm* intercomm, int array_of_errcodes[]) {
+  ConstEventNameType CATEGORY = "spawn";
   BRAHMA_MAP_OR_FAIL(MPI_Comm_spawn_multiple);
   DFT_LOGGER_START_ALWAYS();
   DFT_LOGGER_UPDATE_TYPE(count, MetadataType::MT_VALUE);
@@ -3101,6 +3252,7 @@ int brahma::MPIDFTracer::MPI_Comm_spawn_multiple(
     int count, char* array_of_commands[], char** array_of_argv[],
     const int array_of_maxprocs[], const MPI_Info array_of_info[], int root,
     int comm, int* intercomm, int array_of_errcodes[]) {
+  ConstEventNameType CATEGORY = "spawn";
   BRAHMA_MAP_OR_FAIL(MPI_Comm_spawn_multiple);
   DFT_LOGGER_START_ALWAYS();
   DFT_LOGGER_UPDATE_TYPE(count, MetadataType::MT_VALUE);
@@ -3125,6 +3277,7 @@ int brahma::MPIDFTracer::MPI_Comm_spawn_multiple(
      (BRAHMA_MPI_VERSION >= 400106 && BRAHMA_MPI_VERSION < 400200))
 int brahma::MPIDFTracer::MPI_Comm_split(MPI_Comm comm, int color, int key,
                                         MPI_Comm* newcomm) {
+  ConstEventNameType CATEGORY = "comm";
   BRAHMA_MAP_OR_FAIL(MPI_Comm_split);
   DFT_LOGGER_START_ALWAYS();
   DFT_LOGGER_UPDATE_TYPE(comm, MetadataType::MT_VALUE);
@@ -3146,6 +3299,7 @@ int brahma::MPIDFTracer::MPI_Comm_split(MPI_Comm comm, int color, int key,
       (BRAHMA_MPI_VERSION >= 400106 && BRAHMA_MPI_VERSION < 400200))
 int brahma::MPIDFTracer::MPI_Comm_split(int comm, int color, int key,
                                         int* newcomm) {
+  ConstEventNameType CATEGORY = "comm";
   BRAHMA_MAP_OR_FAIL(MPI_Comm_split);
   DFT_LOGGER_START_ALWAYS();
   DFT_LOGGER_UPDATE_TYPE(comm, MetadataType::MT_VALUE);
@@ -3169,6 +3323,7 @@ int brahma::MPIDFTracer::MPI_Comm_split(int comm, int color, int key,
 int brahma::MPIDFTracer::MPI_Comm_split_type(MPI_Comm comm, int split_type,
                                              int key, MPI_Info info,
                                              MPI_Comm* newcomm) {
+  ConstEventNameType CATEGORY = "comm";
   BRAHMA_MAP_OR_FAIL(MPI_Comm_split_type);
   DFT_LOGGER_START_ALWAYS();
   DFT_LOGGER_UPDATE_TYPE(comm, MetadataType::MT_VALUE);
@@ -3191,6 +3346,7 @@ int brahma::MPIDFTracer::MPI_Comm_split_type(MPI_Comm comm, int split_type,
       (BRAHMA_MPI_VERSION >= 400106 && BRAHMA_MPI_VERSION < 400200))
 int brahma::MPIDFTracer::MPI_Comm_split_type(int comm, int split_type, int key,
                                              MPI_Info info, int* newcomm) {
+  ConstEventNameType CATEGORY = "comm";
   BRAHMA_MAP_OR_FAIL(MPI_Comm_split_type);
   DFT_LOGGER_START_ALWAYS();
   DFT_LOGGER_UPDATE_TYPE(comm, MetadataType::MT_VALUE);
@@ -3213,6 +3369,7 @@ int brahma::MPIDFTracer::MPI_Comm_split_type(int comm, int split_type, int key,
     (defined(BRAHMA_MPI_IMPL_OPENMPI) &&                                   \
      (BRAHMA_MPI_VERSION >= 400106 && BRAHMA_MPI_VERSION < 400200))
 int brahma::MPIDFTracer::MPI_Comm_test_inter(MPI_Comm comm, int* flag) {
+  ConstEventNameType CATEGORY = "comm";
   BRAHMA_MAP_OR_FAIL(MPI_Comm_test_inter);
   DFT_LOGGER_START_ALWAYS();
   DFT_LOGGER_UPDATE_TYPE(comm, MetadataType::MT_VALUE);
@@ -3231,6 +3388,7 @@ int brahma::MPIDFTracer::MPI_Comm_test_inter(MPI_Comm comm, int* flag) {
     !(defined(BRAHMA_MPI_IMPL_OPENMPI) &&                                  \
       (BRAHMA_MPI_VERSION >= 400106 && BRAHMA_MPI_VERSION < 400200))
 int brahma::MPIDFTracer::MPI_Comm_test_inter(int comm, int* flag) {
+  ConstEventNameType CATEGORY = "comm";
   BRAHMA_MAP_OR_FAIL(MPI_Comm_test_inter);
   DFT_LOGGER_START_ALWAYS();
   DFT_LOGGER_UPDATE_TYPE(comm, MetadataType::MT_VALUE);
@@ -3252,6 +3410,7 @@ int brahma::MPIDFTracer::MPI_Comm_test_inter(int comm, int* flag) {
 int brahma::MPIDFTracer::MPI_Compare_and_swap(
     const void* origin_addr, const void* compare_addr, void* result_addr,
     MPI_Datatype datatype, int target_rank, MPI_Aint target_disp, MPI_Win win) {
+  ConstEventNameType CATEGORY = "rma";
   BRAHMA_MAP_OR_FAIL(MPI_Compare_and_swap);
   DFT_LOGGER_START_ALWAYS();
   DFT_LOGGER_UPDATE_TYPE(datatype, MetadataType::MT_VALUE);
@@ -3276,6 +3435,7 @@ int brahma::MPIDFTracer::MPI_Compare_and_swap(
       ((BRAHMA_MPI_VERSION >= 400106 && BRAHMA_MPI_VERSION < 400200) ||   \
        (BRAHMA_MPI_VERSION >= 500006 && BRAHMA_MPI_VERSION < 500100))))
 int brahma::MPIDFTracer::MPI_Dims_create(int nnodes, int ndims, int dims[]) {
+  ConstEventNameType CATEGORY = "topology";
   BRAHMA_MAP_OR_FAIL(MPI_Dims_create);
   DFT_LOGGER_START_ALWAYS();
   DFT_LOGGER_UPDATE_TYPE(nnodes, MetadataType::MT_VALUE);
@@ -3299,6 +3459,7 @@ int brahma::MPIDFTracer::MPI_Dist_graph_create(
     MPI_Comm comm_old, int n, const int nodes[], const int degrees[],
     const int targets[], const int weights[], MPI_Info info, int reorder,
     MPI_Comm* newcomm) {
+  ConstEventNameType CATEGORY = "topology";
   BRAHMA_MAP_OR_FAIL(MPI_Dist_graph_create);
   DFT_LOGGER_START_ALWAYS();
   DFT_LOGGER_UPDATE_TYPE(comm_old, MetadataType::MT_VALUE);
@@ -3324,6 +3485,7 @@ int brahma::MPIDFTracer::MPI_Dist_graph_create(
     int comm_old, int n, const int nodes[], const int degrees[],
     const int targets[], const int weights[], MPI_Info info, int reorder,
     int* newcomm) {
+  ConstEventNameType CATEGORY = "topology";
   BRAHMA_MAP_OR_FAIL(MPI_Dist_graph_create);
   DFT_LOGGER_START_ALWAYS();
   DFT_LOGGER_UPDATE_TYPE(comm_old, MetadataType::MT_VALUE);
@@ -3351,6 +3513,7 @@ int brahma::MPIDFTracer::MPI_Dist_graph_create_adjacent(
     const int sourceweights[], int outdegree, const int destinations[],
     const int destweights[], MPI_Info info, int reorder,
     MPI_Comm* comm_dist_graph) {
+  ConstEventNameType CATEGORY = "topology";
   BRAHMA_MAP_OR_FAIL(MPI_Dist_graph_create_adjacent);
   DFT_LOGGER_START_ALWAYS();
   DFT_LOGGER_UPDATE_TYPE(comm_old, MetadataType::MT_VALUE);
@@ -3378,6 +3541,7 @@ int brahma::MPIDFTracer::MPI_Dist_graph_create_adjacent(
     int comm_old, int indegree, const int sources[], const int sourceweights[],
     int outdegree, const int destinations[], const int destweights[],
     MPI_Info info, int reorder, int* comm_dist_graph) {
+  ConstEventNameType CATEGORY = "topology";
   BRAHMA_MAP_OR_FAIL(MPI_Dist_graph_create_adjacent);
   DFT_LOGGER_START_ALWAYS();
   DFT_LOGGER_UPDATE_TYPE(comm_old, MetadataType::MT_VALUE);
@@ -3405,6 +3569,7 @@ int brahma::MPIDFTracer::MPI_Dist_graph_create_adjacent(
 int brahma::MPIDFTracer::MPI_Dist_graph_neighbors(
     MPI_Comm comm, int maxindegree, int sources[], int sourceweights[],
     int maxoutdegree, int destinations[], int destweights[]) {
+  ConstEventNameType CATEGORY = "topology";
   BRAHMA_MAP_OR_FAIL(MPI_Dist_graph_neighbors);
   DFT_LOGGER_START_ALWAYS();
   DFT_LOGGER_UPDATE_TYPE(comm, MetadataType::MT_VALUE);
@@ -3429,6 +3594,7 @@ int brahma::MPIDFTracer::MPI_Dist_graph_neighbors(
 int brahma::MPIDFTracer::MPI_Dist_graph_neighbors(
     int comm, int maxindegree, int sources[], int sourceweights[],
     int maxoutdegree, int destinations[], int destweights[]) {
+  ConstEventNameType CATEGORY = "topology";
   BRAHMA_MAP_OR_FAIL(MPI_Dist_graph_neighbors);
   DFT_LOGGER_START_ALWAYS();
   DFT_LOGGER_UPDATE_TYPE(comm, MetadataType::MT_VALUE);
@@ -3455,6 +3621,7 @@ int brahma::MPIDFTracer::MPI_Dist_graph_neighbors_count(MPI_Comm comm,
                                                         int* inneighbors,
                                                         int* outneighbors,
                                                         int* weighted) {
+  ConstEventNameType CATEGORY = "topology";
   BRAHMA_MAP_OR_FAIL(MPI_Dist_graph_neighbors_count);
   DFT_LOGGER_START_ALWAYS();
   DFT_LOGGER_UPDATE_TYPE(comm, MetadataType::MT_VALUE);
@@ -3477,6 +3644,7 @@ int brahma::MPIDFTracer::MPI_Dist_graph_neighbors_count(int comm,
                                                         int* inneighbors,
                                                         int* outneighbors,
                                                         int* weighted) {
+  ConstEventNameType CATEGORY = "topology";
   BRAHMA_MAP_OR_FAIL(MPI_Dist_graph_neighbors_count);
   DFT_LOGGER_START_ALWAYS();
   DFT_LOGGER_UPDATE_TYPE(comm, MetadataType::MT_VALUE);
@@ -3492,6 +3660,7 @@ int brahma::MPIDFTracer::MPI_Dist_graph_neighbors_count(int comm,
 int brahma::MPIDFTracer::MPI_Errhandler_create(
     MPI_Comm_errhandler_function* comm_errhandler_fn,
     MPI_Errhandler* errhandler) {
+  ConstEventNameType CATEGORY = "comm";
   BRAHMA_MAP_OR_FAIL(MPI_Errhandler_create);
   DFT_LOGGER_START_ALWAYS();
   int ret = __real_MPI_Errhandler_create(comm_errhandler_fn, errhandler);
@@ -3506,6 +3675,7 @@ int brahma::MPIDFTracer::MPI_Errhandler_create(
       (BRAHMA_MPI_VERSION >= 400203 && BRAHMA_MPI_VERSION < 400300)))
 int brahma::MPIDFTracer::MPI_Errhandler_create(
     MPI_Comm_errhandler_function* comm_errhandler_fn, int* errhandler) {
+  ConstEventNameType CATEGORY = "comm";
   BRAHMA_MAP_OR_FAIL(MPI_Errhandler_create);
   DFT_LOGGER_START_ALWAYS();
   int ret = __real_MPI_Errhandler_create(comm_errhandler_fn, errhandler);
@@ -3520,6 +3690,7 @@ int brahma::MPIDFTracer::MPI_Errhandler_create(
      (BRAHMA_MPI_VERSION >= 400106 && BRAHMA_MPI_VERSION < 400200))
 int brahma::MPIDFTracer::MPI_Errhandler_create(MPI_Handler_function* function,
                                                MPI_Errhandler* errhandler) {
+  ConstEventNameType CATEGORY = "comm";
   BRAHMA_MAP_OR_FAIL(MPI_Errhandler_create);
   DFT_LOGGER_START_ALWAYS();
   int ret = __real_MPI_Errhandler_create(function, errhandler);
@@ -3534,6 +3705,7 @@ int brahma::MPIDFTracer::MPI_Errhandler_create(MPI_Handler_function* function,
       (BRAHMA_MPI_VERSION >= 400106 && BRAHMA_MPI_VERSION < 400200))
 int brahma::MPIDFTracer::MPI_Errhandler_create(MPI_Handler_function* function,
                                                int* errhandler) {
+  ConstEventNameType CATEGORY = "comm";
   BRAHMA_MAP_OR_FAIL(MPI_Errhandler_create);
   DFT_LOGGER_START_ALWAYS();
   int ret = __real_MPI_Errhandler_create(function, errhandler);
@@ -3552,6 +3724,7 @@ int brahma::MPIDFTracer::MPI_Errhandler_create(MPI_Handler_function* function,
     (defined(BRAHMA_MPI_IMPL_OPENMPI) &&                                   \
      (BRAHMA_MPI_VERSION >= 400106 && BRAHMA_MPI_VERSION < 400200))
 int brahma::MPIDFTracer::MPI_Errhandler_free(MPI_Errhandler* errhandler) {
+  ConstEventNameType CATEGORY = "comm";
   BRAHMA_MAP_OR_FAIL(MPI_Errhandler_free);
   DFT_LOGGER_START_ALWAYS();
   int ret = __real_MPI_Errhandler_free(errhandler);
@@ -3569,6 +3742,7 @@ int brahma::MPIDFTracer::MPI_Errhandler_free(MPI_Errhandler* errhandler) {
     !(defined(BRAHMA_MPI_IMPL_OPENMPI) &&                                  \
       (BRAHMA_MPI_VERSION >= 400106 && BRAHMA_MPI_VERSION < 400200))
 int brahma::MPIDFTracer::MPI_Errhandler_free(int* errhandler) {
+  ConstEventNameType CATEGORY = "comm";
   BRAHMA_MAP_OR_FAIL(MPI_Errhandler_free);
   DFT_LOGGER_START_ALWAYS();
   int ret = __real_MPI_Errhandler_free(errhandler);
@@ -3588,6 +3762,7 @@ int brahma::MPIDFTracer::MPI_Errhandler_free(int* errhandler) {
      (BRAHMA_MPI_VERSION >= 400106 && BRAHMA_MPI_VERSION < 400200))
 int brahma::MPIDFTracer::MPI_Errhandler_get(MPI_Comm comm,
                                             MPI_Errhandler* errhandler) {
+  ConstEventNameType CATEGORY = "comm";
   BRAHMA_MAP_OR_FAIL(MPI_Errhandler_get);
   DFT_LOGGER_START_ALWAYS();
   DFT_LOGGER_UPDATE_TYPE(comm, MetadataType::MT_VALUE);
@@ -3606,6 +3781,7 @@ int brahma::MPIDFTracer::MPI_Errhandler_get(MPI_Comm comm,
     !(defined(BRAHMA_MPI_IMPL_OPENMPI) &&                                  \
       (BRAHMA_MPI_VERSION >= 400106 && BRAHMA_MPI_VERSION < 400200))
 int brahma::MPIDFTracer::MPI_Errhandler_get(int comm, int* errhandler) {
+  ConstEventNameType CATEGORY = "comm";
   BRAHMA_MAP_OR_FAIL(MPI_Errhandler_get);
   DFT_LOGGER_START_ALWAYS();
   DFT_LOGGER_UPDATE_TYPE(comm, MetadataType::MT_VALUE);
@@ -3626,6 +3802,7 @@ int brahma::MPIDFTracer::MPI_Errhandler_get(int comm, int* errhandler) {
      (BRAHMA_MPI_VERSION >= 400106 && BRAHMA_MPI_VERSION < 400200))
 int brahma::MPIDFTracer::MPI_Errhandler_set(MPI_Comm comm,
                                             MPI_Errhandler errhandler) {
+  ConstEventNameType CATEGORY = "comm";
   BRAHMA_MAP_OR_FAIL(MPI_Errhandler_set);
   DFT_LOGGER_START_ALWAYS();
   DFT_LOGGER_UPDATE_TYPE(comm, MetadataType::MT_VALUE);
@@ -3645,6 +3822,7 @@ int brahma::MPIDFTracer::MPI_Errhandler_set(MPI_Comm comm,
     !(defined(BRAHMA_MPI_IMPL_OPENMPI) &&                                  \
       (BRAHMA_MPI_VERSION >= 400106 && BRAHMA_MPI_VERSION < 400200))
 int brahma::MPIDFTracer::MPI_Errhandler_set(int comm, int errhandler) {
+  ConstEventNameType CATEGORY = "comm";
   BRAHMA_MAP_OR_FAIL(MPI_Errhandler_set);
   DFT_LOGGER_START_ALWAYS();
   DFT_LOGGER_UPDATE_TYPE(comm, MetadataType::MT_VALUE);
@@ -3665,6 +3843,7 @@ int brahma::MPIDFTracer::MPI_Errhandler_set(int comm, int errhandler) {
       ((BRAHMA_MPI_VERSION >= 400106 && BRAHMA_MPI_VERSION < 400200) ||   \
        (BRAHMA_MPI_VERSION >= 500006 && BRAHMA_MPI_VERSION < 500100))))
 int brahma::MPIDFTracer::MPI_Error_class(int errorcode, int* errorclass) {
+  ConstEventNameType CATEGORY = "env";
   BRAHMA_MAP_OR_FAIL(MPI_Error_class);
   DFT_LOGGER_START_ALWAYS();
   DFT_LOGGER_UPDATE_TYPE(errorcode, MetadataType::MT_VALUE);
@@ -3685,6 +3864,7 @@ int brahma::MPIDFTracer::MPI_Error_class(int errorcode, int* errorclass) {
        (BRAHMA_MPI_VERSION >= 500006 && BRAHMA_MPI_VERSION < 500100))))
 int brahma::MPIDFTracer::MPI_Error_string(int errorcode, char* string,
                                           int* resultlen) {
+  ConstEventNameType CATEGORY = "env";
   BRAHMA_MAP_OR_FAIL(MPI_Error_string);
   DFT_LOGGER_START_ALWAYS();
   DFT_LOGGER_UPDATE_TYPE(errorcode, MetadataType::MT_VALUE);
@@ -3706,6 +3886,7 @@ int brahma::MPIDFTracer::MPI_Error_string(int errorcode, char* string,
 int brahma::MPIDFTracer::MPI_Exscan(const void* sendbuf, void* recvbuf,
                                     int count, MPI_Datatype datatype, MPI_Op op,
                                     MPI_Comm comm) {
+  ConstEventNameType CATEGORY = "collective";
   BRAHMA_MAP_OR_FAIL(MPI_Exscan);
   DFT_LOGGER_START_ALWAYS();
   DFT_LOGGER_UPDATE_TYPE(count, MetadataType::MT_VALUE);
@@ -3729,6 +3910,7 @@ int brahma::MPIDFTracer::MPI_Exscan(const void* sendbuf, void* recvbuf,
 int brahma::MPIDFTracer::MPI_Exscan(const void* sendbuf, void* recvbuf,
                                     int count, MPI_Datatype datatype, MPI_Op op,
                                     int comm) {
+  ConstEventNameType CATEGORY = "collective";
   BRAHMA_MAP_OR_FAIL(MPI_Exscan);
   DFT_LOGGER_START_ALWAYS();
   DFT_LOGGER_UPDATE_TYPE(count, MetadataType::MT_VALUE);
@@ -3746,6 +3928,7 @@ int brahma::MPIDFTracer::MPI_Exscan(const void* sendbuf, void* recvbuf,
 int brahma::MPIDFTracer::MPI_Exscan_c(const void* sendbuf, void* recvbuf,
                                       MPI_Count count, MPI_Datatype datatype,
                                       MPI_Op op, MPI_Comm comm) {
+  ConstEventNameType CATEGORY = "collective";
   BRAHMA_MAP_OR_FAIL(MPI_Exscan_c);
   DFT_LOGGER_START_ALWAYS();
   DFT_LOGGER_UPDATE_TYPE(count, MetadataType::MT_VALUE);
@@ -3765,6 +3948,7 @@ int brahma::MPIDFTracer::MPI_Exscan_c(const void* sendbuf, void* recvbuf,
 int brahma::MPIDFTracer::MPI_Exscan_c(const void* sendbuf, void* recvbuf,
                                       MPI_Count count, int datatype, int op,
                                       int comm) {
+  ConstEventNameType CATEGORY = "collective";
   BRAHMA_MAP_OR_FAIL(MPI_Exscan_c);
   DFT_LOGGER_START_ALWAYS();
   DFT_LOGGER_UPDATE_TYPE(count, MetadataType::MT_VALUE);
@@ -3785,6 +3969,7 @@ int brahma::MPIDFTracer::MPI_Exscan_init(const void* sendbuf, void* recvbuf,
                                          int count, MPI_Datatype datatype,
                                          MPI_Op op, MPI_Comm comm,
                                          MPI_Info info, MPI_Request* request) {
+  ConstEventNameType CATEGORY = "collective";
   BRAHMA_MAP_OR_FAIL(MPI_Exscan_init);
   DFT_LOGGER_START_ALWAYS();
   DFT_LOGGER_UPDATE_TYPE(count, MetadataType::MT_VALUE);
@@ -3806,6 +3991,7 @@ int brahma::MPIDFTracer::MPI_Exscan_init(const void* sendbuf, void* recvbuf,
 int brahma::MPIDFTracer::MPI_Exscan_init(const void* sendbuf, void* recvbuf,
                                          int count, int datatype, int op,
                                          int comm, int info, int* request) {
+  ConstEventNameType CATEGORY = "collective";
   BRAHMA_MAP_OR_FAIL(MPI_Exscan_init);
   DFT_LOGGER_START_ALWAYS();
   DFT_LOGGER_UPDATE_TYPE(count, MetadataType::MT_VALUE);
@@ -3827,6 +4013,7 @@ int brahma::MPIDFTracer::MPI_Exscan_init_c(const void* sendbuf, void* recvbuf,
                                            MPI_Datatype datatype, MPI_Op op,
                                            MPI_Comm comm, MPI_Info info,
                                            MPI_Request* request) {
+  ConstEventNameType CATEGORY = "collective";
   BRAHMA_MAP_OR_FAIL(MPI_Exscan_init_c);
   DFT_LOGGER_START_ALWAYS();
   DFT_LOGGER_UPDATE_TYPE(count, MetadataType::MT_VALUE);
@@ -3849,6 +4036,7 @@ int brahma::MPIDFTracer::MPI_Exscan_init_c(const void* sendbuf, void* recvbuf,
                                            MPI_Count count, int datatype,
                                            int op, int comm, int info,
                                            int* request) {
+  ConstEventNameType CATEGORY = "collective";
   BRAHMA_MAP_OR_FAIL(MPI_Exscan_init_c);
   DFT_LOGGER_START_ALWAYS();
   DFT_LOGGER_UPDATE_TYPE(count, MetadataType::MT_VALUE);
@@ -3877,6 +4065,7 @@ int brahma::MPIDFTracer::MPI_Fetch_and_op(const void* origin_addr,
                                           MPI_Datatype datatype,
                                           int target_rank, MPI_Aint target_disp,
                                           MPI_Op op, MPI_Win win) {
+  ConstEventNameType CATEGORY = "rma";
   BRAHMA_MAP_OR_FAIL(MPI_Fetch_and_op);
   DFT_LOGGER_START_ALWAYS();
   DFT_LOGGER_UPDATE_TYPE(datatype, MetadataType::MT_VALUE);
@@ -3901,6 +4090,7 @@ int brahma::MPIDFTracer::MPI_Fetch_and_op(const void* origin_addr,
       ((BRAHMA_MPI_VERSION >= 400106 && BRAHMA_MPI_VERSION < 400200) ||   \
        (BRAHMA_MPI_VERSION >= 500006 && BRAHMA_MPI_VERSION < 500100))))
 int brahma::MPIDFTracer::MPI_Finalize(void) {
+  ConstEventNameType CATEGORY = "env";
   BRAHMA_MAP_OR_FAIL(MPI_Finalize);
   DFT_LOGGER_START_ALWAYS();
   int ret = __real_MPI_Finalize();
@@ -3933,6 +4123,7 @@ int brahma::MPIDFTracer::MPI_Finalized(int* flag) {
       ((BRAHMA_MPI_VERSION >= 400106 && BRAHMA_MPI_VERSION < 400200) ||   \
        (BRAHMA_MPI_VERSION >= 500006 && BRAHMA_MPI_VERSION < 500100))))
 int brahma::MPIDFTracer::MPI_Free_mem(void* base) {
+  ConstEventNameType CATEGORY = "env";
   BRAHMA_MAP_OR_FAIL(MPI_Free_mem);
   DFT_LOGGER_START_ALWAYS();
   int ret = __real_MPI_Free_mem(base);
@@ -3954,6 +4145,7 @@ int brahma::MPIDFTracer::MPI_Gather(const void* sendbuf, int sendcount,
                                     MPI_Datatype sendtype, void* recvbuf,
                                     int recvcount, MPI_Datatype recvtype,
                                     int root, MPI_Comm comm) {
+  ConstEventNameType CATEGORY = "collective";
   BRAHMA_MAP_OR_FAIL(MPI_Gather);
   DFT_LOGGER_START_ALWAYS();
   DFT_LOGGER_UPDATE_TYPE(sendcount, MetadataType::MT_VALUE);
@@ -3981,6 +4173,7 @@ int brahma::MPIDFTracer::MPI_Gather(const void* sendbuf, int sendcount,
                                     MPI_Datatype sendtype, void* recvbuf,
                                     int recvcount, MPI_Datatype recvtype,
                                     int root, int comm) {
+  ConstEventNameType CATEGORY = "collective";
   BRAHMA_MAP_OR_FAIL(MPI_Gather);
   DFT_LOGGER_START_ALWAYS();
   DFT_LOGGER_UPDATE_TYPE(sendcount, MetadataType::MT_VALUE);
@@ -4003,6 +4196,7 @@ int brahma::MPIDFTracer::MPI_Gather_c(const void* sendbuf, MPI_Count sendcount,
                                       MPI_Count recvcount,
                                       MPI_Datatype recvtype, int root,
                                       MPI_Comm comm) {
+  ConstEventNameType CATEGORY = "collective";
   BRAHMA_MAP_OR_FAIL(MPI_Gather_c);
   DFT_LOGGER_START_ALWAYS();
   DFT_LOGGER_UPDATE_TYPE(sendcount, MetadataType::MT_VALUE);
@@ -4026,6 +4220,7 @@ int brahma::MPIDFTracer::MPI_Gather_c(const void* sendbuf, MPI_Count sendcount,
                                       int sendtype, void* recvbuf,
                                       MPI_Count recvcount, int recvtype,
                                       int root, int comm) {
+  ConstEventNameType CATEGORY = "collective";
   BRAHMA_MAP_OR_FAIL(MPI_Gather_c);
   DFT_LOGGER_START_ALWAYS();
   DFT_LOGGER_UPDATE_TYPE(sendcount, MetadataType::MT_VALUE);
@@ -4050,6 +4245,7 @@ int brahma::MPIDFTracer::MPI_Gather_init(const void* sendbuf, int sendcount,
                                          int recvcount, MPI_Datatype recvtype,
                                          int root, MPI_Comm comm, MPI_Info info,
                                          MPI_Request* request) {
+  ConstEventNameType CATEGORY = "collective";
   BRAHMA_MAP_OR_FAIL(MPI_Gather_init);
   DFT_LOGGER_START_ALWAYS();
   DFT_LOGGER_UPDATE_TYPE(sendcount, MetadataType::MT_VALUE);
@@ -4075,6 +4271,7 @@ int brahma::MPIDFTracer::MPI_Gather_init(const void* sendbuf, int sendcount,
                                          int sendtype, void* recvbuf,
                                          int recvcount, int recvtype, int root,
                                          int comm, int info, int* request) {
+  ConstEventNameType CATEGORY = "collective";
   BRAHMA_MAP_OR_FAIL(MPI_Gather_init);
   DFT_LOGGER_START_ALWAYS();
   DFT_LOGGER_UPDATE_TYPE(sendcount, MetadataType::MT_VALUE);
@@ -4098,6 +4295,7 @@ int brahma::MPIDFTracer::MPI_Gather_init_c(
     const void* sendbuf, MPI_Count sendcount, MPI_Datatype sendtype,
     void* recvbuf, MPI_Count recvcount, MPI_Datatype recvtype, int root,
     MPI_Comm comm, MPI_Info info, MPI_Request* request) {
+  ConstEventNameType CATEGORY = "collective";
   BRAHMA_MAP_OR_FAIL(MPI_Gather_init_c);
   DFT_LOGGER_START_ALWAYS();
   DFT_LOGGER_UPDATE_TYPE(sendcount, MetadataType::MT_VALUE);
@@ -4124,6 +4322,7 @@ int brahma::MPIDFTracer::MPI_Gather_init_c(const void* sendbuf,
                                            void* recvbuf, MPI_Count recvcount,
                                            int recvtype, int root, int comm,
                                            int info, int* request) {
+  ConstEventNameType CATEGORY = "collective";
   BRAHMA_MAP_OR_FAIL(MPI_Gather_init_c);
   DFT_LOGGER_START_ALWAYS();
   DFT_LOGGER_UPDATE_TYPE(sendcount, MetadataType::MT_VALUE);
@@ -4148,6 +4347,7 @@ int brahma::MPIDFTracer::MPI_Gatherv(const void* sendbuf, int sendcount,
                                      const int* recvcounts, const int* displs,
                                      MPI_Datatype recvtype, int root,
                                      MPI_Comm comm) {
+  ConstEventNameType CATEGORY = "collective";
   BRAHMA_MAP_OR_FAIL(MPI_Gatherv);
   DFT_LOGGER_START_ALWAYS();
   DFT_LOGGER_UPDATE_TYPE(sendcount, MetadataType::MT_VALUE);
@@ -4173,6 +4373,7 @@ int brahma::MPIDFTracer::MPI_Gatherv(const void* sendbuf, int sendcount,
                                      const int recvcounts[], const int displs[],
                                      MPI_Datatype recvtype, int root,
                                      MPI_Comm comm) {
+  ConstEventNameType CATEGORY = "collective";
   BRAHMA_MAP_OR_FAIL(MPI_Gatherv);
   DFT_LOGGER_START_ALWAYS();
   DFT_LOGGER_UPDATE_TYPE(sendcount, MetadataType::MT_VALUE);
@@ -4200,6 +4401,7 @@ int brahma::MPIDFTracer::MPI_Gatherv(const void* sendbuf, int sendcount,
                                      const int recvcounts[], const int displs[],
                                      MPI_Datatype recvtype, int root,
                                      int comm) {
+  ConstEventNameType CATEGORY = "collective";
   BRAHMA_MAP_OR_FAIL(MPI_Gatherv);
   DFT_LOGGER_START_ALWAYS();
   DFT_LOGGER_UPDATE_TYPE(sendcount, MetadataType::MT_VALUE);
@@ -4222,6 +4424,7 @@ int brahma::MPIDFTracer::MPI_Gatherv_c(const void* sendbuf, MPI_Count sendcount,
                                        const MPI_Aint displs[],
                                        MPI_Datatype recvtype, int root,
                                        MPI_Comm comm) {
+  ConstEventNameType CATEGORY = "collective";
   BRAHMA_MAP_OR_FAIL(MPI_Gatherv_c);
   DFT_LOGGER_START_ALWAYS();
   DFT_LOGGER_UPDATE_TYPE(sendcount, MetadataType::MT_VALUE);
@@ -4245,6 +4448,7 @@ int brahma::MPIDFTracer::MPI_Gatherv_c(const void* sendbuf, MPI_Count sendcount,
                                        const MPI_Count recvcounts[],
                                        const MPI_Aint displs[], int recvtype,
                                        int root, int comm) {
+  ConstEventNameType CATEGORY = "collective";
   BRAHMA_MAP_OR_FAIL(MPI_Gatherv_c);
   DFT_LOGGER_START_ALWAYS();
   DFT_LOGGER_UPDATE_TYPE(sendcount, MetadataType::MT_VALUE);
@@ -4267,6 +4471,7 @@ int brahma::MPIDFTracer::MPI_Gatherv_init(
     const void* sendbuf, int sendcount, MPI_Datatype sendtype, void* recvbuf,
     const int recvcounts[], const int displs[], MPI_Datatype recvtype, int root,
     MPI_Comm comm, MPI_Info info, MPI_Request* request) {
+  ConstEventNameType CATEGORY = "collective";
   BRAHMA_MAP_OR_FAIL(MPI_Gatherv_init);
   DFT_LOGGER_START_ALWAYS();
   DFT_LOGGER_UPDATE_TYPE(sendcount, MetadataType::MT_VALUE);
@@ -4293,6 +4498,7 @@ int brahma::MPIDFTracer::MPI_Gatherv_init(const void* sendbuf, int sendcount,
                                           const int displs[], int recvtype,
                                           int root, int comm, int info,
                                           int* request) {
+  ConstEventNameType CATEGORY = "collective";
   BRAHMA_MAP_OR_FAIL(MPI_Gatherv_init);
   DFT_LOGGER_START_ALWAYS();
   DFT_LOGGER_UPDATE_TYPE(sendcount, MetadataType::MT_VALUE);
@@ -4316,6 +4522,7 @@ int brahma::MPIDFTracer::MPI_Gatherv_init_c(
     void* recvbuf, const MPI_Count recvcounts[], const MPI_Aint displs[],
     MPI_Datatype recvtype, int root, MPI_Comm comm, MPI_Info info,
     MPI_Request* request) {
+  ConstEventNameType CATEGORY = "collective";
   BRAHMA_MAP_OR_FAIL(MPI_Gatherv_init_c);
   DFT_LOGGER_START_ALWAYS();
   DFT_LOGGER_UPDATE_TYPE(sendcount, MetadataType::MT_VALUE);
@@ -4340,6 +4547,7 @@ int brahma::MPIDFTracer::MPI_Gatherv_init_c(
     const void* sendbuf, MPI_Count sendcount, int sendtype, void* recvbuf,
     const MPI_Count recvcounts[], const MPI_Aint displs[], int recvtype,
     int root, int comm, int info, int* request) {
+  ConstEventNameType CATEGORY = "collective";
   BRAHMA_MAP_OR_FAIL(MPI_Gatherv_init_c);
   DFT_LOGGER_START_ALWAYS();
   DFT_LOGGER_UPDATE_TYPE(sendcount, MetadataType::MT_VALUE);
@@ -4369,6 +4577,7 @@ int brahma::MPIDFTracer::MPI_Get(void* origin_addr, int origin_count,
                                  MPI_Datatype origin_datatype, int target_rank,
                                  MPI_Aint target_disp, int target_count,
                                  MPI_Datatype target_datatype, MPI_Win win) {
+  ConstEventNameType CATEGORY = "rma";
   BRAHMA_MAP_OR_FAIL(MPI_Get);
   DFT_LOGGER_START_ALWAYS();
   DFT_LOGGER_UPDATE_TYPE(origin_count, MetadataType::MT_VALUE);
@@ -4400,6 +4609,7 @@ int brahma::MPIDFTracer::MPI_Get_accumulate(
     void* result_addr, int result_count, MPI_Datatype result_datatype,
     int target_rank, MPI_Aint target_disp, int target_count,
     MPI_Datatype target_datatype, MPI_Op op, MPI_Win win) {
+  ConstEventNameType CATEGORY = "rma";
   BRAHMA_MAP_OR_FAIL(MPI_Get_accumulate);
   DFT_LOGGER_START_ALWAYS();
   DFT_LOGGER_UPDATE_TYPE(origin_count, MetadataType::MT_VALUE);
@@ -4429,6 +4639,7 @@ int brahma::MPIDFTracer::MPI_Get_accumulate_c(
     MPI_Datatype result_datatype, int target_rank, MPI_Aint target_disp,
     MPI_Count target_count, MPI_Datatype target_datatype, MPI_Op op,
     MPI_Win win) {
+  ConstEventNameType CATEGORY = "rma";
   BRAHMA_MAP_OR_FAIL(MPI_Get_accumulate_c);
   DFT_LOGGER_START_ALWAYS();
   DFT_LOGGER_UPDATE_TYPE(origin_count, MetadataType::MT_VALUE);
@@ -4459,6 +4670,7 @@ int brahma::MPIDFTracer::MPI_Get_accumulate_c(
     void* result_addr, MPI_Count result_count, int result_datatype,
     int target_rank, MPI_Aint target_disp, MPI_Count target_count,
     int target_datatype, int op, int win) {
+  ConstEventNameType CATEGORY = "rma";
   BRAHMA_MAP_OR_FAIL(MPI_Get_accumulate_c);
   DFT_LOGGER_START_ALWAYS();
   DFT_LOGGER_UPDATE_TYPE(origin_count, MetadataType::MT_VALUE);
@@ -4491,6 +4703,7 @@ int brahma::MPIDFTracer::MPI_Get_accumulate_c(
        (BRAHMA_MPI_VERSION >= 500006 && BRAHMA_MPI_VERSION < 500100))))
 int brahma::MPIDFTracer::MPI_Get_address(const void* location,
                                          MPI_Aint* address) {
+  ConstEventNameType CATEGORY = "datatype";
   BRAHMA_MAP_OR_FAIL(MPI_Get_address);
   DFT_LOGGER_START_ALWAYS();
   int ret = __real_MPI_Get_address(location, address);
@@ -4506,6 +4719,7 @@ int brahma::MPIDFTracer::MPI_Get_c(void* origin_addr, MPI_Count origin_count,
                                    int target_rank, MPI_Aint target_disp,
                                    MPI_Count target_count,
                                    MPI_Datatype target_datatype, MPI_Win win) {
+  ConstEventNameType CATEGORY = "rma";
   BRAHMA_MAP_OR_FAIL(MPI_Get_c);
   DFT_LOGGER_START_ALWAYS();
   DFT_LOGGER_UPDATE_TYPE(origin_count, MetadataType::MT_VALUE);
@@ -4531,6 +4745,7 @@ int brahma::MPIDFTracer::MPI_Get_c(void* origin_addr, MPI_Count origin_count,
                                    int origin_datatype, int target_rank,
                                    MPI_Aint target_disp, MPI_Count target_count,
                                    int target_datatype, int win) {
+  ConstEventNameType CATEGORY = "rma";
   BRAHMA_MAP_OR_FAIL(MPI_Get_c);
   DFT_LOGGER_START_ALWAYS();
   DFT_LOGGER_UPDATE_TYPE(origin_count, MetadataType::MT_VALUE);
@@ -4559,6 +4774,7 @@ int brahma::MPIDFTracer::MPI_Get_c(void* origin_addr, MPI_Count origin_count,
        (BRAHMA_MPI_VERSION >= 500006 && BRAHMA_MPI_VERSION < 500100))))
 int brahma::MPIDFTracer::MPI_Get_count(const MPI_Status* status,
                                        MPI_Datatype datatype, int* count) {
+  ConstEventNameType CATEGORY = "env";
   BRAHMA_MAP_OR_FAIL(MPI_Get_count);
   DFT_LOGGER_START_ALWAYS();
   DFT_LOGGER_UPDATE_TYPE(datatype, MetadataType::MT_VALUE);
@@ -4573,6 +4789,7 @@ int brahma::MPIDFTracer::MPI_Get_count(const MPI_Status* status,
 int brahma::MPIDFTracer::MPI_Get_count_c(const MPI_Status* status,
                                          MPI_Datatype datatype,
                                          MPI_Count* count) {
+  ConstEventNameType CATEGORY = "env";
   BRAHMA_MAP_OR_FAIL(MPI_Get_count_c);
   DFT_LOGGER_START_ALWAYS();
   DFT_LOGGER_UPDATE_TYPE(datatype, MetadataType::MT_VALUE);
@@ -4588,6 +4805,7 @@ int brahma::MPIDFTracer::MPI_Get_count_c(const MPI_Status* status,
       (BRAHMA_MPI_VERSION >= 400203 && BRAHMA_MPI_VERSION < 400300)))
 int brahma::MPIDFTracer::MPI_Get_count_c(const MPI_Status* status, int datatype,
                                          MPI_Count* count) {
+  ConstEventNameType CATEGORY = "env";
   BRAHMA_MAP_OR_FAIL(MPI_Get_count_c);
   DFT_LOGGER_START_ALWAYS();
   DFT_LOGGER_UPDATE_TYPE(datatype, MetadataType::MT_VALUE);
@@ -4608,6 +4826,7 @@ int brahma::MPIDFTracer::MPI_Get_count_c(const MPI_Status* status, int datatype,
        (BRAHMA_MPI_VERSION >= 500006 && BRAHMA_MPI_VERSION < 500100))))
 int brahma::MPIDFTracer::MPI_Get_elements(const MPI_Status* status,
                                           MPI_Datatype datatype, int* count) {
+  ConstEventNameType CATEGORY = "env";
   BRAHMA_MAP_OR_FAIL(MPI_Get_elements);
   DFT_LOGGER_START_ALWAYS();
   DFT_LOGGER_UPDATE_TYPE(datatype, MetadataType::MT_VALUE);
@@ -4622,6 +4841,7 @@ int brahma::MPIDFTracer::MPI_Get_elements(const MPI_Status* status,
 int brahma::MPIDFTracer::MPI_Get_elements_c(const MPI_Status* status,
                                             MPI_Datatype datatype,
                                             MPI_Count* count) {
+  ConstEventNameType CATEGORY = "env";
   BRAHMA_MAP_OR_FAIL(MPI_Get_elements_c);
   DFT_LOGGER_START_ALWAYS();
   DFT_LOGGER_UPDATE_TYPE(datatype, MetadataType::MT_VALUE);
@@ -4637,6 +4857,7 @@ int brahma::MPIDFTracer::MPI_Get_elements_c(const MPI_Status* status,
       (BRAHMA_MPI_VERSION >= 400203 && BRAHMA_MPI_VERSION < 400300)))
 int brahma::MPIDFTracer::MPI_Get_elements_c(const MPI_Status* status,
                                             int datatype, MPI_Count* count) {
+  ConstEventNameType CATEGORY = "env";
   BRAHMA_MAP_OR_FAIL(MPI_Get_elements_c);
   DFT_LOGGER_START_ALWAYS();
   DFT_LOGGER_UPDATE_TYPE(datatype, MetadataType::MT_VALUE);
@@ -4658,6 +4879,7 @@ int brahma::MPIDFTracer::MPI_Get_elements_c(const MPI_Status* status,
 int brahma::MPIDFTracer::MPI_Get_elements_x(const MPI_Status* status,
                                             MPI_Datatype datatype,
                                             MPI_Count* count) {
+  ConstEventNameType CATEGORY = "env";
   BRAHMA_MAP_OR_FAIL(MPI_Get_elements_x);
   DFT_LOGGER_START_ALWAYS();
   DFT_LOGGER_UPDATE_TYPE(datatype, MetadataType::MT_VALUE);
@@ -4672,6 +4894,7 @@ int brahma::MPIDFTracer::MPI_Get_elements_x(const MPI_Status* status,
      (defined(BRAHMA_MPI_IMPL_MPICH) &&                                 \
       (BRAHMA_MPI_VERSION >= 400203 && BRAHMA_MPI_VERSION < 400300)))
 int brahma::MPIDFTracer::MPI_Get_hw_resource_info(int* hw_info) {
+  ConstEventNameType CATEGORY = "env";
   BRAHMA_MAP_OR_FAIL(MPI_Get_hw_resource_info);
   DFT_LOGGER_START_ALWAYS();
   int ret = __real_MPI_Get_hw_resource_info(hw_info);
@@ -4691,6 +4914,7 @@ int brahma::MPIDFTracer::MPI_Get_hw_resource_info(int* hw_info) {
        (BRAHMA_MPI_VERSION >= 500006 && BRAHMA_MPI_VERSION < 500100))))
 int brahma::MPIDFTracer::MPI_Get_library_version(char* version,
                                                  int* resultlen) {
+  ConstEventNameType CATEGORY = "env";
   BRAHMA_MAP_OR_FAIL(MPI_Get_library_version);
   DFT_LOGGER_START_ALWAYS();
   int ret = __real_MPI_Get_library_version(version, resultlen);
@@ -4709,6 +4933,7 @@ int brahma::MPIDFTracer::MPI_Get_library_version(char* version,
       ((BRAHMA_MPI_VERSION >= 400106 && BRAHMA_MPI_VERSION < 400200) ||   \
        (BRAHMA_MPI_VERSION >= 500006 && BRAHMA_MPI_VERSION < 500100))))
 int brahma::MPIDFTracer::MPI_Get_processor_name(char* name, int* resultlen) {
+  ConstEventNameType CATEGORY = "env";
   BRAHMA_MAP_OR_FAIL(MPI_Get_processor_name);
   DFT_LOGGER_START_ALWAYS();
   int ret = __real_MPI_Get_processor_name(name, resultlen);
@@ -4727,6 +4952,7 @@ int brahma::MPIDFTracer::MPI_Get_processor_name(char* name, int* resultlen) {
       ((BRAHMA_MPI_VERSION >= 400106 && BRAHMA_MPI_VERSION < 400200) ||   \
        (BRAHMA_MPI_VERSION >= 500006 && BRAHMA_MPI_VERSION < 500100))))
 int brahma::MPIDFTracer::MPI_Get_version(int* version, int* subversion) {
+  ConstEventNameType CATEGORY = "env";
   BRAHMA_MAP_OR_FAIL(MPI_Get_version);
   DFT_LOGGER_START_ALWAYS();
   int ret = __real_MPI_Get_version(version, subversion);
@@ -4747,6 +4973,7 @@ int brahma::MPIDFTracer::MPI_Get_version(int* version, int* subversion) {
 int brahma::MPIDFTracer::MPI_Graph_create(MPI_Comm comm_old, int nnodes,
                                           const int index[], const int edges[],
                                           int reorder, MPI_Comm* comm_graph) {
+  ConstEventNameType CATEGORY = "topology";
   BRAHMA_MAP_OR_FAIL(MPI_Graph_create);
   DFT_LOGGER_START_ALWAYS();
   DFT_LOGGER_UPDATE_TYPE(comm_old, MetadataType::MT_VALUE);
@@ -4770,6 +4997,7 @@ int brahma::MPIDFTracer::MPI_Graph_create(MPI_Comm comm_old, int nnodes,
 int brahma::MPIDFTracer::MPI_Graph_create(int comm_old, int nnodes,
                                           const int index[], const int edges[],
                                           int reorder, int* comm_graph) {
+  ConstEventNameType CATEGORY = "topology";
   BRAHMA_MAP_OR_FAIL(MPI_Graph_create);
   DFT_LOGGER_START_ALWAYS();
   DFT_LOGGER_UPDATE_TYPE(comm_old, MetadataType::MT_VALUE);
@@ -4793,6 +5021,7 @@ int brahma::MPIDFTracer::MPI_Graph_create(int comm_old, int nnodes,
      (BRAHMA_MPI_VERSION >= 400106 && BRAHMA_MPI_VERSION < 400200))
 int brahma::MPIDFTracer::MPI_Graph_get(MPI_Comm comm, int maxindex,
                                        int maxedges, int index[], int edges[]) {
+  ConstEventNameType CATEGORY = "topology";
   BRAHMA_MAP_OR_FAIL(MPI_Graph_get);
   DFT_LOGGER_START_ALWAYS();
   DFT_LOGGER_UPDATE_TYPE(comm, MetadataType::MT_VALUE);
@@ -4814,6 +5043,7 @@ int brahma::MPIDFTracer::MPI_Graph_get(MPI_Comm comm, int maxindex,
       (BRAHMA_MPI_VERSION >= 400106 && BRAHMA_MPI_VERSION < 400200))
 int brahma::MPIDFTracer::MPI_Graph_get(int comm, int maxindex, int maxedges,
                                        int index[], int edges[]) {
+  ConstEventNameType CATEGORY = "topology";
   BRAHMA_MAP_OR_FAIL(MPI_Graph_get);
   DFT_LOGGER_START_ALWAYS();
   DFT_LOGGER_UPDATE_TYPE(comm, MetadataType::MT_VALUE);
@@ -4837,6 +5067,7 @@ int brahma::MPIDFTracer::MPI_Graph_get(int comm, int maxindex, int maxedges,
 int brahma::MPIDFTracer::MPI_Graph_map(MPI_Comm comm, int nnodes,
                                        const int index[], const int edges[],
                                        int* newrank) {
+  ConstEventNameType CATEGORY = "topology";
   BRAHMA_MAP_OR_FAIL(MPI_Graph_map);
   DFT_LOGGER_START_ALWAYS();
   DFT_LOGGER_UPDATE_TYPE(comm, MetadataType::MT_VALUE);
@@ -4857,6 +5088,7 @@ int brahma::MPIDFTracer::MPI_Graph_map(MPI_Comm comm, int nnodes,
       (BRAHMA_MPI_VERSION >= 400106 && BRAHMA_MPI_VERSION < 400200))
 int brahma::MPIDFTracer::MPI_Graph_map(int comm, int nnodes, const int index[],
                                        const int edges[], int* newrank) {
+  ConstEventNameType CATEGORY = "topology";
   BRAHMA_MAP_OR_FAIL(MPI_Graph_map);
   DFT_LOGGER_START_ALWAYS();
   DFT_LOGGER_UPDATE_TYPE(comm, MetadataType::MT_VALUE);
@@ -4879,6 +5111,7 @@ int brahma::MPIDFTracer::MPI_Graph_map(int comm, int nnodes, const int index[],
 int brahma::MPIDFTracer::MPI_Graph_neighbors(MPI_Comm comm, int rank,
                                              int maxneighbors,
                                              int neighbors[]) {
+  ConstEventNameType CATEGORY = "topology";
   BRAHMA_MAP_OR_FAIL(MPI_Graph_neighbors);
   DFT_LOGGER_START_ALWAYS();
   DFT_LOGGER_UPDATE_TYPE(comm, MetadataType::MT_VALUE);
@@ -4901,6 +5134,7 @@ int brahma::MPIDFTracer::MPI_Graph_neighbors(MPI_Comm comm, int rank,
 int brahma::MPIDFTracer::MPI_Graph_neighbors(int comm, int rank,
                                              int maxneighbors,
                                              int neighbors[]) {
+  ConstEventNameType CATEGORY = "topology";
   BRAHMA_MAP_OR_FAIL(MPI_Graph_neighbors);
   DFT_LOGGER_START_ALWAYS();
   DFT_LOGGER_UPDATE_TYPE(comm, MetadataType::MT_VALUE);
@@ -4923,6 +5157,7 @@ int brahma::MPIDFTracer::MPI_Graph_neighbors(int comm, int rank,
      (BRAHMA_MPI_VERSION >= 400106 && BRAHMA_MPI_VERSION < 400200))
 int brahma::MPIDFTracer::MPI_Graph_neighbors_count(MPI_Comm comm, int rank,
                                                    int* nneighbors) {
+  ConstEventNameType CATEGORY = "topology";
   BRAHMA_MAP_OR_FAIL(MPI_Graph_neighbors_count);
   DFT_LOGGER_START_ALWAYS();
   DFT_LOGGER_UPDATE_TYPE(comm, MetadataType::MT_VALUE);
@@ -4943,6 +5178,7 @@ int brahma::MPIDFTracer::MPI_Graph_neighbors_count(MPI_Comm comm, int rank,
       (BRAHMA_MPI_VERSION >= 400106 && BRAHMA_MPI_VERSION < 400200))
 int brahma::MPIDFTracer::MPI_Graph_neighbors_count(int comm, int rank,
                                                    int* nneighbors) {
+  ConstEventNameType CATEGORY = "topology";
   BRAHMA_MAP_OR_FAIL(MPI_Graph_neighbors_count);
   DFT_LOGGER_START_ALWAYS();
   DFT_LOGGER_UPDATE_TYPE(comm, MetadataType::MT_VALUE);
@@ -4964,6 +5200,7 @@ int brahma::MPIDFTracer::MPI_Graph_neighbors_count(int comm, int rank,
      (BRAHMA_MPI_VERSION >= 400106 && BRAHMA_MPI_VERSION < 400200))
 int brahma::MPIDFTracer::MPI_Graphdims_get(MPI_Comm comm, int* nnodes,
                                            int* nedges) {
+  ConstEventNameType CATEGORY = "topology";
   BRAHMA_MAP_OR_FAIL(MPI_Graphdims_get);
   DFT_LOGGER_START_ALWAYS();
   DFT_LOGGER_UPDATE_TYPE(comm, MetadataType::MT_VALUE);
@@ -4982,6 +5219,7 @@ int brahma::MPIDFTracer::MPI_Graphdims_get(MPI_Comm comm, int* nnodes,
     !(defined(BRAHMA_MPI_IMPL_OPENMPI) &&                                  \
       (BRAHMA_MPI_VERSION >= 400106 && BRAHMA_MPI_VERSION < 400200))
 int brahma::MPIDFTracer::MPI_Graphdims_get(int comm, int* nnodes, int* nedges) {
+  ConstEventNameType CATEGORY = "topology";
   BRAHMA_MAP_OR_FAIL(MPI_Graphdims_get);
   DFT_LOGGER_START_ALWAYS();
   DFT_LOGGER_UPDATE_TYPE(comm, MetadataType::MT_VALUE);
@@ -5001,6 +5239,7 @@ int brahma::MPIDFTracer::MPI_Graphdims_get(int comm, int* nnodes, int* nedges) {
       ((BRAHMA_MPI_VERSION >= 400106 && BRAHMA_MPI_VERSION < 400200) ||   \
        (BRAHMA_MPI_VERSION >= 500006 && BRAHMA_MPI_VERSION < 500100))))
 int brahma::MPIDFTracer::MPI_Grequest_complete(MPI_Request request) {
+  ConstEventNameType CATEGORY = "p2p";
   BRAHMA_MAP_OR_FAIL(MPI_Grequest_complete);
   DFT_LOGGER_START_ALWAYS();
   DFT_LOGGER_UPDATE_TYPE(request, MetadataType::MT_VALUE);
@@ -5023,6 +5262,7 @@ int brahma::MPIDFTracer::MPI_Grequest_start(
     MPI_Grequest_query_function* query_fn, MPI_Grequest_free_function* free_fn,
     MPI_Grequest_cancel_function* cancel_fn, void* extra_state,
     MPI_Request* request) {
+  ConstEventNameType CATEGORY = "p2p";
   BRAHMA_MAP_OR_FAIL(MPI_Grequest_start);
   DFT_LOGGER_START_ALWAYS();
   int ret = __real_MPI_Grequest_start(query_fn, free_fn, cancel_fn, extra_state,
@@ -5043,6 +5283,7 @@ int brahma::MPIDFTracer::MPI_Grequest_start(
        (BRAHMA_MPI_VERSION >= 500006 && BRAHMA_MPI_VERSION < 500100))))
 int brahma::MPIDFTracer::MPI_Group_compare(MPI_Group group1, MPI_Group group2,
                                            int* result2) {
+  ConstEventNameType CATEGORY = "comm";
   BRAHMA_MAP_OR_FAIL(MPI_Group_compare);
   DFT_LOGGER_START_ALWAYS();
   DFT_LOGGER_UPDATE_TYPE(group1, MetadataType::MT_VALUE);
@@ -5065,6 +5306,7 @@ int brahma::MPIDFTracer::MPI_Group_compare(MPI_Group group1, MPI_Group group2,
 int brahma::MPIDFTracer::MPI_Group_difference(MPI_Group group1,
                                               MPI_Group group2,
                                               MPI_Group* newgroup) {
+  ConstEventNameType CATEGORY = "comm";
   BRAHMA_MAP_OR_FAIL(MPI_Group_difference);
   DFT_LOGGER_START_ALWAYS();
   DFT_LOGGER_UPDATE_TYPE(group1, MetadataType::MT_VALUE);
@@ -5087,6 +5329,7 @@ int brahma::MPIDFTracer::MPI_Group_difference(MPI_Group group1,
 int brahma::MPIDFTracer::MPI_Group_excl(MPI_Group group, int n,
                                         const int ranks[],
                                         MPI_Group* newgroup) {
+  ConstEventNameType CATEGORY = "comm";
   BRAHMA_MAP_OR_FAIL(MPI_Group_excl);
   DFT_LOGGER_START_ALWAYS();
   DFT_LOGGER_UPDATE_TYPE(group, MetadataType::MT_VALUE);
@@ -5107,6 +5350,7 @@ int brahma::MPIDFTracer::MPI_Group_excl(MPI_Group group, int n,
     (defined(BRAHMA_MPI_IMPL_OPENMPI) &&                                   \
      (BRAHMA_MPI_VERSION >= 400106 && BRAHMA_MPI_VERSION < 400200))
 int brahma::MPIDFTracer::MPI_Group_free(MPI_Group* group) {
+  ConstEventNameType CATEGORY = "comm";
   BRAHMA_MAP_OR_FAIL(MPI_Group_free);
   DFT_LOGGER_START_ALWAYS();
   int ret = __real_MPI_Group_free(group);
@@ -5124,6 +5368,7 @@ int brahma::MPIDFTracer::MPI_Group_free(MPI_Group* group) {
     !(defined(BRAHMA_MPI_IMPL_OPENMPI) &&                                  \
       (BRAHMA_MPI_VERSION >= 400106 && BRAHMA_MPI_VERSION < 400200))
 int brahma::MPIDFTracer::MPI_Group_free(int* group) {
+  ConstEventNameType CATEGORY = "comm";
   BRAHMA_MAP_OR_FAIL(MPI_Group_free);
   DFT_LOGGER_START_ALWAYS();
   int ret = __real_MPI_Group_free(group);
@@ -5144,6 +5389,7 @@ int brahma::MPIDFTracer::MPI_Group_free(int* group) {
 int brahma::MPIDFTracer::MPI_Group_incl(MPI_Group group, int n,
                                         const int ranks[],
                                         MPI_Group* newgroup) {
+  ConstEventNameType CATEGORY = "comm";
   BRAHMA_MAP_OR_FAIL(MPI_Group_incl);
   DFT_LOGGER_START_ALWAYS();
   DFT_LOGGER_UPDATE_TYPE(group, MetadataType::MT_VALUE);
@@ -5164,6 +5410,7 @@ int brahma::MPIDFTracer::MPI_Group_incl(MPI_Group group, int n,
       (BRAHMA_MPI_VERSION >= 400106 && BRAHMA_MPI_VERSION < 400200))
 int brahma::MPIDFTracer::MPI_Group_incl(int group, int n, const int ranks[],
                                         int* newgroup) {
+  ConstEventNameType CATEGORY = "comm";
   BRAHMA_MAP_OR_FAIL(MPI_Group_incl);
   DFT_LOGGER_START_ALWAYS();
   DFT_LOGGER_UPDATE_TYPE(group, MetadataType::MT_VALUE);
@@ -5186,6 +5433,7 @@ int brahma::MPIDFTracer::MPI_Group_incl(int group, int n, const int ranks[],
 int brahma::MPIDFTracer::MPI_Group_intersection(MPI_Group group1,
                                                 MPI_Group group2,
                                                 MPI_Group* newgroup) {
+  ConstEventNameType CATEGORY = "comm";
   BRAHMA_MAP_OR_FAIL(MPI_Group_intersection);
   DFT_LOGGER_START_ALWAYS();
   DFT_LOGGER_UPDATE_TYPE(group1, MetadataType::MT_VALUE);
@@ -5206,6 +5454,7 @@ int brahma::MPIDFTracer::MPI_Group_intersection(MPI_Group group1,
       (BRAHMA_MPI_VERSION >= 400106 && BRAHMA_MPI_VERSION < 400200))
 int brahma::MPIDFTracer::MPI_Group_intersection(int group1, int group2,
                                                 int* newgroup) {
+  ConstEventNameType CATEGORY = "comm";
   BRAHMA_MAP_OR_FAIL(MPI_Group_intersection);
   DFT_LOGGER_START_ALWAYS();
   DFT_LOGGER_UPDATE_TYPE(group1, MetadataType::MT_VALUE);
@@ -5228,6 +5477,7 @@ int brahma::MPIDFTracer::MPI_Group_intersection(int group1, int group2,
 int brahma::MPIDFTracer::MPI_Group_range_excl(MPI_Group group, int n,
                                               int ranges[][3],
                                               MPI_Group* newgroup) {
+  ConstEventNameType CATEGORY = "comm";
   BRAHMA_MAP_OR_FAIL(MPI_Group_range_excl);
   DFT_LOGGER_START_ALWAYS();
   DFT_LOGGER_UPDATE_TYPE(group, MetadataType::MT_VALUE);
@@ -5248,6 +5498,7 @@ int brahma::MPIDFTracer::MPI_Group_range_excl(MPI_Group group, int n,
       (BRAHMA_MPI_VERSION >= 400106 && BRAHMA_MPI_VERSION < 400200))
 int brahma::MPIDFTracer::MPI_Group_range_excl(int group, int n, int ranges[][3],
                                               int* newgroup) {
+  ConstEventNameType CATEGORY = "comm";
   BRAHMA_MAP_OR_FAIL(MPI_Group_range_excl);
   DFT_LOGGER_START_ALWAYS();
   DFT_LOGGER_UPDATE_TYPE(group, MetadataType::MT_VALUE);
@@ -5270,6 +5521,7 @@ int brahma::MPIDFTracer::MPI_Group_range_excl(int group, int n, int ranges[][3],
 int brahma::MPIDFTracer::MPI_Group_range_incl(MPI_Group group, int n,
                                               int ranges[][3],
                                               MPI_Group* newgroup) {
+  ConstEventNameType CATEGORY = "comm";
   BRAHMA_MAP_OR_FAIL(MPI_Group_range_incl);
   DFT_LOGGER_START_ALWAYS();
   DFT_LOGGER_UPDATE_TYPE(group, MetadataType::MT_VALUE);
@@ -5290,6 +5542,7 @@ int brahma::MPIDFTracer::MPI_Group_range_incl(MPI_Group group, int n,
       (BRAHMA_MPI_VERSION >= 400106 && BRAHMA_MPI_VERSION < 400200))
 int brahma::MPIDFTracer::MPI_Group_range_incl(int group, int n, int ranges[][3],
                                               int* newgroup) {
+  ConstEventNameType CATEGORY = "comm";
   BRAHMA_MAP_OR_FAIL(MPI_Group_range_incl);
   DFT_LOGGER_START_ALWAYS();
   DFT_LOGGER_UPDATE_TYPE(group, MetadataType::MT_VALUE);
@@ -5310,6 +5563,7 @@ int brahma::MPIDFTracer::MPI_Group_range_incl(int group, int n, int ranges[][3],
     (defined(BRAHMA_MPI_IMPL_OPENMPI) &&                                   \
      (BRAHMA_MPI_VERSION >= 400106 && BRAHMA_MPI_VERSION < 400200))
 int brahma::MPIDFTracer::MPI_Group_rank(MPI_Group group, int* rank) {
+  ConstEventNameType CATEGORY = "comm";
   BRAHMA_MAP_OR_FAIL(MPI_Group_rank);
   DFT_LOGGER_START_ALWAYS();
   DFT_LOGGER_UPDATE_TYPE(group, MetadataType::MT_VALUE);
@@ -5328,6 +5582,7 @@ int brahma::MPIDFTracer::MPI_Group_rank(MPI_Group group, int* rank) {
     !(defined(BRAHMA_MPI_IMPL_OPENMPI) &&                                  \
       (BRAHMA_MPI_VERSION >= 400106 && BRAHMA_MPI_VERSION < 400200))
 int brahma::MPIDFTracer::MPI_Group_rank(int group, int* rank) {
+  ConstEventNameType CATEGORY = "comm";
   BRAHMA_MAP_OR_FAIL(MPI_Group_rank);
   DFT_LOGGER_START_ALWAYS();
   DFT_LOGGER_UPDATE_TYPE(group, MetadataType::MT_VALUE);
@@ -5347,6 +5602,7 @@ int brahma::MPIDFTracer::MPI_Group_rank(int group, int* rank) {
     (defined(BRAHMA_MPI_IMPL_OPENMPI) &&                                   \
      (BRAHMA_MPI_VERSION >= 400106 && BRAHMA_MPI_VERSION < 400200))
 int brahma::MPIDFTracer::MPI_Group_size(MPI_Group group, int* size) {
+  ConstEventNameType CATEGORY = "comm";
   BRAHMA_MAP_OR_FAIL(MPI_Group_size);
   DFT_LOGGER_START_ALWAYS();
   DFT_LOGGER_UPDATE_TYPE(group, MetadataType::MT_VALUE);
@@ -5365,6 +5621,7 @@ int brahma::MPIDFTracer::MPI_Group_size(MPI_Group group, int* size) {
     !(defined(BRAHMA_MPI_IMPL_OPENMPI) &&                                  \
       (BRAHMA_MPI_VERSION >= 400106 && BRAHMA_MPI_VERSION < 400200))
 int brahma::MPIDFTracer::MPI_Group_size(int group, int* size) {
+  ConstEventNameType CATEGORY = "comm";
   BRAHMA_MAP_OR_FAIL(MPI_Group_size);
   DFT_LOGGER_START_ALWAYS();
   DFT_LOGGER_UPDATE_TYPE(group, MetadataType::MT_VALUE);
@@ -5387,6 +5644,7 @@ int brahma::MPIDFTracer::MPI_Group_translate_ranks(MPI_Group group1, int n,
                                                    const int ranks1[],
                                                    MPI_Group group2,
                                                    int ranks2[]) {
+  ConstEventNameType CATEGORY = "comm";
   BRAHMA_MAP_OR_FAIL(MPI_Group_translate_ranks);
   DFT_LOGGER_START_ALWAYS();
   DFT_LOGGER_UPDATE_TYPE(group1, MetadataType::MT_VALUE);
@@ -5409,6 +5667,7 @@ int brahma::MPIDFTracer::MPI_Group_translate_ranks(MPI_Group group1, int n,
 int brahma::MPIDFTracer::MPI_Group_translate_ranks(int group1, int n,
                                                    const int ranks1[],
                                                    int group2, int ranks2[]) {
+  ConstEventNameType CATEGORY = "comm";
   BRAHMA_MAP_OR_FAIL(MPI_Group_translate_ranks);
   DFT_LOGGER_START_ALWAYS();
   DFT_LOGGER_UPDATE_TYPE(group1, MetadataType::MT_VALUE);
@@ -5431,6 +5690,7 @@ int brahma::MPIDFTracer::MPI_Group_translate_ranks(int group1, int n,
      (BRAHMA_MPI_VERSION >= 400106 && BRAHMA_MPI_VERSION < 400200))
 int brahma::MPIDFTracer::MPI_Group_union(MPI_Group group1, MPI_Group group2,
                                          MPI_Group* newgroup) {
+  ConstEventNameType CATEGORY = "comm";
   BRAHMA_MAP_OR_FAIL(MPI_Group_union);
   DFT_LOGGER_START_ALWAYS();
   DFT_LOGGER_UPDATE_TYPE(group1, MetadataType::MT_VALUE);
@@ -5451,6 +5711,7 @@ int brahma::MPIDFTracer::MPI_Group_union(MPI_Group group1, MPI_Group group2,
       (BRAHMA_MPI_VERSION >= 400106 && BRAHMA_MPI_VERSION < 400200))
 int brahma::MPIDFTracer::MPI_Group_union(int group1, int group2,
                                          int* newgroup) {
+  ConstEventNameType CATEGORY = "comm";
   BRAHMA_MAP_OR_FAIL(MPI_Group_union);
   DFT_LOGGER_START_ALWAYS();
   DFT_LOGGER_UPDATE_TYPE(group1, MetadataType::MT_VALUE);
@@ -5474,6 +5735,7 @@ int brahma::MPIDFTracer::MPI_Iallgather(const void* sendbuf, int sendcount,
                                         MPI_Datatype sendtype, void* recvbuf,
                                         int recvcount, MPI_Datatype recvtype,
                                         MPI_Comm comm, MPI_Request* request) {
+  ConstEventNameType CATEGORY = "collective";
   BRAHMA_MAP_OR_FAIL(MPI_Iallgather);
   DFT_LOGGER_START_ALWAYS();
   DFT_LOGGER_UPDATE_TYPE(sendcount, MetadataType::MT_VALUE);
@@ -5496,6 +5758,7 @@ int brahma::MPIDFTracer::MPI_Iallgather_c(const void* sendbuf,
                                           MPI_Count recvcount,
                                           MPI_Datatype recvtype, MPI_Comm comm,
                                           MPI_Request* request) {
+  ConstEventNameType CATEGORY = "collective";
   BRAHMA_MAP_OR_FAIL(MPI_Iallgather_c);
   DFT_LOGGER_START_ALWAYS();
   DFT_LOGGER_UPDATE_TYPE(sendcount, MetadataType::MT_VALUE);
@@ -5519,6 +5782,7 @@ int brahma::MPIDFTracer::MPI_Iallgather_c(const void* sendbuf,
                                           void* recvbuf, MPI_Count recvcount,
                                           int recvtype, int comm,
                                           int* request) {
+  ConstEventNameType CATEGORY = "collective";
   BRAHMA_MAP_OR_FAIL(MPI_Iallgather_c);
   DFT_LOGGER_START_ALWAYS();
   DFT_LOGGER_UPDATE_TYPE(sendcount, MetadataType::MT_VALUE);
@@ -5548,6 +5812,7 @@ int brahma::MPIDFTracer::MPI_Iallgatherv(const void* sendbuf, int sendcount,
                                          const int displs[],
                                          MPI_Datatype recvtype, MPI_Comm comm,
                                          MPI_Request* request) {
+  ConstEventNameType CATEGORY = "collective";
   BRAHMA_MAP_OR_FAIL(MPI_Iallgatherv);
   DFT_LOGGER_START_ALWAYS();
   DFT_LOGGER_UPDATE_TYPE(sendcount, MetadataType::MT_VALUE);
@@ -5567,6 +5832,7 @@ int brahma::MPIDFTracer::MPI_Iallgatherv_c(
     const void* sendbuf, MPI_Count sendcount, MPI_Datatype sendtype,
     void* recvbuf, const MPI_Count recvcounts[], const MPI_Aint displs[],
     MPI_Datatype recvtype, MPI_Comm comm, MPI_Request* request) {
+  ConstEventNameType CATEGORY = "collective";
   BRAHMA_MAP_OR_FAIL(MPI_Iallgatherv_c);
   DFT_LOGGER_START_ALWAYS();
   DFT_LOGGER_UPDATE_TYPE(sendcount, MetadataType::MT_VALUE);
@@ -5589,6 +5855,7 @@ int brahma::MPIDFTracer::MPI_Iallgatherv_c(
     const void* sendbuf, MPI_Count sendcount, int sendtype, void* recvbuf,
     const MPI_Count recvcounts[], const MPI_Aint displs[], int recvtype,
     int comm, int* request) {
+  ConstEventNameType CATEGORY = "collective";
   BRAHMA_MAP_OR_FAIL(MPI_Iallgatherv_c);
   DFT_LOGGER_START_ALWAYS();
   DFT_LOGGER_UPDATE_TYPE(sendcount, MetadataType::MT_VALUE);
@@ -5616,6 +5883,7 @@ int brahma::MPIDFTracer::MPI_Iallreduce(const void* sendbuf, void* recvbuf,
                                         int count, MPI_Datatype datatype,
                                         MPI_Op op, MPI_Comm comm,
                                         MPI_Request* request) {
+  ConstEventNameType CATEGORY = "collective";
   BRAHMA_MAP_OR_FAIL(MPI_Iallreduce);
   DFT_LOGGER_START_ALWAYS();
   DFT_LOGGER_UPDATE_TYPE(count, MetadataType::MT_VALUE);
@@ -5635,6 +5903,7 @@ int brahma::MPIDFTracer::MPI_Iallreduce_c(const void* sendbuf, void* recvbuf,
                                           MPI_Count count,
                                           MPI_Datatype datatype, MPI_Op op,
                                           MPI_Comm comm, MPI_Request* request) {
+  ConstEventNameType CATEGORY = "collective";
   BRAHMA_MAP_OR_FAIL(MPI_Iallreduce_c);
   DFT_LOGGER_START_ALWAYS();
   DFT_LOGGER_UPDATE_TYPE(count, MetadataType::MT_VALUE);
@@ -5655,6 +5924,7 @@ int brahma::MPIDFTracer::MPI_Iallreduce_c(const void* sendbuf, void* recvbuf,
 int brahma::MPIDFTracer::MPI_Iallreduce_c(const void* sendbuf, void* recvbuf,
                                           MPI_Count count, int datatype, int op,
                                           int comm, int* request) {
+  ConstEventNameType CATEGORY = "collective";
   BRAHMA_MAP_OR_FAIL(MPI_Iallreduce_c);
   DFT_LOGGER_START_ALWAYS();
   DFT_LOGGER_UPDATE_TYPE(count, MetadataType::MT_VALUE);
@@ -5681,6 +5951,7 @@ int brahma::MPIDFTracer::MPI_Ialltoall(const void* sendbuf, int sendcount,
                                        MPI_Datatype sendtype, void* recvbuf,
                                        int recvcount, MPI_Datatype recvtype,
                                        MPI_Comm comm, MPI_Request* request) {
+  ConstEventNameType CATEGORY = "collective";
   BRAHMA_MAP_OR_FAIL(MPI_Ialltoall);
   DFT_LOGGER_START_ALWAYS();
   DFT_LOGGER_UPDATE_TYPE(sendcount, MetadataType::MT_VALUE);
@@ -5703,6 +5974,7 @@ int brahma::MPIDFTracer::MPI_Ialltoall_c(const void* sendbuf,
                                          MPI_Count recvcount,
                                          MPI_Datatype recvtype, MPI_Comm comm,
                                          MPI_Request* request) {
+  ConstEventNameType CATEGORY = "collective";
   BRAHMA_MAP_OR_FAIL(MPI_Ialltoall_c);
   DFT_LOGGER_START_ALWAYS();
   DFT_LOGGER_UPDATE_TYPE(sendcount, MetadataType::MT_VALUE);
@@ -5725,6 +5997,7 @@ int brahma::MPIDFTracer::MPI_Ialltoall_c(const void* sendbuf,
                                          MPI_Count sendcount, int sendtype,
                                          void* recvbuf, MPI_Count recvcount,
                                          int recvtype, int comm, int* request) {
+  ConstEventNameType CATEGORY = "collective";
   BRAHMA_MAP_OR_FAIL(MPI_Ialltoall_c);
   DFT_LOGGER_START_ALWAYS();
   DFT_LOGGER_UPDATE_TYPE(sendcount, MetadataType::MT_VALUE);
@@ -5753,6 +6026,7 @@ int brahma::MPIDFTracer::MPI_Ialltoallv(
     MPI_Datatype sendtype, void* recvbuf, const int recvcounts[],
     const int rdispls[], MPI_Datatype recvtype, MPI_Comm comm,
     MPI_Request* request) {
+  ConstEventNameType CATEGORY = "collective";
   BRAHMA_MAP_OR_FAIL(MPI_Ialltoallv);
   DFT_LOGGER_START_ALWAYS();
   DFT_LOGGER_UPDATE_TYPE(sendtype, MetadataType::MT_VALUE);
@@ -5773,6 +6047,7 @@ int brahma::MPIDFTracer::MPI_Ialltoallv_c(
     MPI_Datatype sendtype, void* recvbuf, const MPI_Count recvcounts[],
     const MPI_Aint rdispls[], MPI_Datatype recvtype, MPI_Comm comm,
     MPI_Request* request) {
+  ConstEventNameType CATEGORY = "collective";
   BRAHMA_MAP_OR_FAIL(MPI_Ialltoallv_c);
   DFT_LOGGER_START_ALWAYS();
   DFT_LOGGER_UPDATE_TYPE(sendtype, MetadataType::MT_VALUE);
@@ -5794,6 +6069,7 @@ int brahma::MPIDFTracer::MPI_Ialltoallv_c(
     const void* sendbuf, const MPI_Count sendcounts[], const MPI_Aint sdispls[],
     int sendtype, void* recvbuf, const MPI_Count recvcounts[],
     const MPI_Aint rdispls[], int recvtype, int comm, int* request) {
+  ConstEventNameType CATEGORY = "collective";
   BRAHMA_MAP_OR_FAIL(MPI_Ialltoallv_c);
   DFT_LOGGER_START_ALWAYS();
   DFT_LOGGER_UPDATE_TYPE(sendtype, MetadataType::MT_VALUE);
@@ -5821,6 +6097,7 @@ int brahma::MPIDFTracer::MPI_Ialltoallw(
     const MPI_Datatype sendtypes[], void* recvbuf, const int recvcounts[],
     const int rdispls[], const MPI_Datatype recvtypes[], MPI_Comm comm,
     MPI_Request* request) {
+  ConstEventNameType CATEGORY = "collective";
   BRAHMA_MAP_OR_FAIL(MPI_Ialltoallw);
   DFT_LOGGER_START_ALWAYS();
   DFT_LOGGER_UPDATE_TYPE(comm, MetadataType::MT_VALUE);
@@ -5839,6 +6116,7 @@ int brahma::MPIDFTracer::MPI_Ialltoallw_c(
     const MPI_Datatype sendtypes[], void* recvbuf, const MPI_Count recvcounts[],
     const MPI_Aint rdispls[], const MPI_Datatype recvtypes[], MPI_Comm comm,
     MPI_Request* request) {
+  ConstEventNameType CATEGORY = "collective";
   BRAHMA_MAP_OR_FAIL(MPI_Ialltoallw_c);
   DFT_LOGGER_START_ALWAYS();
   DFT_LOGGER_UPDATE_TYPE(comm, MetadataType::MT_VALUE);
@@ -5858,6 +6136,7 @@ int brahma::MPIDFTracer::MPI_Ialltoallw_c(
     const void* sendbuf, const MPI_Count sendcounts[], const MPI_Aint sdispls[],
     const int sendtypes[], void* recvbuf, const MPI_Count recvcounts[],
     const MPI_Aint rdispls[], const int recvtypes[], int comm, int* request) {
+  ConstEventNameType CATEGORY = "collective";
   BRAHMA_MAP_OR_FAIL(MPI_Ialltoallw_c);
   DFT_LOGGER_START_ALWAYS();
   DFT_LOGGER_UPDATE_TYPE(comm, MetadataType::MT_VALUE);
@@ -5879,6 +6158,7 @@ int brahma::MPIDFTracer::MPI_Ialltoallw_c(
       ((BRAHMA_MPI_VERSION >= 400106 && BRAHMA_MPI_VERSION < 400200) ||   \
        (BRAHMA_MPI_VERSION >= 500006 && BRAHMA_MPI_VERSION < 500100))))
 int brahma::MPIDFTracer::MPI_Ibarrier(MPI_Comm comm, MPI_Request* request) {
+  ConstEventNameType CATEGORY = "collective";
   BRAHMA_MAP_OR_FAIL(MPI_Ibarrier);
   DFT_LOGGER_START_ALWAYS();
   DFT_LOGGER_UPDATE_TYPE(comm, MetadataType::MT_VALUE);
@@ -5900,6 +6180,7 @@ int brahma::MPIDFTracer::MPI_Ibarrier(MPI_Comm comm, MPI_Request* request) {
 int brahma::MPIDFTracer::MPI_Ibcast(void* buffer, int count,
                                     MPI_Datatype datatype, int root,
                                     MPI_Comm comm, MPI_Request* request) {
+  ConstEventNameType CATEGORY = "collective";
   BRAHMA_MAP_OR_FAIL(MPI_Ibcast);
   DFT_LOGGER_START_ALWAYS();
   DFT_LOGGER_UPDATE_TYPE(count, MetadataType::MT_VALUE);
@@ -5917,6 +6198,7 @@ int brahma::MPIDFTracer::MPI_Ibcast(void* buffer, int count,
 int brahma::MPIDFTracer::MPI_Ibcast_c(void* buffer, MPI_Count count,
                                       MPI_Datatype datatype, int root,
                                       MPI_Comm comm, MPI_Request* request) {
+  ConstEventNameType CATEGORY = "collective";
   BRAHMA_MAP_OR_FAIL(MPI_Ibcast_c);
   DFT_LOGGER_START_ALWAYS();
   DFT_LOGGER_UPDATE_TYPE(count, MetadataType::MT_VALUE);
@@ -5936,6 +6218,7 @@ int brahma::MPIDFTracer::MPI_Ibcast_c(void* buffer, MPI_Count count,
 int brahma::MPIDFTracer::MPI_Ibcast_c(void* buffer, MPI_Count count,
                                       int datatype, int root, int comm,
                                       int* request) {
+  ConstEventNameType CATEGORY = "collective";
   BRAHMA_MAP_OR_FAIL(MPI_Ibcast_c);
   DFT_LOGGER_START_ALWAYS();
   DFT_LOGGER_UPDATE_TYPE(count, MetadataType::MT_VALUE);
@@ -5960,6 +6243,7 @@ int brahma::MPIDFTracer::MPI_Ibcast_c(void* buffer, MPI_Count count,
 int brahma::MPIDFTracer::MPI_Ibsend(const void* buf, int count,
                                     MPI_Datatype datatype, int dest, int tag,
                                     MPI_Comm comm, MPI_Request* request) {
+  ConstEventNameType CATEGORY = "p2p";
   BRAHMA_MAP_OR_FAIL(MPI_Ibsend);
   DFT_LOGGER_START_ALWAYS();
   DFT_LOGGER_UPDATE_TYPE(count, MetadataType::MT_VALUE);
@@ -5984,6 +6268,7 @@ int brahma::MPIDFTracer::MPI_Ibsend(const void* buf, int count,
 int brahma::MPIDFTracer::MPI_Ibsend(const void* buf, int count,
                                     MPI_Datatype datatype, int dest, int tag,
                                     int comm, MPI_Request* request) {
+  ConstEventNameType CATEGORY = "p2p";
   BRAHMA_MAP_OR_FAIL(MPI_Ibsend);
   DFT_LOGGER_START_ALWAYS();
   DFT_LOGGER_UPDATE_TYPE(count, MetadataType::MT_VALUE);
@@ -6002,6 +6287,7 @@ int brahma::MPIDFTracer::MPI_Ibsend(const void* buf, int count,
 int brahma::MPIDFTracer::MPI_Ibsend_c(const void* buf, MPI_Count count,
                                       MPI_Datatype datatype, int dest, int tag,
                                       MPI_Comm comm, MPI_Request* request) {
+  ConstEventNameType CATEGORY = "p2p";
   BRAHMA_MAP_OR_FAIL(MPI_Ibsend_c);
   DFT_LOGGER_START_ALWAYS();
   DFT_LOGGER_UPDATE_TYPE(count, MetadataType::MT_VALUE);
@@ -6022,6 +6308,7 @@ int brahma::MPIDFTracer::MPI_Ibsend_c(const void* buf, MPI_Count count,
 int brahma::MPIDFTracer::MPI_Ibsend_c(const void* buf, MPI_Count count,
                                       int datatype, int dest, int tag, int comm,
                                       int* request) {
+  ConstEventNameType CATEGORY = "p2p";
   BRAHMA_MAP_OR_FAIL(MPI_Ibsend_c);
   DFT_LOGGER_START_ALWAYS();
   DFT_LOGGER_UPDATE_TYPE(count, MetadataType::MT_VALUE);
@@ -6048,6 +6335,7 @@ int brahma::MPIDFTracer::MPI_Iexscan(const void* sendbuf, void* recvbuf,
                                      int count, MPI_Datatype datatype,
                                      MPI_Op op, MPI_Comm comm,
                                      MPI_Request* request) {
+  ConstEventNameType CATEGORY = "collective";
   BRAHMA_MAP_OR_FAIL(MPI_Iexscan);
   DFT_LOGGER_START_ALWAYS();
   DFT_LOGGER_UPDATE_TYPE(count, MetadataType::MT_VALUE);
@@ -6073,6 +6361,7 @@ int brahma::MPIDFTracer::MPI_Iexscan(const void* sendbuf, void* recvbuf,
                                      int count, MPI_Datatype datatype,
                                      MPI_Op op, int comm,
                                      MPI_Request* request) {
+  ConstEventNameType CATEGORY = "collective";
   BRAHMA_MAP_OR_FAIL(MPI_Iexscan);
   DFT_LOGGER_START_ALWAYS();
   DFT_LOGGER_UPDATE_TYPE(count, MetadataType::MT_VALUE);
@@ -6092,6 +6381,7 @@ int brahma::MPIDFTracer::MPI_Iexscan_c(const void* sendbuf, void* recvbuf,
                                        MPI_Count count, MPI_Datatype datatype,
                                        MPI_Op op, MPI_Comm comm,
                                        MPI_Request* request) {
+  ConstEventNameType CATEGORY = "collective";
   BRAHMA_MAP_OR_FAIL(MPI_Iexscan_c);
   DFT_LOGGER_START_ALWAYS();
   DFT_LOGGER_UPDATE_TYPE(count, MetadataType::MT_VALUE);
@@ -6112,6 +6402,7 @@ int brahma::MPIDFTracer::MPI_Iexscan_c(const void* sendbuf, void* recvbuf,
 int brahma::MPIDFTracer::MPI_Iexscan_c(const void* sendbuf, void* recvbuf,
                                        MPI_Count count, int datatype, int op,
                                        int comm, int* request) {
+  ConstEventNameType CATEGORY = "collective";
   BRAHMA_MAP_OR_FAIL(MPI_Iexscan_c);
   DFT_LOGGER_START_ALWAYS();
   DFT_LOGGER_UPDATE_TYPE(count, MetadataType::MT_VALUE);
@@ -6139,6 +6430,7 @@ int brahma::MPIDFTracer::MPI_Igather(const void* sendbuf, int sendcount,
                                      int recvcount, MPI_Datatype recvtype,
                                      int root, MPI_Comm comm,
                                      MPI_Request* request) {
+  ConstEventNameType CATEGORY = "collective";
   BRAHMA_MAP_OR_FAIL(MPI_Igather);
   DFT_LOGGER_START_ALWAYS();
   DFT_LOGGER_UPDATE_TYPE(sendcount, MetadataType::MT_VALUE);
@@ -6166,6 +6458,7 @@ int brahma::MPIDFTracer::MPI_Igather(const void* sendbuf, int sendcount,
                                      MPI_Datatype sendtype, void* recvbuf,
                                      int recvcount, MPI_Datatype recvtype,
                                      int root, int comm, MPI_Request* request) {
+  ConstEventNameType CATEGORY = "collective";
   BRAHMA_MAP_OR_FAIL(MPI_Igather);
   DFT_LOGGER_START_ALWAYS();
   DFT_LOGGER_UPDATE_TYPE(sendcount, MetadataType::MT_VALUE);
@@ -6188,6 +6481,7 @@ int brahma::MPIDFTracer::MPI_Igather_c(const void* sendbuf, MPI_Count sendcount,
                                        MPI_Count recvcount,
                                        MPI_Datatype recvtype, int root,
                                        MPI_Comm comm, MPI_Request* request) {
+  ConstEventNameType CATEGORY = "collective";
   BRAHMA_MAP_OR_FAIL(MPI_Igather_c);
   DFT_LOGGER_START_ALWAYS();
   DFT_LOGGER_UPDATE_TYPE(sendcount, MetadataType::MT_VALUE);
@@ -6211,6 +6505,7 @@ int brahma::MPIDFTracer::MPI_Igather_c(const void* sendbuf, MPI_Count sendcount,
                                        int sendtype, void* recvbuf,
                                        MPI_Count recvcount, int recvtype,
                                        int root, int comm, int* request) {
+  ConstEventNameType CATEGORY = "collective";
   BRAHMA_MAP_OR_FAIL(MPI_Igather_c);
   DFT_LOGGER_START_ALWAYS();
   DFT_LOGGER_UPDATE_TYPE(sendcount, MetadataType::MT_VALUE);
@@ -6241,6 +6536,7 @@ int brahma::MPIDFTracer::MPI_Igatherv(const void* sendbuf, int sendcount,
                                       const int displs[], MPI_Datatype recvtype,
                                       int root, MPI_Comm comm,
                                       MPI_Request* request) {
+  ConstEventNameType CATEGORY = "collective";
   BRAHMA_MAP_OR_FAIL(MPI_Igatherv);
   DFT_LOGGER_START_ALWAYS();
   DFT_LOGGER_UPDATE_TYPE(sendcount, MetadataType::MT_VALUE);
@@ -6270,6 +6566,7 @@ int brahma::MPIDFTracer::MPI_Igatherv(const void* sendbuf, int sendcount,
                                       const int displs[], MPI_Datatype recvtype,
                                       int root, int comm,
                                       MPI_Request* request) {
+  ConstEventNameType CATEGORY = "collective";
   BRAHMA_MAP_OR_FAIL(MPI_Igatherv);
   DFT_LOGGER_START_ALWAYS();
   DFT_LOGGER_UPDATE_TYPE(sendcount, MetadataType::MT_VALUE);
@@ -6291,6 +6588,7 @@ int brahma::MPIDFTracer::MPI_Igatherv_c(
     const void* sendbuf, MPI_Count sendcount, MPI_Datatype sendtype,
     void* recvbuf, const MPI_Count recvcounts[], const MPI_Aint displs[],
     MPI_Datatype recvtype, int root, MPI_Comm comm, MPI_Request* request) {
+  ConstEventNameType CATEGORY = "collective";
   BRAHMA_MAP_OR_FAIL(MPI_Igatherv_c);
   DFT_LOGGER_START_ALWAYS();
   DFT_LOGGER_UPDATE_TYPE(sendcount, MetadataType::MT_VALUE);
@@ -6316,6 +6614,7 @@ int brahma::MPIDFTracer::MPI_Igatherv_c(const void* sendbuf,
                                         const MPI_Count recvcounts[],
                                         const MPI_Aint displs[], int recvtype,
                                         int root, int comm, int* request) {
+  ConstEventNameType CATEGORY = "collective";
   BRAHMA_MAP_OR_FAIL(MPI_Igatherv_c);
   DFT_LOGGER_START_ALWAYS();
   DFT_LOGGER_UPDATE_TYPE(sendcount, MetadataType::MT_VALUE);
@@ -6343,6 +6642,7 @@ int brahma::MPIDFTracer::MPI_Igatherv_c(const void* sendbuf,
 int brahma::MPIDFTracer::MPI_Improbe(int source, int tag, MPI_Comm comm,
                                      int* flag, MPI_Message* message,
                                      MPI_Status* status) {
+  ConstEventNameType CATEGORY = "p2p";
   BRAHMA_MAP_OR_FAIL(MPI_Improbe);
   DFT_LOGGER_START_ALWAYS();
   DFT_LOGGER_UPDATE_TYPE(source, MetadataType::MT_VALUE);
@@ -6364,6 +6664,7 @@ int brahma::MPIDFTracer::MPI_Improbe(int source, int tag, MPI_Comm comm,
       (BRAHMA_MPI_VERSION >= 400106 && BRAHMA_MPI_VERSION < 400200))
 int brahma::MPIDFTracer::MPI_Improbe(int source, int tag, int comm, int* flag,
                                      MPI_Message* message, MPI_Status* status) {
+  ConstEventNameType CATEGORY = "p2p";
   BRAHMA_MAP_OR_FAIL(MPI_Improbe);
   DFT_LOGGER_START_ALWAYS();
   DFT_LOGGER_UPDATE_TYPE(source, MetadataType::MT_VALUE);
@@ -6387,6 +6688,7 @@ int brahma::MPIDFTracer::MPI_Improbe(int source, int tag, int comm, int* flag,
 int brahma::MPIDFTracer::MPI_Imrecv(void* buf, int count, MPI_Datatype type,
                                     MPI_Message* message,
                                     MPI_Request* request) {
+  ConstEventNameType CATEGORY = "p2p";
   BRAHMA_MAP_OR_FAIL(MPI_Imrecv);
   DFT_LOGGER_START_ALWAYS();
   DFT_LOGGER_UPDATE_TYPE(count, MetadataType::MT_VALUE);
@@ -6403,6 +6705,7 @@ int brahma::MPIDFTracer::MPI_Imrecv_c(void* buf, MPI_Count count,
                                       MPI_Datatype datatype,
                                       MPI_Message* message,
                                       MPI_Request* request) {
+  ConstEventNameType CATEGORY = "p2p";
   BRAHMA_MAP_OR_FAIL(MPI_Imrecv_c);
   DFT_LOGGER_START_ALWAYS();
   DFT_LOGGER_UPDATE_TYPE(count, MetadataType::MT_VALUE);
@@ -6419,6 +6722,7 @@ int brahma::MPIDFTracer::MPI_Imrecv_c(void* buf, MPI_Count count,
       (BRAHMA_MPI_VERSION >= 400203 && BRAHMA_MPI_VERSION < 400300)))
 int brahma::MPIDFTracer::MPI_Imrecv_c(void* buf, MPI_Count count, int datatype,
                                       int* message, int* request) {
+  ConstEventNameType CATEGORY = "p2p";
   BRAHMA_MAP_OR_FAIL(MPI_Imrecv_c);
   DFT_LOGGER_START_ALWAYS();
   DFT_LOGGER_UPDATE_TYPE(count, MetadataType::MT_VALUE);
@@ -6441,6 +6745,7 @@ int brahma::MPIDFTracer::MPI_Imrecv_c(void* buf, MPI_Count count, int datatype,
 int brahma::MPIDFTracer::MPI_Ineighbor_allgather(
     const void* sendbuf, int sendcount, MPI_Datatype sendtype, void* recvbuf,
     int recvcount, MPI_Datatype recvtype, MPI_Comm comm, MPI_Request* request) {
+  ConstEventNameType CATEGORY = "collective";
   BRAHMA_MAP_OR_FAIL(MPI_Ineighbor_allgather);
   DFT_LOGGER_START_ALWAYS();
   DFT_LOGGER_UPDATE_TYPE(sendcount, MetadataType::MT_VALUE);
@@ -6467,6 +6772,7 @@ int brahma::MPIDFTracer::MPI_Ineighbor_allgather(
 int brahma::MPIDFTracer::MPI_Ineighbor_allgather(
     const void* sendbuf, int sendcount, MPI_Datatype sendtype, void* recvbuf,
     int recvcount, MPI_Datatype recvtype, int comm, MPI_Request* request) {
+  ConstEventNameType CATEGORY = "collective";
   BRAHMA_MAP_OR_FAIL(MPI_Ineighbor_allgather);
   DFT_LOGGER_START_ALWAYS();
   DFT_LOGGER_UPDATE_TYPE(sendcount, MetadataType::MT_VALUE);
@@ -6488,6 +6794,7 @@ int brahma::MPIDFTracer::MPI_Ineighbor_allgather_c(
     const void* sendbuf, MPI_Count sendcount, MPI_Datatype sendtype,
     void* recvbuf, MPI_Count recvcount, MPI_Datatype recvtype, MPI_Comm comm,
     MPI_Request* request) {
+  ConstEventNameType CATEGORY = "collective";
   BRAHMA_MAP_OR_FAIL(MPI_Ineighbor_allgather_c);
   DFT_LOGGER_START_ALWAYS();
   DFT_LOGGER_UPDATE_TYPE(sendcount, MetadataType::MT_VALUE);
@@ -6510,6 +6817,7 @@ int brahma::MPIDFTracer::MPI_Ineighbor_allgather_c(
 int brahma::MPIDFTracer::MPI_Ineighbor_allgather_c(
     const void* sendbuf, MPI_Count sendcount, int sendtype, void* recvbuf,
     MPI_Count recvcount, int recvtype, int comm, int* request) {
+  ConstEventNameType CATEGORY = "collective";
   BRAHMA_MAP_OR_FAIL(MPI_Ineighbor_allgather_c);
   DFT_LOGGER_START_ALWAYS();
   DFT_LOGGER_UPDATE_TYPE(sendcount, MetadataType::MT_VALUE);
@@ -6538,6 +6846,7 @@ int brahma::MPIDFTracer::MPI_Ineighbor_allgatherv(
     const void* sendbuf, int sendcount, MPI_Datatype sendtype, void* recvbuf,
     const int recvcounts[], const int displs[], MPI_Datatype recvtype,
     MPI_Comm comm, MPI_Request* request) {
+  ConstEventNameType CATEGORY = "collective";
   BRAHMA_MAP_OR_FAIL(MPI_Ineighbor_allgatherv);
   DFT_LOGGER_START_ALWAYS();
   DFT_LOGGER_UPDATE_TYPE(sendcount, MetadataType::MT_VALUE);
@@ -6564,6 +6873,7 @@ int brahma::MPIDFTracer::MPI_Ineighbor_allgatherv(
     const void* sendbuf, int sendcount, MPI_Datatype sendtype, void* recvbuf,
     const int recvcounts[], const int displs[], MPI_Datatype recvtype, int comm,
     MPI_Request* request) {
+  ConstEventNameType CATEGORY = "collective";
   BRAHMA_MAP_OR_FAIL(MPI_Ineighbor_allgatherv);
   DFT_LOGGER_START_ALWAYS();
   DFT_LOGGER_UPDATE_TYPE(sendcount, MetadataType::MT_VALUE);
@@ -6584,6 +6894,7 @@ int brahma::MPIDFTracer::MPI_Ineighbor_allgatherv_c(
     const void* sendbuf, MPI_Count sendcount, MPI_Datatype sendtype,
     void* recvbuf, const MPI_Count recvcounts[], const MPI_Aint displs[],
     MPI_Datatype recvtype, MPI_Comm comm, MPI_Request* request) {
+  ConstEventNameType CATEGORY = "collective";
   BRAHMA_MAP_OR_FAIL(MPI_Ineighbor_allgatherv_c);
   DFT_LOGGER_START_ALWAYS();
   DFT_LOGGER_UPDATE_TYPE(sendcount, MetadataType::MT_VALUE);
@@ -6606,6 +6917,7 @@ int brahma::MPIDFTracer::MPI_Ineighbor_allgatherv_c(
     const void* sendbuf, MPI_Count sendcount, int sendtype, void* recvbuf,
     const MPI_Count recvcounts[], const MPI_Aint displs[], int recvtype,
     int comm, int* request) {
+  ConstEventNameType CATEGORY = "collective";
   BRAHMA_MAP_OR_FAIL(MPI_Ineighbor_allgatherv_c);
   DFT_LOGGER_START_ALWAYS();
   DFT_LOGGER_UPDATE_TYPE(sendcount, MetadataType::MT_VALUE);
@@ -6632,6 +6944,7 @@ int brahma::MPIDFTracer::MPI_Ineighbor_allgatherv_c(
 int brahma::MPIDFTracer::MPI_Ineighbor_alltoall(
     const void* sendbuf, int sendcount, MPI_Datatype sendtype, void* recvbuf,
     int recvcount, MPI_Datatype recvtype, MPI_Comm comm, MPI_Request* request) {
+  ConstEventNameType CATEGORY = "collective";
   BRAHMA_MAP_OR_FAIL(MPI_Ineighbor_alltoall);
   DFT_LOGGER_START_ALWAYS();
   DFT_LOGGER_UPDATE_TYPE(sendcount, MetadataType::MT_VALUE);
@@ -6657,6 +6970,7 @@ int brahma::MPIDFTracer::MPI_Ineighbor_alltoall(
 int brahma::MPIDFTracer::MPI_Ineighbor_alltoall(
     const void* sendbuf, int sendcount, MPI_Datatype sendtype, void* recvbuf,
     int recvcount, MPI_Datatype recvtype, int comm, MPI_Request* request) {
+  ConstEventNameType CATEGORY = "collective";
   BRAHMA_MAP_OR_FAIL(MPI_Ineighbor_alltoall);
   DFT_LOGGER_START_ALWAYS();
   DFT_LOGGER_UPDATE_TYPE(sendcount, MetadataType::MT_VALUE);
@@ -6677,6 +6991,7 @@ int brahma::MPIDFTracer::MPI_Ineighbor_alltoall_c(
     const void* sendbuf, MPI_Count sendcount, MPI_Datatype sendtype,
     void* recvbuf, MPI_Count recvcount, MPI_Datatype recvtype, MPI_Comm comm,
     MPI_Request* request) {
+  ConstEventNameType CATEGORY = "collective";
   BRAHMA_MAP_OR_FAIL(MPI_Ineighbor_alltoall_c);
   DFT_LOGGER_START_ALWAYS();
   DFT_LOGGER_UPDATE_TYPE(sendcount, MetadataType::MT_VALUE);
@@ -6699,6 +7014,7 @@ int brahma::MPIDFTracer::MPI_Ineighbor_alltoall_c(
 int brahma::MPIDFTracer::MPI_Ineighbor_alltoall_c(
     const void* sendbuf, MPI_Count sendcount, int sendtype, void* recvbuf,
     MPI_Count recvcount, int recvtype, int comm, int* request) {
+  ConstEventNameType CATEGORY = "collective";
   BRAHMA_MAP_OR_FAIL(MPI_Ineighbor_alltoall_c);
   DFT_LOGGER_START_ALWAYS();
   DFT_LOGGER_UPDATE_TYPE(sendcount, MetadataType::MT_VALUE);
@@ -6728,6 +7044,7 @@ int brahma::MPIDFTracer::MPI_Ineighbor_alltoallv(
     MPI_Datatype sendtype, void* recvbuf, const int recvcounts[],
     const int rdispls[], MPI_Datatype recvtype, MPI_Comm comm,
     MPI_Request* request) {
+  ConstEventNameType CATEGORY = "collective";
   BRAHMA_MAP_OR_FAIL(MPI_Ineighbor_alltoallv);
   DFT_LOGGER_START_ALWAYS();
   DFT_LOGGER_UPDATE_TYPE(sendtype, MetadataType::MT_VALUE);
@@ -6754,6 +7071,7 @@ int brahma::MPIDFTracer::MPI_Ineighbor_alltoallv(
     MPI_Datatype sendtype, void* recvbuf, const int recvcounts[],
     const int rdispls[], MPI_Datatype recvtype, int comm,
     MPI_Request* request) {
+  ConstEventNameType CATEGORY = "collective";
   BRAHMA_MAP_OR_FAIL(MPI_Ineighbor_alltoallv);
   DFT_LOGGER_START_ALWAYS();
   DFT_LOGGER_UPDATE_TYPE(sendtype, MetadataType::MT_VALUE);
@@ -6774,6 +7092,7 @@ int brahma::MPIDFTracer::MPI_Ineighbor_alltoallv_c(
     MPI_Datatype sendtype, void* recvbuf, const MPI_Count recvcounts[],
     const MPI_Aint rdispls[], MPI_Datatype recvtype, MPI_Comm comm,
     MPI_Request* request) {
+  ConstEventNameType CATEGORY = "collective";
   BRAHMA_MAP_OR_FAIL(MPI_Ineighbor_alltoallv_c);
   DFT_LOGGER_START_ALWAYS();
   DFT_LOGGER_UPDATE_TYPE(sendtype, MetadataType::MT_VALUE);
@@ -6795,6 +7114,7 @@ int brahma::MPIDFTracer::MPI_Ineighbor_alltoallv_c(
     const void* sendbuf, const MPI_Count sendcounts[], const MPI_Aint sdispls[],
     int sendtype, void* recvbuf, const MPI_Count recvcounts[],
     const MPI_Aint rdispls[], int recvtype, int comm, int* request) {
+  ConstEventNameType CATEGORY = "collective";
   BRAHMA_MAP_OR_FAIL(MPI_Ineighbor_alltoallv_c);
   DFT_LOGGER_START_ALWAYS();
   DFT_LOGGER_UPDATE_TYPE(sendtype, MetadataType::MT_VALUE);
@@ -6822,6 +7142,7 @@ int brahma::MPIDFTracer::MPI_Ineighbor_alltoallw(
     const MPI_Datatype sendtypes[], void* recvbuf, const int recvcounts[],
     const MPI_Aint rdispls[], const MPI_Datatype recvtypes[], MPI_Comm comm,
     MPI_Request* request) {
+  ConstEventNameType CATEGORY = "collective";
   BRAHMA_MAP_OR_FAIL(MPI_Ineighbor_alltoallw);
   DFT_LOGGER_START_ALWAYS();
   DFT_LOGGER_UPDATE_TYPE(comm, MetadataType::MT_VALUE);
@@ -6846,6 +7167,7 @@ int brahma::MPIDFTracer::MPI_Ineighbor_alltoallw(
     const MPI_Datatype sendtypes[], void* recvbuf, const int recvcounts[],
     const MPI_Aint rdispls[], const MPI_Datatype recvtypes[], int comm,
     MPI_Request* request) {
+  ConstEventNameType CATEGORY = "collective";
   BRAHMA_MAP_OR_FAIL(MPI_Ineighbor_alltoallw);
   DFT_LOGGER_START_ALWAYS();
   DFT_LOGGER_UPDATE_TYPE(comm, MetadataType::MT_VALUE);
@@ -6864,6 +7186,7 @@ int brahma::MPIDFTracer::MPI_Ineighbor_alltoallw_c(
     const MPI_Datatype sendtypes[], void* recvbuf, const MPI_Count recvcounts[],
     const MPI_Aint rdispls[], const MPI_Datatype recvtypes[], MPI_Comm comm,
     MPI_Request* request) {
+  ConstEventNameType CATEGORY = "collective";
   BRAHMA_MAP_OR_FAIL(MPI_Ineighbor_alltoallw_c);
   DFT_LOGGER_START_ALWAYS();
   DFT_LOGGER_UPDATE_TYPE(comm, MetadataType::MT_VALUE);
@@ -6883,6 +7206,7 @@ int brahma::MPIDFTracer::MPI_Ineighbor_alltoallw_c(
     const void* sendbuf, const MPI_Count sendcounts[], const MPI_Aint sdispls[],
     const int sendtypes[], void* recvbuf, const MPI_Count recvcounts[],
     const MPI_Aint rdispls[], const int recvtypes[], int comm, int* request) {
+  ConstEventNameType CATEGORY = "collective";
   BRAHMA_MAP_OR_FAIL(MPI_Ineighbor_alltoallw_c);
   DFT_LOGGER_START_ALWAYS();
   DFT_LOGGER_UPDATE_TYPE(comm, MetadataType::MT_VALUE);
@@ -6904,6 +7228,7 @@ int brahma::MPIDFTracer::MPI_Ineighbor_alltoallw_c(
       ((BRAHMA_MPI_VERSION >= 400106 && BRAHMA_MPI_VERSION < 400200) ||   \
        (BRAHMA_MPI_VERSION >= 500006 && BRAHMA_MPI_VERSION < 500100))))
 int brahma::MPIDFTracer::MPI_Info_create(MPI_Info* info) {
+  ConstEventNameType CATEGORY = "metadata";
   BRAHMA_MAP_OR_FAIL(MPI_Info_create);
   DFT_LOGGER_START_ALWAYS();
   int ret = __real_MPI_Info_create(info);
@@ -6918,6 +7243,7 @@ int brahma::MPIDFTracer::MPI_Info_create(MPI_Info* info) {
       (BRAHMA_MPI_VERSION >= 500006 && BRAHMA_MPI_VERSION < 500100)))
 int brahma::MPIDFTracer::MPI_Info_create_env(int argc, char* argv[],
                                              MPI_Info* info) {
+  ConstEventNameType CATEGORY = "metadata";
   BRAHMA_MAP_OR_FAIL(MPI_Info_create_env);
   DFT_LOGGER_START_ALWAYS();
   DFT_LOGGER_UPDATE_TYPE(argc, MetadataType::MT_VALUE);
@@ -6933,6 +7259,7 @@ int brahma::MPIDFTracer::MPI_Info_create_env(int argc, char* argv[],
       (BRAHMA_MPI_VERSION >= 400203 && BRAHMA_MPI_VERSION < 400300)))
 int brahma::MPIDFTracer::MPI_Info_create_env(int argc, char* argv[],
                                              int* info) {
+  ConstEventNameType CATEGORY = "metadata";
   BRAHMA_MAP_OR_FAIL(MPI_Info_create_env);
   DFT_LOGGER_START_ALWAYS();
   DFT_LOGGER_UPDATE_TYPE(argc, MetadataType::MT_VALUE);
@@ -6952,6 +7279,7 @@ int brahma::MPIDFTracer::MPI_Info_create_env(int argc, char* argv[],
       ((BRAHMA_MPI_VERSION >= 400106 && BRAHMA_MPI_VERSION < 400200) ||   \
        (BRAHMA_MPI_VERSION >= 500006 && BRAHMA_MPI_VERSION < 500100))))
 int brahma::MPIDFTracer::MPI_Info_delete(MPI_Info info, const char* key) {
+  ConstEventNameType CATEGORY = "metadata";
   BRAHMA_MAP_OR_FAIL(MPI_Info_delete);
   DFT_LOGGER_START_ALWAYS();
   DFT_LOGGER_UPDATE_TYPE(info, MetadataType::MT_VALUE);
@@ -6971,6 +7299,7 @@ int brahma::MPIDFTracer::MPI_Info_delete(MPI_Info info, const char* key) {
       ((BRAHMA_MPI_VERSION >= 400106 && BRAHMA_MPI_VERSION < 400200) ||   \
        (BRAHMA_MPI_VERSION >= 500006 && BRAHMA_MPI_VERSION < 500100))))
 int brahma::MPIDFTracer::MPI_Info_dup(MPI_Info info, MPI_Info* newinfo) {
+  ConstEventNameType CATEGORY = "metadata";
   BRAHMA_MAP_OR_FAIL(MPI_Info_dup);
   DFT_LOGGER_START_ALWAYS();
   DFT_LOGGER_UPDATE_TYPE(info, MetadataType::MT_VALUE);
@@ -6990,6 +7319,7 @@ int brahma::MPIDFTracer::MPI_Info_dup(MPI_Info info, MPI_Info* newinfo) {
     (defined(BRAHMA_MPI_IMPL_OPENMPI) &&                                   \
      (BRAHMA_MPI_VERSION >= 400106 && BRAHMA_MPI_VERSION < 400200))
 int brahma::MPIDFTracer::MPI_Info_free(MPI_Info* info) {
+  ConstEventNameType CATEGORY = "metadata";
   BRAHMA_MAP_OR_FAIL(MPI_Info_free);
   DFT_LOGGER_START_ALWAYS();
   int ret = __real_MPI_Info_free(info);
@@ -7007,6 +7337,7 @@ int brahma::MPIDFTracer::MPI_Info_free(MPI_Info* info) {
     !(defined(BRAHMA_MPI_IMPL_OPENMPI) &&                                  \
       (BRAHMA_MPI_VERSION >= 400106 && BRAHMA_MPI_VERSION < 400200))
 int brahma::MPIDFTracer::MPI_Info_free(int* info) {
+  ConstEventNameType CATEGORY = "metadata";
   BRAHMA_MAP_OR_FAIL(MPI_Info_free);
   DFT_LOGGER_START_ALWAYS();
   int ret = __real_MPI_Info_free(info);
@@ -7026,6 +7357,7 @@ int brahma::MPIDFTracer::MPI_Info_free(int* info) {
      (BRAHMA_MPI_VERSION >= 400106 && BRAHMA_MPI_VERSION < 400200))
 int brahma::MPIDFTracer::MPI_Info_get(MPI_Info info, const char* key,
                                       int valuelen, char* value, int* flag) {
+  ConstEventNameType CATEGORY = "metadata";
   BRAHMA_MAP_OR_FAIL(MPI_Info_get);
   DFT_LOGGER_START_ALWAYS();
   DFT_LOGGER_UPDATE_TYPE(info, MetadataType::MT_VALUE);
@@ -7046,6 +7378,7 @@ int brahma::MPIDFTracer::MPI_Info_get(MPI_Info info, const char* key,
       (BRAHMA_MPI_VERSION >= 400106 && BRAHMA_MPI_VERSION < 400200))
 int brahma::MPIDFTracer::MPI_Info_get(int info, const char* key, int valuelen,
                                       char* value, int* flag) {
+  ConstEventNameType CATEGORY = "metadata";
   BRAHMA_MAP_OR_FAIL(MPI_Info_get);
   DFT_LOGGER_START_ALWAYS();
   DFT_LOGGER_UPDATE_TYPE(info, MetadataType::MT_VALUE);
@@ -7066,6 +7399,7 @@ int brahma::MPIDFTracer::MPI_Info_get(int info, const char* key, int valuelen,
     (defined(BRAHMA_MPI_IMPL_OPENMPI) &&                                   \
      (BRAHMA_MPI_VERSION >= 400106 && BRAHMA_MPI_VERSION < 400200))
 int brahma::MPIDFTracer::MPI_Info_get_nkeys(MPI_Info info, int* nkeys) {
+  ConstEventNameType CATEGORY = "metadata";
   BRAHMA_MAP_OR_FAIL(MPI_Info_get_nkeys);
   DFT_LOGGER_START_ALWAYS();
   DFT_LOGGER_UPDATE_TYPE(info, MetadataType::MT_VALUE);
@@ -7084,6 +7418,7 @@ int brahma::MPIDFTracer::MPI_Info_get_nkeys(MPI_Info info, int* nkeys) {
     !(defined(BRAHMA_MPI_IMPL_OPENMPI) &&                                  \
       (BRAHMA_MPI_VERSION >= 400106 && BRAHMA_MPI_VERSION < 400200))
 int brahma::MPIDFTracer::MPI_Info_get_nkeys(int info, int* nkeys) {
+  ConstEventNameType CATEGORY = "metadata";
   BRAHMA_MAP_OR_FAIL(MPI_Info_get_nkeys);
   DFT_LOGGER_START_ALWAYS();
   DFT_LOGGER_UPDATE_TYPE(info, MetadataType::MT_VALUE);
@@ -7103,6 +7438,7 @@ int brahma::MPIDFTracer::MPI_Info_get_nkeys(int info, int* nkeys) {
     (defined(BRAHMA_MPI_IMPL_OPENMPI) &&                                   \
      (BRAHMA_MPI_VERSION >= 400106 && BRAHMA_MPI_VERSION < 400200))
 int brahma::MPIDFTracer::MPI_Info_get_nthkey(MPI_Info info, int n, char* key) {
+  ConstEventNameType CATEGORY = "metadata";
   BRAHMA_MAP_OR_FAIL(MPI_Info_get_nthkey);
   DFT_LOGGER_START_ALWAYS();
   DFT_LOGGER_UPDATE_TYPE(info, MetadataType::MT_VALUE);
@@ -7122,6 +7458,7 @@ int brahma::MPIDFTracer::MPI_Info_get_nthkey(MPI_Info info, int n, char* key) {
     !(defined(BRAHMA_MPI_IMPL_OPENMPI) &&                                  \
       (BRAHMA_MPI_VERSION >= 400106 && BRAHMA_MPI_VERSION < 400200))
 int brahma::MPIDFTracer::MPI_Info_get_nthkey(int info, int n, char* key) {
+  ConstEventNameType CATEGORY = "metadata";
   BRAHMA_MAP_OR_FAIL(MPI_Info_get_nthkey);
   DFT_LOGGER_START_ALWAYS();
   DFT_LOGGER_UPDATE_TYPE(info, MetadataType::MT_VALUE);
@@ -7139,6 +7476,7 @@ int brahma::MPIDFTracer::MPI_Info_get_nthkey(int info, int n, char* key) {
 int brahma::MPIDFTracer::MPI_Info_get_string(MPI_Info info, const char* key,
                                              int* buflen, char* value,
                                              int* flag) {
+  ConstEventNameType CATEGORY = "metadata";
   BRAHMA_MAP_OR_FAIL(MPI_Info_get_string);
   DFT_LOGGER_START_ALWAYS();
   DFT_LOGGER_UPDATE_TYPE(info, MetadataType::MT_VALUE);
@@ -7155,6 +7493,7 @@ int brahma::MPIDFTracer::MPI_Info_get_string(MPI_Info info, const char* key,
 int brahma::MPIDFTracer::MPI_Info_get_string(int info, const char* key,
                                              int* buflen, char* value,
                                              int* flag) {
+  ConstEventNameType CATEGORY = "metadata";
   BRAHMA_MAP_OR_FAIL(MPI_Info_get_string);
   DFT_LOGGER_START_ALWAYS();
   DFT_LOGGER_UPDATE_TYPE(info, MetadataType::MT_VALUE);
@@ -7175,6 +7514,7 @@ int brahma::MPIDFTracer::MPI_Info_get_string(int info, const char* key,
      (BRAHMA_MPI_VERSION >= 400106 && BRAHMA_MPI_VERSION < 400200))
 int brahma::MPIDFTracer::MPI_Info_get_valuelen(MPI_Info info, const char* key,
                                                int* valuelen, int* flag) {
+  ConstEventNameType CATEGORY = "metadata";
   BRAHMA_MAP_OR_FAIL(MPI_Info_get_valuelen);
   DFT_LOGGER_START_ALWAYS();
   DFT_LOGGER_UPDATE_TYPE(info, MetadataType::MT_VALUE);
@@ -7194,6 +7534,7 @@ int brahma::MPIDFTracer::MPI_Info_get_valuelen(MPI_Info info, const char* key,
       (BRAHMA_MPI_VERSION >= 400106 && BRAHMA_MPI_VERSION < 400200))
 int brahma::MPIDFTracer::MPI_Info_get_valuelen(int info, const char* key,
                                                int* valuelen, int* flag) {
+  ConstEventNameType CATEGORY = "metadata";
   BRAHMA_MAP_OR_FAIL(MPI_Info_get_valuelen);
   DFT_LOGGER_START_ALWAYS();
   DFT_LOGGER_UPDATE_TYPE(info, MetadataType::MT_VALUE);
@@ -7214,6 +7555,7 @@ int brahma::MPIDFTracer::MPI_Info_get_valuelen(int info, const char* key,
      (BRAHMA_MPI_VERSION >= 400106 && BRAHMA_MPI_VERSION < 400200))
 int brahma::MPIDFTracer::MPI_Info_set(MPI_Info info, const char* key,
                                       const char* value) {
+  ConstEventNameType CATEGORY = "metadata";
   BRAHMA_MAP_OR_FAIL(MPI_Info_set);
   DFT_LOGGER_START_ALWAYS();
   DFT_LOGGER_UPDATE_TYPE(info, MetadataType::MT_VALUE);
@@ -7233,6 +7575,7 @@ int brahma::MPIDFTracer::MPI_Info_set(MPI_Info info, const char* key,
       (BRAHMA_MPI_VERSION >= 400106 && BRAHMA_MPI_VERSION < 400200))
 int brahma::MPIDFTracer::MPI_Info_set(int info, const char* key,
                                       const char* value) {
+  ConstEventNameType CATEGORY = "metadata";
   BRAHMA_MAP_OR_FAIL(MPI_Info_set);
   DFT_LOGGER_START_ALWAYS();
   DFT_LOGGER_UPDATE_TYPE(info, MetadataType::MT_VALUE);
@@ -7252,6 +7595,7 @@ int brahma::MPIDFTracer::MPI_Info_set(int info, const char* key,
       ((BRAHMA_MPI_VERSION >= 400106 && BRAHMA_MPI_VERSION < 400200) ||   \
        (BRAHMA_MPI_VERSION >= 500006 && BRAHMA_MPI_VERSION < 500100))))
 int brahma::MPIDFTracer::MPI_Init(int* argc, char*** argv) {
+  ConstEventNameType CATEGORY = "env";
   BRAHMA_MAP_OR_FAIL(MPI_Init);
   DFT_LOGGER_START_ALWAYS();
   int ret = __real_MPI_Init(argc, argv);
@@ -7275,6 +7619,7 @@ int brahma::MPIDFTracer::MPI_Init(int* argc, char*** argv) {
        (BRAHMA_MPI_VERSION >= 500006 && BRAHMA_MPI_VERSION < 500100))))
 int brahma::MPIDFTracer::MPI_Init_thread(int* argc, char*** argv, int required,
                                          int* provided) {
+  ConstEventNameType CATEGORY = "env";
   BRAHMA_MAP_OR_FAIL(MPI_Init_thread);
   DFT_LOGGER_START_ALWAYS();
   DFT_LOGGER_UPDATE_TYPE(required, MetadataType::MT_VALUE);
@@ -7315,6 +7660,7 @@ int brahma::MPIDFTracer::MPI_Intercomm_create(MPI_Comm local_comm,
                                               MPI_Comm bridge_comm,
                                               int remote_leader, int tag,
                                               MPI_Comm* newintercomm) {
+  ConstEventNameType CATEGORY = "comm";
   BRAHMA_MAP_OR_FAIL(MPI_Intercomm_create);
   DFT_LOGGER_START_ALWAYS();
   DFT_LOGGER_UPDATE_TYPE(local_comm, MetadataType::MT_VALUE);
@@ -7341,6 +7687,7 @@ int brahma::MPIDFTracer::MPI_Intercomm_create(int local_comm, int local_leader,
                                               int bridge_comm,
                                               int remote_leader, int tag,
                                               int* newintercomm) {
+  ConstEventNameType CATEGORY = "comm";
   BRAHMA_MAP_OR_FAIL(MPI_Intercomm_create);
   DFT_LOGGER_START_ALWAYS();
   DFT_LOGGER_UPDATE_TYPE(local_comm, MetadataType::MT_VALUE);
@@ -7363,6 +7710,7 @@ int brahma::MPIDFTracer::MPI_Intercomm_create_from_groups(
     MPI_Group local_group, int local_leader, MPI_Group remote_group,
     int remote_leader, const char* tag, MPI_Info info,
     MPI_Errhandler errhandler, MPI_Comm* newintercomm) {
+  ConstEventNameType CATEGORY = "comm";
   BRAHMA_MAP_OR_FAIL(MPI_Intercomm_create_from_groups);
   DFT_LOGGER_START_ALWAYS();
   DFT_LOGGER_UPDATE_TYPE(local_group, MetadataType::MT_VALUE);
@@ -7386,6 +7734,7 @@ int brahma::MPIDFTracer::MPI_Intercomm_create_from_groups(
 int brahma::MPIDFTracer::MPI_Intercomm_create_from_groups(
     int local_group, int local_leader, int remote_group, int remote_leader,
     const char* tag, int info, int errhandler, int* newintercomm) {
+  ConstEventNameType CATEGORY = "comm";
   BRAHMA_MAP_OR_FAIL(MPI_Intercomm_create_from_groups);
   DFT_LOGGER_START_ALWAYS();
   DFT_LOGGER_UPDATE_TYPE(local_group, MetadataType::MT_VALUE);
@@ -7413,6 +7762,7 @@ int brahma::MPIDFTracer::MPI_Intercomm_create_from_groups(
      (BRAHMA_MPI_VERSION >= 400106 && BRAHMA_MPI_VERSION < 400200))
 int brahma::MPIDFTracer::MPI_Intercomm_merge(MPI_Comm intercomm, int high,
                                              MPI_Comm* newintercomm) {
+  ConstEventNameType CATEGORY = "comm";
   BRAHMA_MAP_OR_FAIL(MPI_Intercomm_merge);
   DFT_LOGGER_START_ALWAYS();
   DFT_LOGGER_UPDATE_TYPE(intercomm, MetadataType::MT_VALUE);
@@ -7433,6 +7783,7 @@ int brahma::MPIDFTracer::MPI_Intercomm_merge(MPI_Comm intercomm, int high,
       (BRAHMA_MPI_VERSION >= 400106 && BRAHMA_MPI_VERSION < 400200))
 int brahma::MPIDFTracer::MPI_Intercomm_merge(int intercomm, int high,
                                              int* newintercomm) {
+  ConstEventNameType CATEGORY = "comm";
   BRAHMA_MAP_OR_FAIL(MPI_Intercomm_merge);
   DFT_LOGGER_START_ALWAYS();
   DFT_LOGGER_UPDATE_TYPE(intercomm, MetadataType::MT_VALUE);
@@ -7454,6 +7805,7 @@ int brahma::MPIDFTracer::MPI_Intercomm_merge(int intercomm, int high,
      (BRAHMA_MPI_VERSION >= 400106 && BRAHMA_MPI_VERSION < 400200))
 int brahma::MPIDFTracer::MPI_Iprobe(int source, int tag, MPI_Comm comm,
                                     int* flag, MPI_Status* status) {
+  ConstEventNameType CATEGORY = "p2p";
   BRAHMA_MAP_OR_FAIL(MPI_Iprobe);
   DFT_LOGGER_START_ALWAYS();
   DFT_LOGGER_UPDATE_TYPE(source, MetadataType::MT_VALUE);
@@ -7475,6 +7827,7 @@ int brahma::MPIDFTracer::MPI_Iprobe(int source, int tag, MPI_Comm comm,
       (BRAHMA_MPI_VERSION >= 400106 && BRAHMA_MPI_VERSION < 400200))
 int brahma::MPIDFTracer::MPI_Iprobe(int source, int tag, int comm, int* flag,
                                     MPI_Status* status) {
+  ConstEventNameType CATEGORY = "p2p";
   BRAHMA_MAP_OR_FAIL(MPI_Iprobe);
   DFT_LOGGER_START_ALWAYS();
   DFT_LOGGER_UPDATE_TYPE(source, MetadataType::MT_VALUE);
@@ -7498,6 +7851,7 @@ int brahma::MPIDFTracer::MPI_Iprobe(int source, int tag, int comm, int* flag,
 int brahma::MPIDFTracer::MPI_Irecv(void* buf, int count, MPI_Datatype datatype,
                                    int source, int tag, MPI_Comm comm,
                                    MPI_Request* request) {
+  ConstEventNameType CATEGORY = "p2p";
   BRAHMA_MAP_OR_FAIL(MPI_Irecv);
   DFT_LOGGER_START_ALWAYS();
   DFT_LOGGER_UPDATE_TYPE(count, MetadataType::MT_VALUE);
@@ -7522,6 +7876,7 @@ int brahma::MPIDFTracer::MPI_Irecv(void* buf, int count, MPI_Datatype datatype,
 int brahma::MPIDFTracer::MPI_Irecv(void* buf, int count, MPI_Datatype datatype,
                                    int source, int tag, int comm,
                                    MPI_Request* request) {
+  ConstEventNameType CATEGORY = "p2p";
   BRAHMA_MAP_OR_FAIL(MPI_Irecv);
   DFT_LOGGER_START_ALWAYS();
   DFT_LOGGER_UPDATE_TYPE(count, MetadataType::MT_VALUE);
@@ -7540,6 +7895,7 @@ int brahma::MPIDFTracer::MPI_Irecv(void* buf, int count, MPI_Datatype datatype,
 int brahma::MPIDFTracer::MPI_Irecv_c(void* buf, MPI_Count count,
                                      MPI_Datatype datatype, int source, int tag,
                                      MPI_Comm comm, MPI_Request* request) {
+  ConstEventNameType CATEGORY = "p2p";
   BRAHMA_MAP_OR_FAIL(MPI_Irecv_c);
   DFT_LOGGER_START_ALWAYS();
   DFT_LOGGER_UPDATE_TYPE(count, MetadataType::MT_VALUE);
@@ -7561,6 +7917,7 @@ int brahma::MPIDFTracer::MPI_Irecv_c(void* buf, MPI_Count count,
 int brahma::MPIDFTracer::MPI_Irecv_c(void* buf, MPI_Count count, int datatype,
                                      int source, int tag, int comm,
                                      int* request) {
+  ConstEventNameType CATEGORY = "p2p";
   BRAHMA_MAP_OR_FAIL(MPI_Irecv_c);
   DFT_LOGGER_START_ALWAYS();
   DFT_LOGGER_UPDATE_TYPE(count, MetadataType::MT_VALUE);
@@ -7588,6 +7945,7 @@ int brahma::MPIDFTracer::MPI_Ireduce(const void* sendbuf, void* recvbuf,
                                      int count, MPI_Datatype datatype,
                                      MPI_Op op, int root, MPI_Comm comm,
                                      MPI_Request* request) {
+  ConstEventNameType CATEGORY = "collective";
   BRAHMA_MAP_OR_FAIL(MPI_Ireduce);
   DFT_LOGGER_START_ALWAYS();
   DFT_LOGGER_UPDATE_TYPE(count, MetadataType::MT_VALUE);
@@ -7613,6 +7971,7 @@ int brahma::MPIDFTracer::MPI_Ireduce(const void* sendbuf, void* recvbuf,
 int brahma::MPIDFTracer::MPI_Ireduce(const void* sendbuf, void* recvbuf,
                                      int count, MPI_Datatype datatype, int op,
                                      int root, int comm, MPI_Request* request) {
+  ConstEventNameType CATEGORY = "collective";
   BRAHMA_MAP_OR_FAIL(MPI_Ireduce);
   DFT_LOGGER_START_ALWAYS();
   DFT_LOGGER_UPDATE_TYPE(count, MetadataType::MT_VALUE);
@@ -7633,6 +7992,7 @@ int brahma::MPIDFTracer::MPI_Ireduce_c(const void* sendbuf, void* recvbuf,
                                        MPI_Count count, MPI_Datatype datatype,
                                        MPI_Op op, int root, MPI_Comm comm,
                                        MPI_Request* request) {
+  ConstEventNameType CATEGORY = "collective";
   BRAHMA_MAP_OR_FAIL(MPI_Ireduce_c);
   DFT_LOGGER_START_ALWAYS();
   DFT_LOGGER_UPDATE_TYPE(count, MetadataType::MT_VALUE);
@@ -7654,6 +8014,7 @@ int brahma::MPIDFTracer::MPI_Ireduce_c(const void* sendbuf, void* recvbuf,
 int brahma::MPIDFTracer::MPI_Ireduce_c(const void* sendbuf, void* recvbuf,
                                        MPI_Count count, int datatype, int op,
                                        int root, int comm, int* request) {
+  ConstEventNameType CATEGORY = "collective";
   BRAHMA_MAP_OR_FAIL(MPI_Ireduce_c);
   DFT_LOGGER_START_ALWAYS();
   DFT_LOGGER_UPDATE_TYPE(count, MetadataType::MT_VALUE);
@@ -7682,6 +8043,7 @@ int brahma::MPIDFTracer::MPI_Ireduce_scatter(const void* sendbuf, void* recvbuf,
                                              MPI_Datatype datatype, MPI_Op op,
                                              MPI_Comm comm,
                                              MPI_Request* request) {
+  ConstEventNameType CATEGORY = "collective";
   BRAHMA_MAP_OR_FAIL(MPI_Ireduce_scatter);
   DFT_LOGGER_START_ALWAYS();
   DFT_LOGGER_UPDATE_TYPE(datatype, MetadataType::MT_VALUE);
@@ -7706,6 +8068,7 @@ int brahma::MPIDFTracer::MPI_Ireduce_scatter(const void* sendbuf, void* recvbuf,
                                              const int recvcounts[],
                                              MPI_Datatype datatype, int op,
                                              int comm, MPI_Request* request) {
+  ConstEventNameType CATEGORY = "collective";
   BRAHMA_MAP_OR_FAIL(MPI_Ireduce_scatter);
   DFT_LOGGER_START_ALWAYS();
   DFT_LOGGER_UPDATE_TYPE(datatype, MetadataType::MT_VALUE);
@@ -7732,6 +8095,7 @@ int brahma::MPIDFTracer::MPI_Ireduce_scatter_block(const void* sendbuf,
                                                    MPI_Datatype datatype,
                                                    MPI_Op op, MPI_Comm comm,
                                                    MPI_Request* request) {
+  ConstEventNameType CATEGORY = "collective";
   BRAHMA_MAP_OR_FAIL(MPI_Ireduce_scatter_block);
   DFT_LOGGER_START_ALWAYS();
   DFT_LOGGER_UPDATE_TYPE(recvcount, MetadataType::MT_VALUE);
@@ -7758,6 +8122,7 @@ int brahma::MPIDFTracer::MPI_Ireduce_scatter_block(const void* sendbuf,
                                                    MPI_Datatype datatype,
                                                    int op, int comm,
                                                    MPI_Request* request) {
+  ConstEventNameType CATEGORY = "collective";
   BRAHMA_MAP_OR_FAIL(MPI_Ireduce_scatter_block);
   DFT_LOGGER_START_ALWAYS();
   DFT_LOGGER_UPDATE_TYPE(recvcount, MetadataType::MT_VALUE);
@@ -7776,6 +8141,7 @@ int brahma::MPIDFTracer::MPI_Ireduce_scatter_block(const void* sendbuf,
 int brahma::MPIDFTracer::MPI_Ireduce_scatter_block_c(
     const void* sendbuf, void* recvbuf, MPI_Count recvcount,
     MPI_Datatype datatype, MPI_Op op, MPI_Comm comm, MPI_Request* request) {
+  ConstEventNameType CATEGORY = "collective";
   BRAHMA_MAP_OR_FAIL(MPI_Ireduce_scatter_block_c);
   DFT_LOGGER_START_ALWAYS();
   DFT_LOGGER_UPDATE_TYPE(recvcount, MetadataType::MT_VALUE);
@@ -7798,6 +8164,7 @@ int brahma::MPIDFTracer::MPI_Ireduce_scatter_block_c(const void* sendbuf,
                                                      MPI_Count recvcount,
                                                      int datatype, int op,
                                                      int comm, int* request) {
+  ConstEventNameType CATEGORY = "collective";
   BRAHMA_MAP_OR_FAIL(MPI_Ireduce_scatter_block_c);
   DFT_LOGGER_START_ALWAYS();
   DFT_LOGGER_UPDATE_TYPE(recvcount, MetadataType::MT_VALUE);
@@ -7816,6 +8183,7 @@ int brahma::MPIDFTracer::MPI_Ireduce_scatter_block_c(const void* sendbuf,
 int brahma::MPIDFTracer::MPI_Ireduce_scatter_c(
     const void* sendbuf, void* recvbuf, const MPI_Count recvcounts[],
     MPI_Datatype datatype, MPI_Op op, MPI_Comm comm, MPI_Request* request) {
+  ConstEventNameType CATEGORY = "collective";
   BRAHMA_MAP_OR_FAIL(MPI_Ireduce_scatter_c);
   DFT_LOGGER_START_ALWAYS();
   DFT_LOGGER_UPDATE_TYPE(datatype, MetadataType::MT_VALUE);
@@ -7837,6 +8205,7 @@ int brahma::MPIDFTracer::MPI_Ireduce_scatter_c(const void* sendbuf,
                                                const MPI_Count recvcounts[],
                                                int datatype, int op, int comm,
                                                int* request) {
+  ConstEventNameType CATEGORY = "collective";
   BRAHMA_MAP_OR_FAIL(MPI_Ireduce_scatter_c);
   DFT_LOGGER_START_ALWAYS();
   DFT_LOGGER_UPDATE_TYPE(datatype, MetadataType::MT_VALUE);
@@ -7861,6 +8230,7 @@ int brahma::MPIDFTracer::MPI_Ireduce_scatter_c(const void* sendbuf,
 int brahma::MPIDFTracer::MPI_Irsend(const void* buf, int count,
                                     MPI_Datatype datatype, int dest, int tag,
                                     MPI_Comm comm, MPI_Request* request) {
+  ConstEventNameType CATEGORY = "p2p";
   BRAHMA_MAP_OR_FAIL(MPI_Irsend);
   DFT_LOGGER_START_ALWAYS();
   DFT_LOGGER_UPDATE_TYPE(count, MetadataType::MT_VALUE);
@@ -7885,6 +8255,7 @@ int brahma::MPIDFTracer::MPI_Irsend(const void* buf, int count,
 int brahma::MPIDFTracer::MPI_Irsend(const void* buf, int count,
                                     MPI_Datatype datatype, int dest, int tag,
                                     int comm, MPI_Request* request) {
+  ConstEventNameType CATEGORY = "p2p";
   BRAHMA_MAP_OR_FAIL(MPI_Irsend);
   DFT_LOGGER_START_ALWAYS();
   DFT_LOGGER_UPDATE_TYPE(count, MetadataType::MT_VALUE);
@@ -7903,6 +8274,7 @@ int brahma::MPIDFTracer::MPI_Irsend(const void* buf, int count,
 int brahma::MPIDFTracer::MPI_Irsend_c(const void* buf, MPI_Count count,
                                       MPI_Datatype datatype, int dest, int tag,
                                       MPI_Comm comm, MPI_Request* request) {
+  ConstEventNameType CATEGORY = "p2p";
   BRAHMA_MAP_OR_FAIL(MPI_Irsend_c);
   DFT_LOGGER_START_ALWAYS();
   DFT_LOGGER_UPDATE_TYPE(count, MetadataType::MT_VALUE);
@@ -7923,6 +8295,7 @@ int brahma::MPIDFTracer::MPI_Irsend_c(const void* buf, MPI_Count count,
 int brahma::MPIDFTracer::MPI_Irsend_c(const void* buf, MPI_Count count,
                                       int datatype, int dest, int tag, int comm,
                                       int* request) {
+  ConstEventNameType CATEGORY = "p2p";
   BRAHMA_MAP_OR_FAIL(MPI_Irsend_c);
   DFT_LOGGER_START_ALWAYS();
   DFT_LOGGER_UPDATE_TYPE(count, MetadataType::MT_VALUE);
@@ -7946,6 +8319,7 @@ int brahma::MPIDFTracer::MPI_Irsend_c(const void* buf, MPI_Count count,
       ((BRAHMA_MPI_VERSION >= 400106 && BRAHMA_MPI_VERSION < 400200) ||   \
        (BRAHMA_MPI_VERSION >= 500006 && BRAHMA_MPI_VERSION < 500100))))
 int brahma::MPIDFTracer::MPI_Is_thread_main(int* flag) {
+  ConstEventNameType CATEGORY = "p2p";
   BRAHMA_MAP_OR_FAIL(MPI_Is_thread_main);
   DFT_LOGGER_START_ALWAYS();
   int ret = __real_MPI_Is_thread_main(flag);
@@ -7966,6 +8340,7 @@ int brahma::MPIDFTracer::MPI_Is_thread_main(int* flag) {
 int brahma::MPIDFTracer::MPI_Iscan(const void* sendbuf, void* recvbuf,
                                    int count, MPI_Datatype datatype, MPI_Op op,
                                    MPI_Comm comm, MPI_Request* request) {
+  ConstEventNameType CATEGORY = "collective";
   BRAHMA_MAP_OR_FAIL(MPI_Iscan);
   DFT_LOGGER_START_ALWAYS();
   DFT_LOGGER_UPDATE_TYPE(count, MetadataType::MT_VALUE);
@@ -7990,6 +8365,7 @@ int brahma::MPIDFTracer::MPI_Iscan(const void* sendbuf, void* recvbuf,
 int brahma::MPIDFTracer::MPI_Iscan(const void* sendbuf, void* recvbuf,
                                    int count, MPI_Datatype datatype, int op,
                                    int comm, int* request) {
+  ConstEventNameType CATEGORY = "collective";
   BRAHMA_MAP_OR_FAIL(MPI_Iscan);
   DFT_LOGGER_START_ALWAYS();
   DFT_LOGGER_UPDATE_TYPE(count, MetadataType::MT_VALUE);
@@ -8009,6 +8385,7 @@ int brahma::MPIDFTracer::MPI_Iscan_c(const void* sendbuf, void* recvbuf,
                                      MPI_Count count, MPI_Datatype datatype,
                                      MPI_Op op, MPI_Comm comm,
                                      MPI_Request* request) {
+  ConstEventNameType CATEGORY = "collective";
   BRAHMA_MAP_OR_FAIL(MPI_Iscan_c);
   DFT_LOGGER_START_ALWAYS();
   DFT_LOGGER_UPDATE_TYPE(count, MetadataType::MT_VALUE);
@@ -8029,6 +8406,7 @@ int brahma::MPIDFTracer::MPI_Iscan_c(const void* sendbuf, void* recvbuf,
 int brahma::MPIDFTracer::MPI_Iscan_c(const void* sendbuf, void* recvbuf,
                                      MPI_Count count, int datatype, int op,
                                      int comm, int* request) {
+  ConstEventNameType CATEGORY = "collective";
   BRAHMA_MAP_OR_FAIL(MPI_Iscan_c);
   DFT_LOGGER_START_ALWAYS();
   DFT_LOGGER_UPDATE_TYPE(count, MetadataType::MT_VALUE);
@@ -8056,6 +8434,7 @@ int brahma::MPIDFTracer::MPI_Iscatter(const void* sendbuf, int sendcount,
                                       int recvcount, MPI_Datatype recvtype,
                                       int root, MPI_Comm comm,
                                       MPI_Request* request) {
+  ConstEventNameType CATEGORY = "collective";
   BRAHMA_MAP_OR_FAIL(MPI_Iscatter);
   DFT_LOGGER_START_ALWAYS();
   DFT_LOGGER_UPDATE_TYPE(sendcount, MetadataType::MT_VALUE);
@@ -8083,6 +8462,7 @@ int brahma::MPIDFTracer::MPI_Iscatter(const void* sendbuf, int sendcount,
                                       MPI_Datatype sendtype, void* recvbuf,
                                       int recvcount, MPI_Datatype recvtype,
                                       int root, int comm, int* request) {
+  ConstEventNameType CATEGORY = "collective";
   BRAHMA_MAP_OR_FAIL(MPI_Iscatter);
   DFT_LOGGER_START_ALWAYS();
   DFT_LOGGER_UPDATE_TYPE(sendcount, MetadataType::MT_VALUE);
@@ -8106,6 +8486,7 @@ int brahma::MPIDFTracer::MPI_Iscatter_c(const void* sendbuf,
                                         MPI_Count recvcount,
                                         MPI_Datatype recvtype, int root,
                                         MPI_Comm comm, MPI_Request* request) {
+  ConstEventNameType CATEGORY = "collective";
   BRAHMA_MAP_OR_FAIL(MPI_Iscatter_c);
   DFT_LOGGER_START_ALWAYS();
   DFT_LOGGER_UPDATE_TYPE(sendcount, MetadataType::MT_VALUE);
@@ -8130,6 +8511,7 @@ int brahma::MPIDFTracer::MPI_Iscatter_c(const void* sendbuf,
                                         void* recvbuf, MPI_Count recvcount,
                                         int recvtype, int root, int comm,
                                         int* request) {
+  ConstEventNameType CATEGORY = "collective";
   BRAHMA_MAP_OR_FAIL(MPI_Iscatter_c);
   DFT_LOGGER_START_ALWAYS();
   DFT_LOGGER_UPDATE_TYPE(sendcount, MetadataType::MT_VALUE);
@@ -8158,6 +8540,7 @@ int brahma::MPIDFTracer::MPI_Iscatterv(
     const void* sendbuf, const int sendcounts[], const int displs[],
     MPI_Datatype sendtype, void* recvbuf, int recvcount, MPI_Datatype recvtype,
     int root, MPI_Comm comm, MPI_Request* request) {
+  ConstEventNameType CATEGORY = "collective";
   BRAHMA_MAP_OR_FAIL(MPI_Iscatterv);
   DFT_LOGGER_START_ALWAYS();
   DFT_LOGGER_UPDATE_TYPE(sendtype, MetadataType::MT_VALUE);
@@ -8186,6 +8569,7 @@ int brahma::MPIDFTracer::MPI_Iscatterv(const void* sendbuf,
                                        MPI_Datatype sendtype, void* recvbuf,
                                        int recvcount, MPI_Datatype recvtype,
                                        int root, int comm, int* request) {
+  ConstEventNameType CATEGORY = "collective";
   BRAHMA_MAP_OR_FAIL(MPI_Iscatterv);
   DFT_LOGGER_START_ALWAYS();
   DFT_LOGGER_UPDATE_TYPE(sendtype, MetadataType::MT_VALUE);
@@ -8206,6 +8590,7 @@ int brahma::MPIDFTracer::MPI_Iscatterv_c(
     const void* sendbuf, const MPI_Count sendcounts[], const MPI_Aint displs[],
     MPI_Datatype sendtype, void* recvbuf, MPI_Count recvcount,
     MPI_Datatype recvtype, int root, MPI_Comm comm, MPI_Request* request) {
+  ConstEventNameType CATEGORY = "collective";
   BRAHMA_MAP_OR_FAIL(MPI_Iscatterv_c);
   DFT_LOGGER_START_ALWAYS();
   DFT_LOGGER_UPDATE_TYPE(sendtype, MetadataType::MT_VALUE);
@@ -8231,6 +8616,7 @@ int brahma::MPIDFTracer::MPI_Iscatterv_c(const void* sendbuf,
                                          void* recvbuf, MPI_Count recvcount,
                                          int recvtype, int root, int comm,
                                          int* request) {
+  ConstEventNameType CATEGORY = "collective";
   BRAHMA_MAP_OR_FAIL(MPI_Iscatterv_c);
   DFT_LOGGER_START_ALWAYS();
   DFT_LOGGER_UPDATE_TYPE(sendtype, MetadataType::MT_VALUE);
@@ -8258,6 +8644,7 @@ int brahma::MPIDFTracer::MPI_Iscatterv_c(const void* sendbuf,
 int brahma::MPIDFTracer::MPI_Isend(const void* buf, int count,
                                    MPI_Datatype datatype, int dest, int tag,
                                    MPI_Comm comm, MPI_Request* request) {
+  ConstEventNameType CATEGORY = "p2p";
   BRAHMA_MAP_OR_FAIL(MPI_Isend);
   DFT_LOGGER_START_ALWAYS();
   DFT_LOGGER_UPDATE_TYPE(count, MetadataType::MT_VALUE);
@@ -8282,6 +8669,7 @@ int brahma::MPIDFTracer::MPI_Isend(const void* buf, int count,
 int brahma::MPIDFTracer::MPI_Isend(const void* buf, int count,
                                    MPI_Datatype datatype, int dest, int tag,
                                    int comm, MPI_Request* request) {
+  ConstEventNameType CATEGORY = "p2p";
   BRAHMA_MAP_OR_FAIL(MPI_Isend);
   DFT_LOGGER_START_ALWAYS();
   DFT_LOGGER_UPDATE_TYPE(count, MetadataType::MT_VALUE);
@@ -8300,6 +8688,7 @@ int brahma::MPIDFTracer::MPI_Isend(const void* buf, int count,
 int brahma::MPIDFTracer::MPI_Isend_c(const void* buf, MPI_Count count,
                                      MPI_Datatype datatype, int dest, int tag,
                                      MPI_Comm comm, MPI_Request* request) {
+  ConstEventNameType CATEGORY = "p2p";
   BRAHMA_MAP_OR_FAIL(MPI_Isend_c);
   DFT_LOGGER_START_ALWAYS();
   DFT_LOGGER_UPDATE_TYPE(count, MetadataType::MT_VALUE);
@@ -8320,6 +8709,7 @@ int brahma::MPIDFTracer::MPI_Isend_c(const void* buf, MPI_Count count,
 int brahma::MPIDFTracer::MPI_Isend_c(const void* buf, MPI_Count count,
                                      int datatype, int dest, int tag, int comm,
                                      int* request) {
+  ConstEventNameType CATEGORY = "p2p";
   BRAHMA_MAP_OR_FAIL(MPI_Isend_c);
   DFT_LOGGER_START_ALWAYS();
   DFT_LOGGER_UPDATE_TYPE(count, MetadataType::MT_VALUE);
@@ -8343,6 +8733,7 @@ int brahma::MPIDFTracer::MPI_Isendrecv(const void* sendbuf, int sendcount,
                                        int recvcount, MPI_Datatype recvtype,
                                        int source, int recvtag, MPI_Comm comm,
                                        MPI_Request* request) {
+  ConstEventNameType CATEGORY = "p2p";
   BRAHMA_MAP_OR_FAIL(MPI_Isendrecv);
   DFT_LOGGER_START_ALWAYS();
   DFT_LOGGER_UPDATE_TYPE(sendcount, MetadataType::MT_VALUE);
@@ -8371,6 +8762,7 @@ int brahma::MPIDFTracer::MPI_Isendrecv(const void* sendbuf, int sendcount,
                                        void* recvbuf, int recvcount,
                                        int recvtype, int source, int recvtag,
                                        int comm, int* request) {
+  ConstEventNameType CATEGORY = "p2p";
   BRAHMA_MAP_OR_FAIL(MPI_Isendrecv);
   DFT_LOGGER_START_ALWAYS();
   DFT_LOGGER_UPDATE_TYPE(sendcount, MetadataType::MT_VALUE);
@@ -8396,6 +8788,7 @@ int brahma::MPIDFTracer::MPI_Isendrecv_c(
     const void* sendbuf, MPI_Count sendcount, MPI_Datatype sendtype, int dest,
     int sendtag, void* recvbuf, MPI_Count recvcount, MPI_Datatype recvtype,
     int source, int recvtag, MPI_Comm comm, MPI_Request* request) {
+  ConstEventNameType CATEGORY = "p2p";
   BRAHMA_MAP_OR_FAIL(MPI_Isendrecv_c);
   DFT_LOGGER_START_ALWAYS();
   DFT_LOGGER_UPDATE_TYPE(sendcount, MetadataType::MT_VALUE);
@@ -8425,6 +8818,7 @@ int brahma::MPIDFTracer::MPI_Isendrecv_c(const void* sendbuf,
                                          MPI_Count recvcount, int recvtype,
                                          int source, int recvtag, int comm,
                                          int* request) {
+  ConstEventNameType CATEGORY = "p2p";
   BRAHMA_MAP_OR_FAIL(MPI_Isendrecv_c);
   DFT_LOGGER_START_ALWAYS();
   DFT_LOGGER_UPDATE_TYPE(sendcount, MetadataType::MT_VALUE);
@@ -8453,6 +8847,7 @@ int brahma::MPIDFTracer::MPI_Isendrecv_replace(void* buf, int count,
                                                int sendtag, int source,
                                                int recvtag, MPI_Comm comm,
                                                MPI_Request* request) {
+  ConstEventNameType CATEGORY = "p2p";
   BRAHMA_MAP_OR_FAIL(MPI_Isendrecv_replace);
   DFT_LOGGER_START_ALWAYS();
   DFT_LOGGER_UPDATE_TYPE(count, MetadataType::MT_VALUE);
@@ -8478,6 +8873,7 @@ int brahma::MPIDFTracer::MPI_Isendrecv_replace(void* buf, int count,
                                                int sendtag, int source,
                                                int recvtag, int comm,
                                                int* request) {
+  ConstEventNameType CATEGORY = "p2p";
   BRAHMA_MAP_OR_FAIL(MPI_Isendrecv_replace);
   DFT_LOGGER_START_ALWAYS();
   DFT_LOGGER_UPDATE_TYPE(count, MetadataType::MT_VALUE);
@@ -8499,6 +8895,7 @@ int brahma::MPIDFTracer::MPI_Isendrecv_replace(void* buf, int count,
 int brahma::MPIDFTracer::MPI_Isendrecv_replace_c(
     void* buf, MPI_Count count, MPI_Datatype datatype, int dest, int sendtag,
     int source, int recvtag, MPI_Comm comm, MPI_Request* request) {
+  ConstEventNameType CATEGORY = "p2p";
   BRAHMA_MAP_OR_FAIL(MPI_Isendrecv_replace_c);
   DFT_LOGGER_START_ALWAYS();
   DFT_LOGGER_UPDATE_TYPE(count, MetadataType::MT_VALUE);
@@ -8524,6 +8921,7 @@ int brahma::MPIDFTracer::MPI_Isendrecv_replace_c(void* buf, MPI_Count count,
                                                  int sendtag, int source,
                                                  int recvtag, int comm,
                                                  int* request) {
+  ConstEventNameType CATEGORY = "p2p";
   BRAHMA_MAP_OR_FAIL(MPI_Isendrecv_replace_c);
   DFT_LOGGER_START_ALWAYS();
   DFT_LOGGER_UPDATE_TYPE(count, MetadataType::MT_VALUE);
@@ -8552,6 +8950,7 @@ int brahma::MPIDFTracer::MPI_Isendrecv_replace_c(void* buf, MPI_Count count,
 int brahma::MPIDFTracer::MPI_Issend(const void* buf, int count,
                                     MPI_Datatype datatype, int dest, int tag,
                                     MPI_Comm comm, MPI_Request* request) {
+  ConstEventNameType CATEGORY = "p2p";
   BRAHMA_MAP_OR_FAIL(MPI_Issend);
   DFT_LOGGER_START_ALWAYS();
   DFT_LOGGER_UPDATE_TYPE(count, MetadataType::MT_VALUE);
@@ -8576,6 +8975,7 @@ int brahma::MPIDFTracer::MPI_Issend(const void* buf, int count,
 int brahma::MPIDFTracer::MPI_Issend(const void* buf, int count,
                                     MPI_Datatype datatype, int dest, int tag,
                                     int comm, MPI_Request* request) {
+  ConstEventNameType CATEGORY = "p2p";
   BRAHMA_MAP_OR_FAIL(MPI_Issend);
   DFT_LOGGER_START_ALWAYS();
   DFT_LOGGER_UPDATE_TYPE(count, MetadataType::MT_VALUE);
@@ -8594,6 +8994,7 @@ int brahma::MPIDFTracer::MPI_Issend(const void* buf, int count,
 int brahma::MPIDFTracer::MPI_Issend_c(const void* buf, MPI_Count count,
                                       MPI_Datatype datatype, int dest, int tag,
                                       MPI_Comm comm, MPI_Request* request) {
+  ConstEventNameType CATEGORY = "p2p";
   BRAHMA_MAP_OR_FAIL(MPI_Issend_c);
   DFT_LOGGER_START_ALWAYS();
   DFT_LOGGER_UPDATE_TYPE(count, MetadataType::MT_VALUE);
@@ -8614,6 +9015,7 @@ int brahma::MPIDFTracer::MPI_Issend_c(const void* buf, MPI_Count count,
 int brahma::MPIDFTracer::MPI_Issend_c(const void* buf, MPI_Count count,
                                       int datatype, int dest, int tag, int comm,
                                       int* request) {
+  ConstEventNameType CATEGORY = "p2p";
   BRAHMA_MAP_OR_FAIL(MPI_Issend_c);
   DFT_LOGGER_START_ALWAYS();
   DFT_LOGGER_UPDATE_TYPE(count, MetadataType::MT_VALUE);
@@ -8639,6 +9041,7 @@ int brahma::MPIDFTracer::MPI_Issend_c(const void* buf, MPI_Count count,
 int brahma::MPIDFTracer::MPI_Keyval_create(MPI_Copy_function* copy_fn,
                                            MPI_Delete_function* delete_fn,
                                            int* keyval, void* extra_state) {
+  ConstEventNameType CATEGORY = "comm";
   BRAHMA_MAP_OR_FAIL(MPI_Keyval_create);
   DFT_LOGGER_START_ALWAYS();
   int ret = __real_MPI_Keyval_create(copy_fn, delete_fn, keyval, extra_state);
@@ -8657,6 +9060,7 @@ int brahma::MPIDFTracer::MPI_Keyval_create(MPI_Copy_function* copy_fn,
       ((BRAHMA_MPI_VERSION >= 400106 && BRAHMA_MPI_VERSION < 400200) ||   \
        (BRAHMA_MPI_VERSION >= 500006 && BRAHMA_MPI_VERSION < 500100))))
 int brahma::MPIDFTracer::MPI_Keyval_free(int* keyval) {
+  ConstEventNameType CATEGORY = "comm";
   BRAHMA_MAP_OR_FAIL(MPI_Keyval_free);
   DFT_LOGGER_START_ALWAYS();
   int ret = __real_MPI_Keyval_free(keyval);
@@ -8676,6 +9080,7 @@ int brahma::MPIDFTracer::MPI_Keyval_free(int* keyval) {
      (BRAHMA_MPI_VERSION >= 400106 && BRAHMA_MPI_VERSION < 400200))
 int brahma::MPIDFTracer::MPI_Lookup_name(const char* service_name,
                                          MPI_Info info, char* port_name) {
+  ConstEventNameType CATEGORY = "spawn";
   BRAHMA_MAP_OR_FAIL(MPI_Lookup_name);
   DFT_LOGGER_START_ALWAYS();
   DFT_LOGGER_UPDATE_TYPE(info, MetadataType::MT_VALUE);
@@ -8695,6 +9100,7 @@ int brahma::MPIDFTracer::MPI_Lookup_name(const char* service_name,
       (BRAHMA_MPI_VERSION >= 400106 && BRAHMA_MPI_VERSION < 400200))
 int brahma::MPIDFTracer::MPI_Lookup_name(const char* service_name, int info,
                                          char* port_name) {
+  ConstEventNameType CATEGORY = "spawn";
   BRAHMA_MAP_OR_FAIL(MPI_Lookup_name);
   DFT_LOGGER_START_ALWAYS();
   DFT_LOGGER_UPDATE_TYPE(info, MetadataType::MT_VALUE);
@@ -8715,6 +9121,7 @@ int brahma::MPIDFTracer::MPI_Lookup_name(const char* service_name, int info,
      (BRAHMA_MPI_VERSION >= 400106 && BRAHMA_MPI_VERSION < 400200))
 int brahma::MPIDFTracer::MPI_Mprobe(int source, int tag, MPI_Comm comm,
                                     MPI_Message* message, MPI_Status* status) {
+  ConstEventNameType CATEGORY = "p2p";
   BRAHMA_MAP_OR_FAIL(MPI_Mprobe);
   DFT_LOGGER_START_ALWAYS();
   DFT_LOGGER_UPDATE_TYPE(source, MetadataType::MT_VALUE);
@@ -8736,6 +9143,7 @@ int brahma::MPIDFTracer::MPI_Mprobe(int source, int tag, MPI_Comm comm,
       (BRAHMA_MPI_VERSION >= 400106 && BRAHMA_MPI_VERSION < 400200))
 int brahma::MPIDFTracer::MPI_Mprobe(int source, int tag, int comm, int* message,
                                     MPI_Status* status) {
+  ConstEventNameType CATEGORY = "p2p";
   BRAHMA_MAP_OR_FAIL(MPI_Mprobe);
   DFT_LOGGER_START_ALWAYS();
   DFT_LOGGER_UPDATE_TYPE(source, MetadataType::MT_VALUE);
@@ -8758,6 +9166,7 @@ int brahma::MPIDFTracer::MPI_Mprobe(int source, int tag, int comm, int* message,
      (BRAHMA_MPI_VERSION >= 400106 && BRAHMA_MPI_VERSION < 400200))
 int brahma::MPIDFTracer::MPI_Mrecv(void* buf, int count, MPI_Datatype type,
                                    MPI_Message* message, MPI_Status* status) {
+  ConstEventNameType CATEGORY = "p2p";
   BRAHMA_MAP_OR_FAIL(MPI_Mrecv);
   DFT_LOGGER_START_ALWAYS();
   DFT_LOGGER_UPDATE_TYPE(count, MetadataType::MT_VALUE);
@@ -8778,6 +9187,7 @@ int brahma::MPIDFTracer::MPI_Mrecv(void* buf, int count, MPI_Datatype type,
       (BRAHMA_MPI_VERSION >= 400106 && BRAHMA_MPI_VERSION < 400200))
 int brahma::MPIDFTracer::MPI_Mrecv(void* buf, int count, MPI_Datatype type,
                                    int* message, MPI_Status* status) {
+  ConstEventNameType CATEGORY = "p2p";
   BRAHMA_MAP_OR_FAIL(MPI_Mrecv);
   DFT_LOGGER_START_ALWAYS();
   DFT_LOGGER_UPDATE_TYPE(count, MetadataType::MT_VALUE);
@@ -8793,6 +9203,7 @@ int brahma::MPIDFTracer::MPI_Mrecv(void* buf, int count, MPI_Datatype type,
 int brahma::MPIDFTracer::MPI_Mrecv_c(void* buf, MPI_Count count,
                                      MPI_Datatype datatype,
                                      MPI_Message* message, MPI_Status* status) {
+  ConstEventNameType CATEGORY = "p2p";
   BRAHMA_MAP_OR_FAIL(MPI_Mrecv_c);
   DFT_LOGGER_START_ALWAYS();
   DFT_LOGGER_UPDATE_TYPE(count, MetadataType::MT_VALUE);
@@ -8809,6 +9220,7 @@ int brahma::MPIDFTracer::MPI_Mrecv_c(void* buf, MPI_Count count,
       (BRAHMA_MPI_VERSION >= 400203 && BRAHMA_MPI_VERSION < 400300)))
 int brahma::MPIDFTracer::MPI_Mrecv_c(void* buf, MPI_Count count, int datatype,
                                      int* message, MPI_Status* status) {
+  ConstEventNameType CATEGORY = "p2p";
   BRAHMA_MAP_OR_FAIL(MPI_Mrecv_c);
   DFT_LOGGER_START_ALWAYS();
   DFT_LOGGER_UPDATE_TYPE(count, MetadataType::MT_VALUE);
@@ -8831,6 +9243,7 @@ int brahma::MPIDFTracer::MPI_Mrecv_c(void* buf, MPI_Count count, int datatype,
 int brahma::MPIDFTracer::MPI_Neighbor_allgather(
     const void* sendbuf, int sendcount, MPI_Datatype sendtype, void* recvbuf,
     int recvcount, MPI_Datatype recvtype, MPI_Comm comm) {
+  ConstEventNameType CATEGORY = "collective";
   BRAHMA_MAP_OR_FAIL(MPI_Neighbor_allgather);
   DFT_LOGGER_START_ALWAYS();
   DFT_LOGGER_UPDATE_TYPE(sendcount, MetadataType::MT_VALUE);
@@ -8856,6 +9269,7 @@ int brahma::MPIDFTracer::MPI_Neighbor_allgather(
 int brahma::MPIDFTracer::MPI_Neighbor_allgather(
     const void* sendbuf, int sendcount, MPI_Datatype sendtype, void* recvbuf,
     int recvcount, MPI_Datatype recvtype, int comm) {
+  ConstEventNameType CATEGORY = "collective";
   BRAHMA_MAP_OR_FAIL(MPI_Neighbor_allgather);
   DFT_LOGGER_START_ALWAYS();
   DFT_LOGGER_UPDATE_TYPE(sendcount, MetadataType::MT_VALUE);
@@ -8875,6 +9289,7 @@ int brahma::MPIDFTracer::MPI_Neighbor_allgather(
 int brahma::MPIDFTracer::MPI_Neighbor_allgather_c(
     const void* sendbuf, MPI_Count sendcount, MPI_Datatype sendtype,
     void* recvbuf, MPI_Count recvcount, MPI_Datatype recvtype, MPI_Comm comm) {
+  ConstEventNameType CATEGORY = "collective";
   BRAHMA_MAP_OR_FAIL(MPI_Neighbor_allgather_c);
   DFT_LOGGER_START_ALWAYS();
   DFT_LOGGER_UPDATE_TYPE(sendcount, MetadataType::MT_VALUE);
@@ -8898,6 +9313,7 @@ int brahma::MPIDFTracer::MPI_Neighbor_allgather_c(const void* sendbuf,
                                                   int sendtype, void* recvbuf,
                                                   MPI_Count recvcount,
                                                   int recvtype, int comm) {
+  ConstEventNameType CATEGORY = "collective";
   BRAHMA_MAP_OR_FAIL(MPI_Neighbor_allgather_c);
   DFT_LOGGER_START_ALWAYS();
   DFT_LOGGER_UPDATE_TYPE(sendcount, MetadataType::MT_VALUE);
@@ -8920,6 +9336,7 @@ int brahma::MPIDFTracer::MPI_Neighbor_allgather_init(
     const void* sendbuf, int sendcount, MPI_Datatype sendtype, void* recvbuf,
     int recvcount, MPI_Datatype recvtype, MPI_Comm comm, MPI_Info info,
     MPI_Request* request) {
+  ConstEventNameType CATEGORY = "collective";
   BRAHMA_MAP_OR_FAIL(MPI_Neighbor_allgather_init);
   DFT_LOGGER_START_ALWAYS();
   DFT_LOGGER_UPDATE_TYPE(sendcount, MetadataType::MT_VALUE);
@@ -8943,6 +9360,7 @@ int brahma::MPIDFTracer::MPI_Neighbor_allgather_init(
 int brahma::MPIDFTracer::MPI_Neighbor_allgather_init(
     const void* sendbuf, int sendcount, int sendtype, void* recvbuf,
     int recvcount, int recvtype, int comm, int info, int* request) {
+  ConstEventNameType CATEGORY = "collective";
   BRAHMA_MAP_OR_FAIL(MPI_Neighbor_allgather_init);
   DFT_LOGGER_START_ALWAYS();
   DFT_LOGGER_UPDATE_TYPE(sendcount, MetadataType::MT_VALUE);
@@ -8965,6 +9383,7 @@ int brahma::MPIDFTracer::MPI_Neighbor_allgather_init_c(
     const void* sendbuf, MPI_Count sendcount, MPI_Datatype sendtype,
     void* recvbuf, MPI_Count recvcount, MPI_Datatype recvtype, MPI_Comm comm,
     MPI_Info info, MPI_Request* request) {
+  ConstEventNameType CATEGORY = "collective";
   BRAHMA_MAP_OR_FAIL(MPI_Neighbor_allgather_init_c);
   DFT_LOGGER_START_ALWAYS();
   DFT_LOGGER_UPDATE_TYPE(sendcount, MetadataType::MT_VALUE);
@@ -8988,6 +9407,7 @@ int brahma::MPIDFTracer::MPI_Neighbor_allgather_init_c(
 int brahma::MPIDFTracer::MPI_Neighbor_allgather_init_c(
     const void* sendbuf, MPI_Count sendcount, int sendtype, void* recvbuf,
     MPI_Count recvcount, int recvtype, int comm, int info, int* request) {
+  ConstEventNameType CATEGORY = "collective";
   BRAHMA_MAP_OR_FAIL(MPI_Neighbor_allgather_init_c);
   DFT_LOGGER_START_ALWAYS();
   DFT_LOGGER_UPDATE_TYPE(sendcount, MetadataType::MT_VALUE);
@@ -9017,6 +9437,7 @@ int brahma::MPIDFTracer::MPI_Neighbor_allgatherv(
     const void* sendbuf, int sendcount, MPI_Datatype sendtype, void* recvbuf,
     const int recvcounts[], const int displs[], MPI_Datatype recvtype,
     MPI_Comm comm) {
+  ConstEventNameType CATEGORY = "collective";
   BRAHMA_MAP_OR_FAIL(MPI_Neighbor_allgatherv);
   DFT_LOGGER_START_ALWAYS();
   DFT_LOGGER_UPDATE_TYPE(sendcount, MetadataType::MT_VALUE);
@@ -9043,6 +9464,7 @@ int brahma::MPIDFTracer::MPI_Neighbor_allgatherv(
     const void* sendbuf, int sendcount, MPI_Datatype sendtype, void* recvbuf,
     const int recvcounts[], const int displs[], MPI_Datatype recvtype,
     int comm) {
+  ConstEventNameType CATEGORY = "collective";
   BRAHMA_MAP_OR_FAIL(MPI_Neighbor_allgatherv);
   DFT_LOGGER_START_ALWAYS();
   DFT_LOGGER_UPDATE_TYPE(sendcount, MetadataType::MT_VALUE);
@@ -9063,6 +9485,7 @@ int brahma::MPIDFTracer::MPI_Neighbor_allgatherv_c(
     const void* sendbuf, MPI_Count sendcount, MPI_Datatype sendtype,
     void* recvbuf, const MPI_Count recvcounts[], const MPI_Aint displs[],
     MPI_Datatype recvtype, MPI_Comm comm) {
+  ConstEventNameType CATEGORY = "collective";
   BRAHMA_MAP_OR_FAIL(MPI_Neighbor_allgatherv_c);
   DFT_LOGGER_START_ALWAYS();
   DFT_LOGGER_UPDATE_TYPE(sendcount, MetadataType::MT_VALUE);
@@ -9087,6 +9510,7 @@ int brahma::MPIDFTracer::MPI_Neighbor_allgatherv_c(const void* sendbuf,
                                                    const MPI_Count recvcounts[],
                                                    const MPI_Aint displs[],
                                                    int recvtype, int comm) {
+  ConstEventNameType CATEGORY = "collective";
   BRAHMA_MAP_OR_FAIL(MPI_Neighbor_allgatherv_c);
   DFT_LOGGER_START_ALWAYS();
   DFT_LOGGER_UPDATE_TYPE(sendcount, MetadataType::MT_VALUE);
@@ -9109,6 +9533,7 @@ int brahma::MPIDFTracer::MPI_Neighbor_allgatherv_init(
     const void* sendbuf, int sendcount, MPI_Datatype sendtype, void* recvbuf,
     const int recvcounts[], const int displs[], MPI_Datatype recvtype,
     MPI_Comm comm, MPI_Info info, MPI_Request* request) {
+  ConstEventNameType CATEGORY = "collective";
   BRAHMA_MAP_OR_FAIL(MPI_Neighbor_allgatherv_init);
   DFT_LOGGER_START_ALWAYS();
   DFT_LOGGER_UPDATE_TYPE(sendcount, MetadataType::MT_VALUE);
@@ -9132,6 +9557,7 @@ int brahma::MPIDFTracer::MPI_Neighbor_allgatherv_init(
     const void* sendbuf, int sendcount, int sendtype, void* recvbuf,
     const int recvcounts[], const int displs[], int recvtype, int comm,
     int info, int* request) {
+  ConstEventNameType CATEGORY = "collective";
   BRAHMA_MAP_OR_FAIL(MPI_Neighbor_allgatherv_init);
   DFT_LOGGER_START_ALWAYS();
   DFT_LOGGER_UPDATE_TYPE(sendcount, MetadataType::MT_VALUE);
@@ -9153,6 +9579,7 @@ int brahma::MPIDFTracer::MPI_Neighbor_allgatherv_init_c(
     const void* sendbuf, MPI_Count sendcount, MPI_Datatype sendtype,
     void* recvbuf, const MPI_Count recvcounts[], const MPI_Aint displs[],
     MPI_Datatype recvtype, MPI_Comm comm, MPI_Info info, MPI_Request* request) {
+  ConstEventNameType CATEGORY = "collective";
   BRAHMA_MAP_OR_FAIL(MPI_Neighbor_allgatherv_init_c);
   DFT_LOGGER_START_ALWAYS();
   DFT_LOGGER_UPDATE_TYPE(sendcount, MetadataType::MT_VALUE);
@@ -9176,6 +9603,7 @@ int brahma::MPIDFTracer::MPI_Neighbor_allgatherv_init_c(
     const void* sendbuf, MPI_Count sendcount, int sendtype, void* recvbuf,
     const MPI_Count recvcounts[], const MPI_Aint displs[], int recvtype,
     int comm, int info, int* request) {
+  ConstEventNameType CATEGORY = "collective";
   BRAHMA_MAP_OR_FAIL(MPI_Neighbor_allgatherv_init_c);
   DFT_LOGGER_START_ALWAYS();
   DFT_LOGGER_UPDATE_TYPE(sendcount, MetadataType::MT_VALUE);
@@ -9203,6 +9631,7 @@ int brahma::MPIDFTracer::MPI_Neighbor_allgatherv_init_c(
 int brahma::MPIDFTracer::MPI_Neighbor_alltoall(
     const void* sendbuf, int sendcount, MPI_Datatype sendtype, void* recvbuf,
     int recvcount, MPI_Datatype recvtype, MPI_Comm comm) {
+  ConstEventNameType CATEGORY = "collective";
   BRAHMA_MAP_OR_FAIL(MPI_Neighbor_alltoall);
   DFT_LOGGER_START_ALWAYS();
   DFT_LOGGER_UPDATE_TYPE(sendcount, MetadataType::MT_VALUE);
@@ -9228,6 +9657,7 @@ int brahma::MPIDFTracer::MPI_Neighbor_alltoall(
 int brahma::MPIDFTracer::MPI_Neighbor_alltoall(
     const void* sendbuf, int sendcount, MPI_Datatype sendtype, void* recvbuf,
     int recvcount, MPI_Datatype recvtype, int comm) {
+  ConstEventNameType CATEGORY = "collective";
   BRAHMA_MAP_OR_FAIL(MPI_Neighbor_alltoall);
   DFT_LOGGER_START_ALWAYS();
   DFT_LOGGER_UPDATE_TYPE(sendcount, MetadataType::MT_VALUE);
@@ -9247,6 +9677,7 @@ int brahma::MPIDFTracer::MPI_Neighbor_alltoall(
 int brahma::MPIDFTracer::MPI_Neighbor_alltoall_c(
     const void* sendbuf, MPI_Count sendcount, MPI_Datatype sendtype,
     void* recvbuf, MPI_Count recvcount, MPI_Datatype recvtype, MPI_Comm comm) {
+  ConstEventNameType CATEGORY = "collective";
   BRAHMA_MAP_OR_FAIL(MPI_Neighbor_alltoall_c);
   DFT_LOGGER_START_ALWAYS();
   DFT_LOGGER_UPDATE_TYPE(sendcount, MetadataType::MT_VALUE);
@@ -9270,6 +9701,7 @@ int brahma::MPIDFTracer::MPI_Neighbor_alltoall_c(const void* sendbuf,
                                                  int sendtype, void* recvbuf,
                                                  MPI_Count recvcount,
                                                  int recvtype, int comm) {
+  ConstEventNameType CATEGORY = "collective";
   BRAHMA_MAP_OR_FAIL(MPI_Neighbor_alltoall_c);
   DFT_LOGGER_START_ALWAYS();
   DFT_LOGGER_UPDATE_TYPE(sendcount, MetadataType::MT_VALUE);
@@ -9292,6 +9724,7 @@ int brahma::MPIDFTracer::MPI_Neighbor_alltoall_init(
     const void* sendbuf, int sendcount, MPI_Datatype sendtype, void* recvbuf,
     int recvcount, MPI_Datatype recvtype, MPI_Comm comm, MPI_Info info,
     MPI_Request* request) {
+  ConstEventNameType CATEGORY = "collective";
   BRAHMA_MAP_OR_FAIL(MPI_Neighbor_alltoall_init);
   DFT_LOGGER_START_ALWAYS();
   DFT_LOGGER_UPDATE_TYPE(sendcount, MetadataType::MT_VALUE);
@@ -9315,6 +9748,7 @@ int brahma::MPIDFTracer::MPI_Neighbor_alltoall_init(
 int brahma::MPIDFTracer::MPI_Neighbor_alltoall_init(
     const void* sendbuf, int sendcount, int sendtype, void* recvbuf,
     int recvcount, int recvtype, int comm, int info, int* request) {
+  ConstEventNameType CATEGORY = "collective";
   BRAHMA_MAP_OR_FAIL(MPI_Neighbor_alltoall_init);
   DFT_LOGGER_START_ALWAYS();
   DFT_LOGGER_UPDATE_TYPE(sendcount, MetadataType::MT_VALUE);
@@ -9337,6 +9771,7 @@ int brahma::MPIDFTracer::MPI_Neighbor_alltoall_init_c(
     const void* sendbuf, MPI_Count sendcount, MPI_Datatype sendtype,
     void* recvbuf, MPI_Count recvcount, MPI_Datatype recvtype, MPI_Comm comm,
     MPI_Info info, MPI_Request* request) {
+  ConstEventNameType CATEGORY = "collective";
   BRAHMA_MAP_OR_FAIL(MPI_Neighbor_alltoall_init_c);
   DFT_LOGGER_START_ALWAYS();
   DFT_LOGGER_UPDATE_TYPE(sendcount, MetadataType::MT_VALUE);
@@ -9360,6 +9795,7 @@ int brahma::MPIDFTracer::MPI_Neighbor_alltoall_init_c(
 int brahma::MPIDFTracer::MPI_Neighbor_alltoall_init_c(
     const void* sendbuf, MPI_Count sendcount, int sendtype, void* recvbuf,
     MPI_Count recvcount, int recvtype, int comm, int info, int* request) {
+  ConstEventNameType CATEGORY = "collective";
   BRAHMA_MAP_OR_FAIL(MPI_Neighbor_alltoall_init_c);
   DFT_LOGGER_START_ALWAYS();
   DFT_LOGGER_UPDATE_TYPE(sendcount, MetadataType::MT_VALUE);
@@ -9389,6 +9825,7 @@ int brahma::MPIDFTracer::MPI_Neighbor_alltoallv(
     const void* sendbuf, const int sendcounts[], const int sdispls[],
     MPI_Datatype sendtype, void* recvbuf, const int recvcounts[],
     const int rdispls[], MPI_Datatype recvtype, MPI_Comm comm) {
+  ConstEventNameType CATEGORY = "collective";
   BRAHMA_MAP_OR_FAIL(MPI_Neighbor_alltoallv);
   DFT_LOGGER_START_ALWAYS();
   DFT_LOGGER_UPDATE_TYPE(sendtype, MetadataType::MT_VALUE);
@@ -9414,6 +9851,7 @@ int brahma::MPIDFTracer::MPI_Neighbor_alltoallv(
     const void* sendbuf, const int sendcounts[], const int sdispls[],
     MPI_Datatype sendtype, void* recvbuf, const int recvcounts[],
     const int rdispls[], MPI_Datatype recvtype, int comm) {
+  ConstEventNameType CATEGORY = "collective";
   BRAHMA_MAP_OR_FAIL(MPI_Neighbor_alltoallv);
   DFT_LOGGER_START_ALWAYS();
   DFT_LOGGER_UPDATE_TYPE(sendtype, MetadataType::MT_VALUE);
@@ -9433,6 +9871,7 @@ int brahma::MPIDFTracer::MPI_Neighbor_alltoallv_c(
     const void* sendbuf, const MPI_Count sendcounts[], const MPI_Aint sdispls[],
     MPI_Datatype sendtype, void* recvbuf, const MPI_Count recvcounts[],
     const MPI_Aint rdispls[], MPI_Datatype recvtype, MPI_Comm comm) {
+  ConstEventNameType CATEGORY = "collective";
   BRAHMA_MAP_OR_FAIL(MPI_Neighbor_alltoallv_c);
   DFT_LOGGER_START_ALWAYS();
   DFT_LOGGER_UPDATE_TYPE(sendtype, MetadataType::MT_VALUE);
@@ -9454,6 +9893,7 @@ int brahma::MPIDFTracer::MPI_Neighbor_alltoallv_c(
     const void* sendbuf, const MPI_Count sendcounts[], const MPI_Aint sdispls[],
     int sendtype, void* recvbuf, const MPI_Count recvcounts[],
     const MPI_Aint rdispls[], int recvtype, int comm) {
+  ConstEventNameType CATEGORY = "collective";
   BRAHMA_MAP_OR_FAIL(MPI_Neighbor_alltoallv_c);
   DFT_LOGGER_START_ALWAYS();
   DFT_LOGGER_UPDATE_TYPE(sendtype, MetadataType::MT_VALUE);
@@ -9476,6 +9916,7 @@ int brahma::MPIDFTracer::MPI_Neighbor_alltoallv_init(
     MPI_Datatype sendtype, void* recvbuf, const int recvcounts[],
     const int rdispls[], MPI_Datatype recvtype, MPI_Comm comm, MPI_Info info,
     MPI_Request* request) {
+  ConstEventNameType CATEGORY = "collective";
   BRAHMA_MAP_OR_FAIL(MPI_Neighbor_alltoallv_init);
   DFT_LOGGER_START_ALWAYS();
   DFT_LOGGER_UPDATE_TYPE(sendtype, MetadataType::MT_VALUE);
@@ -9498,6 +9939,7 @@ int brahma::MPIDFTracer::MPI_Neighbor_alltoallv_init(
     const void* sendbuf, const int sendcounts[], const int sdispls[],
     int sendtype, void* recvbuf, const int recvcounts[], const int rdispls[],
     int recvtype, int comm, int info, int* request) {
+  ConstEventNameType CATEGORY = "collective";
   BRAHMA_MAP_OR_FAIL(MPI_Neighbor_alltoallv_init);
   DFT_LOGGER_START_ALWAYS();
   DFT_LOGGER_UPDATE_TYPE(sendtype, MetadataType::MT_VALUE);
@@ -9519,6 +9961,7 @@ int brahma::MPIDFTracer::MPI_Neighbor_alltoallv_init_c(
     MPI_Datatype sendtype, void* recvbuf, const MPI_Count recvcounts[],
     const MPI_Aint rdispls[], MPI_Datatype recvtype, MPI_Comm comm,
     MPI_Info info, MPI_Request* request) {
+  ConstEventNameType CATEGORY = "collective";
   BRAHMA_MAP_OR_FAIL(MPI_Neighbor_alltoallv_init_c);
   DFT_LOGGER_START_ALWAYS();
   DFT_LOGGER_UPDATE_TYPE(sendtype, MetadataType::MT_VALUE);
@@ -9541,6 +9984,7 @@ int brahma::MPIDFTracer::MPI_Neighbor_alltoallv_init_c(
     const void* sendbuf, const MPI_Count sendcounts[], const MPI_Aint sdispls[],
     int sendtype, void* recvbuf, const MPI_Count recvcounts[],
     const MPI_Aint rdispls[], int recvtype, int comm, int info, int* request) {
+  ConstEventNameType CATEGORY = "collective";
   BRAHMA_MAP_OR_FAIL(MPI_Neighbor_alltoallv_init_c);
   DFT_LOGGER_START_ALWAYS();
   DFT_LOGGER_UPDATE_TYPE(sendtype, MetadataType::MT_VALUE);
@@ -9568,6 +10012,7 @@ int brahma::MPIDFTracer::MPI_Neighbor_alltoallw(
     const void* sendbuf, const int sendcounts[], const MPI_Aint sdispls[],
     const MPI_Datatype sendtypes[], void* recvbuf, const int recvcounts[],
     const MPI_Aint rdispls[], const MPI_Datatype recvtypes[], MPI_Comm comm) {
+  ConstEventNameType CATEGORY = "collective";
   BRAHMA_MAP_OR_FAIL(MPI_Neighbor_alltoallw);
   DFT_LOGGER_START_ALWAYS();
   DFT_LOGGER_UPDATE_TYPE(comm, MetadataType::MT_VALUE);
@@ -9591,6 +10036,7 @@ int brahma::MPIDFTracer::MPI_Neighbor_alltoallw(
     const void* sendbuf, const int sendcounts[], const MPI_Aint sdispls[],
     const MPI_Datatype sendtypes[], void* recvbuf, const int recvcounts[],
     const MPI_Aint rdispls[], const MPI_Datatype recvtypes[], int comm) {
+  ConstEventNameType CATEGORY = "collective";
   BRAHMA_MAP_OR_FAIL(MPI_Neighbor_alltoallw);
   DFT_LOGGER_START_ALWAYS();
   DFT_LOGGER_UPDATE_TYPE(comm, MetadataType::MT_VALUE);
@@ -9608,6 +10054,7 @@ int brahma::MPIDFTracer::MPI_Neighbor_alltoallw_c(
     const void* sendbuf, const MPI_Count sendcounts[], const MPI_Aint sdispls[],
     const MPI_Datatype sendtypes[], void* recvbuf, const MPI_Count recvcounts[],
     const MPI_Aint rdispls[], const MPI_Datatype recvtypes[], MPI_Comm comm) {
+  ConstEventNameType CATEGORY = "collective";
   BRAHMA_MAP_OR_FAIL(MPI_Neighbor_alltoallw_c);
   DFT_LOGGER_START_ALWAYS();
   DFT_LOGGER_UPDATE_TYPE(comm, MetadataType::MT_VALUE);
@@ -9627,6 +10074,7 @@ int brahma::MPIDFTracer::MPI_Neighbor_alltoallw_c(
     const void* sendbuf, const MPI_Count sendcounts[], const MPI_Aint sdispls[],
     const int sendtypes[], void* recvbuf, const MPI_Count recvcounts[],
     const MPI_Aint rdispls[], const int recvtypes[], int comm) {
+  ConstEventNameType CATEGORY = "collective";
   BRAHMA_MAP_OR_FAIL(MPI_Neighbor_alltoallw_c);
   DFT_LOGGER_START_ALWAYS();
   DFT_LOGGER_UPDATE_TYPE(comm, MetadataType::MT_VALUE);
@@ -9647,6 +10095,7 @@ int brahma::MPIDFTracer::MPI_Neighbor_alltoallw_init(
     const MPI_Datatype sendtypes[], void* recvbuf, const int recvcounts[],
     const MPI_Aint rdispls[], const MPI_Datatype recvtypes[], MPI_Comm comm,
     MPI_Info info, MPI_Request* request) {
+  ConstEventNameType CATEGORY = "collective";
   BRAHMA_MAP_OR_FAIL(MPI_Neighbor_alltoallw_init);
   DFT_LOGGER_START_ALWAYS();
   DFT_LOGGER_UPDATE_TYPE(comm, MetadataType::MT_VALUE);
@@ -9668,6 +10117,7 @@ int brahma::MPIDFTracer::MPI_Neighbor_alltoallw_init(
     const int sendtypes[], void* recvbuf, const int recvcounts[],
     const MPI_Aint rdispls[], const int recvtypes[], int comm, int info,
     int* request) {
+  ConstEventNameType CATEGORY = "collective";
   BRAHMA_MAP_OR_FAIL(MPI_Neighbor_alltoallw_init);
   DFT_LOGGER_START_ALWAYS();
   DFT_LOGGER_UPDATE_TYPE(comm, MetadataType::MT_VALUE);
@@ -9687,6 +10137,7 @@ int brahma::MPIDFTracer::MPI_Neighbor_alltoallw_init_c(
     const MPI_Datatype sendtypes[], void* recvbuf, const MPI_Count recvcounts[],
     const MPI_Aint rdispls[], const MPI_Datatype recvtypes[], MPI_Comm comm,
     MPI_Info info, MPI_Request* request) {
+  ConstEventNameType CATEGORY = "collective";
   BRAHMA_MAP_OR_FAIL(MPI_Neighbor_alltoallw_init_c);
   DFT_LOGGER_START_ALWAYS();
   DFT_LOGGER_UPDATE_TYPE(comm, MetadataType::MT_VALUE);
@@ -9708,6 +10159,7 @@ int brahma::MPIDFTracer::MPI_Neighbor_alltoallw_init_c(
     const int sendtypes[], void* recvbuf, const MPI_Count recvcounts[],
     const MPI_Aint rdispls[], const int recvtypes[], int comm, int info,
     int* request) {
+  ConstEventNameType CATEGORY = "collective";
   BRAHMA_MAP_OR_FAIL(MPI_Neighbor_alltoallw_init_c);
   DFT_LOGGER_START_ALWAYS();
   DFT_LOGGER_UPDATE_TYPE(comm, MetadataType::MT_VALUE);
@@ -9730,6 +10182,7 @@ int brahma::MPIDFTracer::MPI_Neighbor_alltoallw_init_c(
       ((BRAHMA_MPI_VERSION >= 400106 && BRAHMA_MPI_VERSION < 400200) ||   \
        (BRAHMA_MPI_VERSION >= 500006 && BRAHMA_MPI_VERSION < 500100))))
 int brahma::MPIDFTracer::MPI_Op_commutative(MPI_Op op, int* commute) {
+  ConstEventNameType CATEGORY = "collective";
   BRAHMA_MAP_OR_FAIL(MPI_Op_commutative);
   DFT_LOGGER_START_ALWAYS();
   DFT_LOGGER_UPDATE_TYPE(op, MetadataType::MT_VALUE);
@@ -9750,6 +10203,7 @@ int brahma::MPIDFTracer::MPI_Op_commutative(MPI_Op op, int* commute) {
        (BRAHMA_MPI_VERSION >= 500006 && BRAHMA_MPI_VERSION < 500100))))
 int brahma::MPIDFTracer::MPI_Op_create(MPI_User_function* function, int commute,
                                        MPI_Op* op) {
+  ConstEventNameType CATEGORY = "collective";
   BRAHMA_MAP_OR_FAIL(MPI_Op_create);
   DFT_LOGGER_START_ALWAYS();
   DFT_LOGGER_UPDATE_TYPE(commute, MetadataType::MT_VALUE);
@@ -9763,6 +10217,7 @@ int brahma::MPIDFTracer::MPI_Op_create(MPI_User_function* function, int commute,
      (BRAHMA_MPI_VERSION >= 900001 && BRAHMA_MPI_VERSION < 900100))
 int brahma::MPIDFTracer::MPI_Op_create_c(MPI_User_function_c* user_fn,
                                          int commute, MPI_Op* op) {
+  ConstEventNameType CATEGORY = "collective";
   BRAHMA_MAP_OR_FAIL(MPI_Op_create_c);
   DFT_LOGGER_START_ALWAYS();
   DFT_LOGGER_UPDATE_TYPE(commute, MetadataType::MT_VALUE);
@@ -9778,6 +10233,7 @@ int brahma::MPIDFTracer::MPI_Op_create_c(MPI_User_function_c* user_fn,
       (BRAHMA_MPI_VERSION >= 400203 && BRAHMA_MPI_VERSION < 400300)))
 int brahma::MPIDFTracer::MPI_Op_create_c(MPI_User_function_c* user_fn,
                                          int commute, int* op) {
+  ConstEventNameType CATEGORY = "collective";
   BRAHMA_MAP_OR_FAIL(MPI_Op_create_c);
   DFT_LOGGER_START_ALWAYS();
   DFT_LOGGER_UPDATE_TYPE(commute, MetadataType::MT_VALUE);
@@ -9797,6 +10253,7 @@ int brahma::MPIDFTracer::MPI_Op_create_c(MPI_User_function_c* user_fn,
     (defined(BRAHMA_MPI_IMPL_OPENMPI) &&                                   \
      (BRAHMA_MPI_VERSION >= 400106 && BRAHMA_MPI_VERSION < 400200))
 int brahma::MPIDFTracer::MPI_Op_free(MPI_Op* op) {
+  ConstEventNameType CATEGORY = "collective";
   BRAHMA_MAP_OR_FAIL(MPI_Op_free);
   DFT_LOGGER_START_ALWAYS();
   int ret = __real_MPI_Op_free(op);
@@ -9814,6 +10271,7 @@ int brahma::MPIDFTracer::MPI_Op_free(MPI_Op* op) {
     !(defined(BRAHMA_MPI_IMPL_OPENMPI) &&                                  \
       (BRAHMA_MPI_VERSION >= 400106 && BRAHMA_MPI_VERSION < 400200))
 int brahma::MPIDFTracer::MPI_Op_free(int* op) {
+  ConstEventNameType CATEGORY = "collective";
   BRAHMA_MAP_OR_FAIL(MPI_Op_free);
   DFT_LOGGER_START_ALWAYS();
   int ret = __real_MPI_Op_free(op);
@@ -9832,6 +10290,7 @@ int brahma::MPIDFTracer::MPI_Op_free(int* op) {
     (defined(BRAHMA_MPI_IMPL_OPENMPI) &&                                   \
      (BRAHMA_MPI_VERSION >= 400106 && BRAHMA_MPI_VERSION < 400200))
 int brahma::MPIDFTracer::MPI_Open_port(MPI_Info info, char* port_name) {
+  ConstEventNameType CATEGORY = "spawn";
   BRAHMA_MAP_OR_FAIL(MPI_Open_port);
   DFT_LOGGER_START_ALWAYS();
   DFT_LOGGER_UPDATE_TYPE(info, MetadataType::MT_VALUE);
@@ -9850,6 +10309,7 @@ int brahma::MPIDFTracer::MPI_Open_port(MPI_Info info, char* port_name) {
     !(defined(BRAHMA_MPI_IMPL_OPENMPI) &&                                  \
       (BRAHMA_MPI_VERSION >= 400106 && BRAHMA_MPI_VERSION < 400200))
 int brahma::MPIDFTracer::MPI_Open_port(int info, char* port_name) {
+  ConstEventNameType CATEGORY = "spawn";
   BRAHMA_MAP_OR_FAIL(MPI_Open_port);
   DFT_LOGGER_START_ALWAYS();
   DFT_LOGGER_UPDATE_TYPE(info, MetadataType::MT_VALUE);
@@ -9871,6 +10331,7 @@ int brahma::MPIDFTracer::MPI_Open_port(int info, char* port_name) {
 int brahma::MPIDFTracer::MPI_Pack(const void* inbuf, int incount,
                                   MPI_Datatype datatype, void* outbuf,
                                   int outsize, int* position, MPI_Comm comm) {
+  ConstEventNameType CATEGORY = "datatype";
   BRAHMA_MAP_OR_FAIL(MPI_Pack);
   DFT_LOGGER_START_ALWAYS();
   DFT_LOGGER_UPDATE_TYPE(incount, MetadataType::MT_VALUE);
@@ -9895,6 +10356,7 @@ int brahma::MPIDFTracer::MPI_Pack(const void* inbuf, int incount,
 int brahma::MPIDFTracer::MPI_Pack(const void* inbuf, int incount,
                                   MPI_Datatype datatype, void* outbuf,
                                   int outsize, int* position, int comm) {
+  ConstEventNameType CATEGORY = "datatype";
   BRAHMA_MAP_OR_FAIL(MPI_Pack);
   DFT_LOGGER_START_ALWAYS();
   DFT_LOGGER_UPDATE_TYPE(incount, MetadataType::MT_VALUE);
@@ -9914,6 +10376,7 @@ int brahma::MPIDFTracer::MPI_Pack_c(const void* inbuf, MPI_Count incount,
                                     MPI_Datatype datatype, void* outbuf,
                                     MPI_Count outsize, MPI_Count* position,
                                     MPI_Comm comm) {
+  ConstEventNameType CATEGORY = "datatype";
   BRAHMA_MAP_OR_FAIL(MPI_Pack_c);
   DFT_LOGGER_START_ALWAYS();
   DFT_LOGGER_UPDATE_TYPE(incount, MetadataType::MT_VALUE);
@@ -9935,6 +10398,7 @@ int brahma::MPIDFTracer::MPI_Pack_c(const void* inbuf, MPI_Count incount,
                                     int datatype, void* outbuf,
                                     MPI_Count outsize, MPI_Count* position,
                                     int comm) {
+  ConstEventNameType CATEGORY = "datatype";
   BRAHMA_MAP_OR_FAIL(MPI_Pack_c);
   DFT_LOGGER_START_ALWAYS();
   DFT_LOGGER_UPDATE_TYPE(incount, MetadataType::MT_VALUE);
@@ -9957,6 +10421,7 @@ int brahma::MPIDFTracer::MPI_Pack_external(const char* datarep,
                                            MPI_Datatype datatype, void* outbuf,
                                            MPI_Aint outsize,
                                            MPI_Aint* position) {
+  ConstEventNameType CATEGORY = "datatype";
   BRAHMA_MAP_OR_FAIL(MPI_Pack_external);
   DFT_LOGGER_START_ALWAYS();
   DFT_LOGGER_UPDATE_TYPE(incount, MetadataType::MT_VALUE);
@@ -9977,6 +10442,7 @@ int brahma::MPIDFTracer::MPI_Pack_external(const char datarep[],
                                            MPI_Datatype datatype, void* outbuf,
                                            MPI_Aint outsize,
                                            MPI_Aint* position) {
+  ConstEventNameType CATEGORY = "datatype";
   BRAHMA_MAP_OR_FAIL(MPI_Pack_external);
   DFT_LOGGER_START_ALWAYS();
   DFT_LOGGER_UPDATE_TYPE(incount, MetadataType::MT_VALUE);
@@ -9997,6 +10463,7 @@ int brahma::MPIDFTracer::MPI_Pack_external_c(const char* datarep,
                                              MPI_Datatype datatype,
                                              void* outbuf, MPI_Count outsize,
                                              MPI_Count* position) {
+  ConstEventNameType CATEGORY = "datatype";
   BRAHMA_MAP_OR_FAIL(MPI_Pack_external_c);
   DFT_LOGGER_START_ALWAYS();
   DFT_LOGGER_UPDATE_TYPE(incount, MetadataType::MT_VALUE);
@@ -10018,6 +10485,7 @@ int brahma::MPIDFTracer::MPI_Pack_external_c(const char* datarep,
                                              MPI_Count incount, int datatype,
                                              void* outbuf, MPI_Count outsize,
                                              MPI_Count* position) {
+  ConstEventNameType CATEGORY = "datatype";
   BRAHMA_MAP_OR_FAIL(MPI_Pack_external_c);
   DFT_LOGGER_START_ALWAYS();
   DFT_LOGGER_UPDATE_TYPE(incount, MetadataType::MT_VALUE);
@@ -10038,6 +10506,7 @@ int brahma::MPIDFTracer::MPI_Pack_external_size(const char* datarep,
                                                 int incount,
                                                 MPI_Datatype datatype,
                                                 MPI_Aint* size) {
+  ConstEventNameType CATEGORY = "datatype";
   BRAHMA_MAP_OR_FAIL(MPI_Pack_external_size);
   DFT_LOGGER_START_ALWAYS();
   DFT_LOGGER_UPDATE_TYPE(incount, MetadataType::MT_VALUE);
@@ -10055,6 +10524,7 @@ int brahma::MPIDFTracer::MPI_Pack_external_size(const char datarep[],
                                                 int incount,
                                                 MPI_Datatype datatype,
                                                 MPI_Aint* size) {
+  ConstEventNameType CATEGORY = "datatype";
   BRAHMA_MAP_OR_FAIL(MPI_Pack_external_size);
   DFT_LOGGER_START_ALWAYS();
   DFT_LOGGER_UPDATE_TYPE(incount, MetadataType::MT_VALUE);
@@ -10071,6 +10541,7 @@ int brahma::MPIDFTracer::MPI_Pack_external_size_c(const char* datarep,
                                                   MPI_Count incount,
                                                   MPI_Datatype datatype,
                                                   MPI_Count* size) {
+  ConstEventNameType CATEGORY = "datatype";
   BRAHMA_MAP_OR_FAIL(MPI_Pack_external_size_c);
   DFT_LOGGER_START_ALWAYS();
   DFT_LOGGER_UPDATE_TYPE(incount, MetadataType::MT_VALUE);
@@ -10089,6 +10560,7 @@ int brahma::MPIDFTracer::MPI_Pack_external_size_c(const char* datarep,
                                                   MPI_Count incount,
                                                   int datatype,
                                                   MPI_Count* size) {
+  ConstEventNameType CATEGORY = "datatype";
   BRAHMA_MAP_OR_FAIL(MPI_Pack_external_size_c);
   DFT_LOGGER_START_ALWAYS();
   DFT_LOGGER_UPDATE_TYPE(incount, MetadataType::MT_VALUE);
@@ -10110,6 +10582,7 @@ int brahma::MPIDFTracer::MPI_Pack_external_size_c(const char* datarep,
      (BRAHMA_MPI_VERSION >= 400106 && BRAHMA_MPI_VERSION < 400200))
 int brahma::MPIDFTracer::MPI_Pack_size(int incount, MPI_Datatype datatype,
                                        MPI_Comm comm, int* size) {
+  ConstEventNameType CATEGORY = "datatype";
   BRAHMA_MAP_OR_FAIL(MPI_Pack_size);
   DFT_LOGGER_START_ALWAYS();
   DFT_LOGGER_UPDATE_TYPE(incount, MetadataType::MT_VALUE);
@@ -10131,6 +10604,7 @@ int brahma::MPIDFTracer::MPI_Pack_size(int incount, MPI_Datatype datatype,
       (BRAHMA_MPI_VERSION >= 400106 && BRAHMA_MPI_VERSION < 400200))
 int brahma::MPIDFTracer::MPI_Pack_size(int incount, MPI_Datatype datatype,
                                        int comm, int* size) {
+  ConstEventNameType CATEGORY = "datatype";
   BRAHMA_MAP_OR_FAIL(MPI_Pack_size);
   DFT_LOGGER_START_ALWAYS();
   DFT_LOGGER_UPDATE_TYPE(incount, MetadataType::MT_VALUE);
@@ -10147,6 +10621,7 @@ int brahma::MPIDFTracer::MPI_Pack_size(int incount, MPI_Datatype datatype,
 int brahma::MPIDFTracer::MPI_Pack_size_c(MPI_Count incount,
                                          MPI_Datatype datatype, MPI_Comm comm,
                                          MPI_Count* size) {
+  ConstEventNameType CATEGORY = "datatype";
   BRAHMA_MAP_OR_FAIL(MPI_Pack_size_c);
   DFT_LOGGER_START_ALWAYS();
   DFT_LOGGER_UPDATE_TYPE(incount, MetadataType::MT_VALUE);
@@ -10164,6 +10639,7 @@ int brahma::MPIDFTracer::MPI_Pack_size_c(MPI_Count incount,
       (BRAHMA_MPI_VERSION >= 400203 && BRAHMA_MPI_VERSION < 400300)))
 int brahma::MPIDFTracer::MPI_Pack_size_c(MPI_Count incount, int datatype,
                                          int comm, MPI_Count* size) {
+  ConstEventNameType CATEGORY = "datatype";
   BRAHMA_MAP_OR_FAIL(MPI_Pack_size_c);
   DFT_LOGGER_START_ALWAYS();
   DFT_LOGGER_UPDATE_TYPE(incount, MetadataType::MT_VALUE);
@@ -10181,6 +10657,7 @@ int brahma::MPIDFTracer::MPI_Pack_size_c(MPI_Count incount, int datatype,
       (BRAHMA_MPI_VERSION >= 500006 && BRAHMA_MPI_VERSION < 500100)))
 int brahma::MPIDFTracer::MPI_Parrived(MPI_Request request, int partition,
                                       int* flag) {
+  ConstEventNameType CATEGORY = "p2p";
   BRAHMA_MAP_OR_FAIL(MPI_Parrived);
   DFT_LOGGER_START_ALWAYS();
   DFT_LOGGER_UPDATE_TYPE(request, MetadataType::MT_VALUE);
@@ -10196,6 +10673,7 @@ int brahma::MPIDFTracer::MPI_Parrived(MPI_Request request, int partition,
      (defined(BRAHMA_MPI_IMPL_MPICH) &&                                 \
       (BRAHMA_MPI_VERSION >= 400203 && BRAHMA_MPI_VERSION < 400300)))
 int brahma::MPIDFTracer::MPI_Parrived(int request, int partition, int* flag) {
+  ConstEventNameType CATEGORY = "p2p";
   BRAHMA_MAP_OR_FAIL(MPI_Parrived);
   DFT_LOGGER_START_ALWAYS();
   DFT_LOGGER_UPDATE_TYPE(request, MetadataType::MT_VALUE);
@@ -10211,6 +10689,7 @@ int brahma::MPIDFTracer::MPI_Parrived(int request, int partition, int* flag) {
      (defined(BRAHMA_MPI_IMPL_OPENMPI) &&                               \
       (BRAHMA_MPI_VERSION >= 500006 && BRAHMA_MPI_VERSION < 500100)))
 int brahma::MPIDFTracer::MPI_Pready(int partitions, MPI_Request request) {
+  ConstEventNameType CATEGORY = "p2p";
   BRAHMA_MAP_OR_FAIL(MPI_Pready);
   DFT_LOGGER_START_ALWAYS();
   DFT_LOGGER_UPDATE_TYPE(partitions, MetadataType::MT_VALUE);
@@ -10226,6 +10705,7 @@ int brahma::MPIDFTracer::MPI_Pready(int partitions, MPI_Request request) {
      (defined(BRAHMA_MPI_IMPL_MPICH) &&                                 \
       (BRAHMA_MPI_VERSION >= 400203 && BRAHMA_MPI_VERSION < 400300)))
 int brahma::MPIDFTracer::MPI_Pready(int partitions, int request) {
+  ConstEventNameType CATEGORY = "p2p";
   BRAHMA_MAP_OR_FAIL(MPI_Pready);
   DFT_LOGGER_START_ALWAYS();
   DFT_LOGGER_UPDATE_TYPE(partitions, MetadataType::MT_VALUE);
@@ -10241,6 +10721,7 @@ int brahma::MPIDFTracer::MPI_Pready(int partitions, int request) {
 int brahma::MPIDFTracer::MPI_Pready_list(int length,
                                          const int array_of_partitions[],
                                          int request) {
+  ConstEventNameType CATEGORY = "p2p";
   BRAHMA_MAP_OR_FAIL(MPI_Pready_list);
   DFT_LOGGER_START_ALWAYS();
   DFT_LOGGER_UPDATE_TYPE(length, MetadataType::MT_VALUE);
@@ -10255,6 +10736,7 @@ int brahma::MPIDFTracer::MPI_Pready_list(int length,
      (BRAHMA_MPI_VERSION >= 500006 && BRAHMA_MPI_VERSION < 500100))
 int brahma::MPIDFTracer::MPI_Pready_list(int length, int partition_list[],
                                          MPI_Request request) {
+  ConstEventNameType CATEGORY = "p2p";
   BRAHMA_MAP_OR_FAIL(MPI_Pready_list);
   DFT_LOGGER_START_ALWAYS();
   DFT_LOGGER_UPDATE_TYPE(length, MetadataType::MT_VALUE);
@@ -10271,6 +10753,7 @@ int brahma::MPIDFTracer::MPI_Pready_list(int length, int partition_list[],
       (BRAHMA_MPI_VERSION >= 500006 && BRAHMA_MPI_VERSION < 500100)))
 int brahma::MPIDFTracer::MPI_Pready_range(int partition_low, int partition_high,
                                           MPI_Request request) {
+  ConstEventNameType CATEGORY = "p2p";
   BRAHMA_MAP_OR_FAIL(MPI_Pready_range);
   DFT_LOGGER_START_ALWAYS();
   DFT_LOGGER_UPDATE_TYPE(partition_low, MetadataType::MT_VALUE);
@@ -10288,6 +10771,7 @@ int brahma::MPIDFTracer::MPI_Pready_range(int partition_low, int partition_high,
       (BRAHMA_MPI_VERSION >= 400203 && BRAHMA_MPI_VERSION < 400300)))
 int brahma::MPIDFTracer::MPI_Pready_range(int partition_low, int partition_high,
                                           int request) {
+  ConstEventNameType CATEGORY = "p2p";
   BRAHMA_MAP_OR_FAIL(MPI_Pready_range);
   DFT_LOGGER_START_ALWAYS();
   DFT_LOGGER_UPDATE_TYPE(partition_low, MetadataType::MT_VALUE);
@@ -10307,6 +10791,7 @@ int brahma::MPIDFTracer::MPI_Precv_init(void* buf, int partitions,
                                         MPI_Count count, MPI_Datatype datatype,
                                         int source, int tag, MPI_Comm comm,
                                         MPI_Info info, MPI_Request* request) {
+  ConstEventNameType CATEGORY = "p2p";
   BRAHMA_MAP_OR_FAIL(MPI_Precv_init);
   DFT_LOGGER_START_ALWAYS();
   DFT_LOGGER_UPDATE_TYPE(partitions, MetadataType::MT_VALUE);
@@ -10331,6 +10816,7 @@ int brahma::MPIDFTracer::MPI_Precv_init(void* buf, int partitions,
                                         MPI_Count count, int datatype,
                                         int source, int tag, int comm, int info,
                                         int* request) {
+  ConstEventNameType CATEGORY = "p2p";
   BRAHMA_MAP_OR_FAIL(MPI_Precv_init);
   DFT_LOGGER_START_ALWAYS();
   DFT_LOGGER_UPDATE_TYPE(partitions, MetadataType::MT_VALUE);
@@ -10358,6 +10844,7 @@ int brahma::MPIDFTracer::MPI_Precv_init(void* buf, int partitions,
      (BRAHMA_MPI_VERSION >= 400106 && BRAHMA_MPI_VERSION < 400200))
 int brahma::MPIDFTracer::MPI_Probe(int source, int tag, MPI_Comm comm,
                                    MPI_Status* status) {
+  ConstEventNameType CATEGORY = "p2p";
   BRAHMA_MAP_OR_FAIL(MPI_Probe);
   DFT_LOGGER_START_ALWAYS();
   DFT_LOGGER_UPDATE_TYPE(source, MetadataType::MT_VALUE);
@@ -10379,6 +10866,7 @@ int brahma::MPIDFTracer::MPI_Probe(int source, int tag, MPI_Comm comm,
       (BRAHMA_MPI_VERSION >= 400106 && BRAHMA_MPI_VERSION < 400200))
 int brahma::MPIDFTracer::MPI_Probe(int source, int tag, int comm,
                                    MPI_Status* status) {
+  ConstEventNameType CATEGORY = "p2p";
   BRAHMA_MAP_OR_FAIL(MPI_Probe);
   DFT_LOGGER_START_ALWAYS();
   DFT_LOGGER_UPDATE_TYPE(source, MetadataType::MT_VALUE);
@@ -10398,6 +10886,7 @@ int brahma::MPIDFTracer::MPI_Psend_init(const void* buf, int partitions,
                                         MPI_Count count, MPI_Datatype datatype,
                                         int dest, int tag, MPI_Comm comm,
                                         MPI_Info info, MPI_Request* request) {
+  ConstEventNameType CATEGORY = "p2p";
   BRAHMA_MAP_OR_FAIL(MPI_Psend_init);
   DFT_LOGGER_START_ALWAYS();
   DFT_LOGGER_UPDATE_TYPE(partitions, MetadataType::MT_VALUE);
@@ -10422,6 +10911,7 @@ int brahma::MPIDFTracer::MPI_Psend_init(const void* buf, int partitions,
                                         MPI_Count count, int datatype, int dest,
                                         int tag, int comm, int info,
                                         int* request) {
+  ConstEventNameType CATEGORY = "p2p";
   BRAHMA_MAP_OR_FAIL(MPI_Psend_init);
   DFT_LOGGER_START_ALWAYS();
   DFT_LOGGER_UPDATE_TYPE(partitions, MetadataType::MT_VALUE);
@@ -10450,6 +10940,7 @@ int brahma::MPIDFTracer::MPI_Psend_init(const void* buf, int partitions,
 int brahma::MPIDFTracer::MPI_Publish_name(const char* service_name,
                                           MPI_Info info,
                                           const char* port_name) {
+  ConstEventNameType CATEGORY = "spawn";
   BRAHMA_MAP_OR_FAIL(MPI_Publish_name);
   DFT_LOGGER_START_ALWAYS();
   DFT_LOGGER_UPDATE_TYPE(info, MetadataType::MT_VALUE);
@@ -10469,6 +10960,7 @@ int brahma::MPIDFTracer::MPI_Publish_name(const char* service_name,
       (BRAHMA_MPI_VERSION >= 400106 && BRAHMA_MPI_VERSION < 400200))
 int brahma::MPIDFTracer::MPI_Publish_name(const char* service_name, int info,
                                           const char* port_name) {
+  ConstEventNameType CATEGORY = "spawn";
   BRAHMA_MAP_OR_FAIL(MPI_Publish_name);
   DFT_LOGGER_START_ALWAYS();
   DFT_LOGGER_UPDATE_TYPE(info, MetadataType::MT_VALUE);
@@ -10491,6 +10983,7 @@ int brahma::MPIDFTracer::MPI_Put(const void* origin_addr, int origin_count,
                                  MPI_Datatype origin_datatype, int target_rank,
                                  MPI_Aint target_disp, int target_count,
                                  MPI_Datatype target_datatype, MPI_Win win) {
+  ConstEventNameType CATEGORY = "rma";
   BRAHMA_MAP_OR_FAIL(MPI_Put);
   DFT_LOGGER_START_ALWAYS();
   DFT_LOGGER_UPDATE_TYPE(origin_count, MetadataType::MT_VALUE);
@@ -10516,6 +11009,7 @@ int brahma::MPIDFTracer::MPI_Put_c(const void* origin_addr,
                                    int target_rank, MPI_Aint target_disp,
                                    MPI_Count target_count,
                                    MPI_Datatype target_datatype, MPI_Win win) {
+  ConstEventNameType CATEGORY = "rma";
   BRAHMA_MAP_OR_FAIL(MPI_Put_c);
   DFT_LOGGER_START_ALWAYS();
   DFT_LOGGER_UPDATE_TYPE(origin_count, MetadataType::MT_VALUE);
@@ -10542,6 +11036,7 @@ int brahma::MPIDFTracer::MPI_Put_c(const void* origin_addr,
                                    int target_rank, MPI_Aint target_disp,
                                    MPI_Count target_count, int target_datatype,
                                    int win) {
+  ConstEventNameType CATEGORY = "rma";
   BRAHMA_MAP_OR_FAIL(MPI_Put_c);
   DFT_LOGGER_START_ALWAYS();
   DFT_LOGGER_UPDATE_TYPE(origin_count, MetadataType::MT_VALUE);
@@ -10569,6 +11064,7 @@ int brahma::MPIDFTracer::MPI_Put_c(const void* origin_addr,
       ((BRAHMA_MPI_VERSION >= 400106 && BRAHMA_MPI_VERSION < 400200) ||   \
        (BRAHMA_MPI_VERSION >= 500006 && BRAHMA_MPI_VERSION < 500100))))
 int brahma::MPIDFTracer::MPI_Query_thread(int* provided) {
+  ConstEventNameType CATEGORY = "env";
   BRAHMA_MAP_OR_FAIL(MPI_Query_thread);
   DFT_LOGGER_START_ALWAYS();
   int ret = __real_MPI_Query_thread(provided);
@@ -10591,6 +11087,7 @@ int brahma::MPIDFTracer::MPI_Raccumulate(
     int target_rank, MPI_Aint target_disp, int target_count,
     MPI_Datatype target_datatype, MPI_Op op, MPI_Win win,
     MPI_Request* request) {
+  ConstEventNameType CATEGORY = "rma";
   BRAHMA_MAP_OR_FAIL(MPI_Raccumulate);
   DFT_LOGGER_START_ALWAYS();
   DFT_LOGGER_UPDATE_TYPE(origin_count, MetadataType::MT_VALUE);
@@ -10621,6 +11118,7 @@ int brahma::MPIDFTracer::MPI_Raccumulate(
     const void* origin_addr, int origin_count, MPI_Datatype origin_datatype,
     int target_rank, MPI_Aint target_disp, int target_count,
     MPI_Datatype target_datatype, int op, MPI_Win win, MPI_Request* request) {
+  ConstEventNameType CATEGORY = "rma";
   BRAHMA_MAP_OR_FAIL(MPI_Raccumulate);
   DFT_LOGGER_START_ALWAYS();
   DFT_LOGGER_UPDATE_TYPE(origin_count, MetadataType::MT_VALUE);
@@ -10646,6 +11144,7 @@ int brahma::MPIDFTracer::MPI_Raccumulate_c(
     MPI_Datatype origin_datatype, int target_rank, MPI_Aint target_disp,
     MPI_Count target_count, MPI_Datatype target_datatype, MPI_Op op,
     MPI_Win win, MPI_Request* request) {
+  ConstEventNameType CATEGORY = "rma";
   BRAHMA_MAP_OR_FAIL(MPI_Raccumulate_c);
   DFT_LOGGER_START_ALWAYS();
   DFT_LOGGER_UPDATE_TYPE(origin_count, MetadataType::MT_VALUE);
@@ -10672,6 +11171,7 @@ int brahma::MPIDFTracer::MPI_Raccumulate_c(
     const void* origin_addr, MPI_Count origin_count, int origin_datatype,
     int target_rank, MPI_Aint target_disp, MPI_Count target_count,
     int target_datatype, int op, int win, int* request) {
+  ConstEventNameType CATEGORY = "rma";
   BRAHMA_MAP_OR_FAIL(MPI_Raccumulate_c);
   DFT_LOGGER_START_ALWAYS();
   DFT_LOGGER_UPDATE_TYPE(origin_count, MetadataType::MT_VALUE);
@@ -10702,6 +11202,7 @@ int brahma::MPIDFTracer::MPI_Raccumulate_c(
 int brahma::MPIDFTracer::MPI_Recv(void* buf, int count, MPI_Datatype datatype,
                                   int source, int tag, MPI_Comm comm,
                                   MPI_Status* status) {
+  ConstEventNameType CATEGORY = "p2p";
   BRAHMA_MAP_OR_FAIL(MPI_Recv);
   DFT_LOGGER_START_ALWAYS();
   DFT_LOGGER_UPDATE_TYPE(count, MetadataType::MT_VALUE);
@@ -10726,6 +11227,7 @@ int brahma::MPIDFTracer::MPI_Recv(void* buf, int count, MPI_Datatype datatype,
 int brahma::MPIDFTracer::MPI_Recv(void* buf, int count, MPI_Datatype datatype,
                                   int source, int tag, int comm,
                                   MPI_Status* status) {
+  ConstEventNameType CATEGORY = "p2p";
   BRAHMA_MAP_OR_FAIL(MPI_Recv);
   DFT_LOGGER_START_ALWAYS();
   DFT_LOGGER_UPDATE_TYPE(count, MetadataType::MT_VALUE);
@@ -10744,6 +11246,7 @@ int brahma::MPIDFTracer::MPI_Recv(void* buf, int count, MPI_Datatype datatype,
 int brahma::MPIDFTracer::MPI_Recv_c(void* buf, MPI_Count count,
                                     MPI_Datatype datatype, int source, int tag,
                                     MPI_Comm comm, MPI_Status* status) {
+  ConstEventNameType CATEGORY = "p2p";
   BRAHMA_MAP_OR_FAIL(MPI_Recv_c);
   DFT_LOGGER_START_ALWAYS();
   DFT_LOGGER_UPDATE_TYPE(count, MetadataType::MT_VALUE);
@@ -10764,6 +11267,7 @@ int brahma::MPIDFTracer::MPI_Recv_c(void* buf, MPI_Count count,
 int brahma::MPIDFTracer::MPI_Recv_c(void* buf, MPI_Count count, int datatype,
                                     int source, int tag, int comm,
                                     MPI_Status* status) {
+  ConstEventNameType CATEGORY = "p2p";
   BRAHMA_MAP_OR_FAIL(MPI_Recv_c);
   DFT_LOGGER_START_ALWAYS();
   DFT_LOGGER_UPDATE_TYPE(count, MetadataType::MT_VALUE);
@@ -10790,6 +11294,7 @@ int brahma::MPIDFTracer::MPI_Recv_init(void* buf, int count,
                                        MPI_Datatype datatype, int source,
                                        int tag, MPI_Comm comm,
                                        MPI_Request* request) {
+  ConstEventNameType CATEGORY = "p2p";
   BRAHMA_MAP_OR_FAIL(MPI_Recv_init);
   DFT_LOGGER_START_ALWAYS();
   DFT_LOGGER_UPDATE_TYPE(count, MetadataType::MT_VALUE);
@@ -10816,6 +11321,7 @@ int brahma::MPIDFTracer::MPI_Recv_init(void* buf, int count,
                                        MPI_Datatype datatype, int source,
                                        int tag, int comm,
                                        MPI_Request* request) {
+  ConstEventNameType CATEGORY = "p2p";
   BRAHMA_MAP_OR_FAIL(MPI_Recv_init);
   DFT_LOGGER_START_ALWAYS();
   DFT_LOGGER_UPDATE_TYPE(count, MetadataType::MT_VALUE);
@@ -10836,6 +11342,7 @@ int brahma::MPIDFTracer::MPI_Recv_init_c(void* buf, MPI_Count count,
                                          MPI_Datatype datatype, int source,
                                          int tag, MPI_Comm comm,
                                          MPI_Request* request) {
+  ConstEventNameType CATEGORY = "p2p";
   BRAHMA_MAP_OR_FAIL(MPI_Recv_init_c);
   DFT_LOGGER_START_ALWAYS();
   DFT_LOGGER_UPDATE_TYPE(count, MetadataType::MT_VALUE);
@@ -10857,6 +11364,7 @@ int brahma::MPIDFTracer::MPI_Recv_init_c(void* buf, MPI_Count count,
 int brahma::MPIDFTracer::MPI_Recv_init_c(void* buf, MPI_Count count,
                                          int datatype, int source, int tag,
                                          int comm, int* request) {
+  ConstEventNameType CATEGORY = "p2p";
   BRAHMA_MAP_OR_FAIL(MPI_Recv_init_c);
   DFT_LOGGER_START_ALWAYS();
   DFT_LOGGER_UPDATE_TYPE(count, MetadataType::MT_VALUE);
@@ -10883,6 +11391,7 @@ int brahma::MPIDFTracer::MPI_Recv_init_c(void* buf, MPI_Count count,
 int brahma::MPIDFTracer::MPI_Reduce(const void* sendbuf, void* recvbuf,
                                     int count, MPI_Datatype datatype, MPI_Op op,
                                     int root, MPI_Comm comm) {
+  ConstEventNameType CATEGORY = "collective";
   BRAHMA_MAP_OR_FAIL(MPI_Reduce);
   DFT_LOGGER_START_ALWAYS();
   DFT_LOGGER_UPDATE_TYPE(count, MetadataType::MT_VALUE);
@@ -10908,6 +11417,7 @@ int brahma::MPIDFTracer::MPI_Reduce(const void* sendbuf, void* recvbuf,
 int brahma::MPIDFTracer::MPI_Reduce(const void* sendbuf, void* recvbuf,
                                     int count, MPI_Datatype datatype, int op,
                                     int root, int comm) {
+  ConstEventNameType CATEGORY = "collective";
   BRAHMA_MAP_OR_FAIL(MPI_Reduce);
   DFT_LOGGER_START_ALWAYS();
   DFT_LOGGER_UPDATE_TYPE(count, MetadataType::MT_VALUE);
@@ -10927,6 +11437,7 @@ int brahma::MPIDFTracer::MPI_Reduce(const void* sendbuf, void* recvbuf,
 int brahma::MPIDFTracer::MPI_Reduce_c(const void* sendbuf, void* recvbuf,
                                       MPI_Count count, MPI_Datatype datatype,
                                       MPI_Op op, int root, MPI_Comm comm) {
+  ConstEventNameType CATEGORY = "collective";
   BRAHMA_MAP_OR_FAIL(MPI_Reduce_c);
   DFT_LOGGER_START_ALWAYS();
   DFT_LOGGER_UPDATE_TYPE(count, MetadataType::MT_VALUE);
@@ -10948,6 +11459,7 @@ int brahma::MPIDFTracer::MPI_Reduce_c(const void* sendbuf, void* recvbuf,
 int brahma::MPIDFTracer::MPI_Reduce_c(const void* sendbuf, void* recvbuf,
                                       MPI_Count count, int datatype, int op,
                                       int root, int comm) {
+  ConstEventNameType CATEGORY = "collective";
   BRAHMA_MAP_OR_FAIL(MPI_Reduce_c);
   DFT_LOGGER_START_ALWAYS();
   DFT_LOGGER_UPDATE_TYPE(count, MetadataType::MT_VALUE);
@@ -10970,6 +11482,7 @@ int brahma::MPIDFTracer::MPI_Reduce_init(const void* sendbuf, void* recvbuf,
                                          int count, MPI_Datatype datatype,
                                          MPI_Op op, int root, MPI_Comm comm,
                                          MPI_Info info, MPI_Request* request) {
+  ConstEventNameType CATEGORY = "collective";
   BRAHMA_MAP_OR_FAIL(MPI_Reduce_init);
   DFT_LOGGER_START_ALWAYS();
   DFT_LOGGER_UPDATE_TYPE(count, MetadataType::MT_VALUE);
@@ -10993,6 +11506,7 @@ int brahma::MPIDFTracer::MPI_Reduce_init(const void* sendbuf, void* recvbuf,
                                          int count, int datatype, int op,
                                          int root, int comm, int info,
                                          int* request) {
+  ConstEventNameType CATEGORY = "collective";
   BRAHMA_MAP_OR_FAIL(MPI_Reduce_init);
   DFT_LOGGER_START_ALWAYS();
   DFT_LOGGER_UPDATE_TYPE(count, MetadataType::MT_VALUE);
@@ -11013,6 +11527,7 @@ int brahma::MPIDFTracer::MPI_Reduce_init(const void* sendbuf, void* recvbuf,
 int brahma::MPIDFTracer::MPI_Reduce_init_c(
     const void* sendbuf, void* recvbuf, MPI_Count count, MPI_Datatype datatype,
     MPI_Op op, int root, MPI_Comm comm, MPI_Info info, MPI_Request* request) {
+  ConstEventNameType CATEGORY = "collective";
   BRAHMA_MAP_OR_FAIL(MPI_Reduce_init_c);
   DFT_LOGGER_START_ALWAYS();
   DFT_LOGGER_UPDATE_TYPE(count, MetadataType::MT_VALUE);
@@ -11036,6 +11551,7 @@ int brahma::MPIDFTracer::MPI_Reduce_init_c(const void* sendbuf, void* recvbuf,
                                            MPI_Count count, int datatype,
                                            int op, int root, int comm, int info,
                                            int* request) {
+  ConstEventNameType CATEGORY = "collective";
   BRAHMA_MAP_OR_FAIL(MPI_Reduce_init_c);
   DFT_LOGGER_START_ALWAYS();
   DFT_LOGGER_UPDATE_TYPE(count, MetadataType::MT_VALUE);
@@ -11063,6 +11579,7 @@ int brahma::MPIDFTracer::MPI_Reduce_init_c(const void* sendbuf, void* recvbuf,
 int brahma::MPIDFTracer::MPI_Reduce_local(const void* inbuf, void* inoutbuf,
                                           int count, MPI_Datatype datatype,
                                           MPI_Op op) {
+  ConstEventNameType CATEGORY = "collective";
   BRAHMA_MAP_OR_FAIL(MPI_Reduce_local);
   DFT_LOGGER_START_ALWAYS();
   DFT_LOGGER_UPDATE_TYPE(count, MetadataType::MT_VALUE);
@@ -11085,6 +11602,7 @@ int brahma::MPIDFTracer::MPI_Reduce_local(const void* inbuf, void* inoutbuf,
 int brahma::MPIDFTracer::MPI_Reduce_local(const void* inbuf, void* inoutbuf,
                                           int count, MPI_Datatype datatype,
                                           int op) {
+  ConstEventNameType CATEGORY = "collective";
   BRAHMA_MAP_OR_FAIL(MPI_Reduce_local);
   DFT_LOGGER_START_ALWAYS();
   DFT_LOGGER_UPDATE_TYPE(count, MetadataType::MT_VALUE);
@@ -11101,6 +11619,7 @@ int brahma::MPIDFTracer::MPI_Reduce_local(const void* inbuf, void* inoutbuf,
 int brahma::MPIDFTracer::MPI_Reduce_local_c(const void* inbuf, void* inoutbuf,
                                             MPI_Count count,
                                             MPI_Datatype datatype, MPI_Op op) {
+  ConstEventNameType CATEGORY = "collective";
   BRAHMA_MAP_OR_FAIL(MPI_Reduce_local_c);
   DFT_LOGGER_START_ALWAYS();
   DFT_LOGGER_UPDATE_TYPE(count, MetadataType::MT_VALUE);
@@ -11119,6 +11638,7 @@ int brahma::MPIDFTracer::MPI_Reduce_local_c(const void* inbuf, void* inoutbuf,
 int brahma::MPIDFTracer::MPI_Reduce_local_c(const void* inbuf, void* inoutbuf,
                                             MPI_Count count, int datatype,
                                             int op) {
+  ConstEventNameType CATEGORY = "collective";
   BRAHMA_MAP_OR_FAIL(MPI_Reduce_local_c);
   DFT_LOGGER_START_ALWAYS();
   DFT_LOGGER_UPDATE_TYPE(count, MetadataType::MT_VALUE);
@@ -11143,6 +11663,7 @@ int brahma::MPIDFTracer::MPI_Reduce_scatter(const void* sendbuf, void* recvbuf,
                                             const int recvcounts[],
                                             MPI_Datatype datatype, MPI_Op op,
                                             MPI_Comm comm) {
+  ConstEventNameType CATEGORY = "collective";
   BRAHMA_MAP_OR_FAIL(MPI_Reduce_scatter);
   DFT_LOGGER_START_ALWAYS();
   DFT_LOGGER_UPDATE_TYPE(datatype, MetadataType::MT_VALUE);
@@ -11167,6 +11688,7 @@ int brahma::MPIDFTracer::MPI_Reduce_scatter(const void* sendbuf, void* recvbuf,
                                             const int recvcounts[],
                                             MPI_Datatype datatype, int op,
                                             int comm) {
+  ConstEventNameType CATEGORY = "collective";
   BRAHMA_MAP_OR_FAIL(MPI_Reduce_scatter);
   DFT_LOGGER_START_ALWAYS();
   DFT_LOGGER_UPDATE_TYPE(datatype, MetadataType::MT_VALUE);
@@ -11192,6 +11714,7 @@ int brahma::MPIDFTracer::MPI_Reduce_scatter_block(const void* sendbuf,
                                                   void* recvbuf, int recvcount,
                                                   MPI_Datatype datatype,
                                                   MPI_Op op, MPI_Comm comm) {
+  ConstEventNameType CATEGORY = "collective";
   BRAHMA_MAP_OR_FAIL(MPI_Reduce_scatter_block);
   DFT_LOGGER_START_ALWAYS();
   DFT_LOGGER_UPDATE_TYPE(recvcount, MetadataType::MT_VALUE);
@@ -11217,6 +11740,7 @@ int brahma::MPIDFTracer::MPI_Reduce_scatter_block(const void* sendbuf,
                                                   void* recvbuf, int recvcount,
                                                   MPI_Datatype datatype, int op,
                                                   int comm) {
+  ConstEventNameType CATEGORY = "collective";
   BRAHMA_MAP_OR_FAIL(MPI_Reduce_scatter_block);
   DFT_LOGGER_START_ALWAYS();
   DFT_LOGGER_UPDATE_TYPE(recvcount, MetadataType::MT_VALUE);
@@ -11237,6 +11761,7 @@ int brahma::MPIDFTracer::MPI_Reduce_scatter_block_c(const void* sendbuf,
                                                     MPI_Count recvcount,
                                                     MPI_Datatype datatype,
                                                     MPI_Op op, MPI_Comm comm) {
+  ConstEventNameType CATEGORY = "collective";
   BRAHMA_MAP_OR_FAIL(MPI_Reduce_scatter_block_c);
   DFT_LOGGER_START_ALWAYS();
   DFT_LOGGER_UPDATE_TYPE(recvcount, MetadataType::MT_VALUE);
@@ -11259,6 +11784,7 @@ int brahma::MPIDFTracer::MPI_Reduce_scatter_block_c(const void* sendbuf,
                                                     MPI_Count recvcount,
                                                     int datatype, int op,
                                                     int comm) {
+  ConstEventNameType CATEGORY = "collective";
   BRAHMA_MAP_OR_FAIL(MPI_Reduce_scatter_block_c);
   DFT_LOGGER_START_ALWAYS();
   DFT_LOGGER_UPDATE_TYPE(recvcount, MetadataType::MT_VALUE);
@@ -11279,6 +11805,7 @@ int brahma::MPIDFTracer::MPI_Reduce_scatter_block_c(const void* sendbuf,
 int brahma::MPIDFTracer::MPI_Reduce_scatter_block_init(
     const void* sendbuf, void* recvbuf, int recvcount, MPI_Datatype datatype,
     MPI_Op op, MPI_Comm comm, MPI_Info info, MPI_Request* request) {
+  ConstEventNameType CATEGORY = "collective";
   BRAHMA_MAP_OR_FAIL(MPI_Reduce_scatter_block_init);
   DFT_LOGGER_START_ALWAYS();
   DFT_LOGGER_UPDATE_TYPE(recvcount, MetadataType::MT_VALUE);
@@ -11300,6 +11827,7 @@ int brahma::MPIDFTracer::MPI_Reduce_scatter_block_init(
 int brahma::MPIDFTracer::MPI_Reduce_scatter_block_init(
     const void* sendbuf, void* recvbuf, int recvcount, int datatype, int op,
     int comm, int info, int* request) {
+  ConstEventNameType CATEGORY = "collective";
   BRAHMA_MAP_OR_FAIL(MPI_Reduce_scatter_block_init);
   DFT_LOGGER_START_ALWAYS();
   DFT_LOGGER_UPDATE_TYPE(recvcount, MetadataType::MT_VALUE);
@@ -11320,6 +11848,7 @@ int brahma::MPIDFTracer::MPI_Reduce_scatter_block_init_c(
     const void* sendbuf, void* recvbuf, MPI_Count recvcount,
     MPI_Datatype datatype, MPI_Op op, MPI_Comm comm, MPI_Info info,
     MPI_Request* request) {
+  ConstEventNameType CATEGORY = "collective";
   BRAHMA_MAP_OR_FAIL(MPI_Reduce_scatter_block_init_c);
   DFT_LOGGER_START_ALWAYS();
   DFT_LOGGER_UPDATE_TYPE(recvcount, MetadataType::MT_VALUE);
@@ -11341,6 +11870,7 @@ int brahma::MPIDFTracer::MPI_Reduce_scatter_block_init_c(
 int brahma::MPIDFTracer::MPI_Reduce_scatter_block_init_c(
     const void* sendbuf, void* recvbuf, MPI_Count recvcount, int datatype,
     int op, int comm, int info, int* request) {
+  ConstEventNameType CATEGORY = "collective";
   BRAHMA_MAP_OR_FAIL(MPI_Reduce_scatter_block_init_c);
   DFT_LOGGER_START_ALWAYS();
   DFT_LOGGER_UPDATE_TYPE(recvcount, MetadataType::MT_VALUE);
@@ -11362,6 +11892,7 @@ int brahma::MPIDFTracer::MPI_Reduce_scatter_c(const void* sendbuf,
                                               const MPI_Count recvcounts[],
                                               MPI_Datatype datatype, MPI_Op op,
                                               MPI_Comm comm) {
+  ConstEventNameType CATEGORY = "collective";
   BRAHMA_MAP_OR_FAIL(MPI_Reduce_scatter_c);
   DFT_LOGGER_START_ALWAYS();
   DFT_LOGGER_UPDATE_TYPE(datatype, MetadataType::MT_VALUE);
@@ -11382,6 +11913,7 @@ int brahma::MPIDFTracer::MPI_Reduce_scatter_c(const void* sendbuf,
                                               void* recvbuf,
                                               const MPI_Count recvcounts[],
                                               int datatype, int op, int comm) {
+  ConstEventNameType CATEGORY = "collective";
   BRAHMA_MAP_OR_FAIL(MPI_Reduce_scatter_c);
   DFT_LOGGER_START_ALWAYS();
   DFT_LOGGER_UPDATE_TYPE(datatype, MetadataType::MT_VALUE);
@@ -11402,6 +11934,7 @@ int brahma::MPIDFTracer::MPI_Reduce_scatter_init(
     const void* sendbuf, void* recvbuf, const int recvcounts[],
     MPI_Datatype datatype, MPI_Op op, MPI_Comm comm, MPI_Info info,
     MPI_Request* request) {
+  ConstEventNameType CATEGORY = "collective";
   BRAHMA_MAP_OR_FAIL(MPI_Reduce_scatter_init);
   DFT_LOGGER_START_ALWAYS();
   DFT_LOGGER_UPDATE_TYPE(datatype, MetadataType::MT_VALUE);
@@ -11424,6 +11957,7 @@ int brahma::MPIDFTracer::MPI_Reduce_scatter_init(const void* sendbuf,
                                                  const int recvcounts[],
                                                  int datatype, int op, int comm,
                                                  int info, int* request) {
+  ConstEventNameType CATEGORY = "collective";
   BRAHMA_MAP_OR_FAIL(MPI_Reduce_scatter_init);
   DFT_LOGGER_START_ALWAYS();
   DFT_LOGGER_UPDATE_TYPE(datatype, MetadataType::MT_VALUE);
@@ -11443,6 +11977,7 @@ int brahma::MPIDFTracer::MPI_Reduce_scatter_init_c(
     const void* sendbuf, void* recvbuf, const MPI_Count recvcounts[],
     MPI_Datatype datatype, MPI_Op op, MPI_Comm comm, MPI_Info info,
     MPI_Request* request) {
+  ConstEventNameType CATEGORY = "collective";
   BRAHMA_MAP_OR_FAIL(MPI_Reduce_scatter_init_c);
   DFT_LOGGER_START_ALWAYS();
   DFT_LOGGER_UPDATE_TYPE(datatype, MetadataType::MT_VALUE);
@@ -11463,6 +11998,7 @@ int brahma::MPIDFTracer::MPI_Reduce_scatter_init_c(
 int brahma::MPIDFTracer::MPI_Reduce_scatter_init_c(
     const void* sendbuf, void* recvbuf, const MPI_Count recvcounts[],
     int datatype, int op, int comm, int info, int* request) {
+  ConstEventNameType CATEGORY = "collective";
   BRAHMA_MAP_OR_FAIL(MPI_Reduce_scatter_init_c);
   DFT_LOGGER_START_ALWAYS();
   DFT_LOGGER_UPDATE_TYPE(datatype, MetadataType::MT_VALUE);
@@ -11489,6 +12025,7 @@ int brahma::MPIDFTracer::MPI_Register_datarep(
     const char* datarep, MPI_Datarep_conversion_function* read_conversion_fn,
     MPI_Datarep_conversion_function* write_conversion_fn,
     MPI_Datarep_extent_function* dtype_file_extent_fn, void* extra_state) {
+  ConstEventNameType CATEGORY = "metadata";
   BRAHMA_MAP_OR_FAIL(MPI_Register_datarep);
   DFT_LOGGER_START_ALWAYS();
   int ret = __real_MPI_Register_datarep(datarep, read_conversion_fn,
@@ -11507,6 +12044,7 @@ int brahma::MPIDFTracer::MPI_Register_datarep_c(
     const char* datarep, MPI_Datarep_conversion_function_c* read_conversion_fn,
     MPI_Datarep_conversion_function_c* write_conversion_fn,
     MPI_Datarep_extent_function* dtype_file_extent_fn, void* extra_state) {
+  ConstEventNameType CATEGORY = "metadata";
   BRAHMA_MAP_OR_FAIL(MPI_Register_datarep_c);
   DFT_LOGGER_START_ALWAYS();
   int ret = __real_MPI_Register_datarep_c(datarep, read_conversion_fn,
@@ -11522,6 +12060,7 @@ int brahma::MPIDFTracer::MPI_Register_datarep_c(
      (defined(BRAHMA_MPI_IMPL_MPICH) &&                                 \
       (BRAHMA_MPI_VERSION >= 400203 && BRAHMA_MPI_VERSION < 400300)))
 int brahma::MPIDFTracer::MPI_Remove_error_class(int errorclass) {
+  ConstEventNameType CATEGORY = "env";
   BRAHMA_MAP_OR_FAIL(MPI_Remove_error_class);
   DFT_LOGGER_START_ALWAYS();
   DFT_LOGGER_UPDATE_TYPE(errorclass, MetadataType::MT_VALUE);
@@ -11536,6 +12075,7 @@ int brahma::MPIDFTracer::MPI_Remove_error_class(int errorclass) {
      (defined(BRAHMA_MPI_IMPL_MPICH) &&                                 \
       (BRAHMA_MPI_VERSION >= 400203 && BRAHMA_MPI_VERSION < 400300)))
 int brahma::MPIDFTracer::MPI_Remove_error_code(int errorcode) {
+  ConstEventNameType CATEGORY = "env";
   BRAHMA_MAP_OR_FAIL(MPI_Remove_error_code);
   DFT_LOGGER_START_ALWAYS();
   DFT_LOGGER_UPDATE_TYPE(errorcode, MetadataType::MT_VALUE);
@@ -11550,6 +12090,7 @@ int brahma::MPIDFTracer::MPI_Remove_error_code(int errorcode) {
      (defined(BRAHMA_MPI_IMPL_MPICH) &&                                 \
       (BRAHMA_MPI_VERSION >= 400203 && BRAHMA_MPI_VERSION < 400300)))
 int brahma::MPIDFTracer::MPI_Remove_error_string(int errorcode) {
+  ConstEventNameType CATEGORY = "env";
   BRAHMA_MAP_OR_FAIL(MPI_Remove_error_string);
   DFT_LOGGER_START_ALWAYS();
   DFT_LOGGER_UPDATE_TYPE(errorcode, MetadataType::MT_VALUE);
@@ -11569,6 +12110,7 @@ int brahma::MPIDFTracer::MPI_Remove_error_string(int errorcode) {
     (defined(BRAHMA_MPI_IMPL_OPENMPI) &&                                   \
      (BRAHMA_MPI_VERSION >= 400106 && BRAHMA_MPI_VERSION < 400200))
 int brahma::MPIDFTracer::MPI_Request_free(MPI_Request* request) {
+  ConstEventNameType CATEGORY = "p2p";
   BRAHMA_MAP_OR_FAIL(MPI_Request_free);
   DFT_LOGGER_START_ALWAYS();
   int ret = __real_MPI_Request_free(request);
@@ -11586,6 +12128,7 @@ int brahma::MPIDFTracer::MPI_Request_free(MPI_Request* request) {
     !(defined(BRAHMA_MPI_IMPL_OPENMPI) &&                                  \
       (BRAHMA_MPI_VERSION >= 400106 && BRAHMA_MPI_VERSION < 400200))
 int brahma::MPIDFTracer::MPI_Request_free(int* request) {
+  ConstEventNameType CATEGORY = "p2p";
   BRAHMA_MAP_OR_FAIL(MPI_Request_free);
   DFT_LOGGER_START_ALWAYS();
   int ret = __real_MPI_Request_free(request);
@@ -11605,6 +12148,7 @@ int brahma::MPIDFTracer::MPI_Request_free(int* request) {
      (BRAHMA_MPI_VERSION >= 400106 && BRAHMA_MPI_VERSION < 400200))
 int brahma::MPIDFTracer::MPI_Request_get_status(MPI_Request request, int* flag,
                                                 MPI_Status* status) {
+  ConstEventNameType CATEGORY = "p2p";
   BRAHMA_MAP_OR_FAIL(MPI_Request_get_status);
   DFT_LOGGER_START_ALWAYS();
   DFT_LOGGER_UPDATE_TYPE(request, MetadataType::MT_VALUE);
@@ -11624,6 +12168,7 @@ int brahma::MPIDFTracer::MPI_Request_get_status(MPI_Request request, int* flag,
       (BRAHMA_MPI_VERSION >= 400106 && BRAHMA_MPI_VERSION < 400200))
 int brahma::MPIDFTracer::MPI_Request_get_status(int request, int* flag,
                                                 MPI_Status* status) {
+  ConstEventNameType CATEGORY = "p2p";
   BRAHMA_MAP_OR_FAIL(MPI_Request_get_status);
   DFT_LOGGER_START_ALWAYS();
   DFT_LOGGER_UPDATE_TYPE(request, MetadataType::MT_VALUE);
@@ -11640,6 +12185,7 @@ int brahma::MPIDFTracer::MPI_Request_get_status(int request, int* flag,
 int brahma::MPIDFTracer::MPI_Request_get_status_all(
     int count, int array_of_requests[], int* flag,
     MPI_Status* array_of_statuses) {
+  ConstEventNameType CATEGORY = "p2p";
   BRAHMA_MAP_OR_FAIL(MPI_Request_get_status_all);
   DFT_LOGGER_START_ALWAYS();
   DFT_LOGGER_UPDATE_TYPE(count, MetadataType::MT_VALUE);
@@ -11658,6 +12204,7 @@ int brahma::MPIDFTracer::MPI_Request_get_status_any(int count,
                                                     int array_of_requests[],
                                                     int* indx, int* flag,
                                                     MPI_Status* status) {
+  ConstEventNameType CATEGORY = "p2p";
   BRAHMA_MAP_OR_FAIL(MPI_Request_get_status_any);
   DFT_LOGGER_START_ALWAYS();
   DFT_LOGGER_UPDATE_TYPE(count, MetadataType::MT_VALUE);
@@ -11675,6 +12222,7 @@ int brahma::MPIDFTracer::MPI_Request_get_status_any(int count,
 int brahma::MPIDFTracer::MPI_Request_get_status_some(
     int incount, int array_of_requests[], int* outcount, int array_of_indices[],
     MPI_Status* array_of_statuses) {
+  ConstEventNameType CATEGORY = "p2p";
   BRAHMA_MAP_OR_FAIL(MPI_Request_get_status_some);
   DFT_LOGGER_START_ALWAYS();
   DFT_LOGGER_UPDATE_TYPE(incount, MetadataType::MT_VALUE);
@@ -11700,6 +12248,7 @@ int brahma::MPIDFTracer::MPI_Rget(void* origin_addr, int origin_count,
                                   MPI_Aint target_disp, int target_count,
                                   MPI_Datatype target_datatype, MPI_Win win,
                                   MPI_Request* request) {
+  ConstEventNameType CATEGORY = "rma";
   BRAHMA_MAP_OR_FAIL(MPI_Rget);
   DFT_LOGGER_START_ALWAYS();
   DFT_LOGGER_UPDATE_TYPE(origin_count, MetadataType::MT_VALUE);
@@ -11730,6 +12279,7 @@ int brahma::MPIDFTracer::MPI_Rget(void* origin_addr, int origin_count,
                                   MPI_Aint target_disp, int target_count,
                                   MPI_Datatype target_datatype, MPI_Win win,
                                   int* request) {
+  ConstEventNameType CATEGORY = "rma";
   BRAHMA_MAP_OR_FAIL(MPI_Rget);
   DFT_LOGGER_START_ALWAYS();
   DFT_LOGGER_UPDATE_TYPE(origin_count, MetadataType::MT_VALUE);
@@ -11762,6 +12312,7 @@ int brahma::MPIDFTracer::MPI_Rget_accumulate(
     int target_rank, MPI_Aint target_disp, int target_count,
     MPI_Datatype target_datatype, MPI_Op op, MPI_Win win,
     MPI_Request* request) {
+  ConstEventNameType CATEGORY = "rma";
   BRAHMA_MAP_OR_FAIL(MPI_Rget_accumulate);
   DFT_LOGGER_START_ALWAYS();
   DFT_LOGGER_UPDATE_TYPE(origin_count, MetadataType::MT_VALUE);
@@ -11796,6 +12347,7 @@ int brahma::MPIDFTracer::MPI_Rget_accumulate(
     void* result_addr, int result_count, MPI_Datatype result_datatype,
     int target_rank, MPI_Aint target_disp, int target_count,
     MPI_Datatype target_datatype, int op, MPI_Win win, int* request) {
+  ConstEventNameType CATEGORY = "rma";
   BRAHMA_MAP_OR_FAIL(MPI_Rget_accumulate);
   DFT_LOGGER_START_ALWAYS();
   DFT_LOGGER_UPDATE_TYPE(origin_count, MetadataType::MT_VALUE);
@@ -11825,6 +12377,7 @@ int brahma::MPIDFTracer::MPI_Rget_accumulate_c(
     MPI_Datatype result_datatype, int target_rank, MPI_Aint target_disp,
     MPI_Count target_count, MPI_Datatype target_datatype, MPI_Op op,
     MPI_Win win, MPI_Request* request) {
+  ConstEventNameType CATEGORY = "rma";
   BRAHMA_MAP_OR_FAIL(MPI_Rget_accumulate_c);
   DFT_LOGGER_START_ALWAYS();
   DFT_LOGGER_UPDATE_TYPE(origin_count, MetadataType::MT_VALUE);
@@ -11855,6 +12408,7 @@ int brahma::MPIDFTracer::MPI_Rget_accumulate_c(
     void* result_addr, MPI_Count result_count, int result_datatype,
     int target_rank, MPI_Aint target_disp, MPI_Count target_count,
     int target_datatype, int op, int win, int* request) {
+  ConstEventNameType CATEGORY = "rma";
   BRAHMA_MAP_OR_FAIL(MPI_Rget_accumulate_c);
   DFT_LOGGER_START_ALWAYS();
   DFT_LOGGER_UPDATE_TYPE(origin_count, MetadataType::MT_VALUE);
@@ -11884,6 +12438,7 @@ int brahma::MPIDFTracer::MPI_Rget_c(void* origin_addr, MPI_Count origin_count,
                                     MPI_Count target_count,
                                     MPI_Datatype target_datatype, MPI_Win win,
                                     MPI_Request* request) {
+  ConstEventNameType CATEGORY = "rma";
   BRAHMA_MAP_OR_FAIL(MPI_Rget_c);
   DFT_LOGGER_START_ALWAYS();
   DFT_LOGGER_UPDATE_TYPE(origin_count, MetadataType::MT_VALUE);
@@ -11910,6 +12465,7 @@ int brahma::MPIDFTracer::MPI_Rget_c(void* origin_addr, MPI_Count origin_count,
                                     MPI_Aint target_disp,
                                     MPI_Count target_count, int target_datatype,
                                     int win, int* request) {
+  ConstEventNameType CATEGORY = "rma";
   BRAHMA_MAP_OR_FAIL(MPI_Rget_c);
   DFT_LOGGER_START_ALWAYS();
   DFT_LOGGER_UPDATE_TYPE(origin_count, MetadataType::MT_VALUE);
@@ -11941,6 +12497,7 @@ int brahma::MPIDFTracer::MPI_Rput(const void* origin_addr, int origin_count,
                                   MPI_Aint target_disp, int target_cout,
                                   MPI_Datatype target_datatype, MPI_Win win,
                                   MPI_Request* request) {
+  ConstEventNameType CATEGORY = "rma";
   BRAHMA_MAP_OR_FAIL(MPI_Rput);
   DFT_LOGGER_START_ALWAYS();
   DFT_LOGGER_UPDATE_TYPE(origin_count, MetadataType::MT_VALUE);
@@ -11971,6 +12528,7 @@ int brahma::MPIDFTracer::MPI_Rput(const void* origin_addr, int origin_count,
                                   MPI_Aint target_disp, int target_cout,
                                   MPI_Datatype target_datatype, MPI_Win win,
                                   int* request) {
+  ConstEventNameType CATEGORY = "rma";
   BRAHMA_MAP_OR_FAIL(MPI_Rput);
   DFT_LOGGER_START_ALWAYS();
   DFT_LOGGER_UPDATE_TYPE(origin_count, MetadataType::MT_VALUE);
@@ -11997,6 +12555,7 @@ int brahma::MPIDFTracer::MPI_Rput_c(const void* origin_addr,
                                     MPI_Count target_count,
                                     MPI_Datatype target_datatype, MPI_Win win,
                                     MPI_Request* request) {
+  ConstEventNameType CATEGORY = "rma";
   BRAHMA_MAP_OR_FAIL(MPI_Rput_c);
   DFT_LOGGER_START_ALWAYS();
   DFT_LOGGER_UPDATE_TYPE(origin_count, MetadataType::MT_VALUE);
@@ -12023,6 +12582,7 @@ int brahma::MPIDFTracer::MPI_Rput_c(const void* origin_addr,
                                     int target_rank, MPI_Aint target_disp,
                                     MPI_Count target_count, int target_datatype,
                                     int win, int* request) {
+  ConstEventNameType CATEGORY = "rma";
   BRAHMA_MAP_OR_FAIL(MPI_Rput_c);
   DFT_LOGGER_START_ALWAYS();
   DFT_LOGGER_UPDATE_TYPE(origin_count, MetadataType::MT_VALUE);
@@ -12052,6 +12612,7 @@ int brahma::MPIDFTracer::MPI_Rput_c(const void* origin_addr,
 int brahma::MPIDFTracer::MPI_Rsend(const void* ibuf, int count,
                                    MPI_Datatype datatype, int dest, int tag,
                                    MPI_Comm comm) {
+  ConstEventNameType CATEGORY = "p2p";
   BRAHMA_MAP_OR_FAIL(MPI_Rsend);
   DFT_LOGGER_START_ALWAYS();
   DFT_LOGGER_UPDATE_TYPE(count, MetadataType::MT_VALUE);
@@ -12076,6 +12637,7 @@ int brahma::MPIDFTracer::MPI_Rsend(const void* ibuf, int count,
 int brahma::MPIDFTracer::MPI_Rsend(const void* ibuf, int count,
                                    MPI_Datatype datatype, int dest, int tag,
                                    int comm) {
+  ConstEventNameType CATEGORY = "p2p";
   BRAHMA_MAP_OR_FAIL(MPI_Rsend);
   DFT_LOGGER_START_ALWAYS();
   DFT_LOGGER_UPDATE_TYPE(count, MetadataType::MT_VALUE);
@@ -12094,6 +12656,7 @@ int brahma::MPIDFTracer::MPI_Rsend(const void* ibuf, int count,
 int brahma::MPIDFTracer::MPI_Rsend_c(const void* buf, MPI_Count count,
                                      MPI_Datatype datatype, int dest, int tag,
                                      MPI_Comm comm) {
+  ConstEventNameType CATEGORY = "p2p";
   BRAHMA_MAP_OR_FAIL(MPI_Rsend_c);
   DFT_LOGGER_START_ALWAYS();
   DFT_LOGGER_UPDATE_TYPE(count, MetadataType::MT_VALUE);
@@ -12114,6 +12677,7 @@ int brahma::MPIDFTracer::MPI_Rsend_c(const void* buf, MPI_Count count,
 int brahma::MPIDFTracer::MPI_Rsend_c(const void* buf, MPI_Count count,
                                      int datatype, int dest, int tag,
                                      int comm) {
+  ConstEventNameType CATEGORY = "p2p";
   BRAHMA_MAP_OR_FAIL(MPI_Rsend_c);
   DFT_LOGGER_START_ALWAYS();
   DFT_LOGGER_UPDATE_TYPE(count, MetadataType::MT_VALUE);
@@ -12140,6 +12704,7 @@ int brahma::MPIDFTracer::MPI_Rsend_init(const void* buf, int count,
                                         MPI_Datatype datatype, int dest,
                                         int tag, MPI_Comm comm,
                                         MPI_Request* request) {
+  ConstEventNameType CATEGORY = "p2p";
   BRAHMA_MAP_OR_FAIL(MPI_Rsend_init);
   DFT_LOGGER_START_ALWAYS();
   DFT_LOGGER_UPDATE_TYPE(count, MetadataType::MT_VALUE);
@@ -12165,6 +12730,7 @@ int brahma::MPIDFTracer::MPI_Rsend_init(const void* buf, int count,
 int brahma::MPIDFTracer::MPI_Rsend_init(const void* buf, int count,
                                         MPI_Datatype datatype, int dest,
                                         int tag, int comm, int* request) {
+  ConstEventNameType CATEGORY = "p2p";
   BRAHMA_MAP_OR_FAIL(MPI_Rsend_init);
   DFT_LOGGER_START_ALWAYS();
   DFT_LOGGER_UPDATE_TYPE(count, MetadataType::MT_VALUE);
@@ -12185,6 +12751,7 @@ int brahma::MPIDFTracer::MPI_Rsend_init_c(const void* buf, MPI_Count count,
                                           MPI_Datatype datatype, int dest,
                                           int tag, MPI_Comm comm,
                                           MPI_Request* request) {
+  ConstEventNameType CATEGORY = "p2p";
   BRAHMA_MAP_OR_FAIL(MPI_Rsend_init_c);
   DFT_LOGGER_START_ALWAYS();
   DFT_LOGGER_UPDATE_TYPE(count, MetadataType::MT_VALUE);
@@ -12206,6 +12773,7 @@ int brahma::MPIDFTracer::MPI_Rsend_init_c(const void* buf, MPI_Count count,
 int brahma::MPIDFTracer::MPI_Rsend_init_c(const void* buf, MPI_Count count,
                                           int datatype, int dest, int tag,
                                           int comm, int* request) {
+  ConstEventNameType CATEGORY = "p2p";
   BRAHMA_MAP_OR_FAIL(MPI_Rsend_init_c);
   DFT_LOGGER_START_ALWAYS();
   DFT_LOGGER_UPDATE_TYPE(count, MetadataType::MT_VALUE);
@@ -12232,6 +12800,7 @@ int brahma::MPIDFTracer::MPI_Rsend_init_c(const void* buf, MPI_Count count,
 int brahma::MPIDFTracer::MPI_Scan(const void* sendbuf, void* recvbuf, int count,
                                   MPI_Datatype datatype, MPI_Op op,
                                   MPI_Comm comm) {
+  ConstEventNameType CATEGORY = "collective";
   BRAHMA_MAP_OR_FAIL(MPI_Scan);
   DFT_LOGGER_START_ALWAYS();
   DFT_LOGGER_UPDATE_TYPE(count, MetadataType::MT_VALUE);
@@ -12254,6 +12823,7 @@ int brahma::MPIDFTracer::MPI_Scan(const void* sendbuf, void* recvbuf, int count,
       (BRAHMA_MPI_VERSION >= 400106 && BRAHMA_MPI_VERSION < 400200))
 int brahma::MPIDFTracer::MPI_Scan(const void* sendbuf, void* recvbuf, int count,
                                   MPI_Datatype datatype, int op, int comm) {
+  ConstEventNameType CATEGORY = "collective";
   BRAHMA_MAP_OR_FAIL(MPI_Scan);
   DFT_LOGGER_START_ALWAYS();
   DFT_LOGGER_UPDATE_TYPE(count, MetadataType::MT_VALUE);
@@ -12271,6 +12841,7 @@ int brahma::MPIDFTracer::MPI_Scan(const void* sendbuf, void* recvbuf, int count,
 int brahma::MPIDFTracer::MPI_Scan_c(const void* sendbuf, void* recvbuf,
                                     MPI_Count count, MPI_Datatype datatype,
                                     MPI_Op op, MPI_Comm comm) {
+  ConstEventNameType CATEGORY = "collective";
   BRAHMA_MAP_OR_FAIL(MPI_Scan_c);
   DFT_LOGGER_START_ALWAYS();
   DFT_LOGGER_UPDATE_TYPE(count, MetadataType::MT_VALUE);
@@ -12290,6 +12861,7 @@ int brahma::MPIDFTracer::MPI_Scan_c(const void* sendbuf, void* recvbuf,
 int brahma::MPIDFTracer::MPI_Scan_c(const void* sendbuf, void* recvbuf,
                                     MPI_Count count, int datatype, int op,
                                     int comm) {
+  ConstEventNameType CATEGORY = "collective";
   BRAHMA_MAP_OR_FAIL(MPI_Scan_c);
   DFT_LOGGER_START_ALWAYS();
   DFT_LOGGER_UPDATE_TYPE(count, MetadataType::MT_VALUE);
@@ -12310,6 +12882,7 @@ int brahma::MPIDFTracer::MPI_Scan_init(const void* sendbuf, void* recvbuf,
                                        int count, MPI_Datatype datatype,
                                        MPI_Op op, MPI_Comm comm, MPI_Info info,
                                        MPI_Request* request) {
+  ConstEventNameType CATEGORY = "collective";
   BRAHMA_MAP_OR_FAIL(MPI_Scan_init);
   DFT_LOGGER_START_ALWAYS();
   DFT_LOGGER_UPDATE_TYPE(count, MetadataType::MT_VALUE);
@@ -12331,6 +12904,7 @@ int brahma::MPIDFTracer::MPI_Scan_init(const void* sendbuf, void* recvbuf,
 int brahma::MPIDFTracer::MPI_Scan_init(const void* sendbuf, void* recvbuf,
                                        int count, int datatype, int op,
                                        int comm, int info, int* request) {
+  ConstEventNameType CATEGORY = "collective";
   BRAHMA_MAP_OR_FAIL(MPI_Scan_init);
   DFT_LOGGER_START_ALWAYS();
   DFT_LOGGER_UPDATE_TYPE(count, MetadataType::MT_VALUE);
@@ -12351,6 +12925,7 @@ int brahma::MPIDFTracer::MPI_Scan_init_c(const void* sendbuf, void* recvbuf,
                                          MPI_Count count, MPI_Datatype datatype,
                                          MPI_Op op, MPI_Comm comm,
                                          MPI_Info info, MPI_Request* request) {
+  ConstEventNameType CATEGORY = "collective";
   BRAHMA_MAP_OR_FAIL(MPI_Scan_init_c);
   DFT_LOGGER_START_ALWAYS();
   DFT_LOGGER_UPDATE_TYPE(count, MetadataType::MT_VALUE);
@@ -12372,6 +12947,7 @@ int brahma::MPIDFTracer::MPI_Scan_init_c(const void* sendbuf, void* recvbuf,
 int brahma::MPIDFTracer::MPI_Scan_init_c(const void* sendbuf, void* recvbuf,
                                          MPI_Count count, int datatype, int op,
                                          int comm, int info, int* request) {
+  ConstEventNameType CATEGORY = "collective";
   BRAHMA_MAP_OR_FAIL(MPI_Scan_init_c);
   DFT_LOGGER_START_ALWAYS();
   DFT_LOGGER_UPDATE_TYPE(count, MetadataType::MT_VALUE);
@@ -12399,6 +12975,7 @@ int brahma::MPIDFTracer::MPI_Scatter(const void* sendbuf, int sendcount,
                                      MPI_Datatype sendtype, void* recvbuf,
                                      int recvcount, MPI_Datatype recvtype,
                                      int root, MPI_Comm comm) {
+  ConstEventNameType CATEGORY = "collective";
   BRAHMA_MAP_OR_FAIL(MPI_Scatter);
   DFT_LOGGER_START_ALWAYS();
   DFT_LOGGER_UPDATE_TYPE(sendcount, MetadataType::MT_VALUE);
@@ -12426,6 +13003,7 @@ int brahma::MPIDFTracer::MPI_Scatter(const void* sendbuf, int sendcount,
                                      MPI_Datatype sendtype, void* recvbuf,
                                      int recvcount, MPI_Datatype recvtype,
                                      int root, int comm) {
+  ConstEventNameType CATEGORY = "collective";
   BRAHMA_MAP_OR_FAIL(MPI_Scatter);
   DFT_LOGGER_START_ALWAYS();
   DFT_LOGGER_UPDATE_TYPE(sendcount, MetadataType::MT_VALUE);
@@ -12448,6 +13026,7 @@ int brahma::MPIDFTracer::MPI_Scatter_c(const void* sendbuf, MPI_Count sendcount,
                                        MPI_Count recvcount,
                                        MPI_Datatype recvtype, int root,
                                        MPI_Comm comm) {
+  ConstEventNameType CATEGORY = "collective";
   BRAHMA_MAP_OR_FAIL(MPI_Scatter_c);
   DFT_LOGGER_START_ALWAYS();
   DFT_LOGGER_UPDATE_TYPE(sendcount, MetadataType::MT_VALUE);
@@ -12471,6 +13050,7 @@ int brahma::MPIDFTracer::MPI_Scatter_c(const void* sendbuf, MPI_Count sendcount,
                                        int sendtype, void* recvbuf,
                                        MPI_Count recvcount, int recvtype,
                                        int root, int comm) {
+  ConstEventNameType CATEGORY = "collective";
   BRAHMA_MAP_OR_FAIL(MPI_Scatter_c);
   DFT_LOGGER_START_ALWAYS();
   DFT_LOGGER_UPDATE_TYPE(sendcount, MetadataType::MT_VALUE);
@@ -12495,6 +13075,7 @@ int brahma::MPIDFTracer::MPI_Scatter_init(const void* sendbuf, int sendcount,
                                           int recvcount, MPI_Datatype recvtype,
                                           int root, MPI_Comm comm,
                                           MPI_Info info, MPI_Request* request) {
+  ConstEventNameType CATEGORY = "collective";
   BRAHMA_MAP_OR_FAIL(MPI_Scatter_init);
   DFT_LOGGER_START_ALWAYS();
   DFT_LOGGER_UPDATE_TYPE(sendcount, MetadataType::MT_VALUE);
@@ -12520,6 +13101,7 @@ int brahma::MPIDFTracer::MPI_Scatter_init(const void* sendbuf, int sendcount,
                                           int sendtype, void* recvbuf,
                                           int recvcount, int recvtype, int root,
                                           int comm, int info, int* request) {
+  ConstEventNameType CATEGORY = "collective";
   BRAHMA_MAP_OR_FAIL(MPI_Scatter_init);
   DFT_LOGGER_START_ALWAYS();
   DFT_LOGGER_UPDATE_TYPE(sendcount, MetadataType::MT_VALUE);
@@ -12543,6 +13125,7 @@ int brahma::MPIDFTracer::MPI_Scatter_init_c(
     const void* sendbuf, MPI_Count sendcount, MPI_Datatype sendtype,
     void* recvbuf, MPI_Count recvcount, MPI_Datatype recvtype, int root,
     MPI_Comm comm, MPI_Info info, MPI_Request* request) {
+  ConstEventNameType CATEGORY = "collective";
   BRAHMA_MAP_OR_FAIL(MPI_Scatter_init_c);
   DFT_LOGGER_START_ALWAYS();
   DFT_LOGGER_UPDATE_TYPE(sendcount, MetadataType::MT_VALUE);
@@ -12569,6 +13152,7 @@ int brahma::MPIDFTracer::MPI_Scatter_init_c(const void* sendbuf,
                                             void* recvbuf, MPI_Count recvcount,
                                             int recvtype, int root, int comm,
                                             int info, int* request) {
+  ConstEventNameType CATEGORY = "collective";
   BRAHMA_MAP_OR_FAIL(MPI_Scatter_init_c);
   DFT_LOGGER_START_ALWAYS();
   DFT_LOGGER_UPDATE_TYPE(sendcount, MetadataType::MT_VALUE);
@@ -12593,6 +13177,7 @@ int brahma::MPIDFTracer::MPI_Scatterv(const void* sendbuf,
                                       MPI_Datatype sendtype, void* recvbuf,
                                       int recvcount, MPI_Datatype recvtype,
                                       int root, MPI_Comm comm) {
+  ConstEventNameType CATEGORY = "collective";
   BRAHMA_MAP_OR_FAIL(MPI_Scatterv);
   DFT_LOGGER_START_ALWAYS();
   DFT_LOGGER_UPDATE_TYPE(sendtype, MetadataType::MT_VALUE);
@@ -12619,6 +13204,7 @@ int brahma::MPIDFTracer::MPI_Scatterv(const void* sendbuf,
                                       void* recvbuf, int recvcount,
                                       MPI_Datatype recvtype, int root,
                                       MPI_Comm comm) {
+  ConstEventNameType CATEGORY = "collective";
   BRAHMA_MAP_OR_FAIL(MPI_Scatterv);
   DFT_LOGGER_START_ALWAYS();
   DFT_LOGGER_UPDATE_TYPE(sendtype, MetadataType::MT_VALUE);
@@ -12647,6 +13233,7 @@ int brahma::MPIDFTracer::MPI_Scatterv(const void* sendbuf,
                                       void* recvbuf, int recvcount,
                                       MPI_Datatype recvtype, int root,
                                       int comm) {
+  ConstEventNameType CATEGORY = "collective";
   BRAHMA_MAP_OR_FAIL(MPI_Scatterv);
   DFT_LOGGER_START_ALWAYS();
   DFT_LOGGER_UPDATE_TYPE(sendtype, MetadataType::MT_VALUE);
@@ -12667,6 +13254,7 @@ int brahma::MPIDFTracer::MPI_Scatterv_c(
     const void* sendbuf, const MPI_Count sendcounts[], const MPI_Aint displs[],
     MPI_Datatype sendtype, void* recvbuf, MPI_Count recvcount,
     MPI_Datatype recvtype, int root, MPI_Comm comm) {
+  ConstEventNameType CATEGORY = "collective";
   BRAHMA_MAP_OR_FAIL(MPI_Scatterv_c);
   DFT_LOGGER_START_ALWAYS();
   DFT_LOGGER_UPDATE_TYPE(sendtype, MetadataType::MT_VALUE);
@@ -12690,6 +13278,7 @@ int brahma::MPIDFTracer::MPI_Scatterv_c(const void* sendbuf,
                                         const MPI_Aint displs[], int sendtype,
                                         void* recvbuf, MPI_Count recvcount,
                                         int recvtype, int root, int comm) {
+  ConstEventNameType CATEGORY = "collective";
   BRAHMA_MAP_OR_FAIL(MPI_Scatterv_c);
   DFT_LOGGER_START_ALWAYS();
   DFT_LOGGER_UPDATE_TYPE(sendtype, MetadataType::MT_VALUE);
@@ -12712,6 +13301,7 @@ int brahma::MPIDFTracer::MPI_Scatterv_init(
     const void* sendbuf, const int sendcounts[], const int displs[],
     MPI_Datatype sendtype, void* recvbuf, int recvcount, MPI_Datatype recvtype,
     int root, MPI_Comm comm, MPI_Info info, MPI_Request* request) {
+  ConstEventNameType CATEGORY = "collective";
   BRAHMA_MAP_OR_FAIL(MPI_Scatterv_init);
   DFT_LOGGER_START_ALWAYS();
   DFT_LOGGER_UPDATE_TYPE(sendtype, MetadataType::MT_VALUE);
@@ -12738,6 +13328,7 @@ int brahma::MPIDFTracer::MPI_Scatterv_init(const void* sendbuf,
                                            void* recvbuf, int recvcount,
                                            int recvtype, int root, int comm,
                                            int info, int* request) {
+  ConstEventNameType CATEGORY = "collective";
   BRAHMA_MAP_OR_FAIL(MPI_Scatterv_init);
   DFT_LOGGER_START_ALWAYS();
   DFT_LOGGER_UPDATE_TYPE(sendtype, MetadataType::MT_VALUE);
@@ -12761,6 +13352,7 @@ int brahma::MPIDFTracer::MPI_Scatterv_init_c(
     MPI_Datatype sendtype, void* recvbuf, MPI_Count recvcount,
     MPI_Datatype recvtype, int root, MPI_Comm comm, MPI_Info info,
     MPI_Request* request) {
+  ConstEventNameType CATEGORY = "collective";
   BRAHMA_MAP_OR_FAIL(MPI_Scatterv_init_c);
   DFT_LOGGER_START_ALWAYS();
   DFT_LOGGER_UPDATE_TYPE(sendtype, MetadataType::MT_VALUE);
@@ -12785,6 +13377,7 @@ int brahma::MPIDFTracer::MPI_Scatterv_init_c(
     const void* sendbuf, const MPI_Count sendcounts[], const MPI_Aint displs[],
     int sendtype, void* recvbuf, MPI_Count recvcount, int recvtype, int root,
     int comm, int info, int* request) {
+  ConstEventNameType CATEGORY = "collective";
   BRAHMA_MAP_OR_FAIL(MPI_Scatterv_init_c);
   DFT_LOGGER_START_ALWAYS();
   DFT_LOGGER_UPDATE_TYPE(sendtype, MetadataType::MT_VALUE);
@@ -12813,6 +13406,7 @@ int brahma::MPIDFTracer::MPI_Scatterv_init_c(
 int brahma::MPIDFTracer::MPI_Send(const void* buf, int count,
                                   MPI_Datatype datatype, int dest, int tag,
                                   MPI_Comm comm) {
+  ConstEventNameType CATEGORY = "p2p";
   BRAHMA_MAP_OR_FAIL(MPI_Send);
   DFT_LOGGER_START_ALWAYS();
   DFT_LOGGER_UPDATE_TYPE(count, MetadataType::MT_VALUE);
@@ -12837,6 +13431,7 @@ int brahma::MPIDFTracer::MPI_Send(const void* buf, int count,
 int brahma::MPIDFTracer::MPI_Send(const void* buf, int count,
                                   MPI_Datatype datatype, int dest, int tag,
                                   int comm) {
+  ConstEventNameType CATEGORY = "p2p";
   BRAHMA_MAP_OR_FAIL(MPI_Send);
   DFT_LOGGER_START_ALWAYS();
   DFT_LOGGER_UPDATE_TYPE(count, MetadataType::MT_VALUE);
@@ -12855,6 +13450,7 @@ int brahma::MPIDFTracer::MPI_Send(const void* buf, int count,
 int brahma::MPIDFTracer::MPI_Send_c(const void* buf, MPI_Count count,
                                     MPI_Datatype datatype, int dest, int tag,
                                     MPI_Comm comm) {
+  ConstEventNameType CATEGORY = "p2p";
   BRAHMA_MAP_OR_FAIL(MPI_Send_c);
   DFT_LOGGER_START_ALWAYS();
   DFT_LOGGER_UPDATE_TYPE(count, MetadataType::MT_VALUE);
@@ -12874,6 +13470,7 @@ int brahma::MPIDFTracer::MPI_Send_c(const void* buf, MPI_Count count,
       (BRAHMA_MPI_VERSION >= 400203 && BRAHMA_MPI_VERSION < 400300)))
 int brahma::MPIDFTracer::MPI_Send_c(const void* buf, MPI_Count count,
                                     int datatype, int dest, int tag, int comm) {
+  ConstEventNameType CATEGORY = "p2p";
   BRAHMA_MAP_OR_FAIL(MPI_Send_c);
   DFT_LOGGER_START_ALWAYS();
   DFT_LOGGER_UPDATE_TYPE(count, MetadataType::MT_VALUE);
@@ -12899,6 +13496,7 @@ int brahma::MPIDFTracer::MPI_Send_c(const void* buf, MPI_Count count,
 int brahma::MPIDFTracer::MPI_Send_init(const void* buf, int count,
                                        MPI_Datatype datatype, int dest, int tag,
                                        MPI_Comm comm, MPI_Request* request) {
+  ConstEventNameType CATEGORY = "p2p";
   BRAHMA_MAP_OR_FAIL(MPI_Send_init);
   DFT_LOGGER_START_ALWAYS();
   DFT_LOGGER_UPDATE_TYPE(count, MetadataType::MT_VALUE);
@@ -12924,6 +13522,7 @@ int brahma::MPIDFTracer::MPI_Send_init(const void* buf, int count,
 int brahma::MPIDFTracer::MPI_Send_init(const void* buf, int count,
                                        MPI_Datatype datatype, int dest, int tag,
                                        int comm, int* request) {
+  ConstEventNameType CATEGORY = "p2p";
   BRAHMA_MAP_OR_FAIL(MPI_Send_init);
   DFT_LOGGER_START_ALWAYS();
   DFT_LOGGER_UPDATE_TYPE(count, MetadataType::MT_VALUE);
@@ -12944,6 +13543,7 @@ int brahma::MPIDFTracer::MPI_Send_init_c(const void* buf, MPI_Count count,
                                          MPI_Datatype datatype, int dest,
                                          int tag, MPI_Comm comm,
                                          MPI_Request* request) {
+  ConstEventNameType CATEGORY = "p2p";
   BRAHMA_MAP_OR_FAIL(MPI_Send_init_c);
   DFT_LOGGER_START_ALWAYS();
   DFT_LOGGER_UPDATE_TYPE(count, MetadataType::MT_VALUE);
@@ -12965,6 +13565,7 @@ int brahma::MPIDFTracer::MPI_Send_init_c(const void* buf, MPI_Count count,
 int brahma::MPIDFTracer::MPI_Send_init_c(const void* buf, MPI_Count count,
                                          int datatype, int dest, int tag,
                                          int comm, int* request) {
+  ConstEventNameType CATEGORY = "p2p";
   BRAHMA_MAP_OR_FAIL(MPI_Send_init_c);
   DFT_LOGGER_START_ALWAYS();
   DFT_LOGGER_UPDATE_TYPE(count, MetadataType::MT_VALUE);
@@ -12994,6 +13595,7 @@ int brahma::MPIDFTracer::MPI_Sendrecv(const void* sendbuf, int sendcount,
                                       MPI_Datatype recvtype, int source,
                                       int recvtag, MPI_Comm comm,
                                       MPI_Status* status) {
+  ConstEventNameType CATEGORY = "p2p";
   BRAHMA_MAP_OR_FAIL(MPI_Sendrecv);
   DFT_LOGGER_START_ALWAYS();
   DFT_LOGGER_UPDATE_TYPE(sendcount, MetadataType::MT_VALUE);
@@ -13027,6 +13629,7 @@ int brahma::MPIDFTracer::MPI_Sendrecv(const void* sendbuf, int sendcount,
                                       MPI_Datatype recvtype, int source,
                                       int recvtag, int comm,
                                       MPI_Status* status) {
+  ConstEventNameType CATEGORY = "p2p";
   BRAHMA_MAP_OR_FAIL(MPI_Sendrecv);
   DFT_LOGGER_START_ALWAYS();
   DFT_LOGGER_UPDATE_TYPE(sendcount, MetadataType::MT_VALUE);
@@ -13052,6 +13655,7 @@ int brahma::MPIDFTracer::MPI_Sendrecv_c(
     const void* sendbuf, MPI_Count sendcount, MPI_Datatype sendtype, int dest,
     int sendtag, void* recvbuf, MPI_Count recvcount, MPI_Datatype recvtype,
     int source, int recvtag, MPI_Comm comm, MPI_Status* status) {
+  ConstEventNameType CATEGORY = "p2p";
   BRAHMA_MAP_OR_FAIL(MPI_Sendrecv_c);
   DFT_LOGGER_START_ALWAYS();
   DFT_LOGGER_UPDATE_TYPE(sendcount, MetadataType::MT_VALUE);
@@ -13081,6 +13685,7 @@ int brahma::MPIDFTracer::MPI_Sendrecv_c(const void* sendbuf,
                                         MPI_Count recvcount, int recvtype,
                                         int source, int recvtag, int comm,
                                         MPI_Status* status) {
+  ConstEventNameType CATEGORY = "p2p";
   BRAHMA_MAP_OR_FAIL(MPI_Sendrecv_c);
   DFT_LOGGER_START_ALWAYS();
   DFT_LOGGER_UPDATE_TYPE(sendcount, MetadataType::MT_VALUE);
@@ -13114,6 +13719,7 @@ int brahma::MPIDFTracer::MPI_Sendrecv_replace(void* buf, int count,
                                               int sendtag, int source,
                                               int recvtag, MPI_Comm comm,
                                               MPI_Status* status) {
+  ConstEventNameType CATEGORY = "p2p";
   BRAHMA_MAP_OR_FAIL(MPI_Sendrecv_replace);
   DFT_LOGGER_START_ALWAYS();
   DFT_LOGGER_UPDATE_TYPE(count, MetadataType::MT_VALUE);
@@ -13143,6 +13749,7 @@ int brahma::MPIDFTracer::MPI_Sendrecv_replace(void* buf, int count,
                                               int sendtag, int source,
                                               int recvtag, int comm,
                                               MPI_Status* status) {
+  ConstEventNameType CATEGORY = "p2p";
   BRAHMA_MAP_OR_FAIL(MPI_Sendrecv_replace);
   DFT_LOGGER_START_ALWAYS();
   DFT_LOGGER_UPDATE_TYPE(count, MetadataType::MT_VALUE);
@@ -13166,6 +13773,7 @@ int brahma::MPIDFTracer::MPI_Sendrecv_replace_c(void* buf, MPI_Count count,
                                                 int sendtag, int source,
                                                 int recvtag, MPI_Comm comm,
                                                 MPI_Status* status) {
+  ConstEventNameType CATEGORY = "p2p";
   BRAHMA_MAP_OR_FAIL(MPI_Sendrecv_replace_c);
   DFT_LOGGER_START_ALWAYS();
   DFT_LOGGER_UPDATE_TYPE(count, MetadataType::MT_VALUE);
@@ -13191,6 +13799,7 @@ int brahma::MPIDFTracer::MPI_Sendrecv_replace_c(void* buf, MPI_Count count,
                                                 int sendtag, int source,
                                                 int recvtag, int comm,
                                                 MPI_Status* status) {
+  ConstEventNameType CATEGORY = "p2p";
   BRAHMA_MAP_OR_FAIL(MPI_Sendrecv_replace_c);
   DFT_LOGGER_START_ALWAYS();
   DFT_LOGGER_UPDATE_TYPE(count, MetadataType::MT_VALUE);
@@ -13219,6 +13828,7 @@ int brahma::MPIDFTracer::MPI_Sendrecv_replace_c(void* buf, MPI_Count count,
 int brahma::MPIDFTracer::MPI_Ssend(const void* buf, int count,
                                    MPI_Datatype datatype, int dest, int tag,
                                    MPI_Comm comm) {
+  ConstEventNameType CATEGORY = "p2p";
   BRAHMA_MAP_OR_FAIL(MPI_Ssend);
   DFT_LOGGER_START_ALWAYS();
   DFT_LOGGER_UPDATE_TYPE(count, MetadataType::MT_VALUE);
@@ -13243,6 +13853,7 @@ int brahma::MPIDFTracer::MPI_Ssend(const void* buf, int count,
 int brahma::MPIDFTracer::MPI_Ssend(const void* buf, int count,
                                    MPI_Datatype datatype, int dest, int tag,
                                    int comm) {
+  ConstEventNameType CATEGORY = "p2p";
   BRAHMA_MAP_OR_FAIL(MPI_Ssend);
   DFT_LOGGER_START_ALWAYS();
   DFT_LOGGER_UPDATE_TYPE(count, MetadataType::MT_VALUE);
@@ -13261,6 +13872,7 @@ int brahma::MPIDFTracer::MPI_Ssend(const void* buf, int count,
 int brahma::MPIDFTracer::MPI_Ssend_c(const void* buf, MPI_Count count,
                                      MPI_Datatype datatype, int dest, int tag,
                                      MPI_Comm comm) {
+  ConstEventNameType CATEGORY = "p2p";
   BRAHMA_MAP_OR_FAIL(MPI_Ssend_c);
   DFT_LOGGER_START_ALWAYS();
   DFT_LOGGER_UPDATE_TYPE(count, MetadataType::MT_VALUE);
@@ -13281,6 +13893,7 @@ int brahma::MPIDFTracer::MPI_Ssend_c(const void* buf, MPI_Count count,
 int brahma::MPIDFTracer::MPI_Ssend_c(const void* buf, MPI_Count count,
                                      int datatype, int dest, int tag,
                                      int comm) {
+  ConstEventNameType CATEGORY = "p2p";
   BRAHMA_MAP_OR_FAIL(MPI_Ssend_c);
   DFT_LOGGER_START_ALWAYS();
   DFT_LOGGER_UPDATE_TYPE(count, MetadataType::MT_VALUE);
@@ -13307,6 +13920,7 @@ int brahma::MPIDFTracer::MPI_Ssend_init(const void* buf, int count,
                                         MPI_Datatype datatype, int dest,
                                         int tag, MPI_Comm comm,
                                         MPI_Request* request) {
+  ConstEventNameType CATEGORY = "p2p";
   BRAHMA_MAP_OR_FAIL(MPI_Ssend_init);
   DFT_LOGGER_START_ALWAYS();
   DFT_LOGGER_UPDATE_TYPE(count, MetadataType::MT_VALUE);
@@ -13332,6 +13946,7 @@ int brahma::MPIDFTracer::MPI_Ssend_init(const void* buf, int count,
 int brahma::MPIDFTracer::MPI_Ssend_init(const void* buf, int count,
                                         MPI_Datatype datatype, int dest,
                                         int tag, int comm, int* request) {
+  ConstEventNameType CATEGORY = "p2p";
   BRAHMA_MAP_OR_FAIL(MPI_Ssend_init);
   DFT_LOGGER_START_ALWAYS();
   DFT_LOGGER_UPDATE_TYPE(count, MetadataType::MT_VALUE);
@@ -13352,6 +13967,7 @@ int brahma::MPIDFTracer::MPI_Ssend_init_c(const void* buf, MPI_Count count,
                                           MPI_Datatype datatype, int dest,
                                           int tag, MPI_Comm comm,
                                           MPI_Request* request) {
+  ConstEventNameType CATEGORY = "p2p";
   BRAHMA_MAP_OR_FAIL(MPI_Ssend_init_c);
   DFT_LOGGER_START_ALWAYS();
   DFT_LOGGER_UPDATE_TYPE(count, MetadataType::MT_VALUE);
@@ -13373,6 +13989,7 @@ int brahma::MPIDFTracer::MPI_Ssend_init_c(const void* buf, MPI_Count count,
 int brahma::MPIDFTracer::MPI_Ssend_init_c(const void* buf, MPI_Count count,
                                           int datatype, int dest, int tag,
                                           int comm, int* request) {
+  ConstEventNameType CATEGORY = "p2p";
   BRAHMA_MAP_OR_FAIL(MPI_Ssend_init_c);
   DFT_LOGGER_START_ALWAYS();
   DFT_LOGGER_UPDATE_TYPE(count, MetadataType::MT_VALUE);
@@ -13397,6 +14014,7 @@ int brahma::MPIDFTracer::MPI_Ssend_init_c(const void* buf, MPI_Count count,
     (defined(BRAHMA_MPI_IMPL_OPENMPI) &&                                   \
      (BRAHMA_MPI_VERSION >= 400106 && BRAHMA_MPI_VERSION < 400200))
 int brahma::MPIDFTracer::MPI_Start(MPI_Request* request) {
+  ConstEventNameType CATEGORY = "p2p";
   BRAHMA_MAP_OR_FAIL(MPI_Start);
   DFT_LOGGER_START_ALWAYS();
   int ret = __real_MPI_Start(request);
@@ -13414,6 +14032,7 @@ int brahma::MPIDFTracer::MPI_Start(MPI_Request* request) {
     !(defined(BRAHMA_MPI_IMPL_OPENMPI) &&                                  \
       (BRAHMA_MPI_VERSION >= 400106 && BRAHMA_MPI_VERSION < 400200))
 int brahma::MPIDFTracer::MPI_Start(int* request) {
+  ConstEventNameType CATEGORY = "p2p";
   BRAHMA_MAP_OR_FAIL(MPI_Start);
   DFT_LOGGER_START_ALWAYS();
   int ret = __real_MPI_Start(request);
@@ -13433,6 +14052,7 @@ int brahma::MPIDFTracer::MPI_Start(int* request) {
      (BRAHMA_MPI_VERSION >= 400106 && BRAHMA_MPI_VERSION < 400200))
 int brahma::MPIDFTracer::MPI_Startall(int count,
                                       MPI_Request array_of_requests[]) {
+  ConstEventNameType CATEGORY = "p2p";
   BRAHMA_MAP_OR_FAIL(MPI_Startall);
   DFT_LOGGER_START_ALWAYS();
   DFT_LOGGER_UPDATE_TYPE(count, MetadataType::MT_VALUE);
@@ -13451,6 +14071,7 @@ int brahma::MPIDFTracer::MPI_Startall(int count,
     !(defined(BRAHMA_MPI_IMPL_OPENMPI) &&                                  \
       (BRAHMA_MPI_VERSION >= 400106 && BRAHMA_MPI_VERSION < 400200))
 int brahma::MPIDFTracer::MPI_Startall(int count, int array_of_requests[]) {
+  ConstEventNameType CATEGORY = "p2p";
   BRAHMA_MAP_OR_FAIL(MPI_Startall);
   DFT_LOGGER_START_ALWAYS();
   DFT_LOGGER_UPDATE_TYPE(count, MetadataType::MT_VALUE);
@@ -13465,6 +14086,7 @@ int brahma::MPIDFTracer::MPI_Startall(int count, int array_of_requests[]) {
      (defined(BRAHMA_MPI_IMPL_MPICH) &&                                 \
       (BRAHMA_MPI_VERSION >= 400203 && BRAHMA_MPI_VERSION < 400300)))
 int brahma::MPIDFTracer::MPI_Status_get_error(MPI_Status* status, int* error) {
+  ConstEventNameType CATEGORY = "p2p";
   BRAHMA_MAP_OR_FAIL(MPI_Status_get_error);
   DFT_LOGGER_START_ALWAYS();
   int ret = __real_MPI_Status_get_error(status, error);
@@ -13479,6 +14101,7 @@ int brahma::MPIDFTracer::MPI_Status_get_error(MPI_Status* status, int* error) {
       (BRAHMA_MPI_VERSION >= 400203 && BRAHMA_MPI_VERSION < 400300)))
 int brahma::MPIDFTracer::MPI_Status_get_source(MPI_Status* status,
                                                int* source) {
+  ConstEventNameType CATEGORY = "p2p";
   BRAHMA_MAP_OR_FAIL(MPI_Status_get_source);
   DFT_LOGGER_START_ALWAYS();
   int ret = __real_MPI_Status_get_source(status, source);
@@ -13492,6 +14115,7 @@ int brahma::MPIDFTracer::MPI_Status_get_source(MPI_Status* status,
      (defined(BRAHMA_MPI_IMPL_MPICH) &&                                 \
       (BRAHMA_MPI_VERSION >= 400203 && BRAHMA_MPI_VERSION < 400300)))
 int brahma::MPIDFTracer::MPI_Status_get_tag(MPI_Status* status, int* tag) {
+  ConstEventNameType CATEGORY = "p2p";
   BRAHMA_MAP_OR_FAIL(MPI_Status_get_tag);
   DFT_LOGGER_START_ALWAYS();
   int ret = __real_MPI_Status_get_tag(status, tag);
@@ -13511,6 +14135,7 @@ int brahma::MPIDFTracer::MPI_Status_get_tag(MPI_Status* status, int* tag) {
        (BRAHMA_MPI_VERSION >= 500006 && BRAHMA_MPI_VERSION < 500100))))
 int brahma::MPIDFTracer::MPI_Status_set_cancelled(MPI_Status* status,
                                                   int flag) {
+  ConstEventNameType CATEGORY = "p2p";
   BRAHMA_MAP_OR_FAIL(MPI_Status_set_cancelled);
   DFT_LOGGER_START_ALWAYS();
   DFT_LOGGER_UPDATE_TYPE(flag, MetadataType::MT_VALUE);
@@ -13532,6 +14157,7 @@ int brahma::MPIDFTracer::MPI_Status_set_cancelled(MPI_Status* status,
 int brahma::MPIDFTracer::MPI_Status_set_elements(MPI_Status* status,
                                                  MPI_Datatype datatype,
                                                  int count) {
+  ConstEventNameType CATEGORY = "p2p";
   BRAHMA_MAP_OR_FAIL(MPI_Status_set_elements);
   DFT_LOGGER_START_ALWAYS();
   DFT_LOGGER_UPDATE_TYPE(datatype, MetadataType::MT_VALUE);
@@ -13547,6 +14173,7 @@ int brahma::MPIDFTracer::MPI_Status_set_elements(MPI_Status* status,
 int brahma::MPIDFTracer::MPI_Status_set_elements_c(MPI_Status* status,
                                                    MPI_Datatype datatype,
                                                    MPI_Count count) {
+  ConstEventNameType CATEGORY = "p2p";
   BRAHMA_MAP_OR_FAIL(MPI_Status_set_elements_c);
   DFT_LOGGER_START_ALWAYS();
   DFT_LOGGER_UPDATE_TYPE(datatype, MetadataType::MT_VALUE);
@@ -13564,6 +14191,7 @@ int brahma::MPIDFTracer::MPI_Status_set_elements_c(MPI_Status* status,
 int brahma::MPIDFTracer::MPI_Status_set_elements_c(MPI_Status* status,
                                                    int datatype,
                                                    MPI_Count count) {
+  ConstEventNameType CATEGORY = "p2p";
   BRAHMA_MAP_OR_FAIL(MPI_Status_set_elements_c);
   DFT_LOGGER_START_ALWAYS();
   DFT_LOGGER_UPDATE_TYPE(datatype, MetadataType::MT_VALUE);
@@ -13586,6 +14214,7 @@ int brahma::MPIDFTracer::MPI_Status_set_elements_c(MPI_Status* status,
 int brahma::MPIDFTracer::MPI_Status_set_elements_x(MPI_Status* status,
                                                    MPI_Datatype datatype,
                                                    MPI_Count count) {
+  ConstEventNameType CATEGORY = "p2p";
   BRAHMA_MAP_OR_FAIL(MPI_Status_set_elements_x);
   DFT_LOGGER_START_ALWAYS();
   DFT_LOGGER_UPDATE_TYPE(datatype, MetadataType::MT_VALUE);
@@ -13601,6 +14230,7 @@ int brahma::MPIDFTracer::MPI_Status_set_elements_x(MPI_Status* status,
      (defined(BRAHMA_MPI_IMPL_MPICH) &&                                 \
       (BRAHMA_MPI_VERSION >= 400203 && BRAHMA_MPI_VERSION < 400300)))
 int brahma::MPIDFTracer::MPI_Status_set_error(MPI_Status* status, int error) {
+  ConstEventNameType CATEGORY = "p2p";
   BRAHMA_MAP_OR_FAIL(MPI_Status_set_error);
   DFT_LOGGER_START_ALWAYS();
   DFT_LOGGER_UPDATE_TYPE(error, MetadataType::MT_VALUE);
@@ -13615,6 +14245,7 @@ int brahma::MPIDFTracer::MPI_Status_set_error(MPI_Status* status, int error) {
      (defined(BRAHMA_MPI_IMPL_MPICH) &&                                 \
       (BRAHMA_MPI_VERSION >= 400203 && BRAHMA_MPI_VERSION < 400300)))
 int brahma::MPIDFTracer::MPI_Status_set_source(MPI_Status* status, int source) {
+  ConstEventNameType CATEGORY = "p2p";
   BRAHMA_MAP_OR_FAIL(MPI_Status_set_source);
   DFT_LOGGER_START_ALWAYS();
   DFT_LOGGER_UPDATE_TYPE(source, MetadataType::MT_VALUE);
@@ -13629,6 +14260,7 @@ int brahma::MPIDFTracer::MPI_Status_set_source(MPI_Status* status, int source) {
      (defined(BRAHMA_MPI_IMPL_MPICH) &&                                 \
       (BRAHMA_MPI_VERSION >= 400203 && BRAHMA_MPI_VERSION < 400300)))
 int brahma::MPIDFTracer::MPI_Status_set_tag(MPI_Status* status, int tag) {
+  ConstEventNameType CATEGORY = "p2p";
   BRAHMA_MAP_OR_FAIL(MPI_Status_set_tag);
   DFT_LOGGER_START_ALWAYS();
   DFT_LOGGER_UPDATE_TYPE(tag, MetadataType::MT_VALUE);
@@ -13649,6 +14281,7 @@ int brahma::MPIDFTracer::MPI_Status_set_tag(MPI_Status* status, int tag) {
      (BRAHMA_MPI_VERSION >= 400106 && BRAHMA_MPI_VERSION < 400200))
 int brahma::MPIDFTracer::MPI_Test(MPI_Request* request, int* flag,
                                   MPI_Status* status) {
+  ConstEventNameType CATEGORY = "p2p";
   BRAHMA_MAP_OR_FAIL(MPI_Test);
   DFT_LOGGER_START_ALWAYS();
   int ret = __real_MPI_Test(request, flag, status);
@@ -13666,6 +14299,7 @@ int brahma::MPIDFTracer::MPI_Test(MPI_Request* request, int* flag,
     !(defined(BRAHMA_MPI_IMPL_OPENMPI) &&                                  \
       (BRAHMA_MPI_VERSION >= 400106 && BRAHMA_MPI_VERSION < 400200))
 int brahma::MPIDFTracer::MPI_Test(int* request, int* flag, MPI_Status* status) {
+  ConstEventNameType CATEGORY = "p2p";
   BRAHMA_MAP_OR_FAIL(MPI_Test);
   DFT_LOGGER_START_ALWAYS();
   int ret = __real_MPI_Test(request, flag, status);
@@ -13685,6 +14319,7 @@ int brahma::MPIDFTracer::MPI_Test(int* request, int* flag, MPI_Status* status) {
        (BRAHMA_MPI_VERSION >= 500006 && BRAHMA_MPI_VERSION < 500100))))
 int brahma::MPIDFTracer::MPI_Test_cancelled(const MPI_Status* status,
                                             int* flag) {
+  ConstEventNameType CATEGORY = "p2p";
   BRAHMA_MAP_OR_FAIL(MPI_Test_cancelled);
   DFT_LOGGER_START_ALWAYS();
   int ret = __real_MPI_Test_cancelled(status, flag);
@@ -13697,6 +14332,7 @@ int brahma::MPIDFTracer::MPI_Test_cancelled(const MPI_Status* status,
      (BRAHMA_MPI_VERSION >= 900001 && BRAHMA_MPI_VERSION < 900100))
 int brahma::MPIDFTracer::MPI_Testall(int count, MPI_Request array_of_requests[],
                                      int* flag, MPI_Status* array_of_statuses) {
+  ConstEventNameType CATEGORY = "p2p";
   BRAHMA_MAP_OR_FAIL(MPI_Testall);
   DFT_LOGGER_START_ALWAYS();
   DFT_LOGGER_UPDATE_TYPE(count, MetadataType::MT_VALUE);
@@ -13714,6 +14350,7 @@ int brahma::MPIDFTracer::MPI_Testall(int count, MPI_Request array_of_requests[],
 int brahma::MPIDFTracer::MPI_Testall(int count, MPI_Request array_of_requests[],
                                      int* flag,
                                      MPI_Status array_of_statuses[]) {
+  ConstEventNameType CATEGORY = "p2p";
   BRAHMA_MAP_OR_FAIL(MPI_Testall);
   DFT_LOGGER_START_ALWAYS();
   DFT_LOGGER_UPDATE_TYPE(count, MetadataType::MT_VALUE);
@@ -13730,6 +14367,7 @@ int brahma::MPIDFTracer::MPI_Testall(int count, MPI_Request array_of_requests[],
       (BRAHMA_MPI_VERSION >= 400203 && BRAHMA_MPI_VERSION < 400300)))
 int brahma::MPIDFTracer::MPI_Testall(int count, int array_of_requests[],
                                      int* flag, MPI_Status* array_of_statuses) {
+  ConstEventNameType CATEGORY = "p2p";
   BRAHMA_MAP_OR_FAIL(MPI_Testall);
   DFT_LOGGER_START_ALWAYS();
   DFT_LOGGER_UPDATE_TYPE(count, MetadataType::MT_VALUE);
@@ -13747,6 +14385,7 @@ int brahma::MPIDFTracer::MPI_Testall(int count, int array_of_requests[],
 int brahma::MPIDFTracer::MPI_Testall(int count, int array_of_requests[],
                                      int* flag,
                                      MPI_Status array_of_statuses[]) {
+  ConstEventNameType CATEGORY = "p2p";
   BRAHMA_MAP_OR_FAIL(MPI_Testall);
   DFT_LOGGER_START_ALWAYS();
   DFT_LOGGER_UPDATE_TYPE(count, MetadataType::MT_VALUE);
@@ -13769,6 +14408,7 @@ int brahma::MPIDFTracer::MPI_Testall(int count, int array_of_requests[],
 int brahma::MPIDFTracer::MPI_Testany(int count, MPI_Request array_of_requests[],
                                      int* index, int* flag,
                                      MPI_Status* status) {
+  ConstEventNameType CATEGORY = "p2p";
   BRAHMA_MAP_OR_FAIL(MPI_Testany);
   DFT_LOGGER_START_ALWAYS();
   DFT_LOGGER_UPDATE_TYPE(count, MetadataType::MT_VALUE);
@@ -13789,6 +14429,7 @@ int brahma::MPIDFTracer::MPI_Testany(int count, MPI_Request array_of_requests[],
 int brahma::MPIDFTracer::MPI_Testany(int count, int array_of_requests[],
                                      int* index, int* flag,
                                      MPI_Status* status) {
+  ConstEventNameType CATEGORY = "p2p";
   BRAHMA_MAP_OR_FAIL(MPI_Testany);
   DFT_LOGGER_START_ALWAYS();
   DFT_LOGGER_UPDATE_TYPE(count, MetadataType::MT_VALUE);
@@ -13804,6 +14445,7 @@ int brahma::MPIDFTracer::MPI_Testsome(int incount,
                                       MPI_Request array_of_requests[],
                                       int* outcount, int array_of_indices[],
                                       MPI_Status* array_of_statuses) {
+  ConstEventNameType CATEGORY = "p2p";
   BRAHMA_MAP_OR_FAIL(MPI_Testsome);
   DFT_LOGGER_START_ALWAYS();
   DFT_LOGGER_UPDATE_TYPE(incount, MetadataType::MT_VALUE);
@@ -13822,6 +14464,7 @@ int brahma::MPIDFTracer::MPI_Testsome(int incount,
                                       MPI_Request array_of_requests[],
                                       int* outcount, int array_of_indices[],
                                       MPI_Status array_of_statuses[]) {
+  ConstEventNameType CATEGORY = "p2p";
   BRAHMA_MAP_OR_FAIL(MPI_Testsome);
   DFT_LOGGER_START_ALWAYS();
   DFT_LOGGER_UPDATE_TYPE(incount, MetadataType::MT_VALUE);
@@ -13839,6 +14482,7 @@ int brahma::MPIDFTracer::MPI_Testsome(int incount,
 int brahma::MPIDFTracer::MPI_Testsome(int incount, int array_of_requests[],
                                       int* outcount, int array_of_indices[],
                                       MPI_Status* array_of_statuses) {
+  ConstEventNameType CATEGORY = "p2p";
   BRAHMA_MAP_OR_FAIL(MPI_Testsome);
   DFT_LOGGER_START_ALWAYS();
   DFT_LOGGER_UPDATE_TYPE(incount, MetadataType::MT_VALUE);
@@ -13856,6 +14500,7 @@ int brahma::MPIDFTracer::MPI_Testsome(int incount, int array_of_requests[],
 int brahma::MPIDFTracer::MPI_Testsome(int incount, int array_of_requests[],
                                       int* outcount, int array_of_indices[],
                                       MPI_Status array_of_statuses[]) {
+  ConstEventNameType CATEGORY = "p2p";
   BRAHMA_MAP_OR_FAIL(MPI_Testsome);
   DFT_LOGGER_START_ALWAYS();
   DFT_LOGGER_UPDATE_TYPE(incount, MetadataType::MT_VALUE);
@@ -13876,6 +14521,7 @@ int brahma::MPIDFTracer::MPI_Testsome(int incount, int array_of_requests[],
     (defined(BRAHMA_MPI_IMPL_OPENMPI) &&                                   \
      (BRAHMA_MPI_VERSION >= 400106 && BRAHMA_MPI_VERSION < 400200))
 int brahma::MPIDFTracer::MPI_Topo_test(MPI_Comm comm, int* status) {
+  ConstEventNameType CATEGORY = "topology";
   BRAHMA_MAP_OR_FAIL(MPI_Topo_test);
   DFT_LOGGER_START_ALWAYS();
   DFT_LOGGER_UPDATE_TYPE(comm, MetadataType::MT_VALUE);
@@ -13894,6 +14540,7 @@ int brahma::MPIDFTracer::MPI_Topo_test(MPI_Comm comm, int* status) {
     !(defined(BRAHMA_MPI_IMPL_OPENMPI) &&                                  \
       (BRAHMA_MPI_VERSION >= 400106 && BRAHMA_MPI_VERSION < 400200))
 int brahma::MPIDFTracer::MPI_Topo_test(int comm, int* status) {
+  ConstEventNameType CATEGORY = "topology";
   BRAHMA_MAP_OR_FAIL(MPI_Topo_test);
   DFT_LOGGER_START_ALWAYS();
   DFT_LOGGER_UPDATE_TYPE(comm, MetadataType::MT_VALUE);
@@ -13913,6 +14560,7 @@ int brahma::MPIDFTracer::MPI_Topo_test(int comm, int* status) {
       ((BRAHMA_MPI_VERSION >= 400106 && BRAHMA_MPI_VERSION < 400200) ||   \
        (BRAHMA_MPI_VERSION >= 500006 && BRAHMA_MPI_VERSION < 500100))))
 int brahma::MPIDFTracer::MPI_Type_commit(MPI_Datatype* type) {
+  ConstEventNameType CATEGORY = "datatype";
   BRAHMA_MAP_OR_FAIL(MPI_Type_commit);
   DFT_LOGGER_START_ALWAYS();
   int ret = __real_MPI_Type_commit(type);
@@ -13932,6 +14580,7 @@ int brahma::MPIDFTracer::MPI_Type_commit(MPI_Datatype* type) {
        (BRAHMA_MPI_VERSION >= 500006 && BRAHMA_MPI_VERSION < 500100))))
 int brahma::MPIDFTracer::MPI_Type_contiguous(int count, MPI_Datatype oldtype,
                                              MPI_Datatype* newtype) {
+  ConstEventNameType CATEGORY = "datatype";
   BRAHMA_MAP_OR_FAIL(MPI_Type_contiguous);
   DFT_LOGGER_START_ALWAYS();
   DFT_LOGGER_UPDATE_TYPE(count, MetadataType::MT_VALUE);
@@ -13947,6 +14596,7 @@ int brahma::MPIDFTracer::MPI_Type_contiguous(int count, MPI_Datatype oldtype,
 int brahma::MPIDFTracer::MPI_Type_contiguous_c(MPI_Count count,
                                                MPI_Datatype oldtype,
                                                MPI_Datatype* newtype) {
+  ConstEventNameType CATEGORY = "datatype";
   BRAHMA_MAP_OR_FAIL(MPI_Type_contiguous_c);
   DFT_LOGGER_START_ALWAYS();
   DFT_LOGGER_UPDATE_TYPE(count, MetadataType::MT_VALUE);
@@ -13963,6 +14613,7 @@ int brahma::MPIDFTracer::MPI_Type_contiguous_c(MPI_Count count,
       (BRAHMA_MPI_VERSION >= 400203 && BRAHMA_MPI_VERSION < 400300)))
 int brahma::MPIDFTracer::MPI_Type_contiguous_c(MPI_Count count, int oldtype,
                                                int* newtype) {
+  ConstEventNameType CATEGORY = "datatype";
   BRAHMA_MAP_OR_FAIL(MPI_Type_contiguous_c);
   DFT_LOGGER_START_ALWAYS();
   DFT_LOGGER_UPDATE_TYPE(count, MetadataType::MT_VALUE);
@@ -13986,6 +14637,7 @@ int brahma::MPIDFTracer::MPI_Type_create_darray(
     int size, int rank, int ndims, const int gsize_array[],
     const int distrib_array[], const int darg_array[], const int psize_array[],
     int order, MPI_Datatype oldtype, MPI_Datatype* newtype) {
+  ConstEventNameType CATEGORY = "datatype";
   BRAHMA_MAP_OR_FAIL(MPI_Type_create_darray);
   DFT_LOGGER_START_ALWAYS();
   DFT_LOGGER_UPDATE_TYPE(size, MetadataType::MT_VALUE);
@@ -14008,6 +14660,7 @@ int brahma::MPIDFTracer::MPI_Type_create_darray_c(
     const int array_of_distribs[], const int array_of_dargs[],
     const int array_of_psizes[], int order, MPI_Datatype oldtype,
     MPI_Datatype* newtype) {
+  ConstEventNameType CATEGORY = "datatype";
   BRAHMA_MAP_OR_FAIL(MPI_Type_create_darray_c);
   DFT_LOGGER_START_ALWAYS();
   DFT_LOGGER_UPDATE_TYPE(size, MetadataType::MT_VALUE);
@@ -14031,6 +14684,7 @@ int brahma::MPIDFTracer::MPI_Type_create_darray_c(
     int size, int rank, int ndims, const MPI_Count array_of_gsizes[],
     const int array_of_distribs[], const int array_of_dargs[],
     const int array_of_psizes[], int order, int oldtype, int* newtype) {
+  ConstEventNameType CATEGORY = "datatype";
   BRAHMA_MAP_OR_FAIL(MPI_Type_create_darray_c);
   DFT_LOGGER_START_ALWAYS();
   DFT_LOGGER_UPDATE_TYPE(size, MetadataType::MT_VALUE);
@@ -14057,6 +14711,7 @@ int brahma::MPIDFTracer::MPI_Type_create_darray_c(
        (BRAHMA_MPI_VERSION >= 500006 && BRAHMA_MPI_VERSION < 500100))))
 int brahma::MPIDFTracer::MPI_Type_create_f90_complex(int p, int r,
                                                      MPI_Datatype* newtype) {
+  ConstEventNameType CATEGORY = "datatype";
   BRAHMA_MAP_OR_FAIL(MPI_Type_create_f90_complex);
   DFT_LOGGER_START_ALWAYS();
   DFT_LOGGER_UPDATE_TYPE(p, MetadataType::MT_VALUE);
@@ -14078,6 +14733,7 @@ int brahma::MPIDFTracer::MPI_Type_create_f90_complex(int p, int r,
        (BRAHMA_MPI_VERSION >= 500006 && BRAHMA_MPI_VERSION < 500100))))
 int brahma::MPIDFTracer::MPI_Type_create_f90_integer(int r,
                                                      MPI_Datatype* newtype) {
+  ConstEventNameType CATEGORY = "datatype";
   BRAHMA_MAP_OR_FAIL(MPI_Type_create_f90_integer);
   DFT_LOGGER_START_ALWAYS();
   DFT_LOGGER_UPDATE_TYPE(r, MetadataType::MT_VALUE);
@@ -14098,6 +14754,7 @@ int brahma::MPIDFTracer::MPI_Type_create_f90_integer(int r,
        (BRAHMA_MPI_VERSION >= 500006 && BRAHMA_MPI_VERSION < 500100))))
 int brahma::MPIDFTracer::MPI_Type_create_f90_real(int p, int r,
                                                   MPI_Datatype* newtype) {
+  ConstEventNameType CATEGORY = "datatype";
   BRAHMA_MAP_OR_FAIL(MPI_Type_create_f90_real);
   DFT_LOGGER_START_ALWAYS();
   DFT_LOGGER_UPDATE_TYPE(p, MetadataType::MT_VALUE);
@@ -14121,6 +14778,7 @@ int brahma::MPIDFTracer::MPI_Type_create_hindexed(
     int count, const int array_of_blocklengths[],
     const MPI_Aint array_of_displacements[], MPI_Datatype oldtype,
     MPI_Datatype* newtype) {
+  ConstEventNameType CATEGORY = "datatype";
   BRAHMA_MAP_OR_FAIL(MPI_Type_create_hindexed);
   DFT_LOGGER_START_ALWAYS();
   DFT_LOGGER_UPDATE_TYPE(count, MetadataType::MT_VALUE);
@@ -14144,6 +14802,7 @@ int brahma::MPIDFTracer::MPI_Type_create_hindexed(
 int brahma::MPIDFTracer::MPI_Type_create_hindexed_block(
     int count, int blocklength, const MPI_Aint array_of_displacements[],
     MPI_Datatype oldtype, MPI_Datatype* newtype) {
+  ConstEventNameType CATEGORY = "datatype";
   BRAHMA_MAP_OR_FAIL(MPI_Type_create_hindexed_block);
   DFT_LOGGER_START_ALWAYS();
   DFT_LOGGER_UPDATE_TYPE(count, MetadataType::MT_VALUE);
@@ -14162,6 +14821,7 @@ int brahma::MPIDFTracer::MPI_Type_create_hindexed_block_c(
     MPI_Count count, MPI_Count blocklength,
     const MPI_Count array_of_displacements[], MPI_Datatype oldtype,
     MPI_Datatype* newtype) {
+  ConstEventNameType CATEGORY = "datatype";
   BRAHMA_MAP_OR_FAIL(MPI_Type_create_hindexed_block_c);
   DFT_LOGGER_START_ALWAYS();
   DFT_LOGGER_UPDATE_TYPE(count, MetadataType::MT_VALUE);
@@ -14181,6 +14841,7 @@ int brahma::MPIDFTracer::MPI_Type_create_hindexed_block_c(
 int brahma::MPIDFTracer::MPI_Type_create_hindexed_block_c(
     MPI_Count count, MPI_Count blocklength,
     const MPI_Count array_of_displacements[], int oldtype, int* newtype) {
+  ConstEventNameType CATEGORY = "datatype";
   BRAHMA_MAP_OR_FAIL(MPI_Type_create_hindexed_block_c);
   DFT_LOGGER_START_ALWAYS();
   DFT_LOGGER_UPDATE_TYPE(count, MetadataType::MT_VALUE);
@@ -14199,6 +14860,7 @@ int brahma::MPIDFTracer::MPI_Type_create_hindexed_c(
     MPI_Count count, const MPI_Count array_of_blocklengths[],
     const MPI_Count array_of_displacements[], MPI_Datatype oldtype,
     MPI_Datatype* newtype) {
+  ConstEventNameType CATEGORY = "datatype";
   BRAHMA_MAP_OR_FAIL(MPI_Type_create_hindexed_c);
   DFT_LOGGER_START_ALWAYS();
   DFT_LOGGER_UPDATE_TYPE(count, MetadataType::MT_VALUE);
@@ -14217,6 +14879,7 @@ int brahma::MPIDFTracer::MPI_Type_create_hindexed_c(
 int brahma::MPIDFTracer::MPI_Type_create_hindexed_c(
     MPI_Count count, const MPI_Count array_of_blocklengths[],
     const MPI_Count array_of_displacements[], int oldtype, int* newtype) {
+  ConstEventNameType CATEGORY = "datatype";
   BRAHMA_MAP_OR_FAIL(MPI_Type_create_hindexed_c);
   DFT_LOGGER_START_ALWAYS();
   DFT_LOGGER_UPDATE_TYPE(count, MetadataType::MT_VALUE);
@@ -14241,6 +14904,7 @@ int brahma::MPIDFTracer::MPI_Type_create_hvector(int count, int blocklength,
                                                  MPI_Aint stride,
                                                  MPI_Datatype oldtype,
                                                  MPI_Datatype* newtype) {
+  ConstEventNameType CATEGORY = "datatype";
   BRAHMA_MAP_OR_FAIL(MPI_Type_create_hvector);
   DFT_LOGGER_START_ALWAYS();
   DFT_LOGGER_UPDATE_TYPE(count, MetadataType::MT_VALUE);
@@ -14261,6 +14925,7 @@ int brahma::MPIDFTracer::MPI_Type_create_hvector_c(MPI_Count count,
                                                    MPI_Count stride,
                                                    MPI_Datatype oldtype,
                                                    MPI_Datatype* newtype) {
+  ConstEventNameType CATEGORY = "datatype";
   BRAHMA_MAP_OR_FAIL(MPI_Type_create_hvector_c);
   DFT_LOGGER_START_ALWAYS();
   DFT_LOGGER_UPDATE_TYPE(count, MetadataType::MT_VALUE);
@@ -14282,6 +14947,7 @@ int brahma::MPIDFTracer::MPI_Type_create_hvector_c(MPI_Count count,
                                                    MPI_Count blocklength,
                                                    MPI_Count stride,
                                                    int oldtype, int* newtype) {
+  ConstEventNameType CATEGORY = "datatype";
   BRAHMA_MAP_OR_FAIL(MPI_Type_create_hvector_c);
   DFT_LOGGER_START_ALWAYS();
   DFT_LOGGER_UPDATE_TYPE(count, MetadataType::MT_VALUE);
@@ -14307,6 +14973,7 @@ int brahma::MPIDFTracer::MPI_Type_create_hvector_c(MPI_Count count,
 int brahma::MPIDFTracer::MPI_Type_create_indexed_block(
     int count, int blocklength, const int array_of_displacements[],
     MPI_Datatype oldtype, MPI_Datatype* newtype) {
+  ConstEventNameType CATEGORY = "datatype";
   BRAHMA_MAP_OR_FAIL(MPI_Type_create_indexed_block);
   DFT_LOGGER_START_ALWAYS();
   DFT_LOGGER_UPDATE_TYPE(count, MetadataType::MT_VALUE);
@@ -14325,6 +14992,7 @@ int brahma::MPIDFTracer::MPI_Type_create_indexed_block_c(
     MPI_Count count, MPI_Count blocklength,
     const MPI_Count array_of_displacements[], MPI_Datatype oldtype,
     MPI_Datatype* newtype) {
+  ConstEventNameType CATEGORY = "datatype";
   BRAHMA_MAP_OR_FAIL(MPI_Type_create_indexed_block_c);
   DFT_LOGGER_START_ALWAYS();
   DFT_LOGGER_UPDATE_TYPE(count, MetadataType::MT_VALUE);
@@ -14344,6 +15012,7 @@ int brahma::MPIDFTracer::MPI_Type_create_indexed_block_c(
 int brahma::MPIDFTracer::MPI_Type_create_indexed_block_c(
     MPI_Count count, MPI_Count blocklength,
     const MPI_Count array_of_displacements[], int oldtype, int* newtype) {
+  ConstEventNameType CATEGORY = "datatype";
   BRAHMA_MAP_OR_FAIL(MPI_Type_create_indexed_block_c);
   DFT_LOGGER_START_ALWAYS();
   DFT_LOGGER_UPDATE_TYPE(count, MetadataType::MT_VALUE);
@@ -14369,6 +15038,7 @@ int brahma::MPIDFTracer::MPI_Type_create_keyval(
     MPI_Type_copy_attr_function* type_copy_attr_fn,
     MPI_Type_delete_attr_function* type_delete_attr_fn, int* type_keyval,
     void* extra_state) {
+  ConstEventNameType CATEGORY = "datatype";
   BRAHMA_MAP_OR_FAIL(MPI_Type_create_keyval);
   DFT_LOGGER_START_ALWAYS();
   int ret = __real_MPI_Type_create_keyval(
@@ -14390,6 +15060,7 @@ int brahma::MPIDFTracer::MPI_Type_create_keyval(
 int brahma::MPIDFTracer::MPI_Type_create_resized(MPI_Datatype oldtype,
                                                  MPI_Aint lb, MPI_Aint extent,
                                                  MPI_Datatype* newtype) {
+  ConstEventNameType CATEGORY = "datatype";
   BRAHMA_MAP_OR_FAIL(MPI_Type_create_resized);
   DFT_LOGGER_START_ALWAYS();
   DFT_LOGGER_UPDATE_TYPE(oldtype, MetadataType::MT_VALUE);
@@ -14407,6 +15078,7 @@ int brahma::MPIDFTracer::MPI_Type_create_resized_c(MPI_Datatype oldtype,
                                                    MPI_Count lb,
                                                    MPI_Count extent,
                                                    MPI_Datatype* newtype) {
+  ConstEventNameType CATEGORY = "datatype";
   BRAHMA_MAP_OR_FAIL(MPI_Type_create_resized_c);
   DFT_LOGGER_START_ALWAYS();
   DFT_LOGGER_UPDATE_TYPE(oldtype, MetadataType::MT_VALUE);
@@ -14425,6 +15097,7 @@ int brahma::MPIDFTracer::MPI_Type_create_resized_c(MPI_Datatype oldtype,
 int brahma::MPIDFTracer::MPI_Type_create_resized_c(int oldtype, MPI_Count lb,
                                                    MPI_Count extent,
                                                    int* newtype) {
+  ConstEventNameType CATEGORY = "datatype";
   BRAHMA_MAP_OR_FAIL(MPI_Type_create_resized_c);
   DFT_LOGGER_START_ALWAYS();
   DFT_LOGGER_UPDATE_TYPE(oldtype, MetadataType::MT_VALUE);
@@ -14449,6 +15122,7 @@ int brahma::MPIDFTracer::MPI_Type_create_struct(
     int count, const int array_of_block_lengths[],
     const MPI_Aint array_of_displacements[],
     const MPI_Datatype array_of_types[], MPI_Datatype* newtype) {
+  ConstEventNameType CATEGORY = "datatype";
   BRAHMA_MAP_OR_FAIL(MPI_Type_create_struct);
   DFT_LOGGER_START_ALWAYS();
   DFT_LOGGER_UPDATE_TYPE(count, MetadataType::MT_VALUE);
@@ -14466,6 +15140,7 @@ int brahma::MPIDFTracer::MPI_Type_create_struct_c(
     MPI_Count count, const MPI_Count array_of_blocklengths[],
     const MPI_Count array_of_displacements[],
     const MPI_Datatype array_of_types[], MPI_Datatype* newtype) {
+  ConstEventNameType CATEGORY = "datatype";
   BRAHMA_MAP_OR_FAIL(MPI_Type_create_struct_c);
   DFT_LOGGER_START_ALWAYS();
   DFT_LOGGER_UPDATE_TYPE(count, MetadataType::MT_VALUE);
@@ -14485,6 +15160,7 @@ int brahma::MPIDFTracer::MPI_Type_create_struct_c(
     MPI_Count count, const MPI_Count array_of_blocklengths[],
     const MPI_Count array_of_displacements[], const int array_of_types[],
     int* newtype) {
+  ConstEventNameType CATEGORY = "datatype";
   BRAHMA_MAP_OR_FAIL(MPI_Type_create_struct_c);
   DFT_LOGGER_START_ALWAYS();
   DFT_LOGGER_UPDATE_TYPE(count, MetadataType::MT_VALUE);
@@ -14509,6 +15185,7 @@ int brahma::MPIDFTracer::MPI_Type_create_subarray(
     int ndims, const int size_array[], const int subsize_array[],
     const int start_array[], int order, MPI_Datatype oldtype,
     MPI_Datatype* newtype) {
+  ConstEventNameType CATEGORY = "datatype";
   BRAHMA_MAP_OR_FAIL(MPI_Type_create_subarray);
   DFT_LOGGER_START_ALWAYS();
   DFT_LOGGER_UPDATE_TYPE(ndims, MetadataType::MT_VALUE);
@@ -14527,6 +15204,7 @@ int brahma::MPIDFTracer::MPI_Type_create_subarray_c(
     int ndims, const MPI_Count array_of_sizes[],
     const MPI_Count array_of_subsizes[], const MPI_Count array_of_starts[],
     int order, MPI_Datatype oldtype, MPI_Datatype* newtype) {
+  ConstEventNameType CATEGORY = "datatype";
   BRAHMA_MAP_OR_FAIL(MPI_Type_create_subarray_c);
   DFT_LOGGER_START_ALWAYS();
   DFT_LOGGER_UPDATE_TYPE(ndims, MetadataType::MT_VALUE);
@@ -14548,6 +15226,7 @@ int brahma::MPIDFTracer::MPI_Type_create_subarray_c(
     int ndims, const MPI_Count array_of_sizes[],
     const MPI_Count array_of_subsizes[], const MPI_Count array_of_starts[],
     int order, int oldtype, int* newtype) {
+  ConstEventNameType CATEGORY = "datatype";
   BRAHMA_MAP_OR_FAIL(MPI_Type_create_subarray_c);
   DFT_LOGGER_START_ALWAYS();
   DFT_LOGGER_UPDATE_TYPE(ndims, MetadataType::MT_VALUE);
@@ -14572,6 +15251,7 @@ int brahma::MPIDFTracer::MPI_Type_create_subarray_c(
        (BRAHMA_MPI_VERSION >= 500006 && BRAHMA_MPI_VERSION < 500100))))
 int brahma::MPIDFTracer::MPI_Type_delete_attr(MPI_Datatype type,
                                               int type_keyval) {
+  ConstEventNameType CATEGORY = "datatype";
   BRAHMA_MAP_OR_FAIL(MPI_Type_delete_attr);
   DFT_LOGGER_START_ALWAYS();
   DFT_LOGGER_UPDATE_TYPE(type, MetadataType::MT_VALUE);
@@ -14593,6 +15273,7 @@ int brahma::MPIDFTracer::MPI_Type_delete_attr(MPI_Datatype type,
        (BRAHMA_MPI_VERSION >= 500006 && BRAHMA_MPI_VERSION < 500100))))
 int brahma::MPIDFTracer::MPI_Type_dup(MPI_Datatype type,
                                       MPI_Datatype* newtype) {
+  ConstEventNameType CATEGORY = "datatype";
   BRAHMA_MAP_OR_FAIL(MPI_Type_dup);
   DFT_LOGGER_START_ALWAYS();
   DFT_LOGGER_UPDATE_TYPE(type, MetadataType::MT_VALUE);
@@ -14612,6 +15293,7 @@ int brahma::MPIDFTracer::MPI_Type_dup(MPI_Datatype type,
     (defined(BRAHMA_MPI_IMPL_OPENMPI) &&                                   \
      (BRAHMA_MPI_VERSION >= 400106 && BRAHMA_MPI_VERSION < 400200))
 int brahma::MPIDFTracer::MPI_Type_extent(MPI_Datatype type, MPI_Aint* extent) {
+  ConstEventNameType CATEGORY = "datatype";
   BRAHMA_MAP_OR_FAIL(MPI_Type_extent);
   DFT_LOGGER_START_ALWAYS();
   DFT_LOGGER_UPDATE_TYPE(type, MetadataType::MT_VALUE);
@@ -14630,6 +15312,7 @@ int brahma::MPIDFTracer::MPI_Type_extent(MPI_Datatype type, MPI_Aint* extent) {
     !(defined(BRAHMA_MPI_IMPL_OPENMPI) &&                                  \
       (BRAHMA_MPI_VERSION >= 400106 && BRAHMA_MPI_VERSION < 400200))
 int brahma::MPIDFTracer::MPI_Type_extent(int type, MPI_Aint* extent) {
+  ConstEventNameType CATEGORY = "datatype";
   BRAHMA_MAP_OR_FAIL(MPI_Type_extent);
   DFT_LOGGER_START_ALWAYS();
   DFT_LOGGER_UPDATE_TYPE(type, MetadataType::MT_VALUE);
@@ -14649,6 +15332,7 @@ int brahma::MPIDFTracer::MPI_Type_extent(int type, MPI_Aint* extent) {
       ((BRAHMA_MPI_VERSION >= 400106 && BRAHMA_MPI_VERSION < 400200) ||   \
        (BRAHMA_MPI_VERSION >= 500006 && BRAHMA_MPI_VERSION < 500100))))
 int brahma::MPIDFTracer::MPI_Type_free(MPI_Datatype* type) {
+  ConstEventNameType CATEGORY = "datatype";
   BRAHMA_MAP_OR_FAIL(MPI_Type_free);
   DFT_LOGGER_START_ALWAYS();
   int ret = __real_MPI_Type_free(type);
@@ -14667,6 +15351,7 @@ int brahma::MPIDFTracer::MPI_Type_free(MPI_Datatype* type) {
       ((BRAHMA_MPI_VERSION >= 400106 && BRAHMA_MPI_VERSION < 400200) ||   \
        (BRAHMA_MPI_VERSION >= 500006 && BRAHMA_MPI_VERSION < 500100))))
 int brahma::MPIDFTracer::MPI_Type_free_keyval(int* type_keyval) {
+  ConstEventNameType CATEGORY = "datatype";
   BRAHMA_MAP_OR_FAIL(MPI_Type_free_keyval);
   DFT_LOGGER_START_ALWAYS();
   int ret = __real_MPI_Type_free_keyval(type_keyval);
@@ -14686,6 +15371,7 @@ int brahma::MPIDFTracer::MPI_Type_free_keyval(int* type_keyval) {
      (BRAHMA_MPI_VERSION >= 400106 && BRAHMA_MPI_VERSION < 400200))
 int brahma::MPIDFTracer::MPI_Type_get_attr(MPI_Datatype type, int type_keyval,
                                            void* attribute_val, int* flag) {
+  ConstEventNameType CATEGORY = "datatype";
   BRAHMA_MAP_OR_FAIL(MPI_Type_get_attr);
   DFT_LOGGER_START_ALWAYS();
   DFT_LOGGER_UPDATE_TYPE(type, MetadataType::MT_VALUE);
@@ -14706,6 +15392,7 @@ int brahma::MPIDFTracer::MPI_Type_get_attr(MPI_Datatype type, int type_keyval,
       (BRAHMA_MPI_VERSION >= 400106 && BRAHMA_MPI_VERSION < 400200))
 int brahma::MPIDFTracer::MPI_Type_get_attr(int type, int type_keyval,
                                            void* attribute_val, int* flag) {
+  ConstEventNameType CATEGORY = "datatype";
   BRAHMA_MAP_OR_FAIL(MPI_Type_get_attr);
   DFT_LOGGER_START_ALWAYS();
   DFT_LOGGER_UPDATE_TYPE(type, MetadataType::MT_VALUE);
@@ -14729,6 +15416,7 @@ int brahma::MPIDFTracer::MPI_Type_get_contents(
     MPI_Datatype mtype, int max_integers, int max_addresses, int max_datatypes,
     int array_of_integers[], MPI_Aint array_of_addresses[],
     MPI_Datatype array_of_datatypes[]) {
+  ConstEventNameType CATEGORY = "datatype";
   BRAHMA_MAP_OR_FAIL(MPI_Type_get_contents);
   DFT_LOGGER_START_ALWAYS();
   DFT_LOGGER_UPDATE_TYPE(mtype, MetadataType::MT_VALUE);
@@ -14757,6 +15445,7 @@ int brahma::MPIDFTracer::MPI_Type_get_contents(int mtype, int max_integers,
                                                int array_of_integers[],
                                                MPI_Aint array_of_addresses[],
                                                int array_of_datatypes[]) {
+  ConstEventNameType CATEGORY = "datatype";
   BRAHMA_MAP_OR_FAIL(MPI_Type_get_contents);
   DFT_LOGGER_START_ALWAYS();
   DFT_LOGGER_UPDATE_TYPE(mtype, MetadataType::MT_VALUE);
@@ -14778,6 +15467,7 @@ int brahma::MPIDFTracer::MPI_Type_get_contents_c(
     MPI_Count max_large_counts, MPI_Count max_datatypes,
     int array_of_integers[], MPI_Aint array_of_addresses[],
     MPI_Count array_of_large_counts[], MPI_Datatype array_of_datatypes[]) {
+  ConstEventNameType CATEGORY = "datatype";
   BRAHMA_MAP_OR_FAIL(MPI_Type_get_contents_c);
   DFT_LOGGER_START_ALWAYS();
   DFT_LOGGER_UPDATE_TYPE(datatype, MetadataType::MT_VALUE);
@@ -14803,6 +15493,7 @@ int brahma::MPIDFTracer::MPI_Type_get_contents_c(
     MPI_Count max_large_counts, MPI_Count max_datatypes,
     int array_of_integers[], MPI_Aint array_of_addresses[],
     MPI_Count array_of_large_counts[], int array_of_datatypes[]) {
+  ConstEventNameType CATEGORY = "datatype";
   BRAHMA_MAP_OR_FAIL(MPI_Type_get_contents_c);
   DFT_LOGGER_START_ALWAYS();
   DFT_LOGGER_UPDATE_TYPE(datatype, MetadataType::MT_VALUE);
@@ -14833,6 +15524,7 @@ int brahma::MPIDFTracer::MPI_Type_get_envelope(MPI_Datatype type,
                                                int* num_addresses,
                                                int* num_datatypes,
                                                int* combiner) {
+  ConstEventNameType CATEGORY = "datatype";
   BRAHMA_MAP_OR_FAIL(MPI_Type_get_envelope);
   DFT_LOGGER_START_ALWAYS();
   DFT_LOGGER_UPDATE_TYPE(type, MetadataType::MT_VALUE);
@@ -14855,6 +15547,7 @@ int brahma::MPIDFTracer::MPI_Type_get_envelope(int type, int* num_integers,
                                                int* num_addresses,
                                                int* num_datatypes,
                                                int* combiner) {
+  ConstEventNameType CATEGORY = "datatype";
   BRAHMA_MAP_OR_FAIL(MPI_Type_get_envelope);
   DFT_LOGGER_START_ALWAYS();
   DFT_LOGGER_UPDATE_TYPE(type, MetadataType::MT_VALUE);
@@ -14870,6 +15563,7 @@ int brahma::MPIDFTracer::MPI_Type_get_envelope(int type, int* num_integers,
 int brahma::MPIDFTracer::MPI_Type_get_envelope_c(
     MPI_Datatype datatype, MPI_Count* num_integers, MPI_Count* num_addresses,
     MPI_Count* num_large_counts, MPI_Count* num_datatypes, int* combiner) {
+  ConstEventNameType CATEGORY = "datatype";
   BRAHMA_MAP_OR_FAIL(MPI_Type_get_envelope_c);
   DFT_LOGGER_START_ALWAYS();
   DFT_LOGGER_UPDATE_TYPE(datatype, MetadataType::MT_VALUE);
@@ -14888,6 +15582,7 @@ int brahma::MPIDFTracer::MPI_Type_get_envelope_c(
 int brahma::MPIDFTracer::MPI_Type_get_envelope_c(
     int datatype, MPI_Count* num_integers, MPI_Count* num_addresses,
     MPI_Count* num_large_counts, MPI_Count* num_datatypes, int* combiner) {
+  ConstEventNameType CATEGORY = "datatype";
   BRAHMA_MAP_OR_FAIL(MPI_Type_get_envelope_c);
   DFT_LOGGER_START_ALWAYS();
   DFT_LOGGER_UPDATE_TYPE(datatype, MetadataType::MT_VALUE);
@@ -14910,6 +15605,7 @@ int brahma::MPIDFTracer::MPI_Type_get_envelope_c(
      (BRAHMA_MPI_VERSION >= 400106 && BRAHMA_MPI_VERSION < 400200))
 int brahma::MPIDFTracer::MPI_Type_get_extent(MPI_Datatype type, MPI_Aint* lb,
                                              MPI_Aint* extent) {
+  ConstEventNameType CATEGORY = "datatype";
   BRAHMA_MAP_OR_FAIL(MPI_Type_get_extent);
   DFT_LOGGER_START_ALWAYS();
   DFT_LOGGER_UPDATE_TYPE(type, MetadataType::MT_VALUE);
@@ -14929,6 +15625,7 @@ int brahma::MPIDFTracer::MPI_Type_get_extent(MPI_Datatype type, MPI_Aint* lb,
       (BRAHMA_MPI_VERSION >= 400106 && BRAHMA_MPI_VERSION < 400200))
 int brahma::MPIDFTracer::MPI_Type_get_extent(int type, MPI_Aint* lb,
                                              MPI_Aint* extent) {
+  ConstEventNameType CATEGORY = "datatype";
   BRAHMA_MAP_OR_FAIL(MPI_Type_get_extent);
   DFT_LOGGER_START_ALWAYS();
   DFT_LOGGER_UPDATE_TYPE(type, MetadataType::MT_VALUE);
@@ -14943,6 +15640,7 @@ int brahma::MPIDFTracer::MPI_Type_get_extent(int type, MPI_Aint* lb,
 int brahma::MPIDFTracer::MPI_Type_get_extent_c(MPI_Datatype datatype,
                                                MPI_Count* lb,
                                                MPI_Count* extent) {
+  ConstEventNameType CATEGORY = "datatype";
   BRAHMA_MAP_OR_FAIL(MPI_Type_get_extent_c);
   DFT_LOGGER_START_ALWAYS();
   DFT_LOGGER_UPDATE_TYPE(datatype, MetadataType::MT_VALUE);
@@ -14958,6 +15656,7 @@ int brahma::MPIDFTracer::MPI_Type_get_extent_c(MPI_Datatype datatype,
       (BRAHMA_MPI_VERSION >= 400203 && BRAHMA_MPI_VERSION < 400300)))
 int brahma::MPIDFTracer::MPI_Type_get_extent_c(int datatype, MPI_Count* lb,
                                                MPI_Count* extent) {
+  ConstEventNameType CATEGORY = "datatype";
   BRAHMA_MAP_OR_FAIL(MPI_Type_get_extent_c);
   DFT_LOGGER_START_ALWAYS();
   DFT_LOGGER_UPDATE_TYPE(datatype, MetadataType::MT_VALUE);
@@ -14978,6 +15677,7 @@ int brahma::MPIDFTracer::MPI_Type_get_extent_c(int datatype, MPI_Count* lb,
      (BRAHMA_MPI_VERSION >= 400106 && BRAHMA_MPI_VERSION < 400200))
 int brahma::MPIDFTracer::MPI_Type_get_extent_x(MPI_Datatype type, MPI_Count* lb,
                                                MPI_Count* extent) {
+  ConstEventNameType CATEGORY = "datatype";
   BRAHMA_MAP_OR_FAIL(MPI_Type_get_extent_x);
   DFT_LOGGER_START_ALWAYS();
   DFT_LOGGER_UPDATE_TYPE(type, MetadataType::MT_VALUE);
@@ -14997,6 +15697,7 @@ int brahma::MPIDFTracer::MPI_Type_get_extent_x(MPI_Datatype type, MPI_Count* lb,
       (BRAHMA_MPI_VERSION >= 400106 && BRAHMA_MPI_VERSION < 400200))
 int brahma::MPIDFTracer::MPI_Type_get_extent_x(int type, MPI_Count* lb,
                                                MPI_Count* extent) {
+  ConstEventNameType CATEGORY = "datatype";
   BRAHMA_MAP_OR_FAIL(MPI_Type_get_extent_x);
   DFT_LOGGER_START_ALWAYS();
   DFT_LOGGER_UPDATE_TYPE(type, MetadataType::MT_VALUE);
@@ -15017,6 +15718,7 @@ int brahma::MPIDFTracer::MPI_Type_get_extent_x(int type, MPI_Count* lb,
      (BRAHMA_MPI_VERSION >= 400106 && BRAHMA_MPI_VERSION < 400200))
 int brahma::MPIDFTracer::MPI_Type_get_name(MPI_Datatype type, char* type_name,
                                            int* resultlen) {
+  ConstEventNameType CATEGORY = "datatype";
   BRAHMA_MAP_OR_FAIL(MPI_Type_get_name);
   DFT_LOGGER_START_ALWAYS();
   DFT_LOGGER_UPDATE_TYPE(type, MetadataType::MT_VALUE);
@@ -15036,6 +15738,7 @@ int brahma::MPIDFTracer::MPI_Type_get_name(MPI_Datatype type, char* type_name,
       (BRAHMA_MPI_VERSION >= 400106 && BRAHMA_MPI_VERSION < 400200))
 int brahma::MPIDFTracer::MPI_Type_get_name(int type, char* type_name,
                                            int* resultlen) {
+  ConstEventNameType CATEGORY = "datatype";
   BRAHMA_MAP_OR_FAIL(MPI_Type_get_name);
   DFT_LOGGER_START_ALWAYS();
   DFT_LOGGER_UPDATE_TYPE(type, MetadataType::MT_VALUE);
@@ -15057,6 +15760,7 @@ int brahma::MPIDFTracer::MPI_Type_get_name(int type, char* type_name,
 int brahma::MPIDFTracer::MPI_Type_get_true_extent(MPI_Datatype datatype,
                                                   MPI_Aint* true_lb,
                                                   MPI_Aint* true_extent) {
+  ConstEventNameType CATEGORY = "datatype";
   BRAHMA_MAP_OR_FAIL(MPI_Type_get_true_extent);
   DFT_LOGGER_START_ALWAYS();
   DFT_LOGGER_UPDATE_TYPE(datatype, MetadataType::MT_VALUE);
@@ -15077,6 +15781,7 @@ int brahma::MPIDFTracer::MPI_Type_get_true_extent(MPI_Datatype datatype,
 int brahma::MPIDFTracer::MPI_Type_get_true_extent(int datatype,
                                                   MPI_Aint* true_lb,
                                                   MPI_Aint* true_extent) {
+  ConstEventNameType CATEGORY = "datatype";
   BRAHMA_MAP_OR_FAIL(MPI_Type_get_true_extent);
   DFT_LOGGER_START_ALWAYS();
   DFT_LOGGER_UPDATE_TYPE(datatype, MetadataType::MT_VALUE);
@@ -15091,6 +15796,7 @@ int brahma::MPIDFTracer::MPI_Type_get_true_extent(int datatype,
 int brahma::MPIDFTracer::MPI_Type_get_true_extent_c(MPI_Datatype datatype,
                                                     MPI_Count* true_lb,
                                                     MPI_Count* true_extent) {
+  ConstEventNameType CATEGORY = "datatype";
   BRAHMA_MAP_OR_FAIL(MPI_Type_get_true_extent_c);
   DFT_LOGGER_START_ALWAYS();
   DFT_LOGGER_UPDATE_TYPE(datatype, MetadataType::MT_VALUE);
@@ -15107,6 +15813,7 @@ int brahma::MPIDFTracer::MPI_Type_get_true_extent_c(MPI_Datatype datatype,
 int brahma::MPIDFTracer::MPI_Type_get_true_extent_c(int datatype,
                                                     MPI_Count* true_lb,
                                                     MPI_Count* true_extent) {
+  ConstEventNameType CATEGORY = "datatype";
   BRAHMA_MAP_OR_FAIL(MPI_Type_get_true_extent_c);
   DFT_LOGGER_START_ALWAYS();
   DFT_LOGGER_UPDATE_TYPE(datatype, MetadataType::MT_VALUE);
@@ -15128,6 +15835,7 @@ int brahma::MPIDFTracer::MPI_Type_get_true_extent_c(int datatype,
 int brahma::MPIDFTracer::MPI_Type_get_true_extent_x(MPI_Datatype datatype,
                                                     MPI_Count* true_lb,
                                                     MPI_Count* true_extent) {
+  ConstEventNameType CATEGORY = "datatype";
   BRAHMA_MAP_OR_FAIL(MPI_Type_get_true_extent_x);
   DFT_LOGGER_START_ALWAYS();
   DFT_LOGGER_UPDATE_TYPE(datatype, MetadataType::MT_VALUE);
@@ -15148,6 +15856,7 @@ int brahma::MPIDFTracer::MPI_Type_get_true_extent_x(MPI_Datatype datatype,
 int brahma::MPIDFTracer::MPI_Type_get_true_extent_x(int datatype,
                                                     MPI_Count* true_lb,
                                                     MPI_Count* true_extent) {
+  ConstEventNameType CATEGORY = "datatype";
   BRAHMA_MAP_OR_FAIL(MPI_Type_get_true_extent_x);
   DFT_LOGGER_START_ALWAYS();
   DFT_LOGGER_UPDATE_TYPE(datatype, MetadataType::MT_VALUE);
@@ -15164,6 +15873,7 @@ int brahma::MPIDFTracer::MPI_Type_get_true_extent_x(int datatype,
 int brahma::MPIDFTracer::MPI_Type_get_value_index(int value_type,
                                                   int index_type,
                                                   int* pair_type) {
+  ConstEventNameType CATEGORY = "datatype";
   BRAHMA_MAP_OR_FAIL(MPI_Type_get_value_index);
   DFT_LOGGER_START_ALWAYS();
   DFT_LOGGER_UPDATE_TYPE(value_type, MetadataType::MT_VALUE);
@@ -15181,6 +15891,7 @@ int brahma::MPIDFTracer::MPI_Type_hindexed(int count,
                                            MPI_Aint* array_of_displacements,
                                            MPI_Datatype oldtype,
                                            MPI_Datatype* newtype) {
+  ConstEventNameType CATEGORY = "datatype";
   BRAHMA_MAP_OR_FAIL(MPI_Type_hindexed);
   DFT_LOGGER_START_ALWAYS();
   DFT_LOGGER_UPDATE_TYPE(count, MetadataType::MT_VALUE);
@@ -15203,6 +15914,7 @@ int brahma::MPIDFTracer::MPI_Type_hindexed(int count,
                                            MPI_Aint array_of_displacements[],
                                            MPI_Datatype oldtype,
                                            MPI_Datatype* newtype) {
+  ConstEventNameType CATEGORY = "datatype";
   BRAHMA_MAP_OR_FAIL(MPI_Type_hindexed);
   DFT_LOGGER_START_ALWAYS();
   DFT_LOGGER_UPDATE_TYPE(count, MetadataType::MT_VALUE);
@@ -15226,6 +15938,7 @@ int brahma::MPIDFTracer::MPI_Type_hindexed(int count,
                                            int array_of_blocklengths[],
                                            MPI_Aint array_of_displacements[],
                                            int oldtype, int* newtype) {
+  ConstEventNameType CATEGORY = "datatype";
   BRAHMA_MAP_OR_FAIL(MPI_Type_hindexed);
   DFT_LOGGER_START_ALWAYS();
   DFT_LOGGER_UPDATE_TYPE(count, MetadataType::MT_VALUE);
@@ -15249,6 +15962,7 @@ int brahma::MPIDFTracer::MPI_Type_hindexed(int count,
 int brahma::MPIDFTracer::MPI_Type_hvector(int count, int blocklength,
                                           MPI_Aint stride, MPI_Datatype oldtype,
                                           MPI_Datatype* newtype) {
+  ConstEventNameType CATEGORY = "datatype";
   BRAHMA_MAP_OR_FAIL(MPI_Type_hvector);
   DFT_LOGGER_START_ALWAYS();
   DFT_LOGGER_UPDATE_TYPE(count, MetadataType::MT_VALUE);
@@ -15273,6 +15987,7 @@ int brahma::MPIDFTracer::MPI_Type_hvector(int count, int blocklength,
 int brahma::MPIDFTracer::MPI_Type_hvector(int count, int blocklength,
                                           MPI_Aint stride, int oldtype,
                                           int* newtype) {
+  ConstEventNameType CATEGORY = "datatype";
   BRAHMA_MAP_OR_FAIL(MPI_Type_hvector);
   DFT_LOGGER_START_ALWAYS();
   DFT_LOGGER_UPDATE_TYPE(count, MetadataType::MT_VALUE);
@@ -15293,6 +16008,7 @@ int brahma::MPIDFTracer::MPI_Type_indexed(int count,
                                           const int* array_of_displacements,
                                           MPI_Datatype oldtype,
                                           MPI_Datatype* newtype) {
+  ConstEventNameType CATEGORY = "datatype";
   BRAHMA_MAP_OR_FAIL(MPI_Type_indexed);
   DFT_LOGGER_START_ALWAYS();
   DFT_LOGGER_UPDATE_TYPE(count, MetadataType::MT_VALUE);
@@ -15315,6 +16031,7 @@ int brahma::MPIDFTracer::MPI_Type_indexed(int count,
                                           const int array_of_displacements[],
                                           MPI_Datatype oldtype,
                                           MPI_Datatype* newtype) {
+  ConstEventNameType CATEGORY = "datatype";
   BRAHMA_MAP_OR_FAIL(MPI_Type_indexed);
   DFT_LOGGER_START_ALWAYS();
   DFT_LOGGER_UPDATE_TYPE(count, MetadataType::MT_VALUE);
@@ -15338,6 +16055,7 @@ int brahma::MPIDFTracer::MPI_Type_indexed(int count,
                                           const int array_of_blocklengths[],
                                           const int array_of_displacements[],
                                           int oldtype, int* newtype) {
+  ConstEventNameType CATEGORY = "datatype";
   BRAHMA_MAP_OR_FAIL(MPI_Type_indexed);
   DFT_LOGGER_START_ALWAYS();
   DFT_LOGGER_UPDATE_TYPE(count, MetadataType::MT_VALUE);
@@ -15355,6 +16073,7 @@ int brahma::MPIDFTracer::MPI_Type_indexed_c(
     MPI_Count count, const MPI_Count array_of_blocklengths[],
     const MPI_Count array_of_displacements[], MPI_Datatype oldtype,
     MPI_Datatype* newtype) {
+  ConstEventNameType CATEGORY = "datatype";
   BRAHMA_MAP_OR_FAIL(MPI_Type_indexed_c);
   DFT_LOGGER_START_ALWAYS();
   DFT_LOGGER_UPDATE_TYPE(count, MetadataType::MT_VALUE);
@@ -15373,6 +16092,7 @@ int brahma::MPIDFTracer::MPI_Type_indexed_c(
 int brahma::MPIDFTracer::MPI_Type_indexed_c(
     MPI_Count count, const MPI_Count array_of_blocklengths[],
     const MPI_Count array_of_displacements[], int oldtype, int* newtype) {
+  ConstEventNameType CATEGORY = "datatype";
   BRAHMA_MAP_OR_FAIL(MPI_Type_indexed_c);
   DFT_LOGGER_START_ALWAYS();
   DFT_LOGGER_UPDATE_TYPE(count, MetadataType::MT_VALUE);
@@ -15394,6 +16114,7 @@ int brahma::MPIDFTracer::MPI_Type_indexed_c(
     (defined(BRAHMA_MPI_IMPL_OPENMPI) &&                                   \
      (BRAHMA_MPI_VERSION >= 400106 && BRAHMA_MPI_VERSION < 400200))
 int brahma::MPIDFTracer::MPI_Type_lb(MPI_Datatype type, MPI_Aint* lb) {
+  ConstEventNameType CATEGORY = "datatype";
   BRAHMA_MAP_OR_FAIL(MPI_Type_lb);
   DFT_LOGGER_START_ALWAYS();
   DFT_LOGGER_UPDATE_TYPE(type, MetadataType::MT_VALUE);
@@ -15412,6 +16133,7 @@ int brahma::MPIDFTracer::MPI_Type_lb(MPI_Datatype type, MPI_Aint* lb) {
     !(defined(BRAHMA_MPI_IMPL_OPENMPI) &&                                  \
       (BRAHMA_MPI_VERSION >= 400106 && BRAHMA_MPI_VERSION < 400200))
 int brahma::MPIDFTracer::MPI_Type_lb(int type, MPI_Aint* lb) {
+  ConstEventNameType CATEGORY = "datatype";
   BRAHMA_MAP_OR_FAIL(MPI_Type_lb);
   DFT_LOGGER_START_ALWAYS();
   DFT_LOGGER_UPDATE_TYPE(type, MetadataType::MT_VALUE);
@@ -15432,6 +16154,7 @@ int brahma::MPIDFTracer::MPI_Type_lb(int type, MPI_Aint* lb) {
      (BRAHMA_MPI_VERSION >= 400106 && BRAHMA_MPI_VERSION < 400200))
 int brahma::MPIDFTracer::MPI_Type_match_size(int typeclass, int size,
                                              MPI_Datatype* type) {
+  ConstEventNameType CATEGORY = "datatype";
   BRAHMA_MAP_OR_FAIL(MPI_Type_match_size);
   DFT_LOGGER_START_ALWAYS();
   DFT_LOGGER_UPDATE_TYPE(typeclass, MetadataType::MT_VALUE);
@@ -15452,6 +16175,7 @@ int brahma::MPIDFTracer::MPI_Type_match_size(int typeclass, int size,
       (BRAHMA_MPI_VERSION >= 400106 && BRAHMA_MPI_VERSION < 400200))
 int brahma::MPIDFTracer::MPI_Type_match_size(int typeclass, int size,
                                              int* type) {
+  ConstEventNameType CATEGORY = "datatype";
   BRAHMA_MAP_OR_FAIL(MPI_Type_match_size);
   DFT_LOGGER_START_ALWAYS();
   DFT_LOGGER_UPDATE_TYPE(typeclass, MetadataType::MT_VALUE);
@@ -15473,6 +16197,7 @@ int brahma::MPIDFTracer::MPI_Type_match_size(int typeclass, int size,
      (BRAHMA_MPI_VERSION >= 400106 && BRAHMA_MPI_VERSION < 400200))
 int brahma::MPIDFTracer::MPI_Type_set_attr(MPI_Datatype type, int type_keyval,
                                            void* attr_val) {
+  ConstEventNameType CATEGORY = "datatype";
   BRAHMA_MAP_OR_FAIL(MPI_Type_set_attr);
   DFT_LOGGER_START_ALWAYS();
   DFT_LOGGER_UPDATE_TYPE(type, MetadataType::MT_VALUE);
@@ -15493,6 +16218,7 @@ int brahma::MPIDFTracer::MPI_Type_set_attr(MPI_Datatype type, int type_keyval,
       (BRAHMA_MPI_VERSION >= 400106 && BRAHMA_MPI_VERSION < 400200))
 int brahma::MPIDFTracer::MPI_Type_set_attr(int type, int type_keyval,
                                            void* attr_val) {
+  ConstEventNameType CATEGORY = "datatype";
   BRAHMA_MAP_OR_FAIL(MPI_Type_set_attr);
   DFT_LOGGER_START_ALWAYS();
   DFT_LOGGER_UPDATE_TYPE(type, MetadataType::MT_VALUE);
@@ -15514,6 +16240,7 @@ int brahma::MPIDFTracer::MPI_Type_set_attr(int type, int type_keyval,
      (BRAHMA_MPI_VERSION >= 400106 && BRAHMA_MPI_VERSION < 400200))
 int brahma::MPIDFTracer::MPI_Type_set_name(MPI_Datatype type,
                                            const char* type_name) {
+  ConstEventNameType CATEGORY = "datatype";
   BRAHMA_MAP_OR_FAIL(MPI_Type_set_name);
   DFT_LOGGER_START_ALWAYS();
   DFT_LOGGER_UPDATE_TYPE(type, MetadataType::MT_VALUE);
@@ -15532,6 +16259,7 @@ int brahma::MPIDFTracer::MPI_Type_set_name(MPI_Datatype type,
     !(defined(BRAHMA_MPI_IMPL_OPENMPI) &&                                  \
       (BRAHMA_MPI_VERSION >= 400106 && BRAHMA_MPI_VERSION < 400200))
 int brahma::MPIDFTracer::MPI_Type_set_name(int type, const char* type_name) {
+  ConstEventNameType CATEGORY = "datatype";
   BRAHMA_MAP_OR_FAIL(MPI_Type_set_name);
   DFT_LOGGER_START_ALWAYS();
   DFT_LOGGER_UPDATE_TYPE(type, MetadataType::MT_VALUE);
@@ -15551,6 +16279,7 @@ int brahma::MPIDFTracer::MPI_Type_set_name(int type, const char* type_name) {
     (defined(BRAHMA_MPI_IMPL_OPENMPI) &&                                   \
      (BRAHMA_MPI_VERSION >= 400106 && BRAHMA_MPI_VERSION < 400200))
 int brahma::MPIDFTracer::MPI_Type_size(MPI_Datatype type, int* size) {
+  ConstEventNameType CATEGORY = "datatype";
   BRAHMA_MAP_OR_FAIL(MPI_Type_size);
   DFT_LOGGER_START_ALWAYS();
   DFT_LOGGER_UPDATE_TYPE(type, MetadataType::MT_VALUE);
@@ -15569,6 +16298,7 @@ int brahma::MPIDFTracer::MPI_Type_size(MPI_Datatype type, int* size) {
     !(defined(BRAHMA_MPI_IMPL_OPENMPI) &&                                  \
       (BRAHMA_MPI_VERSION >= 400106 && BRAHMA_MPI_VERSION < 400200))
 int brahma::MPIDFTracer::MPI_Type_size(int type, int* size) {
+  ConstEventNameType CATEGORY = "datatype";
   BRAHMA_MAP_OR_FAIL(MPI_Type_size);
   DFT_LOGGER_START_ALWAYS();
   DFT_LOGGER_UPDATE_TYPE(type, MetadataType::MT_VALUE);
@@ -15582,6 +16312,7 @@ int brahma::MPIDFTracer::MPI_Type_size(int type, int* size) {
      (BRAHMA_MPI_VERSION >= 900001 && BRAHMA_MPI_VERSION < 900100))
 int brahma::MPIDFTracer::MPI_Type_size_c(MPI_Datatype datatype,
                                          MPI_Count* size) {
+  ConstEventNameType CATEGORY = "datatype";
   BRAHMA_MAP_OR_FAIL(MPI_Type_size_c);
   DFT_LOGGER_START_ALWAYS();
   DFT_LOGGER_UPDATE_TYPE(datatype, MetadataType::MT_VALUE);
@@ -15596,6 +16327,7 @@ int brahma::MPIDFTracer::MPI_Type_size_c(MPI_Datatype datatype,
      (defined(BRAHMA_MPI_IMPL_MPICH) &&                                 \
       (BRAHMA_MPI_VERSION >= 400203 && BRAHMA_MPI_VERSION < 400300)))
 int brahma::MPIDFTracer::MPI_Type_size_c(int datatype, MPI_Count* size) {
+  ConstEventNameType CATEGORY = "datatype";
   BRAHMA_MAP_OR_FAIL(MPI_Type_size_c);
   DFT_LOGGER_START_ALWAYS();
   DFT_LOGGER_UPDATE_TYPE(datatype, MetadataType::MT_VALUE);
@@ -15615,6 +16347,7 @@ int brahma::MPIDFTracer::MPI_Type_size_c(int datatype, MPI_Count* size) {
     (defined(BRAHMA_MPI_IMPL_OPENMPI) &&                                   \
      (BRAHMA_MPI_VERSION >= 400106 && BRAHMA_MPI_VERSION < 400200))
 int brahma::MPIDFTracer::MPI_Type_size_x(MPI_Datatype type, MPI_Count* size) {
+  ConstEventNameType CATEGORY = "datatype";
   BRAHMA_MAP_OR_FAIL(MPI_Type_size_x);
   DFT_LOGGER_START_ALWAYS();
   DFT_LOGGER_UPDATE_TYPE(type, MetadataType::MT_VALUE);
@@ -15633,6 +16366,7 @@ int brahma::MPIDFTracer::MPI_Type_size_x(MPI_Datatype type, MPI_Count* size) {
     !(defined(BRAHMA_MPI_IMPL_OPENMPI) &&                                  \
       (BRAHMA_MPI_VERSION >= 400106 && BRAHMA_MPI_VERSION < 400200))
 int brahma::MPIDFTracer::MPI_Type_size_x(int type, MPI_Count* size) {
+  ConstEventNameType CATEGORY = "datatype";
   BRAHMA_MAP_OR_FAIL(MPI_Type_size_x);
   DFT_LOGGER_START_ALWAYS();
   DFT_LOGGER_UPDATE_TYPE(type, MetadataType::MT_VALUE);
@@ -15648,6 +16382,7 @@ int brahma::MPIDFTracer::MPI_Type_struct(int count, int* array_of_blocklengths,
                                          MPI_Aint* array_of_displacements,
                                          MPI_Datatype* array_of_types,
                                          MPI_Datatype* newtype) {
+  ConstEventNameType CATEGORY = "datatype";
   BRAHMA_MAP_OR_FAIL(MPI_Type_struct);
   DFT_LOGGER_START_ALWAYS();
   DFT_LOGGER_UPDATE_TYPE(count, MetadataType::MT_VALUE);
@@ -15669,6 +16404,7 @@ int brahma::MPIDFTracer::MPI_Type_struct(int count, int array_of_blocklengths[],
                                          MPI_Aint array_of_displacements[],
                                          MPI_Datatype array_of_types[],
                                          MPI_Datatype* newtype) {
+  ConstEventNameType CATEGORY = "datatype";
   BRAHMA_MAP_OR_FAIL(MPI_Type_struct);
   DFT_LOGGER_START_ALWAYS();
   DFT_LOGGER_UPDATE_TYPE(count, MetadataType::MT_VALUE);
@@ -15691,6 +16427,7 @@ int brahma::MPIDFTracer::MPI_Type_struct(int count, int array_of_blocklengths[],
 int brahma::MPIDFTracer::MPI_Type_struct(int count, int array_of_blocklengths[],
                                          MPI_Aint array_of_displacements[],
                                          int array_of_types[], int* newtype) {
+  ConstEventNameType CATEGORY = "datatype";
   BRAHMA_MAP_OR_FAIL(MPI_Type_struct);
   DFT_LOGGER_START_ALWAYS();
   DFT_LOGGER_UPDATE_TYPE(count, MetadataType::MT_VALUE);
@@ -15712,6 +16449,7 @@ int brahma::MPIDFTracer::MPI_Type_struct(int count, int array_of_blocklengths[],
     (defined(BRAHMA_MPI_IMPL_OPENMPI) &&                                   \
      (BRAHMA_MPI_VERSION >= 400106 && BRAHMA_MPI_VERSION < 400200))
 int brahma::MPIDFTracer::MPI_Type_ub(MPI_Datatype mtype, MPI_Aint* ub) {
+  ConstEventNameType CATEGORY = "datatype";
   BRAHMA_MAP_OR_FAIL(MPI_Type_ub);
   DFT_LOGGER_START_ALWAYS();
   DFT_LOGGER_UPDATE_TYPE(mtype, MetadataType::MT_VALUE);
@@ -15730,6 +16468,7 @@ int brahma::MPIDFTracer::MPI_Type_ub(MPI_Datatype mtype, MPI_Aint* ub) {
     !(defined(BRAHMA_MPI_IMPL_OPENMPI) &&                                  \
       (BRAHMA_MPI_VERSION >= 400106 && BRAHMA_MPI_VERSION < 400200))
 int brahma::MPIDFTracer::MPI_Type_ub(int mtype, MPI_Aint* ub) {
+  ConstEventNameType CATEGORY = "datatype";
   BRAHMA_MAP_OR_FAIL(MPI_Type_ub);
   DFT_LOGGER_START_ALWAYS();
   DFT_LOGGER_UPDATE_TYPE(mtype, MetadataType::MT_VALUE);
@@ -15751,6 +16490,7 @@ int brahma::MPIDFTracer::MPI_Type_ub(int mtype, MPI_Aint* ub) {
 int brahma::MPIDFTracer::MPI_Type_vector(int count, int blocklength, int stride,
                                          MPI_Datatype oldtype,
                                          MPI_Datatype* newtype) {
+  ConstEventNameType CATEGORY = "datatype";
   BRAHMA_MAP_OR_FAIL(MPI_Type_vector);
   DFT_LOGGER_START_ALWAYS();
   DFT_LOGGER_UPDATE_TYPE(count, MetadataType::MT_VALUE);
@@ -15774,6 +16514,7 @@ int brahma::MPIDFTracer::MPI_Type_vector(int count, int blocklength, int stride,
       (BRAHMA_MPI_VERSION >= 400106 && BRAHMA_MPI_VERSION < 400200))
 int brahma::MPIDFTracer::MPI_Type_vector(int count, int blocklength, int stride,
                                          int oldtype, int* newtype) {
+  ConstEventNameType CATEGORY = "datatype";
   BRAHMA_MAP_OR_FAIL(MPI_Type_vector);
   DFT_LOGGER_START_ALWAYS();
   DFT_LOGGER_UPDATE_TYPE(count, MetadataType::MT_VALUE);
@@ -15794,6 +16535,7 @@ int brahma::MPIDFTracer::MPI_Type_vector_c(MPI_Count count,
                                            MPI_Count stride,
                                            MPI_Datatype oldtype,
                                            MPI_Datatype* newtype) {
+  ConstEventNameType CATEGORY = "datatype";
   BRAHMA_MAP_OR_FAIL(MPI_Type_vector_c);
   DFT_LOGGER_START_ALWAYS();
   DFT_LOGGER_UPDATE_TYPE(count, MetadataType::MT_VALUE);
@@ -15815,6 +16557,7 @@ int brahma::MPIDFTracer::MPI_Type_vector_c(MPI_Count count,
                                            MPI_Count blocklength,
                                            MPI_Count stride, int oldtype,
                                            int* newtype) {
+  ConstEventNameType CATEGORY = "datatype";
   BRAHMA_MAP_OR_FAIL(MPI_Type_vector_c);
   DFT_LOGGER_START_ALWAYS();
   DFT_LOGGER_UPDATE_TYPE(count, MetadataType::MT_VALUE);
@@ -15840,6 +16583,7 @@ int brahma::MPIDFTracer::MPI_Type_vector_c(MPI_Count count,
 int brahma::MPIDFTracer::MPI_Unpack(const void* inbuf, int insize,
                                     int* position, void* outbuf, int outcount,
                                     MPI_Datatype datatype, MPI_Comm comm) {
+  ConstEventNameType CATEGORY = "datatype";
   BRAHMA_MAP_OR_FAIL(MPI_Unpack);
   DFT_LOGGER_START_ALWAYS();
   DFT_LOGGER_UPDATE_TYPE(insize, MetadataType::MT_VALUE);
@@ -15864,6 +16608,7 @@ int brahma::MPIDFTracer::MPI_Unpack(const void* inbuf, int insize,
 int brahma::MPIDFTracer::MPI_Unpack(const void* inbuf, int insize,
                                     int* position, void* outbuf, int outcount,
                                     int datatype, int comm) {
+  ConstEventNameType CATEGORY = "datatype";
   BRAHMA_MAP_OR_FAIL(MPI_Unpack);
   DFT_LOGGER_START_ALWAYS();
   DFT_LOGGER_UPDATE_TYPE(insize, MetadataType::MT_VALUE);
@@ -15883,6 +16628,7 @@ int brahma::MPIDFTracer::MPI_Unpack_c(const void* inbuf, MPI_Count insize,
                                       MPI_Count* position, void* outbuf,
                                       MPI_Count outcount, MPI_Datatype datatype,
                                       MPI_Comm comm) {
+  ConstEventNameType CATEGORY = "datatype";
   BRAHMA_MAP_OR_FAIL(MPI_Unpack_c);
   DFT_LOGGER_START_ALWAYS();
   DFT_LOGGER_UPDATE_TYPE(insize, MetadataType::MT_VALUE);
@@ -15904,6 +16650,7 @@ int brahma::MPIDFTracer::MPI_Unpack_c(const void* inbuf, MPI_Count insize,
                                       MPI_Count* position, void* outbuf,
                                       MPI_Count outcount, int datatype,
                                       int comm) {
+  ConstEventNameType CATEGORY = "datatype";
   BRAHMA_MAP_OR_FAIL(MPI_Unpack_c);
   DFT_LOGGER_START_ALWAYS();
   DFT_LOGGER_UPDATE_TYPE(insize, MetadataType::MT_VALUE);
@@ -15931,6 +16678,7 @@ int brahma::MPIDFTracer::MPI_Unpack_external(const char datarep[],
                                              MPI_Aint* position, void* outbuf,
                                              int outcount,
                                              MPI_Datatype datatype) {
+  ConstEventNameType CATEGORY = "datatype";
   BRAHMA_MAP_OR_FAIL(MPI_Unpack_external);
   DFT_LOGGER_START_ALWAYS();
   DFT_LOGGER_UPDATE_TYPE(insize, MetadataType::MT_VALUE);
@@ -15955,6 +16703,7 @@ int brahma::MPIDFTracer::MPI_Unpack_external(const char datarep[],
                                              const void* inbuf, MPI_Aint insize,
                                              MPI_Aint* position, void* outbuf,
                                              int outcount, int datatype) {
+  ConstEventNameType CATEGORY = "datatype";
   BRAHMA_MAP_OR_FAIL(MPI_Unpack_external);
   DFT_LOGGER_START_ALWAYS();
   DFT_LOGGER_UPDATE_TYPE(insize, MetadataType::MT_VALUE);
@@ -15975,6 +16724,7 @@ int brahma::MPIDFTracer::MPI_Unpack_external_c(const char datarep[],
                                                MPI_Count* position,
                                                void* outbuf, MPI_Count outcount,
                                                MPI_Datatype datatype) {
+  ConstEventNameType CATEGORY = "datatype";
   BRAHMA_MAP_OR_FAIL(MPI_Unpack_external_c);
   DFT_LOGGER_START_ALWAYS();
   DFT_LOGGER_UPDATE_TYPE(insize, MetadataType::MT_VALUE);
@@ -15994,6 +16744,7 @@ int brahma::MPIDFTracer::MPI_Unpack_external_c(const char datarep[],
 int brahma::MPIDFTracer::MPI_Unpack_external_c(
     const char datarep[], const void* inbuf, MPI_Count insize,
     MPI_Count* position, void* outbuf, MPI_Count outcount, int datatype) {
+  ConstEventNameType CATEGORY = "datatype";
   BRAHMA_MAP_OR_FAIL(MPI_Unpack_external_c);
   DFT_LOGGER_START_ALWAYS();
   DFT_LOGGER_UPDATE_TYPE(insize, MetadataType::MT_VALUE);
@@ -16018,6 +16769,7 @@ int brahma::MPIDFTracer::MPI_Unpack_external_c(
 int brahma::MPIDFTracer::MPI_Unpublish_name(const char* service_name,
                                             MPI_Info info,
                                             const char* port_name) {
+  ConstEventNameType CATEGORY = "spawn";
   BRAHMA_MAP_OR_FAIL(MPI_Unpublish_name);
   DFT_LOGGER_START_ALWAYS();
   DFT_LOGGER_UPDATE_TYPE(info, MetadataType::MT_VALUE);
@@ -16037,6 +16789,7 @@ int brahma::MPIDFTracer::MPI_Unpublish_name(const char* service_name,
       (BRAHMA_MPI_VERSION >= 400106 && BRAHMA_MPI_VERSION < 400200))
 int brahma::MPIDFTracer::MPI_Unpublish_name(const char* service_name, int info,
                                             const char* port_name) {
+  ConstEventNameType CATEGORY = "spawn";
   BRAHMA_MAP_OR_FAIL(MPI_Unpublish_name);
   DFT_LOGGER_START_ALWAYS();
   DFT_LOGGER_UPDATE_TYPE(info, MetadataType::MT_VALUE);
@@ -16056,6 +16809,7 @@ int brahma::MPIDFTracer::MPI_Unpublish_name(const char* service_name, int info,
     (defined(BRAHMA_MPI_IMPL_OPENMPI) &&                                   \
      (BRAHMA_MPI_VERSION >= 400106 && BRAHMA_MPI_VERSION < 400200))
 int brahma::MPIDFTracer::MPI_Wait(MPI_Request* request, MPI_Status* status) {
+  ConstEventNameType CATEGORY = "p2p";
   BRAHMA_MAP_OR_FAIL(MPI_Wait);
   DFT_LOGGER_START_ALWAYS();
   int ret = __real_MPI_Wait(request, status);
@@ -16073,6 +16827,7 @@ int brahma::MPIDFTracer::MPI_Wait(MPI_Request* request, MPI_Status* status) {
     !(defined(BRAHMA_MPI_IMPL_OPENMPI) &&                                  \
       (BRAHMA_MPI_VERSION >= 400106 && BRAHMA_MPI_VERSION < 400200))
 int brahma::MPIDFTracer::MPI_Wait(int* request, MPI_Status* status) {
+  ConstEventNameType CATEGORY = "p2p";
   BRAHMA_MAP_OR_FAIL(MPI_Wait);
   DFT_LOGGER_START_ALWAYS();
   int ret = __real_MPI_Wait(request, status);
@@ -16089,6 +16844,7 @@ int brahma::MPIDFTracer::MPI_Wait(int* request, MPI_Status* status) {
      (BRAHMA_MPI_VERSION >= 400106 && BRAHMA_MPI_VERSION < 400200))
 int brahma::MPIDFTracer::MPI_Waitall(int count, MPI_Request array_of_requests[],
                                      MPI_Status* array_of_statuses) {
+  ConstEventNameType CATEGORY = "p2p";
   BRAHMA_MAP_OR_FAIL(MPI_Waitall);
   DFT_LOGGER_START_ALWAYS();
   DFT_LOGGER_UPDATE_TYPE(count, MetadataType::MT_VALUE);
@@ -16102,6 +16858,7 @@ int brahma::MPIDFTracer::MPI_Waitall(int count, MPI_Request array_of_requests[],
      (BRAHMA_MPI_VERSION >= 300403 && BRAHMA_MPI_VERSION < 300500))
 int brahma::MPIDFTracer::MPI_Waitall(int count, MPI_Request array_of_requests[],
                                      MPI_Status array_of_statuses[]) {
+  ConstEventNameType CATEGORY = "p2p";
   BRAHMA_MAP_OR_FAIL(MPI_Waitall);
   DFT_LOGGER_START_ALWAYS();
   DFT_LOGGER_UPDATE_TYPE(count, MetadataType::MT_VALUE);
@@ -16121,6 +16878,7 @@ int brahma::MPIDFTracer::MPI_Waitall(int count, MPI_Request array_of_requests[],
       (BRAHMA_MPI_VERSION >= 400106 && BRAHMA_MPI_VERSION < 400200))
 int brahma::MPIDFTracer::MPI_Waitall(int count, int array_of_requests[],
                                      MPI_Status* array_of_statuses) {
+  ConstEventNameType CATEGORY = "p2p";
   BRAHMA_MAP_OR_FAIL(MPI_Waitall);
   DFT_LOGGER_START_ALWAYS();
   DFT_LOGGER_UPDATE_TYPE(count, MetadataType::MT_VALUE);
@@ -16141,6 +16899,7 @@ int brahma::MPIDFTracer::MPI_Waitall(int count, int array_of_requests[],
      (BRAHMA_MPI_VERSION >= 400106 && BRAHMA_MPI_VERSION < 400200))
 int brahma::MPIDFTracer::MPI_Waitany(int count, MPI_Request array_of_requests[],
                                      int* index, MPI_Status* status) {
+  ConstEventNameType CATEGORY = "p2p";
   BRAHMA_MAP_OR_FAIL(MPI_Waitany);
   DFT_LOGGER_START_ALWAYS();
   DFT_LOGGER_UPDATE_TYPE(count, MetadataType::MT_VALUE);
@@ -16160,6 +16919,7 @@ int brahma::MPIDFTracer::MPI_Waitany(int count, MPI_Request array_of_requests[],
       (BRAHMA_MPI_VERSION >= 400106 && BRAHMA_MPI_VERSION < 400200))
 int brahma::MPIDFTracer::MPI_Waitany(int count, int array_of_requests[],
                                      int* index, MPI_Status* status) {
+  ConstEventNameType CATEGORY = "p2p";
   BRAHMA_MAP_OR_FAIL(MPI_Waitany);
   DFT_LOGGER_START_ALWAYS();
   DFT_LOGGER_UPDATE_TYPE(count, MetadataType::MT_VALUE);
@@ -16175,6 +16935,7 @@ int brahma::MPIDFTracer::MPI_Waitsome(int incount,
                                       MPI_Request array_of_requests[],
                                       int* outcount, int array_of_indices[],
                                       MPI_Status* array_of_statuses) {
+  ConstEventNameType CATEGORY = "p2p";
   BRAHMA_MAP_OR_FAIL(MPI_Waitsome);
   DFT_LOGGER_START_ALWAYS();
   DFT_LOGGER_UPDATE_TYPE(incount, MetadataType::MT_VALUE);
@@ -16193,6 +16954,7 @@ int brahma::MPIDFTracer::MPI_Waitsome(int incount,
                                       MPI_Request array_of_requests[],
                                       int* outcount, int array_of_indices[],
                                       MPI_Status array_of_statuses[]) {
+  ConstEventNameType CATEGORY = "p2p";
   BRAHMA_MAP_OR_FAIL(MPI_Waitsome);
   DFT_LOGGER_START_ALWAYS();
   DFT_LOGGER_UPDATE_TYPE(incount, MetadataType::MT_VALUE);
@@ -16210,6 +16972,7 @@ int brahma::MPIDFTracer::MPI_Waitsome(int incount,
 int brahma::MPIDFTracer::MPI_Waitsome(int incount, int array_of_requests[],
                                       int* outcount, int array_of_indices[],
                                       MPI_Status* array_of_statuses) {
+  ConstEventNameType CATEGORY = "p2p";
   BRAHMA_MAP_OR_FAIL(MPI_Waitsome);
   DFT_LOGGER_START_ALWAYS();
   DFT_LOGGER_UPDATE_TYPE(incount, MetadataType::MT_VALUE);
@@ -16227,6 +16990,7 @@ int brahma::MPIDFTracer::MPI_Waitsome(int incount, int array_of_requests[],
 int brahma::MPIDFTracer::MPI_Waitsome(int incount, int array_of_requests[],
                                       int* outcount, int array_of_indices[],
                                       MPI_Status array_of_statuses[]) {
+  ConstEventNameType CATEGORY = "p2p";
   BRAHMA_MAP_OR_FAIL(MPI_Waitsome);
   DFT_LOGGER_START_ALWAYS();
   DFT_LOGGER_UPDATE_TYPE(incount, MetadataType::MT_VALUE);
@@ -16249,6 +17013,7 @@ int brahma::MPIDFTracer::MPI_Waitsome(int incount, int array_of_requests[],
 int brahma::MPIDFTracer::MPI_Win_allocate(MPI_Aint size, int disp_unit,
                                           MPI_Info info, MPI_Comm comm,
                                           void* baseptr, MPI_Win* win) {
+  ConstEventNameType CATEGORY = "rma";
   BRAHMA_MAP_OR_FAIL(MPI_Win_allocate);
   DFT_LOGGER_START_ALWAYS();
   DFT_LOGGER_UPDATE_TYPE(size, MetadataType::MT_VALUE);
@@ -16272,6 +17037,7 @@ int brahma::MPIDFTracer::MPI_Win_allocate(MPI_Aint size, int disp_unit,
 int brahma::MPIDFTracer::MPI_Win_allocate(MPI_Aint size, int disp_unit,
                                           int info, int comm, void* baseptr,
                                           MPI_Win* win) {
+  ConstEventNameType CATEGORY = "rma";
   BRAHMA_MAP_OR_FAIL(MPI_Win_allocate);
   DFT_LOGGER_START_ALWAYS();
   DFT_LOGGER_UPDATE_TYPE(size, MetadataType::MT_VALUE);
@@ -16289,6 +17055,7 @@ int brahma::MPIDFTracer::MPI_Win_allocate(MPI_Aint size, int disp_unit,
 int brahma::MPIDFTracer::MPI_Win_allocate_c(MPI_Aint size, MPI_Aint disp_unit,
                                             MPI_Info info, MPI_Comm comm,
                                             void* baseptr, MPI_Win* win) {
+  ConstEventNameType CATEGORY = "rma";
   BRAHMA_MAP_OR_FAIL(MPI_Win_allocate_c);
   DFT_LOGGER_START_ALWAYS();
   DFT_LOGGER_UPDATE_TYPE(size, MetadataType::MT_VALUE);
@@ -16309,6 +17076,7 @@ int brahma::MPIDFTracer::MPI_Win_allocate_c(MPI_Aint size, MPI_Aint disp_unit,
 int brahma::MPIDFTracer::MPI_Win_allocate_c(MPI_Aint size, MPI_Aint disp_unit,
                                             int info, int comm, void* baseptr,
                                             int* win) {
+  ConstEventNameType CATEGORY = "rma";
   BRAHMA_MAP_OR_FAIL(MPI_Win_allocate_c);
   DFT_LOGGER_START_ALWAYS();
   DFT_LOGGER_UPDATE_TYPE(size, MetadataType::MT_VALUE);
@@ -16334,6 +17102,7 @@ int brahma::MPIDFTracer::MPI_Win_allocate_c(MPI_Aint size, MPI_Aint disp_unit,
 int brahma::MPIDFTracer::MPI_Win_allocate_shared(MPI_Aint size, int disp_unit,
                                                  MPI_Info info, MPI_Comm comm,
                                                  void* baseptr, MPI_Win* win) {
+  ConstEventNameType CATEGORY = "rma";
   BRAHMA_MAP_OR_FAIL(MPI_Win_allocate_shared);
   DFT_LOGGER_START_ALWAYS();
   DFT_LOGGER_UPDATE_TYPE(size, MetadataType::MT_VALUE);
@@ -16358,6 +17127,7 @@ int brahma::MPIDFTracer::MPI_Win_allocate_shared(MPI_Aint size, int disp_unit,
 int brahma::MPIDFTracer::MPI_Win_allocate_shared(MPI_Aint size, int disp_unit,
                                                  int info, int comm,
                                                  void* baseptr, MPI_Win* win) {
+  ConstEventNameType CATEGORY = "rma";
   BRAHMA_MAP_OR_FAIL(MPI_Win_allocate_shared);
   DFT_LOGGER_START_ALWAYS();
   DFT_LOGGER_UPDATE_TYPE(size, MetadataType::MT_VALUE);
@@ -16378,6 +17148,7 @@ int brahma::MPIDFTracer::MPI_Win_allocate_shared_c(MPI_Aint size,
                                                    MPI_Info info, MPI_Comm comm,
                                                    void* baseptr,
                                                    MPI_Win* win) {
+  ConstEventNameType CATEGORY = "rma";
   BRAHMA_MAP_OR_FAIL(MPI_Win_allocate_shared_c);
   DFT_LOGGER_START_ALWAYS();
   DFT_LOGGER_UPDATE_TYPE(size, MetadataType::MT_VALUE);
@@ -16399,6 +17170,7 @@ int brahma::MPIDFTracer::MPI_Win_allocate_shared_c(MPI_Aint size,
                                                    MPI_Aint disp_unit, int info,
                                                    int comm, void* baseptr,
                                                    int* win) {
+  ConstEventNameType CATEGORY = "rma";
   BRAHMA_MAP_OR_FAIL(MPI_Win_allocate_shared_c);
   DFT_LOGGER_START_ALWAYS();
   DFT_LOGGER_UPDATE_TYPE(size, MetadataType::MT_VALUE);
@@ -16423,6 +17195,7 @@ int brahma::MPIDFTracer::MPI_Win_allocate_shared_c(MPI_Aint size,
        (BRAHMA_MPI_VERSION >= 500006 && BRAHMA_MPI_VERSION < 500100))))
 int brahma::MPIDFTracer::MPI_Win_attach(MPI_Win win, void* base,
                                         MPI_Aint size) {
+  ConstEventNameType CATEGORY = "rma";
   BRAHMA_MAP_OR_FAIL(MPI_Win_attach);
   DFT_LOGGER_START_ALWAYS();
   DFT_LOGGER_UPDATE_TYPE(win, MetadataType::MT_VALUE);
@@ -16443,6 +17216,7 @@ int brahma::MPIDFTracer::MPI_Win_attach(MPI_Win win, void* base,
       ((BRAHMA_MPI_VERSION >= 400106 && BRAHMA_MPI_VERSION < 400200) ||   \
        (BRAHMA_MPI_VERSION >= 500006 && BRAHMA_MPI_VERSION < 500100))))
 int brahma::MPIDFTracer::MPI_Win_call_errhandler(MPI_Win win, int errorcode) {
+  ConstEventNameType CATEGORY = "rma";
   BRAHMA_MAP_OR_FAIL(MPI_Win_call_errhandler);
   DFT_LOGGER_START_ALWAYS();
   DFT_LOGGER_UPDATE_TYPE(win, MetadataType::MT_VALUE);
@@ -16463,6 +17237,7 @@ int brahma::MPIDFTracer::MPI_Win_call_errhandler(MPI_Win win, int errorcode) {
       ((BRAHMA_MPI_VERSION >= 400106 && BRAHMA_MPI_VERSION < 400200) ||   \
        (BRAHMA_MPI_VERSION >= 500006 && BRAHMA_MPI_VERSION < 500100))))
 int brahma::MPIDFTracer::MPI_Win_complete(MPI_Win win) {
+  ConstEventNameType CATEGORY = "rma";
   BRAHMA_MAP_OR_FAIL(MPI_Win_complete);
   DFT_LOGGER_START_ALWAYS();
   DFT_LOGGER_UPDATE_TYPE(win, MetadataType::MT_VALUE);
@@ -16484,6 +17259,7 @@ int brahma::MPIDFTracer::MPI_Win_complete(MPI_Win win) {
 int brahma::MPIDFTracer::MPI_Win_create(void* base, MPI_Aint size,
                                         int disp_unit, MPI_Info info,
                                         MPI_Comm comm, MPI_Win* win) {
+  ConstEventNameType CATEGORY = "rma";
   BRAHMA_MAP_OR_FAIL(MPI_Win_create);
   DFT_LOGGER_START_ALWAYS();
   DFT_LOGGER_UPDATE_TYPE(size, MetadataType::MT_VALUE);
@@ -16507,6 +17283,7 @@ int brahma::MPIDFTracer::MPI_Win_create(void* base, MPI_Aint size,
 int brahma::MPIDFTracer::MPI_Win_create(void* base, MPI_Aint size,
                                         int disp_unit, int info, int comm,
                                         MPI_Win* win) {
+  ConstEventNameType CATEGORY = "rma";
   BRAHMA_MAP_OR_FAIL(MPI_Win_create);
   DFT_LOGGER_START_ALWAYS();
   DFT_LOGGER_UPDATE_TYPE(size, MetadataType::MT_VALUE);
@@ -16524,6 +17301,7 @@ int brahma::MPIDFTracer::MPI_Win_create(void* base, MPI_Aint size,
 int brahma::MPIDFTracer::MPI_Win_create_c(void* base, MPI_Aint size,
                                           MPI_Aint disp_unit, MPI_Info info,
                                           MPI_Comm comm, MPI_Win* win) {
+  ConstEventNameType CATEGORY = "rma";
   BRAHMA_MAP_OR_FAIL(MPI_Win_create_c);
   DFT_LOGGER_START_ALWAYS();
   DFT_LOGGER_UPDATE_TYPE(size, MetadataType::MT_VALUE);
@@ -16543,6 +17321,7 @@ int brahma::MPIDFTracer::MPI_Win_create_c(void* base, MPI_Aint size,
 int brahma::MPIDFTracer::MPI_Win_create_c(void* base, MPI_Aint size,
                                           MPI_Aint disp_unit, int info,
                                           int comm, int* win) {
+  ConstEventNameType CATEGORY = "rma";
   BRAHMA_MAP_OR_FAIL(MPI_Win_create_c);
   DFT_LOGGER_START_ALWAYS();
   DFT_LOGGER_UPDATE_TYPE(size, MetadataType::MT_VALUE);
@@ -16566,6 +17345,7 @@ int brahma::MPIDFTracer::MPI_Win_create_c(void* base, MPI_Aint size,
      (BRAHMA_MPI_VERSION >= 400106 && BRAHMA_MPI_VERSION < 400200))
 int brahma::MPIDFTracer::MPI_Win_create_dynamic(MPI_Info info, MPI_Comm comm,
                                                 MPI_Win* win) {
+  ConstEventNameType CATEGORY = "rma";
   BRAHMA_MAP_OR_FAIL(MPI_Win_create_dynamic);
   DFT_LOGGER_START_ALWAYS();
   DFT_LOGGER_UPDATE_TYPE(info, MetadataType::MT_VALUE);
@@ -16586,6 +17366,7 @@ int brahma::MPIDFTracer::MPI_Win_create_dynamic(MPI_Info info, MPI_Comm comm,
       (BRAHMA_MPI_VERSION >= 400106 && BRAHMA_MPI_VERSION < 400200))
 int brahma::MPIDFTracer::MPI_Win_create_dynamic(int info, int comm,
                                                 MPI_Win* win) {
+  ConstEventNameType CATEGORY = "rma";
   BRAHMA_MAP_OR_FAIL(MPI_Win_create_dynamic);
   DFT_LOGGER_START_ALWAYS();
   DFT_LOGGER_UPDATE_TYPE(info, MetadataType::MT_VALUE);
@@ -16607,6 +17388,7 @@ int brahma::MPIDFTracer::MPI_Win_create_dynamic(int info, int comm,
      (BRAHMA_MPI_VERSION >= 400106 && BRAHMA_MPI_VERSION < 400200))
 int brahma::MPIDFTracer::MPI_Win_create_errhandler(
     MPI_Win_errhandler_function* function, MPI_Errhandler* errhandler) {
+  ConstEventNameType CATEGORY = "rma";
   BRAHMA_MAP_OR_FAIL(MPI_Win_create_errhandler);
   DFT_LOGGER_START_ALWAYS();
   int ret = __real_MPI_Win_create_errhandler(function, errhandler);
@@ -16625,6 +17407,7 @@ int brahma::MPIDFTracer::MPI_Win_create_errhandler(
       (BRAHMA_MPI_VERSION >= 400106 && BRAHMA_MPI_VERSION < 400200))
 int brahma::MPIDFTracer::MPI_Win_create_errhandler(
     MPI_Win_errhandler_function* function, int* errhandler) {
+  ConstEventNameType CATEGORY = "rma";
   BRAHMA_MAP_OR_FAIL(MPI_Win_create_errhandler);
   DFT_LOGGER_START_ALWAYS();
   int ret = __real_MPI_Win_create_errhandler(function, errhandler);
@@ -16646,6 +17429,7 @@ int brahma::MPIDFTracer::MPI_Win_create_keyval(
     MPI_Win_copy_attr_function* win_copy_attr_fn,
     MPI_Win_delete_attr_function* win_delete_attr_fn, int* win_keyval,
     void* extra_state) {
+  ConstEventNameType CATEGORY = "rma";
   BRAHMA_MAP_OR_FAIL(MPI_Win_create_keyval);
   DFT_LOGGER_START_ALWAYS();
   int ret = __real_MPI_Win_create_keyval(win_copy_attr_fn, win_delete_attr_fn,
@@ -16665,6 +17449,7 @@ int brahma::MPIDFTracer::MPI_Win_create_keyval(
       ((BRAHMA_MPI_VERSION >= 400106 && BRAHMA_MPI_VERSION < 400200) ||   \
        (BRAHMA_MPI_VERSION >= 500006 && BRAHMA_MPI_VERSION < 500100))))
 int brahma::MPIDFTracer::MPI_Win_delete_attr(MPI_Win win, int win_keyval) {
+  ConstEventNameType CATEGORY = "rma";
   BRAHMA_MAP_OR_FAIL(MPI_Win_delete_attr);
   DFT_LOGGER_START_ALWAYS();
   DFT_LOGGER_UPDATE_TYPE(win, MetadataType::MT_VALUE);
@@ -16685,6 +17470,7 @@ int brahma::MPIDFTracer::MPI_Win_delete_attr(MPI_Win win, int win_keyval) {
       ((BRAHMA_MPI_VERSION >= 400106 && BRAHMA_MPI_VERSION < 400200) ||   \
        (BRAHMA_MPI_VERSION >= 500006 && BRAHMA_MPI_VERSION < 500100))))
 int brahma::MPIDFTracer::MPI_Win_detach(MPI_Win win, const void* base) {
+  ConstEventNameType CATEGORY = "rma";
   BRAHMA_MAP_OR_FAIL(MPI_Win_detach);
   DFT_LOGGER_START_ALWAYS();
   DFT_LOGGER_UPDATE_TYPE(win, MetadataType::MT_VALUE);
@@ -16704,6 +17490,7 @@ int brahma::MPIDFTracer::MPI_Win_detach(MPI_Win win, const void* base) {
     (defined(BRAHMA_MPI_IMPL_OPENMPI) &&                                   \
      (BRAHMA_MPI_VERSION >= 400106 && BRAHMA_MPI_VERSION < 400200))
 int brahma::MPIDFTracer::MPI_Win_fence(int assert, MPI_Win win) {
+  ConstEventNameType CATEGORY = "rma";
   BRAHMA_MAP_OR_FAIL(MPI_Win_fence);
   DFT_LOGGER_START_ALWAYS();
   DFT_LOGGER_UPDATE_TYPE(assert, MetadataType::MT_VALUE);
@@ -16723,6 +17510,7 @@ int brahma::MPIDFTracer::MPI_Win_fence(int assert, MPI_Win win) {
     !(defined(BRAHMA_MPI_IMPL_OPENMPI) &&                                  \
       (BRAHMA_MPI_VERSION >= 400106 && BRAHMA_MPI_VERSION < 400200))
 int brahma::MPIDFTracer::MPI_Win_fence(int assert, int win) {
+  ConstEventNameType CATEGORY = "rma";
   BRAHMA_MAP_OR_FAIL(MPI_Win_fence);
   DFT_LOGGER_START_ALWAYS();
   DFT_LOGGER_UPDATE_TYPE(assert, MetadataType::MT_VALUE);
@@ -16743,6 +17531,7 @@ int brahma::MPIDFTracer::MPI_Win_fence(int assert, int win) {
     (defined(BRAHMA_MPI_IMPL_OPENMPI) &&                                   \
      (BRAHMA_MPI_VERSION >= 400106 && BRAHMA_MPI_VERSION < 400200))
 int brahma::MPIDFTracer::MPI_Win_flush(int rank, MPI_Win win) {
+  ConstEventNameType CATEGORY = "rma";
   BRAHMA_MAP_OR_FAIL(MPI_Win_flush);
   DFT_LOGGER_START_ALWAYS();
   DFT_LOGGER_UPDATE_TYPE(rank, MetadataType::MT_VALUE);
@@ -16762,6 +17551,7 @@ int brahma::MPIDFTracer::MPI_Win_flush(int rank, MPI_Win win) {
     !(defined(BRAHMA_MPI_IMPL_OPENMPI) &&                                  \
       (BRAHMA_MPI_VERSION >= 400106 && BRAHMA_MPI_VERSION < 400200))
 int brahma::MPIDFTracer::MPI_Win_flush(int rank, int win) {
+  ConstEventNameType CATEGORY = "rma";
   BRAHMA_MAP_OR_FAIL(MPI_Win_flush);
   DFT_LOGGER_START_ALWAYS();
   DFT_LOGGER_UPDATE_TYPE(rank, MetadataType::MT_VALUE);
@@ -16782,6 +17572,7 @@ int brahma::MPIDFTracer::MPI_Win_flush(int rank, int win) {
     (defined(BRAHMA_MPI_IMPL_OPENMPI) &&                                   \
      (BRAHMA_MPI_VERSION >= 400106 && BRAHMA_MPI_VERSION < 400200))
 int brahma::MPIDFTracer::MPI_Win_flush_all(MPI_Win win) {
+  ConstEventNameType CATEGORY = "rma";
   BRAHMA_MAP_OR_FAIL(MPI_Win_flush_all);
   DFT_LOGGER_START_ALWAYS();
   DFT_LOGGER_UPDATE_TYPE(win, MetadataType::MT_VALUE);
@@ -16800,6 +17591,7 @@ int brahma::MPIDFTracer::MPI_Win_flush_all(MPI_Win win) {
     !(defined(BRAHMA_MPI_IMPL_OPENMPI) &&                                  \
       (BRAHMA_MPI_VERSION >= 400106 && BRAHMA_MPI_VERSION < 400200))
 int brahma::MPIDFTracer::MPI_Win_flush_all(int win) {
+  ConstEventNameType CATEGORY = "rma";
   BRAHMA_MAP_OR_FAIL(MPI_Win_flush_all);
   DFT_LOGGER_START_ALWAYS();
   DFT_LOGGER_UPDATE_TYPE(win, MetadataType::MT_VALUE);
@@ -16819,6 +17611,7 @@ int brahma::MPIDFTracer::MPI_Win_flush_all(int win) {
     (defined(BRAHMA_MPI_IMPL_OPENMPI) &&                                   \
      (BRAHMA_MPI_VERSION >= 400106 && BRAHMA_MPI_VERSION < 400200))
 int brahma::MPIDFTracer::MPI_Win_flush_local(int rank, MPI_Win win) {
+  ConstEventNameType CATEGORY = "rma";
   BRAHMA_MAP_OR_FAIL(MPI_Win_flush_local);
   DFT_LOGGER_START_ALWAYS();
   DFT_LOGGER_UPDATE_TYPE(rank, MetadataType::MT_VALUE);
@@ -16838,6 +17631,7 @@ int brahma::MPIDFTracer::MPI_Win_flush_local(int rank, MPI_Win win) {
     !(defined(BRAHMA_MPI_IMPL_OPENMPI) &&                                  \
       (BRAHMA_MPI_VERSION >= 400106 && BRAHMA_MPI_VERSION < 400200))
 int brahma::MPIDFTracer::MPI_Win_flush_local(int rank, int win) {
+  ConstEventNameType CATEGORY = "rma";
   BRAHMA_MAP_OR_FAIL(MPI_Win_flush_local);
   DFT_LOGGER_START_ALWAYS();
   DFT_LOGGER_UPDATE_TYPE(rank, MetadataType::MT_VALUE);
@@ -16858,6 +17652,7 @@ int brahma::MPIDFTracer::MPI_Win_flush_local(int rank, int win) {
     (defined(BRAHMA_MPI_IMPL_OPENMPI) &&                                   \
      (BRAHMA_MPI_VERSION >= 400106 && BRAHMA_MPI_VERSION < 400200))
 int brahma::MPIDFTracer::MPI_Win_flush_local_all(MPI_Win win) {
+  ConstEventNameType CATEGORY = "rma";
   BRAHMA_MAP_OR_FAIL(MPI_Win_flush_local_all);
   DFT_LOGGER_START_ALWAYS();
   DFT_LOGGER_UPDATE_TYPE(win, MetadataType::MT_VALUE);
@@ -16876,6 +17671,7 @@ int brahma::MPIDFTracer::MPI_Win_flush_local_all(MPI_Win win) {
     !(defined(BRAHMA_MPI_IMPL_OPENMPI) &&                                  \
       (BRAHMA_MPI_VERSION >= 400106 && BRAHMA_MPI_VERSION < 400200))
 int brahma::MPIDFTracer::MPI_Win_flush_local_all(int win) {
+  ConstEventNameType CATEGORY = "rma";
   BRAHMA_MAP_OR_FAIL(MPI_Win_flush_local_all);
   DFT_LOGGER_START_ALWAYS();
   DFT_LOGGER_UPDATE_TYPE(win, MetadataType::MT_VALUE);
@@ -16895,6 +17691,7 @@ int brahma::MPIDFTracer::MPI_Win_flush_local_all(int win) {
     (defined(BRAHMA_MPI_IMPL_OPENMPI) &&                                   \
      (BRAHMA_MPI_VERSION >= 400106 && BRAHMA_MPI_VERSION < 400200))
 int brahma::MPIDFTracer::MPI_Win_free(MPI_Win* win) {
+  ConstEventNameType CATEGORY = "rma";
   BRAHMA_MAP_OR_FAIL(MPI_Win_free);
   DFT_LOGGER_START_ALWAYS();
   int ret = __real_MPI_Win_free(win);
@@ -16912,6 +17709,7 @@ int brahma::MPIDFTracer::MPI_Win_free(MPI_Win* win) {
     !(defined(BRAHMA_MPI_IMPL_OPENMPI) &&                                  \
       (BRAHMA_MPI_VERSION >= 400106 && BRAHMA_MPI_VERSION < 400200))
 int brahma::MPIDFTracer::MPI_Win_free(int* win) {
+  ConstEventNameType CATEGORY = "rma";
   BRAHMA_MAP_OR_FAIL(MPI_Win_free);
   DFT_LOGGER_START_ALWAYS();
   int ret = __real_MPI_Win_free(win);
@@ -16930,6 +17728,7 @@ int brahma::MPIDFTracer::MPI_Win_free(int* win) {
       ((BRAHMA_MPI_VERSION >= 400106 && BRAHMA_MPI_VERSION < 400200) ||   \
        (BRAHMA_MPI_VERSION >= 500006 && BRAHMA_MPI_VERSION < 500100))))
 int brahma::MPIDFTracer::MPI_Win_free_keyval(int* win_keyval) {
+  ConstEventNameType CATEGORY = "rma";
   BRAHMA_MAP_OR_FAIL(MPI_Win_free_keyval);
   DFT_LOGGER_START_ALWAYS();
   int ret = __real_MPI_Win_free_keyval(win_keyval);
@@ -16949,6 +17748,7 @@ int brahma::MPIDFTracer::MPI_Win_free_keyval(int* win_keyval) {
      (BRAHMA_MPI_VERSION >= 400106 && BRAHMA_MPI_VERSION < 400200))
 int brahma::MPIDFTracer::MPI_Win_get_attr(MPI_Win win, int win_keyval,
                                           void* attribute_val, int* flag) {
+  ConstEventNameType CATEGORY = "rma";
   BRAHMA_MAP_OR_FAIL(MPI_Win_get_attr);
   DFT_LOGGER_START_ALWAYS();
   DFT_LOGGER_UPDATE_TYPE(win, MetadataType::MT_VALUE);
@@ -16969,6 +17769,7 @@ int brahma::MPIDFTracer::MPI_Win_get_attr(MPI_Win win, int win_keyval,
       (BRAHMA_MPI_VERSION >= 400106 && BRAHMA_MPI_VERSION < 400200))
 int brahma::MPIDFTracer::MPI_Win_get_attr(int win, int win_keyval,
                                           void* attribute_val, int* flag) {
+  ConstEventNameType CATEGORY = "rma";
   BRAHMA_MAP_OR_FAIL(MPI_Win_get_attr);
   DFT_LOGGER_START_ALWAYS();
   DFT_LOGGER_UPDATE_TYPE(win, MetadataType::MT_VALUE);
@@ -16990,6 +17791,7 @@ int brahma::MPIDFTracer::MPI_Win_get_attr(int win, int win_keyval,
      (BRAHMA_MPI_VERSION >= 400106 && BRAHMA_MPI_VERSION < 400200))
 int brahma::MPIDFTracer::MPI_Win_get_errhandler(MPI_Win win,
                                                 MPI_Errhandler* errhandler) {
+  ConstEventNameType CATEGORY = "rma";
   BRAHMA_MAP_OR_FAIL(MPI_Win_get_errhandler);
   DFT_LOGGER_START_ALWAYS();
   DFT_LOGGER_UPDATE_TYPE(win, MetadataType::MT_VALUE);
@@ -17008,6 +17810,7 @@ int brahma::MPIDFTracer::MPI_Win_get_errhandler(MPI_Win win,
     !(defined(BRAHMA_MPI_IMPL_OPENMPI) &&                                  \
       (BRAHMA_MPI_VERSION >= 400106 && BRAHMA_MPI_VERSION < 400200))
 int brahma::MPIDFTracer::MPI_Win_get_errhandler(int win, int* errhandler) {
+  ConstEventNameType CATEGORY = "rma";
   BRAHMA_MAP_OR_FAIL(MPI_Win_get_errhandler);
   DFT_LOGGER_START_ALWAYS();
   DFT_LOGGER_UPDATE_TYPE(win, MetadataType::MT_VALUE);
@@ -17027,6 +17830,7 @@ int brahma::MPIDFTracer::MPI_Win_get_errhandler(int win, int* errhandler) {
     (defined(BRAHMA_MPI_IMPL_OPENMPI) &&                                   \
      (BRAHMA_MPI_VERSION >= 400106 && BRAHMA_MPI_VERSION < 400200))
 int brahma::MPIDFTracer::MPI_Win_get_group(MPI_Win win, MPI_Group* group) {
+  ConstEventNameType CATEGORY = "rma";
   BRAHMA_MAP_OR_FAIL(MPI_Win_get_group);
   DFT_LOGGER_START_ALWAYS();
   DFT_LOGGER_UPDATE_TYPE(win, MetadataType::MT_VALUE);
@@ -17045,6 +17849,7 @@ int brahma::MPIDFTracer::MPI_Win_get_group(MPI_Win win, MPI_Group* group) {
     !(defined(BRAHMA_MPI_IMPL_OPENMPI) &&                                  \
       (BRAHMA_MPI_VERSION >= 400106 && BRAHMA_MPI_VERSION < 400200))
 int brahma::MPIDFTracer::MPI_Win_get_group(int win, int* group) {
+  ConstEventNameType CATEGORY = "rma";
   BRAHMA_MAP_OR_FAIL(MPI_Win_get_group);
   DFT_LOGGER_START_ALWAYS();
   DFT_LOGGER_UPDATE_TYPE(win, MetadataType::MT_VALUE);
@@ -17064,6 +17869,7 @@ int brahma::MPIDFTracer::MPI_Win_get_group(int win, int* group) {
     (defined(BRAHMA_MPI_IMPL_OPENMPI) &&                                   \
      (BRAHMA_MPI_VERSION >= 400106 && BRAHMA_MPI_VERSION < 400200))
 int brahma::MPIDFTracer::MPI_Win_get_info(MPI_Win win, MPI_Info* info_used) {
+  ConstEventNameType CATEGORY = "rma";
   BRAHMA_MAP_OR_FAIL(MPI_Win_get_info);
   DFT_LOGGER_START_ALWAYS();
   DFT_LOGGER_UPDATE_TYPE(win, MetadataType::MT_VALUE);
@@ -17082,6 +17888,7 @@ int brahma::MPIDFTracer::MPI_Win_get_info(MPI_Win win, MPI_Info* info_used) {
     !(defined(BRAHMA_MPI_IMPL_OPENMPI) &&                                  \
       (BRAHMA_MPI_VERSION >= 400106 && BRAHMA_MPI_VERSION < 400200))
 int brahma::MPIDFTracer::MPI_Win_get_info(int win, int* info_used) {
+  ConstEventNameType CATEGORY = "rma";
   BRAHMA_MAP_OR_FAIL(MPI_Win_get_info);
   DFT_LOGGER_START_ALWAYS();
   DFT_LOGGER_UPDATE_TYPE(win, MetadataType::MT_VALUE);
@@ -17102,6 +17909,7 @@ int brahma::MPIDFTracer::MPI_Win_get_info(int win, int* info_used) {
      (BRAHMA_MPI_VERSION >= 400106 && BRAHMA_MPI_VERSION < 400200))
 int brahma::MPIDFTracer::MPI_Win_get_name(MPI_Win win, char* win_name,
                                           int* resultlen) {
+  ConstEventNameType CATEGORY = "rma";
   BRAHMA_MAP_OR_FAIL(MPI_Win_get_name);
   DFT_LOGGER_START_ALWAYS();
   DFT_LOGGER_UPDATE_TYPE(win, MetadataType::MT_VALUE);
@@ -17121,6 +17929,7 @@ int brahma::MPIDFTracer::MPI_Win_get_name(MPI_Win win, char* win_name,
       (BRAHMA_MPI_VERSION >= 400106 && BRAHMA_MPI_VERSION < 400200))
 int brahma::MPIDFTracer::MPI_Win_get_name(int win, char* win_name,
                                           int* resultlen) {
+  ConstEventNameType CATEGORY = "rma";
   BRAHMA_MAP_OR_FAIL(MPI_Win_get_name);
   DFT_LOGGER_START_ALWAYS();
   DFT_LOGGER_UPDATE_TYPE(win, MetadataType::MT_VALUE);
@@ -17141,6 +17950,7 @@ int brahma::MPIDFTracer::MPI_Win_get_name(int win, char* win_name,
      (BRAHMA_MPI_VERSION >= 400106 && BRAHMA_MPI_VERSION < 400200))
 int brahma::MPIDFTracer::MPI_Win_lock(int lock_type, int rank, int assert,
                                       MPI_Win win) {
+  ConstEventNameType CATEGORY = "rma";
   BRAHMA_MAP_OR_FAIL(MPI_Win_lock);
   DFT_LOGGER_START_ALWAYS();
   DFT_LOGGER_UPDATE_TYPE(lock_type, MetadataType::MT_VALUE);
@@ -17163,6 +17973,7 @@ int brahma::MPIDFTracer::MPI_Win_lock(int lock_type, int rank, int assert,
       (BRAHMA_MPI_VERSION >= 400106 && BRAHMA_MPI_VERSION < 400200))
 int brahma::MPIDFTracer::MPI_Win_lock(int lock_type, int rank, int assert,
                                       int win) {
+  ConstEventNameType CATEGORY = "rma";
   BRAHMA_MAP_OR_FAIL(MPI_Win_lock);
   DFT_LOGGER_START_ALWAYS();
   DFT_LOGGER_UPDATE_TYPE(lock_type, MetadataType::MT_VALUE);
@@ -17185,6 +17996,7 @@ int brahma::MPIDFTracer::MPI_Win_lock(int lock_type, int rank, int assert,
     (defined(BRAHMA_MPI_IMPL_OPENMPI) &&                                   \
      (BRAHMA_MPI_VERSION >= 400106 && BRAHMA_MPI_VERSION < 400200))
 int brahma::MPIDFTracer::MPI_Win_lock_all(int assert, MPI_Win win) {
+  ConstEventNameType CATEGORY = "rma";
   BRAHMA_MAP_OR_FAIL(MPI_Win_lock_all);
   DFT_LOGGER_START_ALWAYS();
   DFT_LOGGER_UPDATE_TYPE(assert, MetadataType::MT_VALUE);
@@ -17204,6 +18016,7 @@ int brahma::MPIDFTracer::MPI_Win_lock_all(int assert, MPI_Win win) {
     !(defined(BRAHMA_MPI_IMPL_OPENMPI) &&                                  \
       (BRAHMA_MPI_VERSION >= 400106 && BRAHMA_MPI_VERSION < 400200))
 int brahma::MPIDFTracer::MPI_Win_lock_all(int assert, int win) {
+  ConstEventNameType CATEGORY = "rma";
   BRAHMA_MAP_OR_FAIL(MPI_Win_lock_all);
   DFT_LOGGER_START_ALWAYS();
   DFT_LOGGER_UPDATE_TYPE(assert, MetadataType::MT_VALUE);
@@ -17225,6 +18038,7 @@ int brahma::MPIDFTracer::MPI_Win_lock_all(int assert, int win) {
      (BRAHMA_MPI_VERSION >= 400106 && BRAHMA_MPI_VERSION < 400200))
 int brahma::MPIDFTracer::MPI_Win_post(MPI_Group group, int assert,
                                       MPI_Win win) {
+  ConstEventNameType CATEGORY = "rma";
   BRAHMA_MAP_OR_FAIL(MPI_Win_post);
   DFT_LOGGER_START_ALWAYS();
   DFT_LOGGER_UPDATE_TYPE(group, MetadataType::MT_VALUE);
@@ -17245,6 +18059,7 @@ int brahma::MPIDFTracer::MPI_Win_post(MPI_Group group, int assert,
     !(defined(BRAHMA_MPI_IMPL_OPENMPI) &&                                  \
       (BRAHMA_MPI_VERSION >= 400106 && BRAHMA_MPI_VERSION < 400200))
 int brahma::MPIDFTracer::MPI_Win_post(int group, int assert, int win) {
+  ConstEventNameType CATEGORY = "rma";
   BRAHMA_MAP_OR_FAIL(MPI_Win_post);
   DFT_LOGGER_START_ALWAYS();
   DFT_LOGGER_UPDATE_TYPE(group, MetadataType::MT_VALUE);
@@ -17267,6 +18082,7 @@ int brahma::MPIDFTracer::MPI_Win_post(int group, int assert, int win) {
      (BRAHMA_MPI_VERSION >= 400106 && BRAHMA_MPI_VERSION < 400200))
 int brahma::MPIDFTracer::MPI_Win_set_attr(MPI_Win win, int win_keyval,
                                           void* attribute_val) {
+  ConstEventNameType CATEGORY = "rma";
   BRAHMA_MAP_OR_FAIL(MPI_Win_set_attr);
   DFT_LOGGER_START_ALWAYS();
   DFT_LOGGER_UPDATE_TYPE(win, MetadataType::MT_VALUE);
@@ -17287,6 +18103,7 @@ int brahma::MPIDFTracer::MPI_Win_set_attr(MPI_Win win, int win_keyval,
       (BRAHMA_MPI_VERSION >= 400106 && BRAHMA_MPI_VERSION < 400200))
 int brahma::MPIDFTracer::MPI_Win_set_attr(int win, int win_keyval,
                                           void* attribute_val) {
+  ConstEventNameType CATEGORY = "rma";
   BRAHMA_MAP_OR_FAIL(MPI_Win_set_attr);
   DFT_LOGGER_START_ALWAYS();
   DFT_LOGGER_UPDATE_TYPE(win, MetadataType::MT_VALUE);
@@ -17308,6 +18125,7 @@ int brahma::MPIDFTracer::MPI_Win_set_attr(int win, int win_keyval,
      (BRAHMA_MPI_VERSION >= 400106 && BRAHMA_MPI_VERSION < 400200))
 int brahma::MPIDFTracer::MPI_Win_set_errhandler(MPI_Win win,
                                                 MPI_Errhandler errhandler) {
+  ConstEventNameType CATEGORY = "rma";
   BRAHMA_MAP_OR_FAIL(MPI_Win_set_errhandler);
   DFT_LOGGER_START_ALWAYS();
   DFT_LOGGER_UPDATE_TYPE(win, MetadataType::MT_VALUE);
@@ -17327,6 +18145,7 @@ int brahma::MPIDFTracer::MPI_Win_set_errhandler(MPI_Win win,
     !(defined(BRAHMA_MPI_IMPL_OPENMPI) &&                                  \
       (BRAHMA_MPI_VERSION >= 400106 && BRAHMA_MPI_VERSION < 400200))
 int brahma::MPIDFTracer::MPI_Win_set_errhandler(int win, int errhandler) {
+  ConstEventNameType CATEGORY = "rma";
   BRAHMA_MAP_OR_FAIL(MPI_Win_set_errhandler);
   DFT_LOGGER_START_ALWAYS();
   DFT_LOGGER_UPDATE_TYPE(win, MetadataType::MT_VALUE);
@@ -17347,6 +18166,7 @@ int brahma::MPIDFTracer::MPI_Win_set_errhandler(int win, int errhandler) {
     (defined(BRAHMA_MPI_IMPL_OPENMPI) &&                                   \
      (BRAHMA_MPI_VERSION >= 400106 && BRAHMA_MPI_VERSION < 400200))
 int brahma::MPIDFTracer::MPI_Win_set_info(MPI_Win win, MPI_Info info) {
+  ConstEventNameType CATEGORY = "rma";
   BRAHMA_MAP_OR_FAIL(MPI_Win_set_info);
   DFT_LOGGER_START_ALWAYS();
   DFT_LOGGER_UPDATE_TYPE(win, MetadataType::MT_VALUE);
@@ -17366,6 +18186,7 @@ int brahma::MPIDFTracer::MPI_Win_set_info(MPI_Win win, MPI_Info info) {
     !(defined(BRAHMA_MPI_IMPL_OPENMPI) &&                                  \
       (BRAHMA_MPI_VERSION >= 400106 && BRAHMA_MPI_VERSION < 400200))
 int brahma::MPIDFTracer::MPI_Win_set_info(int win, int info) {
+  ConstEventNameType CATEGORY = "rma";
   BRAHMA_MAP_OR_FAIL(MPI_Win_set_info);
   DFT_LOGGER_START_ALWAYS();
   DFT_LOGGER_UPDATE_TYPE(win, MetadataType::MT_VALUE);
@@ -17386,6 +18207,7 @@ int brahma::MPIDFTracer::MPI_Win_set_info(int win, int info) {
     (defined(BRAHMA_MPI_IMPL_OPENMPI) &&                                   \
      (BRAHMA_MPI_VERSION >= 400106 && BRAHMA_MPI_VERSION < 400200))
 int brahma::MPIDFTracer::MPI_Win_set_name(MPI_Win win, const char* win_name) {
+  ConstEventNameType CATEGORY = "rma";
   BRAHMA_MAP_OR_FAIL(MPI_Win_set_name);
   DFT_LOGGER_START_ALWAYS();
   DFT_LOGGER_UPDATE_TYPE(win, MetadataType::MT_VALUE);
@@ -17404,6 +18226,7 @@ int brahma::MPIDFTracer::MPI_Win_set_name(MPI_Win win, const char* win_name) {
     !(defined(BRAHMA_MPI_IMPL_OPENMPI) &&                                  \
       (BRAHMA_MPI_VERSION >= 400106 && BRAHMA_MPI_VERSION < 400200))
 int brahma::MPIDFTracer::MPI_Win_set_name(int win, const char* win_name) {
+  ConstEventNameType CATEGORY = "rma";
   BRAHMA_MAP_OR_FAIL(MPI_Win_set_name);
   DFT_LOGGER_START_ALWAYS();
   DFT_LOGGER_UPDATE_TYPE(win, MetadataType::MT_VALUE);
@@ -17425,6 +18248,7 @@ int brahma::MPIDFTracer::MPI_Win_set_name(int win, const char* win_name) {
 int brahma::MPIDFTracer::MPI_Win_shared_query(MPI_Win win, int rank,
                                               MPI_Aint* size, int* disp_unit,
                                               void* baseptr) {
+  ConstEventNameType CATEGORY = "rma";
   BRAHMA_MAP_OR_FAIL(MPI_Win_shared_query);
   DFT_LOGGER_START_ALWAYS();
   DFT_LOGGER_UPDATE_TYPE(win, MetadataType::MT_VALUE);
@@ -17445,6 +18269,7 @@ int brahma::MPIDFTracer::MPI_Win_shared_query(MPI_Win win, int rank,
       (BRAHMA_MPI_VERSION >= 400106 && BRAHMA_MPI_VERSION < 400200))
 int brahma::MPIDFTracer::MPI_Win_shared_query(int win, int rank, MPI_Aint* size,
                                               int* disp_unit, void* baseptr) {
+  ConstEventNameType CATEGORY = "rma";
   BRAHMA_MAP_OR_FAIL(MPI_Win_shared_query);
   DFT_LOGGER_START_ALWAYS();
   DFT_LOGGER_UPDATE_TYPE(win, MetadataType::MT_VALUE);
@@ -17461,6 +18286,7 @@ int brahma::MPIDFTracer::MPI_Win_shared_query_c(MPI_Win win, int rank,
                                                 MPI_Aint* size,
                                                 MPI_Aint* disp_unit,
                                                 void* baseptr) {
+  ConstEventNameType CATEGORY = "rma";
   BRAHMA_MAP_OR_FAIL(MPI_Win_shared_query_c);
   DFT_LOGGER_START_ALWAYS();
   DFT_LOGGER_UPDATE_TYPE(win, MetadataType::MT_VALUE);
@@ -17479,6 +18305,7 @@ int brahma::MPIDFTracer::MPI_Win_shared_query_c(int win, int rank,
                                                 MPI_Aint* size,
                                                 MPI_Aint* disp_unit,
                                                 void* baseptr) {
+  ConstEventNameType CATEGORY = "rma";
   BRAHMA_MAP_OR_FAIL(MPI_Win_shared_query_c);
   DFT_LOGGER_START_ALWAYS();
   DFT_LOGGER_UPDATE_TYPE(win, MetadataType::MT_VALUE);
@@ -17500,6 +18327,7 @@ int brahma::MPIDFTracer::MPI_Win_shared_query_c(int win, int rank,
      (BRAHMA_MPI_VERSION >= 400106 && BRAHMA_MPI_VERSION < 400200))
 int brahma::MPIDFTracer::MPI_Win_start(MPI_Group group, int assert,
                                        MPI_Win win) {
+  ConstEventNameType CATEGORY = "rma";
   BRAHMA_MAP_OR_FAIL(MPI_Win_start);
   DFT_LOGGER_START_ALWAYS();
   DFT_LOGGER_UPDATE_TYPE(group, MetadataType::MT_VALUE);
@@ -17520,6 +18348,7 @@ int brahma::MPIDFTracer::MPI_Win_start(MPI_Group group, int assert,
     !(defined(BRAHMA_MPI_IMPL_OPENMPI) &&                                  \
       (BRAHMA_MPI_VERSION >= 400106 && BRAHMA_MPI_VERSION < 400200))
 int brahma::MPIDFTracer::MPI_Win_start(int group, int assert, int win) {
+  ConstEventNameType CATEGORY = "rma";
   BRAHMA_MAP_OR_FAIL(MPI_Win_start);
   DFT_LOGGER_START_ALWAYS();
   DFT_LOGGER_UPDATE_TYPE(group, MetadataType::MT_VALUE);
@@ -17541,6 +18370,7 @@ int brahma::MPIDFTracer::MPI_Win_start(int group, int assert, int win) {
     (defined(BRAHMA_MPI_IMPL_OPENMPI) &&                                   \
      (BRAHMA_MPI_VERSION >= 400106 && BRAHMA_MPI_VERSION < 400200))
 int brahma::MPIDFTracer::MPI_Win_sync(MPI_Win win) {
+  ConstEventNameType CATEGORY = "rma";
   BRAHMA_MAP_OR_FAIL(MPI_Win_sync);
   DFT_LOGGER_START_ALWAYS();
   DFT_LOGGER_UPDATE_TYPE(win, MetadataType::MT_VALUE);
@@ -17559,6 +18389,7 @@ int brahma::MPIDFTracer::MPI_Win_sync(MPI_Win win) {
     !(defined(BRAHMA_MPI_IMPL_OPENMPI) &&                                  \
       (BRAHMA_MPI_VERSION >= 400106 && BRAHMA_MPI_VERSION < 400200))
 int brahma::MPIDFTracer::MPI_Win_sync(int win) {
+  ConstEventNameType CATEGORY = "rma";
   BRAHMA_MAP_OR_FAIL(MPI_Win_sync);
   DFT_LOGGER_START_ALWAYS();
   DFT_LOGGER_UPDATE_TYPE(win, MetadataType::MT_VALUE);
@@ -17578,6 +18409,7 @@ int brahma::MPIDFTracer::MPI_Win_sync(int win) {
     (defined(BRAHMA_MPI_IMPL_OPENMPI) &&                                   \
      (BRAHMA_MPI_VERSION >= 400106 && BRAHMA_MPI_VERSION < 400200))
 int brahma::MPIDFTracer::MPI_Win_test(MPI_Win win, int* flag) {
+  ConstEventNameType CATEGORY = "rma";
   BRAHMA_MAP_OR_FAIL(MPI_Win_test);
   DFT_LOGGER_START_ALWAYS();
   DFT_LOGGER_UPDATE_TYPE(win, MetadataType::MT_VALUE);
@@ -17596,6 +18428,7 @@ int brahma::MPIDFTracer::MPI_Win_test(MPI_Win win, int* flag) {
     !(defined(BRAHMA_MPI_IMPL_OPENMPI) &&                                  \
       (BRAHMA_MPI_VERSION >= 400106 && BRAHMA_MPI_VERSION < 400200))
 int brahma::MPIDFTracer::MPI_Win_test(int win, int* flag) {
+  ConstEventNameType CATEGORY = "rma";
   BRAHMA_MAP_OR_FAIL(MPI_Win_test);
   DFT_LOGGER_START_ALWAYS();
   DFT_LOGGER_UPDATE_TYPE(win, MetadataType::MT_VALUE);
@@ -17615,6 +18448,7 @@ int brahma::MPIDFTracer::MPI_Win_test(int win, int* flag) {
     (defined(BRAHMA_MPI_IMPL_OPENMPI) &&                                   \
      (BRAHMA_MPI_VERSION >= 400106 && BRAHMA_MPI_VERSION < 400200))
 int brahma::MPIDFTracer::MPI_Win_unlock(int rank, MPI_Win win) {
+  ConstEventNameType CATEGORY = "rma";
   BRAHMA_MAP_OR_FAIL(MPI_Win_unlock);
   DFT_LOGGER_START_ALWAYS();
   DFT_LOGGER_UPDATE_TYPE(rank, MetadataType::MT_VALUE);
@@ -17634,6 +18468,7 @@ int brahma::MPIDFTracer::MPI_Win_unlock(int rank, MPI_Win win) {
     !(defined(BRAHMA_MPI_IMPL_OPENMPI) &&                                  \
       (BRAHMA_MPI_VERSION >= 400106 && BRAHMA_MPI_VERSION < 400200))
 int brahma::MPIDFTracer::MPI_Win_unlock(int rank, int win) {
+  ConstEventNameType CATEGORY = "rma";
   BRAHMA_MAP_OR_FAIL(MPI_Win_unlock);
   DFT_LOGGER_START_ALWAYS();
   DFT_LOGGER_UPDATE_TYPE(rank, MetadataType::MT_VALUE);
@@ -17654,6 +18489,7 @@ int brahma::MPIDFTracer::MPI_Win_unlock(int rank, int win) {
     (defined(BRAHMA_MPI_IMPL_OPENMPI) &&                                   \
      (BRAHMA_MPI_VERSION >= 400106 && BRAHMA_MPI_VERSION < 400200))
 int brahma::MPIDFTracer::MPI_Win_unlock_all(MPI_Win win) {
+  ConstEventNameType CATEGORY = "rma";
   BRAHMA_MAP_OR_FAIL(MPI_Win_unlock_all);
   DFT_LOGGER_START_ALWAYS();
   DFT_LOGGER_UPDATE_TYPE(win, MetadataType::MT_VALUE);
@@ -17672,6 +18508,7 @@ int brahma::MPIDFTracer::MPI_Win_unlock_all(MPI_Win win) {
     !(defined(BRAHMA_MPI_IMPL_OPENMPI) &&                                  \
       (BRAHMA_MPI_VERSION >= 400106 && BRAHMA_MPI_VERSION < 400200))
 int brahma::MPIDFTracer::MPI_Win_unlock_all(int win) {
+  ConstEventNameType CATEGORY = "rma";
   BRAHMA_MAP_OR_FAIL(MPI_Win_unlock_all);
   DFT_LOGGER_START_ALWAYS();
   DFT_LOGGER_UPDATE_TYPE(win, MetadataType::MT_VALUE);
@@ -17691,6 +18528,7 @@ int brahma::MPIDFTracer::MPI_Win_unlock_all(int win) {
     (defined(BRAHMA_MPI_IMPL_OPENMPI) &&                                   \
      (BRAHMA_MPI_VERSION >= 400106 && BRAHMA_MPI_VERSION < 400200))
 int brahma::MPIDFTracer::MPI_Win_wait(MPI_Win win) {
+  ConstEventNameType CATEGORY = "rma";
   BRAHMA_MAP_OR_FAIL(MPI_Win_wait);
   DFT_LOGGER_START_ALWAYS();
   DFT_LOGGER_UPDATE_TYPE(win, MetadataType::MT_VALUE);
@@ -17709,6 +18547,7 @@ int brahma::MPIDFTracer::MPI_Win_wait(MPI_Win win) {
     !(defined(BRAHMA_MPI_IMPL_OPENMPI) &&                                  \
       (BRAHMA_MPI_VERSION >= 400106 && BRAHMA_MPI_VERSION < 400200))
 int brahma::MPIDFTracer::MPI_Win_wait(int win) {
+  ConstEventNameType CATEGORY = "rma";
   BRAHMA_MAP_OR_FAIL(MPI_Win_wait);
   DFT_LOGGER_START_ALWAYS();
   DFT_LOGGER_UPDATE_TYPE(win, MetadataType::MT_VALUE);
@@ -17728,6 +18567,7 @@ int brahma::MPIDFTracer::MPI_Win_wait(int win) {
       ((BRAHMA_MPI_VERSION >= 400106 && BRAHMA_MPI_VERSION < 400200) ||   \
        (BRAHMA_MPI_VERSION >= 500006 && BRAHMA_MPI_VERSION < 500100))))
 double brahma::MPIDFTracer::MPI_Wtick(void) {
+  ConstEventNameType CATEGORY = "env";
   BRAHMA_MAP_OR_FAIL(MPI_Wtick);
   DFT_LOGGER_START_ALWAYS();
   double ret = __real_MPI_Wtick();
@@ -17746,6 +18586,7 @@ double brahma::MPIDFTracer::MPI_Wtick(void) {
       ((BRAHMA_MPI_VERSION >= 400106 && BRAHMA_MPI_VERSION < 400200) ||   \
        (BRAHMA_MPI_VERSION >= 500006 && BRAHMA_MPI_VERSION < 500100))))
 double brahma::MPIDFTracer::MPI_Wtime(void) {
+  ConstEventNameType CATEGORY = "env";
   BRAHMA_MAP_OR_FAIL(MPI_Wtime);
   DFT_LOGGER_START_ALWAYS();
   double ret = __real_MPI_Wtime();
