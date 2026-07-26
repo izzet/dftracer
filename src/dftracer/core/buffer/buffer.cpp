@@ -91,12 +91,10 @@ int BufferManager::finalize(int index, ProcessID process_id, bool end_sym) {
   return 0;
 }
 
-void BufferManager::log_data_event(int index, ConstEventNameType event_name,
-                                   ConstEventNameType category,
-                                   TimeResolution start_time,
-                                   TimeResolution duration,
-                                   dftracer::Metadata* metadata,
-                                   ProcessID process_id, ThreadID tid) {
+void BufferManager::log_data_event(
+    int index, ConstEventNameType event_name, ConstEventNameType category,
+    TraceEventType type, TimeResolution start_time, TimeResolution duration,
+    dftracer::Metadata* metadata, ProcessID process_id, ThreadID tid) {
   std::unique_lock<std::shared_mutex> lock(mtx);
   DFTRACER_LOG_DEBUG("BufferManager.log_data_event %d", index);
   size_t size = 0;
@@ -104,8 +102,8 @@ void BufferManager::log_data_event(int index, ConstEventNameType event_name,
   if (this->config->aggregation_enable && strcmp(category, "dftracer") != 0) {
     enable_tracing = false;
     auto aggregated_key =
-        AggregatedKey{category, event_name, start_time,     duration,
-                      tid,      metadata,   get_app_name(), &rank};
+        AggregatedKey{category, event_name,     type, start_time, duration, tid,
+                      metadata, get_app_name(), &rank};
     if (this->config->aggregation_type ==
         AggregationType::AGGREGATION_TYPE_SELECTIVE) {
       enable_tracing = !this->aggregator->should_aggregate(&aggregated_key);
@@ -130,9 +128,9 @@ void BufferManager::log_data_event(int index, ConstEventNameType event_name,
     }
   }
   if (enable_tracing) {
-    size =
-        this->serializer->data(buffer + buffer_pos, index, event_name, category,
-                               start_time, duration, metadata, process_id, tid);
+    size = this->serializer->data(buffer + buffer_pos, index, event_name,
+                                  category, type, start_time, duration,
+                                  metadata, process_id, tid);
     DFTRACER_LOG_DEBUG(
         "BufferManager.log_data_event serialized tracing size %zu bytes", size);
   }
@@ -141,26 +139,25 @@ void BufferManager::log_data_event(int index, ConstEventNameType event_name,
 
 void BufferManager::log_counter_event(int index, ConstEventNameType name,
                                       ConstEventNameType category,
+                                      TraceEventType type,
                                       TimeResolution start_time,
                                       ProcessID process_id, ThreadID thread_id,
                                       dftracer::Metadata* metadata) {
   std::unique_lock<std::shared_mutex> lock(mtx);
   DFTRACER_LOG_DEBUG("BufferManager.log_counter_event %d", index);
-  size_t size =
-      this->serializer->counter(buffer + buffer_pos, index, name, category,
-                                start_time, process_id, thread_id, metadata);
+  size_t size = this->serializer->counter(buffer + buffer_pos, index, name,
+                                          category, type, start_time,
+                                          process_id, thread_id, metadata);
   compress_and_write_if_needed(size);
 }
 
-void BufferManager::log_metadata_event(ConstEventNameType name,
-                                       ConstEventNameType value,
-                                       ConstEventNameType ph,
-                                       ProcessID process_id, ThreadID tid,
-                                       bool is_string) {
+void BufferManager::log_metadata_event(
+    ConstEventNameType name, ConstEventNameType value, ConstEventNameType ph,
+    TraceEventType type, ProcessID process_id, ThreadID tid, bool is_string) {
   std::unique_lock<std::shared_mutex> lock(mtx);
   DFTRACER_LOG_DEBUG("BufferManager.log_metadata_event %s", value);
   size_t size = this->serializer->metadata(buffer + buffer_pos, name, value, ph,
-                                           process_id, tid, is_string);
+                                           type, process_id, tid, is_string);
   compress_and_write_if_needed(size);
 }
 }  // namespace dftracer

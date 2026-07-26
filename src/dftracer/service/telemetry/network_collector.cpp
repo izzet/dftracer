@@ -153,7 +153,8 @@ void NetworkTelemetryCollector::parseNetworkMetrics(
     std::string net_name = "net-" + if_name;
     int current_index = index.fetch_add(1, std::memory_order_relaxed);
     buffer_manager->log_counter_event(current_index, net_name.c_str(), "net",
-                                      time, 0, 0, metadata);
+                                      TraceEventType::TRACE_TYPE_PSUTIL, time,
+                                      0, 0, metadata);
   }
   fclose(file);
 }

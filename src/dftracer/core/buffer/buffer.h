@@ -36,18 +36,20 @@ class BufferManager {
   int finalize(int index, ProcessID process_id, bool end_sym = false);
 
   void log_data_event(int index, ConstEventNameType event_name,
-                      ConstEventNameType category, TimeResolution start_time,
-                      TimeResolution duration, dftracer::Metadata* metadata,
-                      ProcessID process_id, ThreadID tid);
+                      ConstEventNameType category, TraceEventType type,
+                      TimeResolution start_time, TimeResolution duration,
+                      dftracer::Metadata* metadata, ProcessID process_id,
+                      ThreadID tid);
 
   void log_metadata_event(ConstEventNameType name, ConstEventNameType value,
-                          ConstEventNameType ph, ProcessID process_id,
-                          ThreadID tid, bool is_string = true);
+                          ConstEventNameType ph, TraceEventType type,
+                          ProcessID process_id, ThreadID tid,
+                          bool is_string = true);
 
   void log_counter_event(int index, ConstEventNameType name,
-                         ConstEventNameType category, TimeResolution start_time,
-                         ProcessID process_id, ThreadID thread_id,
-                         dftracer::Metadata* metadata);
+                         ConstEventNameType category, TraceEventType type,
+                         TimeResolution start_time, ProcessID process_id,
+                         ThreadID thread_id, dftracer::Metadata* metadata);
 
  private:
   void compress_and_write_if_needed(size_t size, bool force = false);

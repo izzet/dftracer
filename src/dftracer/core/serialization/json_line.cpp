@@ -63,9 +63,10 @@ bool JsonLines::convert_metadata(Metadata* metadata,
 }
 
 size_t JsonLines::data(char* buffer, int index, ConstEventNameType event_name,
-                       ConstEventNameType category, TimeResolution start_time,
-                       TimeResolution duration, dftracer::Metadata* metadata,
-                       ProcessID process_id, ThreadID thread_id) {
+                       ConstEventNameType category, TraceEventType type,
+                       TimeResolution start_time, TimeResolution duration,
+                       dftracer::Metadata* metadata, ProcessID process_id,
+                       ThreadID thread_id) {
   size_t written_size = 0;
   int n = 0;
   if (include_metadata && metadata != nullptr) {
@@ -78,15 +79,16 @@ size_t JsonLines::data(char* buffer, int index, ConstEventNameType event_name,
     }
     n = dftracer_logging_real_snprintf()(
         buffer, DFTRACER_SERIALIZATION_EVENT_MAX,
-        R"({"id":%d,"name":"%s","cat":"%s","pid":%d,"tid":%lu,"ts":%llu,"dur":%llu,"ph":"X","args":{"hhash":"%s"%s}})",
-        index, event_name, category, process_id, thread_id, start_time,
-        duration, this->hostname_hash, all_stream.str().c_str());
+        R"({"id":%d,"name":"%s","cat":"%s","type":%u,"pid":%d,"tid":%lu,"ts":%llu,"dur":%llu,"ph":"X","args":{"hhash":"%s"%s}})",
+        index, event_name, category, static_cast<unsigned>(type), process_id,
+        thread_id, start_time, duration, this->hostname_hash,
+        all_stream.str().c_str());
   } else {
     n = dftracer_logging_real_snprintf()(
         buffer, DFTRACER_SERIALIZATION_EVENT_MAX,
-        R"({"id":%d,"name":"%s","cat":"%s","pid":%d,"tid":%lu,"ts":%llu,"dur":%llu,"ph":"X"})",
-        index, event_name, category, process_id, thread_id, start_time,
-        duration);
+        R"({"id":%d,"name":"%s","cat":"%s","type":%u,"pid":%d,"tid":%lu,"ts":%llu,"dur":%llu,"ph":"X"})",
+        index, event_name, category, static_cast<unsigned>(type), process_id,
+        thread_id, start_time, duration);
     delete metadata;
   }
   if (n < 0) {
@@ -111,7 +113,7 @@ size_t JsonLines::data(char* buffer, int index, ConstEventNameType event_name,
 
 size_t JsonLines::counter(char* buffer, int index,
                           ConstEventNameType event_name,
-                          ConstEventNameType category,
+                          ConstEventNameType category, TraceEventType type,
                           TimeResolution start_time, ProcessID process_id,
                           ThreadID thread_id, dftracer::Metadata* metadata) {
   size_t written_size = 0;
@@ -125,14 +127,15 @@ size_t JsonLines::counter(char* buffer, int index,
     }
     n = dftracer_logging_real_snprintf()(
         buffer, DFTRACER_SERIALIZATION_EVENT_MAX,
-        R"({"name":"%s","cat":"%s","ts":%llu,"ph":"C","pid":%d,"tid":%lu,"args":{"hhash":"%s"%s}})",
-        event_name, category, start_time, process_id, thread_id,
-        this->hostname_hash, all_stream.str().c_str());
+        R"({"name":"%s","cat":"%s","type":%u,"ts":%llu,"ph":"C","pid":%d,"tid":%lu,"args":{"hhash":"%s"%s}})",
+        event_name, category, static_cast<unsigned>(type), start_time,
+        process_id, thread_id, this->hostname_hash, all_stream.str().c_str());
   } else {
     n = dftracer_logging_real_snprintf()(
         buffer, DFTRACER_SERIALIZATION_EVENT_MAX,
-        R"({"name":"%s","cat":"%s","ts":%llu,"ph":"C","pid":%d,"tid":%lu})",
-        event_name, category, start_time, process_id, thread_id);
+        R"({"name":"%s","cat":"%s","type":%u,"ts":%llu,"ph":"C","pid":%d,"tid":%lu})",
+        event_name, category, static_cast<unsigned>(type), start_time,
+        process_id, thread_id);
   }
   if (n < 0) {
     return 0;
@@ -156,20 +159,22 @@ size_t JsonLines::counter(char* buffer, int index,
 
 size_t JsonLines::metadata(char* buffer, ConstEventNameType name,
                            ConstEventNameType value, ConstEventNameType ph,
-                           ProcessID process_id, ThreadID thread_id,
-                           bool is_string) {
+                           TraceEventType type, ProcessID process_id,
+                           ThreadID thread_id, bool is_string) {
   size_t written_size = 0;
   int n = 0;
   if (is_string) {
     n = dftracer_logging_real_snprintf()(
         buffer, DFTRACER_SERIALIZATION_EVENT_MAX,
-        R"({"name":"%s","cat":"dftracer","pid":%d,"tid":%lu,"ph":"M","args":{"hhash":"%s","name":"%s","value":"%s"}})",
-        ph, process_id, thread_id, this->hostname_hash, name, value);
+        R"({"name":"%s","cat":"dftracer","type":%u,"pid":%d,"tid":%lu,"ph":"M","args":{"hhash":"%s","name":"%s","value":"%s"}})",
+        ph, static_cast<unsigned>(type), process_id, thread_id,
+        this->hostname_hash, name, value);
   } else {
     n = dftracer_logging_real_snprintf()(
         buffer, DFTRACER_SERIALIZATION_EVENT_MAX,
-        R"({"name":"%s","cat":"dftracer","pid":%d,"tid":%lu,"ph":"M","args":{"hhash":"%s","name":"%s","value":%s}})",
-        ph, process_id, thread_id, this->hostname_hash, name, value);
+        R"({"name":"%s","cat":"dftracer","type":%u,"pid":%d,"tid":%lu,"ph":"M","args":{"hhash":"%s","name":"%s","value":%s}})",
+        ph, static_cast<unsigned>(type), process_id, thread_id,
+        this->hostname_hash, name, value);
   }
   if (n < 0) {
     return 0;
@@ -221,9 +226,10 @@ size_t JsonLines::aggregated(char* buffer, int index, ProcessID process_id,
         DFTRACER_FOR_EACH_STRING_TYPE(DFTRACER_ANY_GENERAL_AGGREGATE_MACRO,
                                       base_value, { continue; });
       }
-      total_written += counter(buffer + total_written, index,
-                               key.event_name.c_str(), key.category.c_str(),
-                               interval, process_id, key.thread_id, metadata);
+      total_written +=
+          counter(buffer + total_written, index, key.event_name.c_str(),
+                  key.category.c_str(), key.type, interval, process_id,
+                  key.thread_id, metadata);
     }
   }
   Aggregator::release_aggregated_data(data);

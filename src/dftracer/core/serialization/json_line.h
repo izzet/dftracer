@@ -26,17 +26,17 @@ class JsonLines {
   JsonLines();
   size_t initialize(char* buffer, HashType hostname_hash);
   size_t data(char* buffer, int index, ConstEventNameType event_name,
-              ConstEventNameType category, TimeResolution start_time,
-              TimeResolution duration, dftracer::Metadata* metadata,
-              ProcessID process_id, ThreadID tid);
+              ConstEventNameType category, TraceEventType type,
+              TimeResolution start_time, TimeResolution duration,
+              dftracer::Metadata* metadata, ProcessID process_id, ThreadID tid);
   size_t metadata(char* buffer, ConstEventNameType name,
                   ConstEventNameType value, ConstEventNameType ph,
-                  ProcessID process_id, ThreadID thread_id,
+                  TraceEventType type, ProcessID process_id, ThreadID thread_id,
                   bool is_string = true);
   size_t counter(char* buffer, int index, ConstEventNameType name,
-                 ConstEventNameType category, TimeResolution start_time,
-                 ProcessID process_id, ThreadID thread_id,
-                 dftracer::Metadata* metadata);
+                 ConstEventNameType category, TraceEventType type,
+                 TimeResolution start_time, ProcessID process_id,
+                 ThreadID thread_id, dftracer::Metadata* metadata);
   size_t aggregated(char* buffer, int index, ProcessID process_id,
                     dftracer::AggregatedDataType& data);
   size_t finalize(char* buffer, bool end_sym = false) {

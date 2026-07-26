@@ -124,6 +124,7 @@ inline bool compare_any(const std::any& a, const std::any& b) {
 struct AggregatedKey {
   std::string category;
   std::string event_name;
+  TraceEventType type;
   TimeResolution time_interval;
   ThreadID thread_id;
   Metadata* additional_keys;
@@ -136,6 +137,7 @@ struct AggregatedKey {
   AggregatedKey()
       : category(nullptr),
         event_name(nullptr),
+        type(TraceEventType::TRACE_TYPE_UNKNOWN),
         time_interval(0),
         thread_id(0),
         additional_keys(nullptr),
@@ -145,11 +147,12 @@ struct AggregatedKey {
         _cached_hash(0) {}
 
   AggregatedKey(ConstEventNameType category_, ConstEventNameType event_name_,
-                TimeResolution time_interval_, TimeResolution duration_,
-                ThreadID thread_id_, Metadata* metadata_, const char* app_name_,
-                const int* rank_)
+                TraceEventType type_, TimeResolution time_interval_,
+                TimeResolution duration_, ThreadID thread_id_,
+                Metadata* metadata_, const char* app_name_, const int* rank_)
       : category(category_),
         event_name(event_name_),
+        type(type_),
         time_interval(time_interval_),
         thread_id(thread_id_),
         additional_keys(metadata_),
@@ -160,6 +163,7 @@ struct AggregatedKey {
   AggregatedKey(const AggregatedKey& other)
       : category(other.category),
         event_name(other.event_name),
+        type(other.type),
         time_interval(other.time_interval),
         thread_id(other.thread_id),
         additional_keys(other.additional_keys),
@@ -169,7 +173,8 @@ struct AggregatedKey {
         _cached_hash(other._cached_hash) {}
   bool operator==(const AggregatedKey& other) const {
     if (category != other.category || event_name != other.event_name ||
-        time_interval != other.time_interval || thread_id != other.thread_id) {
+        type != other.type || time_interval != other.time_interval ||
+        thread_id != other.thread_id) {
       return false;
     }
 
@@ -220,6 +225,7 @@ struct hash<dftracer::AggregatedKey> {
     std::size_t h2 = std::hash<std::string>()(key.event_name);
     std::size_t h3 = std::hash<TimeResolution>()(key.time_interval);
     std::size_t h4 = std::hash<ThreadID>()(key.thread_id);
+    std::size_t h6 = std::hash<uint8_t>()(static_cast<uint8_t>(key.type));
 
     std::size_t h5 = 0;
     if (key.additional_keys && !key.additional_keys->empty()) {
@@ -238,6 +244,7 @@ struct hash<dftracer::AggregatedKey> {
     result ^= h3 + 0x9e3779b9 + (result << 6) + (result >> 2);
     result ^= h4 + 0x9e3779b9 + (result << 6) + (result >> 2);
     result ^= h5 + 0x9e3779b9 + (result << 6) + (result >> 2);
+    result ^= h6 + 0x9e3779b9 + (result << 6) + (result >> 2);
 
     // Cache for next time
     const_cast<dftracer::AggregatedKey&>(key)._cached_hash = result;

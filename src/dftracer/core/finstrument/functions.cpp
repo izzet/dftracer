@@ -68,7 +68,7 @@ void __cyg_profile_func_exit(void* func, void* caller) {
       metadata->insert_or_assign("so", so);
     }
     function->logger->enter_event();
-    function->logger->log(event_name.c_str(), CATEGORY, start_time,
+    function->logger->log(event_name.c_str(), CATEGORY, TRACE_TYPE, start_time,
                           end_time - start_time, metadata);
     function->logger->exit_event();
   }

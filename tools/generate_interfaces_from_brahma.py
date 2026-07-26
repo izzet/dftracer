@@ -57,6 +57,7 @@ class InterfaceSpec:
     version_macro: str
     system_header: str
     category: str
+    trace_type: str
     mpi_interface: bool
 
 
@@ -69,6 +70,7 @@ SPECS: Dict[str, InterfaceSpec] = {
         version_macro="BRAHMA_HDF5_VERSION",
         system_header="hdf5.h",
         category="HDF5",
+        trace_type="TRACE_TYPE_HDF5",
         mpi_interface=False,
     ),
     "mpi": InterfaceSpec(
@@ -79,6 +81,7 @@ SPECS: Dict[str, InterfaceSpec] = {
         version_macro="BRAHMA_MPI_VERSION",
         system_header="mpi.h",
         category="MPI",
+        trace_type="TRACE_TYPE_MPI",
         mpi_interface=True,
     ),
     "mpiio": InterfaceSpec(
@@ -89,6 +92,7 @@ SPECS: Dict[str, InterfaceSpec] = {
         version_macro="BRAHMA_MPI_VERSION",
         system_header="mpi.h",
         category="MPIIO",
+        trace_type="TRACE_TYPE_MPI",
         mpi_interface=True,
     ),
 }
@@ -631,7 +635,8 @@ def generate_cpp(spec: InterfaceSpec, methods: Sequence[MethodInfo], timestamp: 
         "///\n\n"
         f"#include <dftracer/core/brahma/{spec.name}.h>\n"
         f"#ifdef {spec.enable_macro}\n\n"
-        f"static ConstEventNameType CATEGORY = \"{spec.category}\";\n\n"
+        f"static ConstEventNameType CATEGORY = \"{spec.category}\";\n"
+        f"static TraceEventType TRACE_TYPE = TraceEventType::{spec.trace_type};\n\n"
         f"std::shared_ptr<brahma::{spec.tracer_class}> brahma::{spec.tracer_class}::instance = nullptr;\n"
         f"bool brahma::{spec.tracer_class}::stop_trace = false;\n\n"
         + "".join(blocks)

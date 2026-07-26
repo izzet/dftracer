@@ -37,6 +37,61 @@ enum TimeMetricType : uint8_t {
 };
 enum class RuleOp { AND, OR, NOT, EQ, NEQ, GT, LT, GTE, LTE, IN, LIKE };
 
+// Instrumentation layer that produced an event, written as the integer "type"
+// column. "cat" stays free-form and holds the sub-category within the layer
+// (e.g. TRACE_TYPE_LIBC_IO with cat "POSIX" or "STDIO").
+// On-disk format: append-only, never renumber or reuse a value.
+enum TraceEventType : uint8_t {
+  TRACE_TYPE_UNKNOWN = 0,
+  TRACE_TYPE_DFTRACER = 1,
+  TRACE_TYPE_C_APP = 2,
+  TRACE_TYPE_LIBC_IO = 3,
+  TRACE_TYPE_HIP = 4,
+  TRACE_TYPE_HDF5 = 5,
+  TRACE_TYPE_PYTHON = 6,
+  TRACE_TYPE_PSUTIL = 7,
+  TRACE_TYPE_FINSTRUMENT = 8,
+  TRACE_TYPE_CPP_APP = 9,
+  TRACE_TYPE_MPI = 10,
+  // Append new types above. Sentinel only, never serialized.
+  TRACE_TYPE_MAX
+};
+
+inline const char* to_string(const TraceEventType& type) {
+  switch (type) {
+    case TraceEventType::TRACE_TYPE_DFTRACER:
+      return "DFTRACER";
+    case TraceEventType::TRACE_TYPE_C_APP:
+      return "C_APP";
+    case TraceEventType::TRACE_TYPE_LIBC_IO:
+      return "LIBC_IO";
+    case TraceEventType::TRACE_TYPE_HIP:
+      return "HIP";
+    case TraceEventType::TRACE_TYPE_HDF5:
+      return "HDF5";
+    case TraceEventType::TRACE_TYPE_PYTHON:
+      return "PYTHON";
+    case TraceEventType::TRACE_TYPE_PSUTIL:
+      return "PSUTIL";
+    case TraceEventType::TRACE_TYPE_FINSTRUMENT:
+      return "FINSTRUMENT";
+    case TraceEventType::TRACE_TYPE_CPP_APP:
+      return "CPP_APP";
+    case TraceEventType::TRACE_TYPE_MPI:
+      return "MPI";
+    default:
+      return "UNKNOWN";
+  }
+}
+
+inline void convert(const int& s, TraceEventType& type) {
+  if (s >= 0 && s < static_cast<int>(TraceEventType::TRACE_TYPE_MAX)) {
+    type = static_cast<TraceEventType>(s);
+  } else {
+    type = TraceEventType::TRACE_TYPE_UNKNOWN;
+  }
+}
+
 inline MetadataType convert(const int& s) {
   if (s == 0) {
     return MetadataType::MT_KEY;

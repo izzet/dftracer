@@ -25,6 +25,11 @@ add_executable(test_aggregated_key_hash test_aggregated_key_hash.cpp)
 target_link_libraries(test_aggregated_key_hash ${PROJECT_NAME}_core_dbg)
 add_dependencies(test_aggregated_key_hash ${PROJECT_NAME}_core_dbg)
 
+# Test trace event type enum
+add_executable(test_trace_event_type test_trace_event_type.cpp)
+target_link_libraries(test_trace_event_type ${PROJECT_NAME}_core_dbg)
+add_dependencies(test_trace_event_type ${PROJECT_NAME}_core_dbg)
+
 # Test aggregated value
 add_executable(test_aggregated_value test_aggregated_value.cpp)
 target_link_libraries(test_aggregated_value ${PROJECT_NAME}_core_dbg)
@@ -49,6 +54,10 @@ set_common_properties(${test_name})
 
 set(test_name unit_test_aggregated_key_hash)
 df_add_test(${test_name} ${CMAKE_BINARY_DIR}/bin/test_aggregated_key_hash)
+set_common_properties(${test_name})
+
+set(test_name unit_test_trace_event_type)
+df_add_test(${test_name} ${CMAKE_BINARY_DIR}/bin/test_trace_event_type)
 set_common_properties(${test_name})
 
 set(test_name unit_test_aggregated_value)

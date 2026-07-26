@@ -9,6 +9,7 @@
 #ifdef BRAHMA_ENABLE_MPI
 
 static ConstEventNameType CATEGORY = "MPI";
+static TraceEventType TRACE_TYPE = TraceEventType::TRACE_TYPE_MPI;
 
 std::shared_ptr<brahma::MPIDFTracer> brahma::MPIDFTracer::instance = nullptr;
 bool brahma::MPIDFTracer::stop_trace = false;
