@@ -67,7 +67,7 @@ int BufferManager::initialize(const char* filename, HashType hostname_hash) {
   return 0;
 }
 
-int BufferManager::finalize(int index, ProcessID process_id, bool end_sym) {
+int BufferManager::finalize(int index, ProcessID process_id) {
   std::unique_lock<std::shared_mutex> lock(mtx);
   if (buffer) {
     size_t size = 0;
@@ -78,9 +78,7 @@ int BufferManager::finalize(int index, ProcessID process_id, bool end_sym) {
                                           process_id, data);
       this->aggregator->finalize();
     }
-    auto end_size =
-        this->serializer->finalize(buffer + buffer_pos + size, end_sym);
-    compress_and_write_if_needed(size + end_size, true);
+    compress_and_write_if_needed(size, true);
 
     if (this->config->compression) this->compressor->finalize();
     this->writer->finalize(index);

@@ -133,14 +133,6 @@ for temp_file in temp_*; do
   pid=$(basename "$temp_file" | cut -d '_' -f 2)
   log "Processing PID $pid with $num_lines lines per file."
   split -l "$num_lines" --numeric-suffixes=1 --additional-suffix=.pfw "${temp_file}" "${output_prefix}-${pid}-"
-  for file in "${output_prefix}-${pid}-"*.pfw; do
-    if [[ -f "$file" ]]; then
-      echo "[" >"${file}_tmp"
-      cat "$file" >>"${file}_tmp"
-      echo "]" >>"${file}_tmp"
-      mv "${file}_tmp" "$file"
-    fi
-  done
   rm "$temp_file"
 done
 

@@ -4,18 +4,25 @@ DFTracer Format
 
 At a high-level, DFTracer events are inspired by the `chrome tracing document`_.
 The similarity to chrome tracing format is in the structure of each event type.
-Specifically, we use complete and metadata events within DFTracer.
-However, it does not strictly follow the format due to parallelization reasons. 
-Essentially, the DFTracer format is as follows
+However, it does not strictly follow the format due to parallelization reasons.
+A DFTracer trace is newline-delimited JSON and nothing else: one complete JSON
+object per line, with no enclosing array.
 
 .. code-block:: bash
 
-    [ # Marking the start of the trace 
-    JSON LINES
-    ] # Marking the end of the trace 
+    JSON LINE
+    JSON LINE
+    JSON LINE
 
-The "[" and "]" are required only for perfetto format.
-Each JSON line is an event of two types: a) Complete Events and b) Metadata Events
+Earlier versions wrapped the trace in "[" and "]" for Perfetto. Those are gone,
+so a trace can be piped straight into line-oriented tools:
+
+.. code-block:: bash
+
+    jq -c 'select(.ph == 1)' trace.pfw
+
+Feeding a trace to Perfetto now requires wrapping it yourself, for example
+``jq --slurp '.' trace.pfw``.
 
 
 ----------

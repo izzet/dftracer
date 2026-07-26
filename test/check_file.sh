@@ -28,12 +28,12 @@ if [[ "$num_posix_lines" -ne "$expected_lines" ]]; then
 else
   for file in $(ls $files); do
   echo file:$file
-    if jq --slurp -e >/dev/null 2>&1 <<< `get_file_content "$file" | grep -v "\["  | grep -v "\]" | grep -v "Binary"  | awk '{$1=$1;print}'`; then
+    if jq --slurp -e >/dev/null 2>&1 <<< `get_file_content "$file" | grep -v "Binary"  | awk '{$1=$1;print}'`; then
       echo "Parsed JSON successfully and got something other than false/null";
     else
       echo "Failed to parse JSON, or got false/null";
-      jq --slurp -e <<< `get_file_content "$file" | grep -v "\[" | grep -v "\]" | grep -v "Binary"  | awk '{$1=$1;print}'`
-      get_file_content "$file" | grep -v "\[" | grep -v "\]"  | awk '{$1=$1;print}'
+      jq --slurp -e <<< `get_file_content "$file" | grep -v "Binary"  | awk '{$1=$1;print}'`
+      get_file_content "$file"  | awk '{$1=$1;print}'
       exit 1
     fi
   done

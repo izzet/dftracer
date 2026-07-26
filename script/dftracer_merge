@@ -132,11 +132,7 @@ fi
 
 log "Extracting events"
 sed -i 's/^\[//g;/^$/d;s/^ *//;s/ *$//;s/^\]\[//;s/^\]//' "$d2"
-tmp_file=$(mktemp)
-echo "[" | cat - "$d2" > "$tmp_file"
-echo "]" >> "$tmp_file"
-mv "$tmp_file" "$dest"
-rm -rf "$tmp_file"
+mv "$d2" "$dest"
 
 if [ "$compressed" == "1" ]; then
   log "Compressing output file"

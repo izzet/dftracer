@@ -19,11 +19,13 @@ void test_initialize_serialization() {
   char buffer[1024];
   HashType hostname_hash = const_cast<char*>("test_hash_12345");
 
+  // Nothing is written up front: the trace is bare JSON lines, so that jq and
+  // other line-oriented tools can read it without stripping a wrapper array.
+  std::memset(buffer, 'x', sizeof(buffer));
   size_t size = serializer->initialize(buffer, hostname_hash);
 
-  assert(size > 0);
-  assert(buffer[0] == '[');
-  assert(buffer[1] == '\n');
+  DFT_CHECK(size == 0);
+  DFT_CHECK(buffer[0] == 'x');
 
   std::cout << "✓ Initialize serialization test passed\n" << std::endl;
 }
@@ -189,25 +191,6 @@ void test_aggregated_preserves_type() {
   std::cout << "\u2713 Aggregated type test passed\n" << std::endl;
 }
 
-void test_finalize_serialization() {
-  std::cout << "=== Test: Finalize Serialization ===\n" << std::endl;
-
-  auto serializer = Singleton<JsonLines>::get_instance();
-
-  char buffer[1024];
-
-  // Test without end symbol
-  size_t size1 = serializer->finalize(buffer, false);
-  assert(size1 == 0);
-
-  // Test with end symbol
-  size_t size2 = serializer->finalize(buffer, true);
-  assert(size2 == 1);
-  assert(buffer[0] == ']');
-
-  std::cout << "✓ Finalize serialization test passed\n" << std::endl;
-}
-
 void test_multiple_events() {
   std::cout << "=== Test: Multiple Events Serialization ===\n" << std::endl;
 
@@ -233,9 +216,8 @@ void test_multiple_events() {
   assert(result.find("open") != std::string::npos);
   assert(total_size > 0);
 
-  // Finalize
-  total_size += serializer->finalize(buffer + total_size, true);
-  assert(buffer[total_size - 1] == ']');
+  // No trailing bracket: every byte written is part of a JSON line.
+  DFT_CHECK(buffer[total_size - 1] == '\n');
 
   std::cout << "✓ Multiple events serialization test passed\n" << std::endl;
 }
@@ -249,7 +231,6 @@ int main() {
     test_aggregated_serialization();
     test_type_column_serialization();
     test_aggregated_preserves_type();
-    test_finalize_serialization();
     test_multiple_events();
 
     std::cout << "\n=== All Serialization Tests Passed ===\n" << std::endl;

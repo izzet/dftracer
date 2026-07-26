@@ -47,13 +47,6 @@ class JsonLines {
                  ThreadID thread_id, dftracer::Metadata* metadata);
   size_t aggregated(char* buffer, int index, ProcessID process_id,
                     dftracer::AggregatedDataType& data);
-  size_t finalize(char* buffer, bool end_sym = false) {
-    if (end_sym) {
-      buffer[0] = ']';
-      return 1;
-    }
-    return 0;
-  }
 };
 }  // namespace dftracer
 

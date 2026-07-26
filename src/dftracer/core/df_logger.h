@@ -466,7 +466,7 @@ class DFTLogger {
           current_index, "end", "dftracer", TraceEventType::TRACE_TYPE_DFTRACER,
           this->get_time(), 0, meta, this->process_id, tid);
       this->exit_event();
-      this->buffer_manager->finalize(index.load(), this->process_id, true);
+      this->buffer_manager->finalize(index.load(), this->process_id);
       DFTRACER_LOG_INFO("Released Logger");
       this->buffer_manager.reset();
       this->is_init = false;

@@ -22,9 +22,7 @@ JsonLines::JsonLines() : include_metadata(false) {
 
 size_t JsonLines::initialize(char* buffer, HashType hostname_hash) {
   this->hostname_hash = hostname_hash;
-  buffer[0] = '[';
-  buffer[1] = '\n';
-  return 2;
+  return 0;
 }
 
 bool JsonLines::convert_metadata(Metadata* metadata,

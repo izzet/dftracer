@@ -10,8 +10,7 @@ ENV RDMAV_FORK_SAFE=1
 RUN mpirun -np 4 dlio_benchmark workload=resnet50 ++workload.dataset.data_folder=/dlio/data ++workload.output.folder=/dlio/output
 RUN ls -al /dlio/output/
 ENV filename=/dlio/output/trace*.pfw
-RUN cat $filename | grep -v "\["   | awk '{$1=$1;print}' > /dlio/output/combined.json
+RUN cat $filename | awk '{$1=$1;print}' > /dlio/output/combined.json
 RUN jq '.' /dlio/output/combined.json > /dev/null
-RUN echo "[" >  /dlio/output/combined.pfw
-RUN cat $filename | grep -v "\["   | awk '{$1=$1;print}' | jq -R "fromjson? | . " -c >> /dlio/output/combined.pfw
+RUN cat $filename | awk '{$1=$1;print}' | jq -R "fromjson? | . " -c > /dlio/output/combined.pfw
 RUN cat /dlio/output/combined.pfw | wc -l

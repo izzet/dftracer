@@ -33,7 +33,7 @@ class BufferManager {
 
   int initialize(const char* filename, HashType hostname_hash);
 
-  int finalize(int index, ProcessID process_id, bool end_sym = false);
+  int finalize(int index, ProcessID process_id);
 
   void log_data_event(int index, ConstEventNameType event_name,
                       ConstEventNameType category, TraceEventType type,
