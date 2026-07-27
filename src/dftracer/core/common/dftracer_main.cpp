@@ -188,6 +188,19 @@ void dftracer::DFTracerCore::reinitialize() {
                        this->process_id);
     return;
   }
+  // Both callers (brahma's fork() hook and the pthread_atfork child handler
+  // below) fire only in a just-forked child — including children spawned via
+  // MPI_Comm_spawn or Python multiprocessing's "fork" start method, since the
+  // OS-level fork() they perform under the hood still runs any registered
+  // pthread_atfork child handlers. Mark the resulting trace file as such: if
+  // this is the very first thing to construct DFTracerCore (the parent never
+  // made a traced call before forking), the constructor never set
+  // log_file_suffix (it only does so for ProfilerStage::PROFILER_INIT, and
+  // this path always runs as PROFILER_OTHER), leaving it empty and producing
+  // a file name ending "-<hash>-.pfw.gz". Setting it unconditionally here
+  // also means every forked child's trace is labeled "fork" regardless of
+  // what the parent's file was named, making forked traces easy to find.
+  this->log_file_suffix = "fork";
   is_initialized = false;
   if (this->log_file_prefix.empty()) {
     const char* log_file_env = getenv("DFTRACER_LOG_FILE");
@@ -351,6 +364,7 @@ void dftracer::DFTracerCore::initialize(bool _bind, const char* _log_file,
       DFTRACER_LOG_DEBUG("Setting log file to %s", this->log_file.c_str());
       logger->update_log_file(this->log_file, exec_name, exec_cmd,
                               this->process_id);
+      logger->set_runtime_info(this->bind, this->log_file);
       if (bind) {
         if (conf->io) {
           auto trie = dftracer::Singleton<Trie>::get_instance();

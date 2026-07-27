@@ -117,6 +117,17 @@ void set_app_metadata_string(std::string key, std::string value) {
                        "");
 }
 
+void mark_used(std::string name) {
+  DFTRACER_LOG_DEBUG("py.mark_used", "");
+  auto dftracer_inst =
+      dftracer::Singleton<dftracer::DFTracerCore>::get_instance(
+          ProfilerStage::PROFILER_OTHER, ProfileType::PROFILER_PY_APP);
+  if (dftracer_inst != nullptr)
+    dftracer_inst->mark_used(name.c_str());
+  else
+    DFTRACER_LOG_DEBUG("py.mark_used dftracer not initialized", "");
+}
+
 int enter_event() {
   DFTRACER_LOG_DEBUG("py.enter_event", "");
   auto dftracer_inst =
