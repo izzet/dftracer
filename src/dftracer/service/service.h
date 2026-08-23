@@ -81,10 +81,10 @@ class DFTracerService {
     running = false;
     if (worker.joinable()) worker.join();
     this->buffer_manager->finalize(index.load(std::memory_order_relaxed), true);
+#if DFTRACER_WRITER_TYPE_STDIO
     if (auto conf =
             dftracer::Singleton<dftracer::ConfigurationManager>::get_instance();
         conf) {
-      // Compress the log file using gzip if enabled
       std::string cmd = "gzip -f " + conf->log_file;
       int ret = system(cmd.c_str());
       if (ret != 0) {
@@ -92,6 +92,7 @@ class DFTracerService {
                 conf->log_file.c_str());
       }
     }
+#endif
   }
 
  private:
@@ -113,6 +114,7 @@ class DFTracerService {
       fflush(stdout);
       getCpuMetrics(time);  // Collect CPU metrics
       getMemMetrics(time);  // Collect memory metrics
+      buffer_manager->flush();  // Push buffered events to writer (Mofka/STDIO)
       std::this_thread::sleep_for(std::chrono::milliseconds(interval));
       ++step;
     }
@@ -142,32 +144,32 @@ class DFTracerService {
 
         if (total_jiffies == 0) total_jiffies = 1;  // Avoid division by zero
 
-        dftracer::Metadata metadata;
+        auto* metadata = new dftracer::Metadata();
         // Store each metric as a percentage of total jiffies
-        metadata.insert_or_assign("user_pct",
-                                  100.0 * metrics.user / total_jiffies);
-        metadata.insert_or_assign("nice_pct",
-                                  100.0 * metrics.nice / total_jiffies);
-        metadata.insert_or_assign("system_pct",
-                                  100.0 * metrics.system / total_jiffies);
-        metadata.insert_or_assign("idle_pct",
-                                  100.0 * metrics.idle / total_jiffies);
-        metadata.insert_or_assign("iowait_pct",
-                                  100.0 * metrics.iowait / total_jiffies);
-        metadata.insert_or_assign("irq_pct",
-                                  100.0 * metrics.irq / total_jiffies);
-        metadata.insert_or_assign("softirq_pct",
-                                  100.0 * metrics.softirq / total_jiffies);
-        metadata.insert_or_assign("steal_pct",
-                                  100.0 * metrics.steal / total_jiffies);
-        metadata.insert_or_assign("guest_pct",
-                                  100.0 * metrics.guest / total_jiffies);
-        metadata.insert_or_assign("guest_nice_pct",
-                                  100.0 * metrics.guest_nice / total_jiffies);
+        metadata->insert_or_assign("user_pct",
+                                   100.0 * metrics.user / total_jiffies);
+        metadata->insert_or_assign("nice_pct",
+                                   100.0 * metrics.nice / total_jiffies);
+        metadata->insert_or_assign("system_pct",
+                                   100.0 * metrics.system / total_jiffies);
+        metadata->insert_or_assign("idle_pct",
+                                   100.0 * metrics.idle / total_jiffies);
+        metadata->insert_or_assign("iowait_pct",
+                                   100.0 * metrics.iowait / total_jiffies);
+        metadata->insert_or_assign("irq_pct",
+                                   100.0 * metrics.irq / total_jiffies);
+        metadata->insert_or_assign("softirq_pct",
+                                   100.0 * metrics.softirq / total_jiffies);
+        metadata->insert_or_assign("steal_pct",
+                                   100.0 * metrics.steal / total_jiffies);
+        metadata->insert_or_assign("guest_pct",
+                                   100.0 * metrics.guest / total_jiffies);
+        metadata->insert_or_assign("guest_nice_pct",
+                                   100.0 * metrics.guest_nice / total_jiffies);
 
         int current_index = index.fetch_add(1, std::memory_order_relaxed);
         buffer_manager->log_counter_event(current_index, "cpu", "sys", time, 0,
-                                          0, &metadata);
+                                          0, metadata);
       } else if (str.find("cpu") == 0 && isdigit(str[3])) {
         // Per-CPU metrics (e.g., cpu0, cpu1, ...)
         CpuMetrics cpu;
@@ -196,19 +198,19 @@ class DFTracerService {
         double softirq_pct = 100.0 * cpu.softirq / total_jiffies;
         double steal_pct = 100.0 * cpu.steal / total_jiffies;
 
-        auto metadata = dftracer::Metadata();
-        metadata.insert_or_assign("user_pct", user_pct);
-        metadata.insert_or_assign("system_pct", system_pct);
-        metadata.insert_or_assign("idle_pct", idle_pct);
-        metadata.insert_or_assign("iowait_pct", iowait_pct);
-        metadata.insert_or_assign("irq_pct", irq_pct);
-        metadata.insert_or_assign("softirq_pct", softirq_pct);
-        metadata.insert_or_assign("steal_pct", steal_pct);
+        auto* metadata = new dftracer::Metadata();
+        metadata->insert_or_assign("user_pct", user_pct);
+        metadata->insert_or_assign("system_pct", system_pct);
+        metadata->insert_or_assign("idle_pct", idle_pct);
+        metadata->insert_or_assign("iowait_pct", iowait_pct);
+        metadata->insert_or_assign("irq_pct", irq_pct);
+        metadata->insert_or_assign("softirq_pct", softirq_pct);
+        metadata->insert_or_assign("steal_pct", steal_pct);
 
         std::string cpu_name = "cpu-" + std::to_string(cpu_index);
         int current_index = index.fetch_add(1, std::memory_order_relaxed);
         buffer_manager->log_counter_event(current_index, cpu_name.c_str(),
-                                          "sys", time, 0, 0, &metadata);
+                                          "sys", time, 0, 0, metadata);
       }
     }
     fclose(file);
@@ -220,7 +222,7 @@ class DFTracerService {
     FILE* file = fopen("/proc/meminfo", "r");
     if (!file) return;
     char line[256];
-    auto metadata = dftracer::Metadata();
+    auto* metadata = new dftracer::Metadata();
     while (fgets(line, sizeof(line), file)) {
       char key[64];
       unsigned long long value = 0;
@@ -229,22 +231,24 @@ class DFTracerService {
         static unsigned long long mem_available = 0;
         if (k == "MemAvailable") {
           mem_available = value;
-          metadata.insert_or_assign("MemAvailable", mem_available);
+          metadata->insert_or_assign("MemAvailable", mem_available);
         } else {
           // Convert to percentage of MemAvailable if MemAvailable is known and
           // nonzero
           if (mem_available > 0) {
-            metadata.insert_or_assign(
+            metadata->insert_or_assign(
                 k, 100.0 * static_cast<double>(value) / mem_available);
           } else {
-            metadata.insert_or_assign(k, 0.0);
+            metadata->insert_or_assign(k, 0.0);
           }
         }
       }
     }
-    if (!metadata.empty()) {
+    if (!metadata->empty()) {
       buffer_manager->log_counter_event(current_index, "memory", "sys", time, 0,
-                                        0, &metadata);
+                                        0, metadata);
+    } else {
+      delete metadata;
     }
     fclose(file);
     return;

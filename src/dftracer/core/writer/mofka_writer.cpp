@@ -94,14 +94,42 @@ MofkaWriter::~MofkaWriter() {
 }
 
 void MofkaWriter::initialize(const char* filename) {
+  fprintf(stderr, "[DFT_DEBUG] MofkaWriter::initialize called, filename=%s pid=%d\n",
+          filename ? filename : "null", getpid());
+  fflush(stderr);
   const char* group_file_env = std::getenv("DFTRACER_MOFKA_GROUP_FILE");
   if (!group_file_env) {
+    fprintf(stderr, "[DFT_DEBUG] DFTRACER_MOFKA_GROUP_FILE not set!\n");
+    fflush(stderr);
     DFTRACER_LOG_ERROR("DFTRACER_MOFKA_GROUP_FILE not set", "");
     throw std::runtime_error("DFTRACER_MOFKA_GROUP_FILE not set");
   }
+  fprintf(stderr, "[DFT_DEBUG] group_file=%s\n", group_file_env);
+  fflush(stderr);
   group_file_ = group_file_env;
   const char* topic_name_env = std::getenv("DFTRACER_MOFKA_TOPIC_NAME");
   topic_name_ = topic_name_env ? topic_name_env : "dftracer_events";
+
+  // Per-node topic routing: append hostname to topic names so each node
+  // pushes to its own Mofka topic.  The per-node analyzer on that node
+  // reads only the local topic, eliminating cross-node fan-in.
+  std::string per_node_suffix;
+  const char* per_node_env = std::getenv("DFTRACER_MOFKA_PER_NODE_TOPICS");
+  if (per_node_env && per_node_env[0] != '\0' &&
+      std::strcmp(per_node_env, "0") != 0) {
+    char hostname_buf[256];
+    gethostname(hostname_buf, sizeof(hostname_buf));
+    hostname_buf[sizeof(hostname_buf) - 1] = '\0';
+    per_node_suffix = std::string("_") + hostname_buf;
+    topic_name_ += per_node_suffix;
+    DFTRACER_LOG_INFO("Per-node topics enabled: trace topic=%s",
+                      topic_name_.c_str());
+  }
+
+  fprintf(stderr, "[DFT_DEBUG] topic_name=%s per_node=%s\n",
+          topic_name_.c_str(), per_node_env ? per_node_env : "null");
+  fflush(stderr);
+
   auto current_pid = getpid();
 
   // Allow Mofka/Mercury to access this process's memory for shared memory
@@ -135,7 +163,19 @@ void MofkaWriter::initialize(const char* filename) {
     diaspora::Metadata options;
     options.json()["group_file"] = group_file_;
     options.json()["margo"] = nlohmann::json::object();
-    options.json()["margo"]["use_progress_thread"] = true;
+    // Was hardcoded true. A setting that decides whether this data-plane client can coexist with
+    // RCCL in the same process should not be a compile-time constant: every configuration observed
+    // wedging at a control-window boundary had this ON, and it could not be varied without a
+    // rebuild, so the "both progress threads off" cell was never testable. See
+    // LIVEFLOW-STATUS.md sec 56. Default unchanged (true), so existing runs are byte-identical.
+    bool use_progress_thread = true;
+    const char* progress_env = std::getenv("DFTRACER_MOFKA_PROGRESS_THREAD");
+    if (progress_env && progress_env[0] != '\0') {
+      use_progress_thread = (std::strcmp(progress_env, "0") != 0);
+      DFTRACER_LOG_INFO("DFTRACER_MOFKA_PROGRESS_THREAD=%s -> use_progress_thread=%d",
+                        progress_env, (int)use_progress_thread);
+    }
+    options.json()["margo"]["use_progress_thread"] = use_progress_thread;
 
     driver_ = std::make_unique<diaspora::Driver>(
         diaspora::Driver::New("mofka", options));
@@ -155,6 +195,15 @@ void MofkaWriter::initialize(const char* filename) {
     // Buffer manager handles batching — each write() call from the buffer
     // manager contains a batch of newline-delimited JSON events. Use
     // batch_size=1 so each push is sent immediately (no Mofka-level batching).
+    //
+    // DO NOT switch this to Adaptive(). The design is deliberate: dftracer's buffer manager
+    // already accumulates events, and batch_size=1 makes Mofka ship that buffer AS ONE BATCH
+    // immediately. Adaptive() would double-buffer and add latency to the streaming path, which
+    // is the property the control loop depends on.
+    //
+    // The cost of this choice is that a fixed BatchSize takes the BLOCKING backpressure path in
+    // ActiveProducerBatchQueue::push (see LIVEFLOW-STATUS sec 85). That is a real hazard and is
+    // being addressed there, not by weakening the batching contract here.
     diaspora::BatchSize batchSize{1};
     const char* batch_size_env_name = "DFTRACER_MOFKA_PRODUCER_BATCH_SIZE";
     const char* batch_size_env = std::getenv(batch_size_env_name);
@@ -229,6 +278,11 @@ void MofkaWriter::initialize(const char* filename) {
     } else {
       control_topic_name_ = "control_events";
       DFTRACER_LOG_INFO("%s unset; defaulting to %s", control_topic_env_name,
+                        control_topic_name_.c_str());
+    }
+    if (!per_node_suffix.empty()) {
+      control_topic_name_ += per_node_suffix;
+      DFTRACER_LOG_INFO("Per-node topics enabled: control topic=%s",
                         control_topic_name_.c_str());
     }
 
@@ -360,7 +414,16 @@ void MofkaWriter::after_write(const EventContext& event) {
 }
 
 size_t MofkaWriter::write(const char* data, size_t len, bool force) {
+  static int write_count = 0;
+  if (write_count < 3) {
+    fprintf(stderr, "[DFT_DEBUG] MofkaWriter::write called, len=%zu force=%d count=%d topic=%p\n",
+            len, force, write_count, (void*)topic_.get());
+    fflush(stderr);
+  }
+  write_count++;
   if (!topic_) {
+    fprintf(stderr, "[DFT_DEBUG] MofkaWriter::write topic NOT initialized!\n");
+    fflush(stderr);
     DFTRACER_LOG_ERROR("Mofka topic not initialized", "");
     return 0;
   }
@@ -373,7 +436,38 @@ size_t MofkaWriter::write(const char* data, size_t len, bool force) {
     batch_metadata.json()["type"] = "batch";
     batch_metadata.json()["size"] = len;
     diaspora::DataView data_view(const_cast<char*>(data), len);
+    // ---- PUSH INSTRUMENTATION (observation only; behaviour unchanged) -------------------
+    // Hypothesis under test (LIVEFLOW-STATUS.md sec 47): the trace-write path can block the
+    // TRAINING THREAD, and every hang we have chased bottoms out here rather than in decode.
+    // The pre-existing "MofkaWriter::write called" line only fires for the first 3 writes, so
+    // it cannot show a mid-run block. This does two things:
+    //   DFTRACER_PUSH_DEBUG=1 -> ENTER/EXIT pair per push. A rank wedged inside push leaves an
+    //                            ENTER with no EXIT, which is the signature we need and the one
+    //                            I wrongly assumed already existed.
+    //   otherwise             -> silent unless a COMPLETED push exceeded DFTRACER_PUSH_WARN_MS
+    //                            (default 100), so it costs nothing in normal runs.
+    static const bool _push_dbg =
+        (getenv("DFTRACER_PUSH_DEBUG") != nullptr && atoi(getenv("DFTRACER_PUSH_DEBUG")) != 0);
+    static const long _push_warn_ms =
+        (getenv("DFTRACER_PUSH_WARN_MS") != nullptr) ? atol(getenv("DFTRACER_PUSH_WARN_MS")) : 100L;
+    static int _push_seq = 0;
+    const int _seq = _push_seq++;
+    if (_push_dbg) {
+      fprintf(stderr, "[DFT_PUSH_ENTER] pid=%d seq=%d len=%zu\n", getpid(), _seq, len);
+      fflush(stderr);
+    }
+    const auto _push_t0 = std::chrono::steady_clock::now();
     producer_->push(std::move(batch_metadata), data_view);
+    const long _push_ms = (long)std::chrono::duration_cast<std::chrono::milliseconds>(
+        std::chrono::steady_clock::now() - _push_t0).count();
+    if (_push_dbg) {
+      fprintf(stderr, "[DFT_PUSH_EXIT] pid=%d seq=%d ms=%ld\n", getpid(), _seq, _push_ms);
+      fflush(stderr);
+    } else if (_push_ms > _push_warn_ms) {
+      fprintf(stderr, "[DFT_PUSH_SLOW] pid=%d seq=%d ms=%ld len=%zu\n",
+              getpid(), _seq, _push_ms, len);
+      fflush(stderr);
+    }
     // Count individual events in the batch (each ends with '\n').
     for (size_t i = 0; i < len; ++i) {
       if (data[i] == '\n') ++trace_events_written_;

@@ -23,6 +23,8 @@ static const uint64_t REPORT_INTERVAL = 50000;  // print every N events
 
 #if DFTRACER_WRITER_TYPE_MOFKA
 #include <dftracer/core/writer/mofka_writer.h>
+#elif DFTRACER_WRITER_TYPE_SHM
+#include <dftracer/core/writer/shm_ring_writer.h>
 #elif DFTRACER_WRITER_TYPE_ZMQ
 #include <dftracer/core/writer/zmq_writer.h>
 #else
@@ -129,6 +131,9 @@ int BufferManager::initialize(const char* filename, HashType hostname_hash) {
 #elif DFTRACER_WRITER_TYPE_ZMQ
   this->writer = std::static_pointer_cast<dftracer::WriterInterface>(
       dftracer::Singleton<dftracer::ZMQWriter>::get_instance());
+#elif DFTRACER_WRITER_TYPE_SHM
+  this->writer = std::static_pointer_cast<dftracer::WriterInterface>(
+      dftracer::Singleton<dftracer::ShmRingWriter>::get_instance());
 #else
   this->writer = std::static_pointer_cast<dftracer::WriterInterface>(
       dftracer::Singleton<dftracer::STDIOWriter>::get_instance());
@@ -148,7 +153,8 @@ int BufferManager::initialize(const char* filename, HashType hostname_hash) {
 }
 
 int BufferManager::finalize(int index, ProcessID process_id, bool end_sym) {
-#if DFTRACER_WRITER_TYPE_MOFKA
+#if DFTRACER_WRITER_TYPE_MOFKA || DFTRACER_WRITER_TYPE_SHM
+  // Streaming writers carry no trailing "]" -- the reader consumes records, not a JSON document.
   end_sym = false;
 #endif
   std::unique_lock<std::shared_mutex> lock(mtx);
@@ -292,6 +298,11 @@ void BufferManager::log_counter_event(int index, ConstEventNameType name,
         name, category, "C", process_id, thread_id, start_time, metadata,
         has_step, step, has_epoch, epoch});
   }
+}
+
+void BufferManager::flush() {
+  std::unique_lock<std::shared_mutex> lock(mtx);
+  compress_and_write_if_needed(0, true);
 }
 
 void BufferManager::log_metadata_event(ConstEventNameType name,

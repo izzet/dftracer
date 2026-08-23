@@ -177,20 +177,34 @@ set(DFTRACER_TEST_LD_LIBRARY_PATH "" CACHE STRING "Additional LD_LIBRARY_PATH to
 
 option(DFTRACER_ENABLE_NATIVE_SCRIPT "Build with native scripting support." OFF)
 
-option(DFTRACER_WRITER_TYPE "Writer Type (STDIO, MOFKA, or ZMQ)" "STDIO")
+option(DFTRACER_WRITER_TYPE "Writer Type (STDIO, MOFKA, ZMQ, or SHM)" "STDIO")
+# SHM: the Option C shared-memory ring (LIVEFLOW-ARCHITECTURE.md sec 6). Header-only, no external
+# dependency at all -- unlike MOFKA (Mochi stack) and ZMQ (libzmq + cppzmq).
+set(DFTRACER_SHM_RING_INCLUDE "" CACHE PATH "Path to liveflow/shm_ring.h include root")
 
 if(DFTRACER_WRITER_TYPE STREQUAL "MOFKA")
     set(DFTRACER_WRITER_TYPE_STDIO 0)
     set(DFTRACER_WRITER_TYPE_MOFKA 1)
     set(DFTRACER_WRITER_TYPE_ZMQ 0)
+    set(DFTRACER_WRITER_TYPE_SHM 0)
 elseif(DFTRACER_WRITER_TYPE STREQUAL "ZMQ")
     set(DFTRACER_WRITER_TYPE_STDIO 0)
     set(DFTRACER_WRITER_TYPE_MOFKA 0)
     set(DFTRACER_WRITER_TYPE_ZMQ 1)
+    set(DFTRACER_WRITER_TYPE_SHM 0)
+elseif(DFTRACER_WRITER_TYPE STREQUAL "SHM")
+    set(DFTRACER_WRITER_TYPE_STDIO 0)
+    set(DFTRACER_WRITER_TYPE_MOFKA 0)
+    set(DFTRACER_WRITER_TYPE_ZMQ 0)
+    set(DFTRACER_WRITER_TYPE_SHM 1)
+    if(NOT DFTRACER_SHM_RING_INCLUDE)
+        message(FATAL_ERROR "-- [DFTRACER] DFTRACER_SHM_RING_INCLUDE must point at the directory containing liveflow/shm_ring.h when DFTRACER_WRITER_TYPE is 'SHM'")
+    endif()
 else()
     set(DFTRACER_WRITER_TYPE_STDIO 1)
     set(DFTRACER_WRITER_TYPE_MOFKA 0)
     set(DFTRACER_WRITER_TYPE_ZMQ 0)
+    set(DFTRACER_WRITER_TYPE_SHM 0)
 endif()
 
 # ------------------------------------------------------------------------------
@@ -254,7 +268,16 @@ else()
         set(DEPENDENCY_LIB ${DEPENDENCY_LIB} stdc++fs)
     endif()
 
-    find_package(cpp-logger 1.0.0 REQUIRED)
+    # cpp-logger is REQUIRED upstream, but the RELEASE build never uses it: the
+    # DFTRACER_LOGGER_CPP_LOGGER define lives only in dftracer_config_dbg.hpp.in, and without it
+    # every DFTRACER_LOG_* macro falls back to a no-op or a plain fprintf
+    # (core/common/logging.h:126-137). Making it optional lets a release build proceed on a
+    # machine that cannot reach the cpp-logger repo, which is the situation this prototype is in.
+    # The _dbg targets still need it and are skipped when it is absent.
+    find_package(cpp-logger 1.0.0 QUIET)
+    if(NOT cpp-logger_FOUND)
+        message(WARNING "-- [DFTRACER] cpp-logger not found; building RELEASE only (no _dbg targets)")
+    endif()
 
     if(${cpp-logger_FOUND})
         include_directories(${CPP_LOGGER_INCLUDE_DIRS})
@@ -270,7 +293,9 @@ else()
 
         message(STATUS "[CPP_LOGGER] found cpp-logger at ${CPP_LOGGER_INCLUDE_DIRS}")
     else()
-        message(FATAL_ERROR "-- [CPP_LOGGER] is needed for ${PROJECT_NAME} build")
+        # Release-only fallback: see the note on the find_package above. The log macros degrade
+        # to no-ops rather than the build failing.
+        message(STATUS "[CPP_LOGGER] absent; DFTRACER_LOG_* degrade to no-ops (release build)")
     endif()
 
     find_package(brahma 3.0.0 REQUIRED)
@@ -489,6 +514,11 @@ else()
         list(APPEND DFTRACER_CORE_SRC ${CMAKE_CURRENT_SOURCE_DIR}/src/dftracer/core/writer/mofka_writer.cpp)
     elseif(DFTRACER_WRITER_TYPE_ZMQ)
         list(APPEND DFTRACER_CORE_SRC ${CMAKE_CURRENT_SOURCE_DIR}/src/dftracer/core/writer/zmq_writer.cpp)
+    elseif(DFTRACER_WRITER_TYPE_SHM)
+        list(APPEND DFTRACER_CORE_SRC ${CMAKE_CURRENT_SOURCE_DIR}/src/dftracer/core/writer/shm_ring_writer.cpp)
+        include_directories(${DFTRACER_SHM_RING_INCLUDE})
+        # shm_open lives in librt on glibc < 2.34.
+        set(DEPENDENCY_LIB ${DEPENDENCY_LIB} rt)
     else()
         list(APPEND DFTRACER_CORE_SRC ${CMAKE_CURRENT_SOURCE_DIR}/src/dftracer/core/writer/stdio_writer.cpp)
     endif()

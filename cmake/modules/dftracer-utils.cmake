@@ -127,7 +127,13 @@ endfunction()
 # ###############################################################
 include(ExternalProject)
 
-function(install_external_project name version var_name url tag install_prefix configure_args)
+# NOTE: prefixed with dftracer_ because cpp-logger (and brahma, same author) SHIP their own
+# install_external_project(name url tag) in <pkg>-utils.cmake, which their *-config.cmake
+# includes. As soon as one of the find_package() calls below succeeds, that definition
+# replaces this one for every later call, and the arguments shift silently: the version
+# ("2.3.2") is then used as the git URL. Symptom is "fatal: repository '2.3.2' does not
+# exist". Keeping a unique name makes this immune to dependency include order.
+function(dftracer_install_external_project name version var_name url tag install_prefix configure_args)
   find_package(${name} ${version} QUIET)
   set(found_var ${name}_FOUND)
 

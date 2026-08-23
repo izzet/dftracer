@@ -54,6 +54,8 @@ class BufferManager {
                          ProcessID process_id, ThreadID thread_id,
                          dftracer::Metadata* metadata);
 
+  void flush();
+
  private:
   void compress_and_write_if_needed(size_t size, bool force = false);
   char* buffer;
