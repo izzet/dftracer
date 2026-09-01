@@ -152,6 +152,15 @@ class CMakeBuild(build_ext):
         # across all generators.
         build_args += ["--", "-j"]
 
+        # Caller-supplied -D flags must be in place BEFORE the dependency-install pass below.
+        # They used to be appended only after it, so the first cmake invocation ran without
+        # them: -DCMAKE_C_COMPILER was silently dropped, and -DDFTRACER_SHM_RING_INCLUDE hit
+        # CMakeLists.txt:201, which hard-fails on any configure when the writer type is SHM.
+        if "DFTRACER_CMAKE_ARGS" in os.environ:
+            cmake_args += [
+                item for item in os.environ["DFTRACER_CMAKE_ARGS"].split(";") if item
+            ]
+
         build_temp = Path(self.build_temp) / ext.name
         if not build_temp.exists():
             build_temp.mkdir(parents=True)
@@ -201,11 +210,6 @@ class CMakeBuild(build_ext):
             f"-Dyaml-cpp_DIR={install_prefix}",
             f"-Dpybind11_DIR={py_cmake_dir}",
         ]
-
-        if "DFTRACER_CMAKE_ARGS" in os.environ:
-            cmake_args += [
-                item for item in os.environ["DFTRACER_CMAKE_ARGS"].split(";") if item
-            ]
 
         subprocess.run(
             ["cmake", ext.sourcedir, *cmake_args],
