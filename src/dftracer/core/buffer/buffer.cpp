@@ -4,6 +4,7 @@
 #include <chrono>
 #include <cstddef>
 #include <cstdio>
+#include <cstdlib>
 #include <dftracer/core/dftracer_config.hpp>
 #include <string>
 
@@ -87,9 +88,50 @@ bool extract_metadata_integer(const dftracer::Metadata* metadata,
 static std::atomic<uint64_t> g_forced_flush_count{0};
 static std::atomic<uint64_t> g_forced_flush_ns{0};
 static std::atomic<uint64_t> g_forced_flush_bytes{0};
+static std::atomic<uint64_t> g_timed_flush_count{0};
+static std::atomic<uint64_t> g_timed_flush_ns{0};
+static std::atomic<uint64_t> g_timed_flush_bytes{0};
 
 void BufferManager::compress_and_write_if_needed(size_t size, bool force) {
-  if (force || buffer_pos + size > this->config->write_buffer_size) {
+  // A BUFFER THAT FLUSHES ONLY WHEN FULL IS INVISIBLE TO A WINDOWED ANALYZER.
+  //
+  // There are exactly two ways a buffer left this process before this: it filled
+  // `write_buffer_size` (16 MiB by default), or an event named in
+  // DFTRACER_SHM_CONTROL_EVENT_NAMES forced it. The second is what makes a training rank's
+  // events arrive window by window, because the rank emits window.start/window.stop.
+  //
+  // A FORKED CHILD EMITS NEITHER. Measured on un_forkgate3_n2, 2 nodes, unet3d, one epoch
+  // (T3-0 section 4q.5): 4 pids logged control events and their persisted records span 1.1 s
+  // each, while 45 forked DataLoader workers logged none and each one's ENTIRE 473 s of events
+  // arrived as a single 16 MiB record at worker exit. Downstream that is 87 of 91 windows
+  // reporting `no_read_observed` while the run really was reading, and the four windows that
+  // did see bytes reporting up to 99 GB/s, because a whole epoch of a worker's reads was
+  // credited to one short window. The flush fix in 1396409 made the child's data ARRIVE; it
+  // did not make it arrive in time to be attributed to the window it happened in.
+  //
+  // So the buffer also flushes on TIME. No thread and no timer is added: the check rides the
+  // event path, which already takes four steady_clock readings per event, and therefore adds no
+  // new fork-safety surface -- which matters, because a redundant call on a singleton inherited
+  // across fork is exactly what 4o.5 spent a day suspecting of a deadlock.
+  //
+  // The interval is an instrument buffering parameter, not a decision rule: nothing compares it
+  // against a domain metric, and its only requirement is to be shorter than the analysis window
+  // so that a window's bytes are in the ring when that window closes. Its cost is ring-write
+  // frequency: at the measured 151 events per second per worker, one second of buffering is
+  // about 35 KiB per record.
+  //
+  // HONEST LIMIT OF A THREADLESS TIMER: the check rides the event path, so a process that stops
+  // producing events entirely keeps whatever is in its buffer until it produces another one or
+  // exits. Staleness is bounded only while the process is active, which is the case that matters
+  // here (a worker that has stopped reading has nothing the analyzer is waiting for), and the
+  // exit flush from 1396409 still catches the rest.
+  bool timed = false;
+  if (!force && flush_interval_ns > 0 && buffer_pos > 0) {
+    auto now = std::chrono::steady_clock::now();
+    uint64_t since = std::chrono::duration_cast<std::chrono::nanoseconds>(now - last_flush).count();
+    if (since >= flush_interval_ns) timed = true;
+  }
+  if (force || timed || buffer_pos + size > this->config->write_buffer_size) {
     if (this->config->compression) {
       size = this->compressor->compress(buffer, buffer_pos + size);
     } else {
@@ -106,9 +148,16 @@ void BufferManager::compress_and_write_if_needed(size_t size, bool force) {
         g_forced_flush_ns.fetch_add(ns, std::memory_order_relaxed);
         g_forced_flush_count.fetch_add(1, std::memory_order_relaxed);
         g_forced_flush_bytes.fetch_add(size, std::memory_order_relaxed);
+      } else if (timed) {
+        // Counted apart from the control-trigger flushes so the two are never read as one
+        // number: a control flush says a window closed, a timed flush says a buffer aged out.
+        g_timed_flush_ns.fetch_add(ns, std::memory_order_relaxed);
+        g_timed_flush_count.fetch_add(1, std::memory_order_relaxed);
+        g_timed_flush_bytes.fetch_add(size, std::memory_order_relaxed);
       }
     }
     buffer_pos = 0;
+    last_flush = std::chrono::steady_clock::now();
   } else {
     buffer_pos += size;
   }
@@ -121,6 +170,22 @@ int BufferManager::initialize(const char* filename, HashType hostname_hash) {
     buffer = (char*)malloc(this->config->write_buffer_size + 16 * 1024);
   }
   buffer_pos = 0;
+  // Milliseconds, 0 disables. Default 1000: an order of magnitude below the shortest analysis
+  // window this project runs (about 5 s on staged cosmoflow), so a window's events are in the
+  // ring before the analyzer drains it.
+  {
+    const char* iv = std::getenv("DFTRACER_FLUSH_INTERVAL_MS");
+    long long ms = 1000;
+    if (iv && *iv) {
+      try {
+        ms = std::stoll(iv);
+      } catch (...) {
+        ms = 1000;
+      }
+    }
+    flush_interval_ns = ms > 0 ? static_cast<uint64_t>(ms) * 1000000ull : 0;
+  }
+  last_flush = std::chrono::steady_clock::now();
   if (!buffer) {
     DFTRACER_LOG_ERROR("BufferManager.BufferManager Failed to allocate buffer",
                        "");
@@ -256,11 +321,15 @@ void BufferManager::log_data_event(int index, ConstEventNameType event_name,
     uint64_t ff_ns = g_forced_flush_ns.load(std::memory_order_relaxed);
     uint64_t ff_cnt = g_forced_flush_count.load(std::memory_order_relaxed);
     uint64_t ff_bytes = g_forced_flush_bytes.load(std::memory_order_relaxed);
+    uint64_t tf_ns = g_timed_flush_ns.load(std::memory_order_relaxed);
+    uint64_t tf_cnt = g_timed_flush_count.load(std::memory_order_relaxed);
+    uint64_t tf_bytes = g_timed_flush_bytes.load(std::memory_order_relaxed);
     fprintf(stderr,
         "[DFTRACER_PERF] pid=%d events=%lu "
         "total_avg_us=%.1f lock_wait_avg_us=%.1f serialize_avg_us=%.1f "
         "flush_avg_ms=%.2f flush_count=%lu "
         "forced_flush_avg_ms=%.2f forced_count=%lu forced_avg_bytes=%lu "
+        "timed_flush_avg_ms=%.2f timed_count=%lu timed_avg_bytes=%lu "
         "trigger_avg_ms=%.1f trigger_count=%lu\n",
         (int)process_id, (unsigned long)count,
         (double)ev_ns / count / 1000.0,
@@ -271,6 +340,9 @@ void BufferManager::log_data_event(int index, ConstEventNameType event_name,
         ff_cnt > 0 ? (double)ff_ns / ff_cnt / 1e6 : 0.0,
         (unsigned long)ff_cnt,
         ff_cnt > 0 ? (unsigned long)(ff_bytes / ff_cnt) : 0UL,
+        tf_cnt > 0 ? (double)tf_ns / tf_cnt / 1e6 : 0.0,
+        (unsigned long)tf_cnt,
+        tf_cnt > 0 ? (unsigned long)(tf_bytes / tf_cnt) : 0UL,
         tr_cnt > 0 ? (double)tr_ns / tr_cnt / 1e6 : 0.0,
         (unsigned long)tr_cnt);
   }

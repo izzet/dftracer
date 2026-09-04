@@ -12,6 +12,7 @@
 #include <dftracer/core/writer/writer_interface.h>
 
 #include <any>
+#include <chrono>
 #include <mutex>
 #include <shared_mutex>
 #include <unordered_map>
@@ -25,7 +26,9 @@ class BufferManager {
         mtx(),
         app_name(),
         rank(-1),
-        control_hooks_enabled(false) {}
+        control_hooks_enabled(false),
+        flush_interval_ns(0),
+        last_flush(std::chrono::steady_clock::now()) {}
   ~BufferManager() {}
 
   void inline set_app_name(const char* name) { app_name = name; }
@@ -64,6 +67,12 @@ class BufferManager {
   std::string app_name;
   int rank;
   bool control_hooks_enabled;
+  // PERIODIC FLUSH, in nanoseconds. 0 disables it and restores size-triggered flushing only.
+  // See compress_and_write_if_needed for why a buffer that flushes only when full is invisible
+  // to a windowed analyzer in a process that emits no control event, which is every forked
+  // DataLoader worker.
+  uint64_t flush_interval_ns;
+  std::chrono::steady_clock::time_point last_flush;
 
   std::shared_ptr<dftracer::ConfigurationManager> config;
   std::shared_ptr<dftracer::JsonLines> serializer;
