@@ -1,6 +1,7 @@
 //
 // Created by haridev on 10/8/23.
 //
+#include <dftracer/core/buffer/buffer.h>
 #include <dftracer/core/common/dftracer_main.h>
 #include <dftracer/core/finstrument/functions.h>
 #include <dftracer/core/function/hip/intercept.h>
@@ -24,8 +25,34 @@ void dft_finalize(bool force) {
   DFTRACER_LOG_DEBUG("DFTracerCore.dft_finalize", "");
   dftracer::emit_fork_breadcrumb("dft_finalize.enter");
   if (dftracer::g_forked_child_process) {
+    // FLUSH, THEN SKIP. These are two decisions and they used to be one.
+    //
+    // A forked child must not run finalize(): that tears down the trie, the I/O bindings and the
+    // singletons, all of which it shares with the parent. But the early return skipped the BUFFER
+    // FLUSH as well, and a child's events live in its own BufferManager until something flushes
+    // them. Nothing ever did, so every event a forked child produced was discarded at exit.
+    //
+    // Measured with an off-cluster reproducer (liveflow_shm/tests/test_fork_flush.py): parent reads
+    // a file, forks, the child reads it 200 times, and the ring is drained by pid. With the child
+    // calling finalize explicitly, both pids appear and the child's 200 reads are present; without
+    // it, only the parent appears and the child's reads are gone. On DLIO's PyTorch path the
+    // DataLoader workers are persistent_workers and are terminated rather than exiting cleanly, so
+    // this discarded the entire storage measurement: zero pread events across all 32 lanes of an
+    // 8-node unet3d run, one pid per lane, every one a parent rank
+    // (T3-0-SHM-LOOP-CORONA.md sections 4o.2 to 4o.4). cosmoflow never showed it because tf.data
+    // reads on threads inside the parent process, so there is no child whose buffer can be lost.
+    //
+    // Flushing is safe here in a way that finalize is not: BufferManager::flush takes the buffer's
+    // own lock and writes the child's own pending records to the ring, which the child already has
+    // its own lane in (ShmRing::write claims a fresh lane on the first write from a new pid). It
+    // touches nothing the parent owns.
+    dftracer::emit_fork_breadcrumb("dft_finalize.forked_child_flush");
+    auto buffer = dftracer::Singleton<dftracer::BufferManager>::get_instance();
+    if (buffer != nullptr) {
+      buffer->flush();
+    }
     dftracer::emit_fork_breadcrumb("dft_finalize.skip_forked_child");
-    DFTRACER_LOG_INFO("Skipping DFTracer finalize in forked child pid %d",
+    DFTRACER_LOG_INFO("Flushed and skipped DFTracer finalize in forked child pid %d",
                       df_getpid());
     return;
   }
