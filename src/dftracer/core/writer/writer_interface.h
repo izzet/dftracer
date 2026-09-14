@@ -14,6 +14,7 @@ struct EventContext {
   ProcessID process_id;
   ThreadID thread_id;
   TimeResolution start_time;
+  TimeResolution duration;
   const Metadata* metadata;
   bool has_step;
   long long step;

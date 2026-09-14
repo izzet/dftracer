@@ -298,7 +298,7 @@ void BufferManager::log_data_event(int index, ConstEventNameType event_name,
   if (is_trigger) {
     auto t_aw0 = std::chrono::steady_clock::now();
     this->writer->after_write(dftracer::EventContext{
-        event_name, category, "X", process_id, tid, start_time, metadata,
+        event_name, category, "X", process_id, tid, start_time, duration, metadata,
         has_step, step, has_epoch, epoch});
     auto t_aw1 = std::chrono::steady_clock::now();
     uint64_t aw_ns = std::chrono::duration_cast<std::chrono::nanoseconds>(t_aw1 - t_aw0).count();
@@ -367,7 +367,7 @@ void BufferManager::log_counter_event(int index, ConstEventNameType name,
   compress_and_write_if_needed(size, is_trigger);
   if (is_trigger) {
     this->writer->after_write(dftracer::EventContext{
-        name, category, "C", process_id, thread_id, start_time, metadata,
+        name, category, "C", process_id, thread_id, start_time, 0, metadata,
         has_step, step, has_epoch, epoch});
   }
 }
