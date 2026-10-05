@@ -15,7 +15,7 @@ set(DFTRACER_EXTERNAL_DEPS "")
 
 find_package(cpp-logger 1.0.0 QUIET)
 if(NOT cpp-logger_FOUND)
-  dftracer_install_external_project(cpp-logger 1.0.0 "CPP_LOGGER" https://github.com/hariharan-devarajan/cpp-logger.git v0.0.6 ${CMAKE_INSTALL_PREFIX} "")
+  dftracer_install_external_project(cpp-logger 1.0.0 "CPP_LOGGER" https://github.com/rayandrew/cpp-logger.git 6e451bb89f6d93ce7a90b04a3286096653c722ca ${CMAKE_INSTALL_PREFIX} "")
   list(APPEND DFTRACER_EXTERNAL_DEPS cpp-logger)
 else()
   message(STATUS "-- [DFTRACER] using preinstalled cpp-logger (${cpp-logger_DIR}); skipping clone")

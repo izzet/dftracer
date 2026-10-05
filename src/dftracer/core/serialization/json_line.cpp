@@ -21,7 +21,7 @@ JsonLines::JsonLines() : include_metadata(false) {
 
 size_t JsonLines::initialize(char* buffer, HashType hostname_hash) {
   this->hostname_hash = hostname_hash;
-#if DFTRACER_WRITER_TYPE_MOFKA
+#if DFTRACER_WRITER_TYPE_MOFKA || DFTRACER_WRITER_TYPE_SHM
   return 0;
 #else
   buffer[0] = '[';
