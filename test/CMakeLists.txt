@@ -374,3 +374,13 @@ if(DFTRACER_ENABLE_PAPER_TESTS)
 endif()
 
 add_subdirectory(dfanalyzer)
+
+# Exercise the actual metadata-consuming serializer before the SHM control hook.
+if(DFTRACER_WRITER_TYPE_SHM)
+    add_executable(test_control_metadata cpp/test_control_metadata.cpp)
+    target_link_libraries(test_control_metadata ${PROJECT_NAME}_core yaml-cpp)
+    df_add_test(test_control_metadata ${CMAKE_BINARY_DIR}/bin/test_control_metadata)
+    set_tests_properties(test_control_metadata PROPERTIES
+        TIMEOUT 30
+        ENVIRONMENT "LD_LIBRARY_PATH=${CMAKE_BINARY_DIR}/${DFTRACER_LIBDIR}:$ENV{LD_LIBRARY_PATH}")
+endif()

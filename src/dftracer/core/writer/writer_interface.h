@@ -5,8 +5,6 @@
 #include <dftracer/core/common/typedef.h>
 
 namespace dftracer {
-class Metadata;
-
 struct EventContext {
   ConstEventNameType event_name;
   ConstEventNameType category;
@@ -15,11 +13,13 @@ struct EventContext {
   ThreadID thread_id;
   TimeResolution start_time;
   TimeResolution duration;
-  const Metadata* metadata;
   bool has_step;
   long long step;
   bool has_epoch;
   long long epoch;
+  // Value snapshot taken before the serializer consumes event metadata.
+  bool discard;
+  bool flush;
 };
 
 class WriterInterface {

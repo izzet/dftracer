@@ -43,7 +43,8 @@ namespace dftracer {
 namespace {
 
 bool extract_metadata_integer(const dftracer::Metadata* metadata,
-                              const char* key, long long* value) {
+                              const char* key, long long* value,
+                              bool allow_string = true) {
   if (!metadata || !key || !value) return false;
   auto it = metadata->find(key);
   if (it == metadata->end()) return false;
@@ -72,7 +73,7 @@ bool extract_metadata_integer(const dftracer::Metadata* metadata,
     *value = std::any_cast<unsigned long long>(raw_value);
     return true;
   }
-  if (raw_value.type() == typeid(std::string)) {
+  if (allow_string && raw_value.type() == typeid(std::string)) {
     try {
       *value = std::stoll(std::any_cast<std::string>(raw_value));
       return true;
@@ -262,6 +263,15 @@ void BufferManager::log_data_event(int index, ConstEventNameType event_name,
   long long epoch = 0;
   const bool has_step = extract_metadata_integer(metadata, "step", &step);
   const bool has_epoch = extract_metadata_integer(metadata, "epoch", &epoch);
+  // JsonLines consumes nonempty metadata. Hooks own only these copied values,
+  // never the serializer-owned object, and still run after the trace flush.
+  long long discard_value = 0, flush_value = 0;
+  const bool discard =
+      extract_metadata_integer(metadata, "discard", &discard_value, false) &&
+      discard_value != 0;
+  const bool flush =
+      extract_metadata_integer(metadata, "flush", &flush_value, false) &&
+      flush_value != 0;
   bool enable_tracing = true;
   if (this->config->aggregation_enable && strcmp(category, "dftracer") != 0) {
     enable_tracing = false;
@@ -298,8 +308,8 @@ void BufferManager::log_data_event(int index, ConstEventNameType event_name,
   if (is_trigger) {
     auto t_aw0 = std::chrono::steady_clock::now();
     this->writer->after_write(dftracer::EventContext{
-        event_name, category, "X", process_id, tid, start_time, duration, metadata,
-        has_step, step, has_epoch, epoch});
+        event_name, category, "X", process_id, tid, start_time, duration,
+        has_step, step, has_epoch, epoch, discard, flush});
     auto t_aw1 = std::chrono::steady_clock::now();
     uint64_t aw_ns = std::chrono::duration_cast<std::chrono::nanoseconds>(t_aw1 - t_aw0).count();
     // trigger_ns tracks after_write time only (not the forced flush before it)
@@ -359,6 +369,15 @@ void BufferManager::log_counter_event(int index, ConstEventNameType name,
   long long epoch = 0;
   const bool has_step = extract_metadata_integer(metadata, "step", &step);
   const bool has_epoch = extract_metadata_integer(metadata, "epoch", &epoch);
+  // JsonLines consumes nonempty metadata. Hooks own only these copied values,
+  // never the serializer-owned object, and still run after the trace flush.
+  long long discard_value = 0, flush_value = 0;
+  const bool discard =
+      extract_metadata_integer(metadata, "discard", &discard_value, false) &&
+      discard_value != 0;
+  const bool flush =
+      extract_metadata_integer(metadata, "flush", &flush_value, false) &&
+      flush_value != 0;
   size_t size =
       this->serializer->counter(buffer + buffer_pos, index, name, category,
                                 start_time, process_id, thread_id, metadata);
@@ -367,8 +386,8 @@ void BufferManager::log_counter_event(int index, ConstEventNameType name,
   compress_and_write_if_needed(size, is_trigger);
   if (is_trigger) {
     this->writer->after_write(dftracer::EventContext{
-        name, category, "C", process_id, thread_id, start_time, 0, metadata,
-        has_step, step, has_epoch, epoch});
+        name, category, "C", process_id, thread_id, start_time, 0,
+        has_step, step, has_epoch, epoch, discard, flush});
   }
 }
 

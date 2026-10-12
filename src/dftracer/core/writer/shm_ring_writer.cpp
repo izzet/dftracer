@@ -63,20 +63,6 @@ void append_escaped(std::string* out, const char* s) {
   }
 }
 
-bool metadata_integer(const Metadata* metadata, const char* key, long long* value) {
-  if (!metadata || !key || !value) return false;
-  const auto it = metadata->find(key);
-  if (it == metadata->end()) return false;
-  const std::any& raw = it->second.second;
-  if (raw.type() == typeid(int)) { *value = std::any_cast<int>(raw); return true; }
-  if (raw.type() == typeid(long)) { *value = std::any_cast<long>(raw); return true; }
-  if (raw.type() == typeid(long long)) { *value = std::any_cast<long long>(raw); return true; }
-  if (raw.type() == typeid(unsigned int)) { *value = std::any_cast<unsigned int>(raw); return true; }
-  if (raw.type() == typeid(unsigned long)) { *value = std::any_cast<unsigned long>(raw); return true; }
-  if (raw.type() == typeid(unsigned long long)) { *value = std::any_cast<unsigned long long>(raw); return true; }
-  return false;
-}
-
 }  // namespace
 
 // Explicit singleton statics, exactly as every other writer does (mofka_writer.cpp:74-77).
@@ -222,11 +208,10 @@ void ShmRingWriter::after_write(const EventContext& event) {
   // These flags describe boundary eligibility, not a diagnosis.  The analyzer must consume an
   // explicitly discarded boundary to preserve rank/window ordering, while excluding it from
   // control evidence.  Keep the control plane's contract minimal and authoritative.
-  long long boundary_flag = 0;
-  if (metadata_integer(event.metadata, "discard", &boundary_flag) && boundary_flag) {
+  if (event.discard) {
     meta.append(",\"discard\":1");
   }
-  if (metadata_integer(event.metadata, "flush", &boundary_flag) && boundary_flag) {
+  if (event.flush) {
     meta.append(",\"flush\":1");
   }
   meta.append(",\"duration_us\":").append(std::to_string(
