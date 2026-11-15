@@ -4,10 +4,8 @@
 
 # DFTracer
 
-**Version:** `$(cat PACKAGE_VERSION 2>/dev/null || echo "2.0.2")`
-
 [![Build and Test](https://github.com/llnl-asr/dftracer/actions/workflows/ci.yml/badge.svg)](https://github.com/llnl-asr/dftracer/actions/workflows/ci.yml)
-[![Coverage Status](https://coveralls.io/repos/github/LLNL/dftracer/badge.svg?branch=develop)](https://coveralls.io/github/LLNL/dftracer?branch=develop)
+[![Coverage Status](https://coveralls.io/repos/github/llnl-asr/dftracer/badge.svg?branch=develop)](https://coveralls.io/github/llnl-asr/dftracer?branch=develop)
 [![Documentation Status](https://readthedocs.org/projects/dftracer/badge/?version=latest)](https://dftracer.readthedocs.io/en/latest/?badge=latest)
 ![PyPI - Version](https://img.shields.io/pypi/v/dftracer?label=PyPI)
 ![PyPI - Wheel](https://img.shields.io/pypi/wheel/dftracer?label=Wheel)
@@ -18,96 +16,66 @@
 
 DFTracer is a tracing tool designed to capture both application-code and I/O-call level events from workflows. It provides a unified tracing interface, optimized trace format, and compression mechanism to enable efficient distributed analysis for large-scale AI-driven workloads.
 
-## Prerequisites
-
-Requirements for DFTracer
-
-1. Python>=3.7
-1. pybind11
-
-Requirements for DFAnalyzer
-
-1. bokeh>=2.4.2
-1. dask>=2023.5.0
-1. distributed
-1. matplotlib>=3.7.3
-1. numpy>=1.24.3
-1. pandas>=2.0.3
-1. pyarrow>=12.0.1
-1. pybind11
-1. python-intervals>=1.10.0.post1
-1. rich>=13.6.0
-1. seaborn>=0.13.2
-1. [zindex_py](https://github.com/hariharan-devarajan/zindex.git)
-
 ## Installation
 
-Users can easily install DFTracer using `pip`, the standard tool for installing Python packages. 
-This method works for both native Python and Conda environments.
+DFTracer needs Python 3.7 or newer. `pip` works in native Python and Conda
+environments.
 
 ### From PyPI
 
 ```bash
 pip install dftracer
-pip install dftracer[dfanalyzer]
-# if you want to use old version of DFAnalyzer
-# pip install dftracer[dfanalyzer_old]
 ```
 
-This installs a prebuilt wheel that traces POSIX and STDIO I/O. It needs nothing
-from the host, but it cannot trace MPI, HDF5 or HIP — see
-[With MPI, HDF5 or HIP support](#with-mpi-hdf5-or-hip-support).
+This installs a prebuilt wheel that traces POSIX and STDIO I/O and needs nothing
+from the host. To trace MPI, MPI-IO, HDF5, PAPI counters, HIP or CUDA as well,
+add the prebuilt modules and compose them for your machine:
+
+```bash
+pip install --pre "dftracer[modules]"   # the core plus prebuilt module archives
+dftracer-compose                        # link what this machine needs
+dftracer_install_info --composition     # show what got linked
+```
+
+Run `dftracer-compose` in the environment you trace in (the same `module load`
+or `spack load`) and again whenever that environment changes. See
+[Composable install](https://dftracer.readthedocs.io/en/latest/composable_install.html)
+for details.
 
 Development builds are published from every merge into `develop`, versioned
-`<last release>.postN.dev0`, as both wheels and an sdist:
+`<last release>.postN.dev0`, as both wheels and an sdist. They are PEP 440
+pre-releases, so `pip` only selects them when asked:
 
 ```bash
-pip install --pre dftracer          # newest prerelease
-pip install dftracer==2.1.0.post5.dev0   # a specific one
+pip install --pre dftracer                # newest prerelease
+pip install dftracer==2.1.0.post5.dev0    # a specific one
 ```
 
-### From Github
+### From source
 
-```bash
-DFTRACER_VERSION=develop
-pip install git+https://github.com/llnl-asr/dftracer.git@${DFTRACER_VERSION}
-pip install git+https://github.com/llnl-asr/dftracer.git@${DFTRACER_VERSION}#egg=dftracer[dfanalyzer]
-# if you want to use old version of DFAnalyzer
-# pip install git+https://github.com/llnl-asr/dftracer.git@${DFTRACER_VERSION}#egg=dftracer[dfanalyzer_old]
-```
-
-### From Source
+A source build is needed to change build options, or to build against an MPI or
+HDF5 that the prebuilt modules do not cover.
 
 ```bash
 git clone https://github.com/llnl-asr/dftracer.git
-cd dftracer
-# You can skip this for installing the dev branch.
-# for latest stable version use master branch.
-git checkout tags/<Release> -b <Release>
+cd dftracer                       # the default branch is develop
+# git checkout tags/<Release> -b <Release>   # or build a specific release
 pip install .
 ```
 
-### With MPI, HDF5 or HIP support
-
-These are compile-time options, so they need a build against the libraries you
-actually run with. The prebuilt wheel cannot carry them: DFTracer intercepts
-calls into the MPI/HDF5 library the application loads, and the interception is
-generated for a specific implementation and version, so a wheel built elsewhere
-would trace nothing. Build from the source distribution instead, the way
-`mpi4py` does:
+To enable MPI, HDF5 or HIP in a source build, set the options below in the
+environment. MPI and HDF5 must be discoverable by CMake (`module load`,
+`spack load`, ...):
 
 ```bash
-# MPI and HDF5 must be discoverable by CMake (module load, spack load, ...)
+DFTRACER_ENABLE_MPI=ON DFTRACER_ENABLE_HDF5=ON pip install .
+# or build the published sdist instead of the wheel:
 DFTRACER_ENABLE_MPI=ON DFTRACER_ENABLE_HDF5=ON \
   pip install --no-binary dftracer dftracer
 ```
 
-`--no-binary dftracer` is what makes `pip` build from source rather than take the
-wheel. Only `dftracer` itself is built from source; its build tools still come as
-wheels. The same works for a checkout (`pip install .`) or a release tarball.
-
-The options below are read from the environment by `setup.py` and passed to CMake.
-All default to `OFF` unless stated:
+`setup.py` reads these variables and passes them to CMake. All default to `OFF`
+unless stated:
 
 | Variable | Effect |
 | --- | --- |
@@ -121,89 +89,96 @@ All default to `OFF` unless stated:
 | `DFTRACER_BUILD_TYPE` | `Release` (default) or `Debug` |
 
 Requirements for a source build: a C++17 compiler whose standard library
-provides `std::filesystem` (GCC 9 or newer; note that a system `libstdc++` older
-than the compiler on the `PATH` can shadow it and fail the link), CMake 3.24 or
-newer, and the development packages of whatever you enable.
+provides `std::filesystem` (GCC 9 or newer; a system `libstdc++` older than the
+compiler on the `PATH` can shadow it and fail the link), CMake 3.24 or newer,
+and the development packages of whatever you enable. The C/C++ dependencies
+(cpp-logger, GOTCHA, brahma, yaml-cpp, libuv) are cloned and built
+automatically, so a source install needs access to their GitHub repositories.
 
-The C/C++ dependencies (cpp-logger, GOTCHA, brahma, yaml-cpp, libuv) are cloned
-and built automatically, so a source install needs access to their GitHub
-repositories.
+For all build options see [docs/build.rst](docs/build.rst), or the
+[rendered documentation](https://dftracer.readthedocs.io/en/latest/build.html).
 
-To confirm the build traces what you enabled, run your application with
-`DFTRACER_ENABLE=1` and check that the trace contains the matching categories
-(`MPI`, `MPIIO`, `HDF5`) and not only `POSIX`.
+### Verify the install
 
-For detailed build instructions see [docs/build.rst](docs/build.rst) in this
-repository, or the [rendered documentation](https://dftracer.readthedocs.io/en/latest/build.html)
-when it is reachable.
+Run your application with `DFTRACER_ENABLE=1` and check that the trace contains
+the categories you enabled (`MPI`, `MPIIO`, `HDF5`) and not only `POSIX`.
 
 ## Usage
 
+DFTracer traces I/O calls automatically; the Python API adds application-level
+events on top. A complete example:
+
 ```python
+import os
+import numpy as np
 from dftracer.python import dftracer, dft_fn
+
 log_inst = dftracer.initialize_log(logfile=None, data_dir=None, process_id=-1)
-dft_fn = dft_fn("COMPUTE")
+compute = dft_fn("COMPUTE")
 
-# Example of using function decorators
-@dft_fn.log
-def log_events(index):
-    sleep(1)
+# Tag a function: DFTracer records one event per call.
+@compute.log
+def preprocess(index):
+    return np.random.randint(255, size=(8, 8, 1024), dtype=np.uint8)
 
-# Example of function spawning and implicit I/O calls
-def posix_calls(val):
-    index, is_spawn = val
-    path = f"{cwd}/data/demofile{index}.txt"
-    f = open(path, "w+")
-    f.write("Now the file has more content!")
-    f.close()
-    if is_spawn:
-        print(f"Calling spawn on {index} with pid {os.getpid()}")
-        log_inst.finalize() # This need to be called to correctly finalize DFTracer.
-    else:
-        print(f"Not calling spawn on {index} with pid {os.getpid()}")
+# Plain I/O needs no annotation: calls under DFTRACER_DATA_DIR are traced automatically.
+def write_sample(index, records):
+    os.makedirs("data", exist_ok=True)
+    np.savez(f"data/sample{index}.npz", x=records)
 
-# NPZ calls internally calls POSIX calls.
-def npz_calls(index):
-    path = f"{cwd}/data/demofile{index}.npz"
-    if os.path.exists(path):
-        os.remove(path)
-    records = np.random.randint(255, size=(8, 8, 1024), dtype=np.uint8)
-    record_labels = [0] * 1024
-    np.savez(path, x=records, y=record_labels)
+# Trace an arbitrary block.
+with dft_fn(cat="block", name="epoch") as dft:
+    for i in range(3):
+        write_sample(i, preprocess(i))
+    dft.update(step=3)
 
-def main():
-    log_events(0)
-    npz_calls(1)
-    with get_context('spawn').Pool(1, initializer=init) as pool:
-        pool.map(posix_calls, ((2, True),))
-    log_inst.finalize()
-
-if __name__ == "__main__":
-    main()
+log_inst.finalize()  # flush and close the trace
 ```
 
-For this example, as the `dftracer.initialize_log` do not pass `logfile` or `data_dir`, we need to set `DFTRACER_LOG_FILE` and `DFTRACER_DATA_DIR`.
-By default the DFTracer mode is set to `FUNCTION`.
-Example of running this configurations are:
+Because `initialize_log` is given no `logfile` or `data_dir`, set them through
+the environment:
 
 ```bash
-# The process id, app_name and .pfw will be appended by DFTracer for each app and process.
-# The name of the final log file will be ~/log_file-<APP_NAME>-<PID>.pfw
-DFTRACER_LOG_FILE=~/log_file
-# Colon separated paths to include in the tracing
-DFTRACER_DATA_DIR=/dev/shm/:/p/gpfs1/$USER/dataset:$PWD/data
-# Enable DFTracer
-DFTRACER_ENABLE=1
+# DFTracer appends the app name, hash and .pfw.gz, e.g. ./trace-<hash>-<app>.pfw.gz
+export DFTRACER_LOG_FILE=$PWD/trace
+# Colon separated paths whose I/O is traced
+export DFTRACER_DATA_DIR=$PWD/data:/dev/shm
+# Enable DFTracer (off by default)
+export DFTRACER_ENABLE=1
+
+python example.py
 ```
 
-For more examples, click [here](https://dftracer.readthedocs.io/en/latest/examples.html).
+The default mode is `FUNCTION`. To trace I/O in code you cannot modify, or to
+combine both, use `DFTRACER_INIT=PRELOAD` with `LD_PRELOAD`; see the
+[API](https://dftracer.readthedocs.io/en/latest/api.html) and
+[examples](https://dftracer.readthedocs.io/en/latest/examples.html) pages for C,
+C++ and preload usage, and
+[Visualizing traces](https://dftracer.readthedocs.io/en/latest/perfetto.html) to
+open the result.
+
+## Analyzing traces
+
+DFAnalyzer analyzes DFTracer traces at scale with Dask:
+
+```bash
+pip install "dftracer[dfanalyzer]"
+```
+
+An older, self-contained version is available with `dftracer[dfanalyzer_old]`.
+See the [DFAnalyzer docs](https://dftracer.readthedocs.io/en/latest/dfanalyzer_build.html).
 
 ## Documentation
 
-* Building DFTracer: [https://dftracer.readthedocs.io/en/latest/build.html](https://dftracer.readthedocs.io/en/latest/build.html)
-* Integrating DFTracer: [https://dftracer.readthedocs.io/en/latest/examples.html](https://dftracer.readthedocs.io/en/latest/examples.html)
-* Visualizing DFTracer Traces: [https://dftracer.readthedocs.io/en/latest/perfetto.html](https://dftracer.readthedocs.io/en/latest/perfetto.html)
-* Building DFAnalyzer: [https://dftracer.readthedocs.io/en/latest/dfanalyzer_build.html](https://dftracer.readthedocs.io/en/latest/dfanalyzer_build.html)
+* [Building DFTracer](https://dftracer.readthedocs.io/en/latest/build.html)
+* [Composable install (MPI, HDF5, GPUs)](https://dftracer.readthedocs.io/en/latest/composable_install.html)
+* [MPI support](https://dftracer.readthedocs.io/en/latest/mpi_support.html)
+* [GPU tracing](https://dftracer.readthedocs.io/en/latest/gpu_tracing.html)
+* [Docker](https://dftracer.readthedocs.io/en/latest/docker.html)
+* [API](https://dftracer.readthedocs.io/en/latest/api.html) and [examples](https://dftracer.readthedocs.io/en/latest/examples.html)
+* [Trace format](https://dftracer.readthedocs.io/en/latest/trace_format.html)
+* [Visualizing traces](https://dftracer.readthedocs.io/en/latest/perfetto.html)
+* [DFAnalyzer](https://dftracer.readthedocs.io/en/latest/dfanalyzer_build.html)
 
 ## Citation and Reference
 
